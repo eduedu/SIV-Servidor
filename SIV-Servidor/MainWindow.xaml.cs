@@ -21,6 +21,7 @@ namespace SIV_Servidor {
 		public MainWindow() {
 			InitializeComponent();
 
+			//hola
 		}
 	}
 }
