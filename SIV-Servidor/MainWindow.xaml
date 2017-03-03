@@ -6,13 +6,47 @@
         xmlns:local="clr-namespace:SIV_Servidor"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="950" Background="#FF969696">
+
     <Grid>
-        <Label x:Name="Label1" x:FieldModifier="public" Content="Label" Margin="0,80,10,0" VerticalAlignment="Top" Height="315" Background="#FF00FF96" HorizontalAlignment="Right" Width="147"/>
-        <DataGrid x:Name="gridFiltro"  ItemsSource="{Binding}" Margin="375,60,0,0" VerticalAlignment="Top" Height="165" SelectionChanged="dataGrid_SelectionChanged" HorizontalAlignment="Left" Width="520" Panel.ZIndex="1" Background="#FFFAFAB4"/>
+
+        <Label x:Name="Label1" x:FieldModifier="public" Content="Label" Margin="0,80,10,0" VerticalAlignment="Top" Height="115" Background="#FF00FF96" HorizontalAlignment="Right" Width="147"/>
         <Label x:Name="labelPreview" Content="labelPreview" HorizontalAlignment="Left" Margin="10,369,0,0" VerticalAlignment="Top" Width="315" Background="#FF00FF96" Height="32"/>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="30" Margin="55,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="440" Background="#FFFFFF78" ToolTip="filtro" TextChanged="textBox_TextChanged"/>
-        <Label x:Name="label" Content="Filtro:" HorizontalAlignment="Left" Margin="10,25,0,0" VerticalAlignment="Top"/>
-        <DataGrid x:Name="gridLista1" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Height="225" Width="625"/>
+        <TextBox x:Name="tbBuscar" HorizontalAlignment="Left" Height="30" Margin="55,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="440" Background="#FFFFFF78" ToolTip="filtro" TextChanged="tbBuscar_TextChanged" PreviewKeyDown="tbBuscar_PreviewKeyDown" PreviewKeyUp="tbBuscar_PreviewKeyUp"/>
+        <Label x:Name="label" Content="Buscar" HorizontalAlignment="Left" Margin="10,25,0,0" VerticalAlignment="Top"/>
+        <ListView x:Name="listFiltro"    Height="134" Margin="332,195,0,0" VerticalAlignment="Top" Width="600" Background="#FFF0F0F0" KeyDown="listFiltro_KeyDown" HorizontalAlignment="Left"  >
+            <ListView.Resources>
+                <!--
+                <Style TargetType="{x:Type GridViewColumnHeader}">
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                </Style>
+                <DataTemplate x:Key="PrecioCellTemplate">
+                    <TextBlock Foreground="DarkBlue" FontWeight="Bold"
+                               TextAlignment="Right"
+                               HorizontalAlignment="Right"
+                             
+                               Text="{ Binding precio, StringFormat=\{0:C\}}" 
+                    />
+                </DataTemplate>
+                -->
+            </ListView.Resources>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Código" Width="100"   DisplayMemberBinding="{Binding codigo}"  />
+                    <GridViewColumn Header="Descripcion" Width="350" DisplayMemberBinding="{Binding descripcion}"  />
+                    <GridViewColumn Header="Precio" Width="100"   >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding precio, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" Foreground="DarkBlue" FontWeight="Bold"  />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <DataGrid x:Name="gridFiltro" ItemsSource="{Binding}" HorizontalAlignment="Left" Margin="680,25,0,0" VerticalAlignment="Top" Height="66" Width="65" Background="#FFF000F0"/>
+        <TextBox x:Name="tbCodigo" HorizontalAlignment="Left" Height="30" Margin="20,415,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" Background="#FFFFFF78" ToolTip="filtro"/>
+        <TextBox x:Name="tbDescripcion" HorizontalAlignment="Left" Height="30" Margin="145,415,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="350" Background="#FFFFFF78" ToolTip="filtro"/>
+        <TextBox x:Name="tbPrecio" HorizontalAlignment="Left" Height="30" Margin="520,415,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" Background="#FFFFFF78" ToolTip="filtro"/>
 
     </Grid>
 </Window>

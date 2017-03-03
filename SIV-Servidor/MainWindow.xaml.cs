@@ -31,91 +31,19 @@ namespace SIV_Servidor {
 		static SQLiteConnection conexion;
 		public MainWindow() {
 			InitializeComponent();
-			gridFiltro.Visibility = Visibility.Hidden;
-			gridFiltro.Margin = new Thickness(textBox.Margin.Left, gridFiltro.Margin.Top, 0, 0);
 
-			iniciarOSC();
+			//SETEAR CONTROLES
+			gridFiltro.Visibility = Visibility.Hidden;
+			listFiltro.Visibility = Visibility.Hidden;
+			listFiltro.Margin = new Thickness(tbBuscar.Margin.Left, tbBuscar.Margin.Top + tbBuscar.Height + 2, 0, 0);
+			tbBuscar.Focus();
+
+
+			//INICIAR FUNCIONES
+			//iniciarOSC();
 			gridFiltroSQL();
 		}
-		/*----------------------------------------------------------------------------------*/
-		/*----------------------------------------------------------------------------------*/
-		private void gridFiltroSQL(string filtro = "") {
-			conexion = new SQLiteConnection
-				("Data Source=lista.db;Version=3;New=False;Compress=True;");
-			conexion.Open();
-
-			// Lanzamos la consulta y preparamos la estructura para leer datos
-			string consulta = "select * from lista where descripcion like '%" + filtro + "%' ";
-
-			// Adaptador de datos, DataSet y tabla
-			SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
-
-			DataSet ds = new DataSet();
-			ds.Reset();
-
-			DataTable dt = new DataTable();
-			db.Fill(ds);
-
-			//Asigna al DataTable la primer tabla (ciudades) 
-			// y la mostramos en el DataGridView
-			dt = ds.Tables[0];
-
-			//dataGrid.DataSource = dt;
-			//dataGrid.DataContext = dt.DefaultView;  //esto anda
-			gridFiltro.ItemsSource = dt.DefaultView;
-
-			// Y ya podemos cerrar la conexion
-			conexion.Close();
-
-
-		}
-		private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-			var grid = sender as DataGrid;
-			if (grid.SelectedItem != null) {
-				var selected = grid.SelectedItem;
-				// ... Set Title to selected names.
-				//this.Title = string.Join(", ", names);
-
-				/*var item = selected as usuarioClass;
-				if (item != null) {
-					//labelid.Content = item.id.ToString();
-					lNombre.Content = item.nya.ToString();
-					string tmpN = item.num.ToString();
-					if (tmpN.Length > 4) {
-						tmpN = tmpN.Substring(0, 3) + "-" + tmpN.Substring(3, tmpN.Length - 3);
-					}
-					lNumero.Content = tmpN;
-				}
-				*/
-				string tmpTexto = "";
-				Console.WriteLine(selected);
-				if (selected.ToString() == "System.Data.DataRowView") {
-					DataRowView drv = (DataRowView)grid.SelectedItem;
-
-					String valor = drv[3].ToString();
-
-					tmpTexto = valor;
-					//int columna = grid.CurrentColumn.DisplayIndex;
-					//valor = columna.ToString();
-					tmpTexto = valor;
-					labelPreview.Content = tmpTexto;
-				}
-			}
-		}
-
-		private void textBox_TextChanged(object sender, TextChangedEventArgs e) {
-			var textBox = sender as TextBox;
-			string filtro = textBox.Text.ToLower().Trim();
-			if (filtro != "") {
-				gridFiltroSQL(filtro);
-				gridFiltro.Visibility = Visibility.Visible;
-			}
-			else {
-				gridFiltro.Visibility = Visibility.Hidden;
-			}
-
-		}
-		///OSC
+		///OSC {
 		public void iniciarOSC() {
 			//Console.WriteLine("hola");
 
@@ -183,7 +111,7 @@ namespace SIV_Servidor {
 				Label1.Content = "";
 				//txtUrlCompartirTitulo.Text = mCambioUrlCompartirTitulo;
 			}), DispatcherPriority.Normal, null);
-			
+
 
 			for (int i = 0; i < message.Data.Count; i++) {
 				string dataString;
@@ -200,11 +128,132 @@ namespace SIV_Servidor {
 				Application.Current.Dispatcher.BeginInvoke((Action)(() => {
 					Label1.Content = Label1.Content + "Mensaje:" + dataString;
 				}), DispatcherPriority.Normal, null);
-				
+
 			}
 
 			Console.WriteLine("Total Messages Received: {0}", MiOSC.sMessagesReceivedCount);
 		}
+		///OSC }
+		private void gridFiltroSQL(string filtro = "") {
+			conexion = new SQLiteConnection
+				("Data Source=lista.db;Version=3;New=False;Compress=True;");
+			conexion.Open();
+
+			// Lanzamos la consulta y preparamos la estructura para leer datos
+			string consulta = "select * from lista where descripcion like '%" + filtro + "%' ";
+
+			// Adaptador de datos, DataSet y tabla
+			SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
+
+			DataSet ds = new DataSet();
+			ds.Reset();
+
+			DataTable dt = new DataTable();
+			db.Fill(ds);
+
+			//Asigna al DataTable la primer tabla (ciudades) 
+			// y la mostramos en el DataGridView
+			dt = ds.Tables[0];
+
+			//dataGrid.DataSource = dt;
+			//dataGrid.DataContext = dt.DefaultView;  //esto anda
+			gridFiltro.ItemsSource = dt.DefaultView;
+			listFiltro.ItemsSource = dt.DefaultView;
+
+			// Y ya podemos cerrar la conexion
+			conexion.Close();
+
+
+		}
+		private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+			var grid = sender as DataGrid;
+			if (grid.SelectedItem != null) {
+				var selected = grid.SelectedItem;
+				// ... Set Title to selected names.
+				//this.Title = string.Join(", ", names);
+
+				/*var item = selected as usuarioClass;
+				if (item != null) {
+					//labelid.Content = item.id.ToString();
+					lNombre.Content = item.nya.ToString();
+					string tmpN = item.num.ToString();
+					if (tmpN.Length > 4) {
+						tmpN = tmpN.Substring(0, 3) + "-" + tmpN.Substring(3, tmpN.Length - 3);
+					}
+					lNumero.Content = tmpN;
+				}
+				*/
+				string tmpTexto = "";
+				Console.WriteLine(selected);
+				if (selected.ToString() == "System.Data.DataRowView") {
+					DataRowView drv = (DataRowView)grid.SelectedItem;
+
+					String valor = drv[3].ToString();
+
+					tmpTexto = valor;
+					//int columna = grid.CurrentColumn.DisplayIndex;
+					//valor = columna.ToString();
+					tmpTexto = valor;
+					labelPreview.Content = tmpTexto;
+				}
+			}
+		}
+		private void tbBuscar_TextChanged(object sender, TextChangedEventArgs e) {
+			var textBox = sender as TextBox;
+			string filtro = textBox.Text.ToLower().Trim();
+			if (filtro != "") {
+				gridFiltroSQL(filtro);
+				//gridFiltro.Visibility = Visibility.Visible;
+				listFiltro.Visibility = Visibility.Visible;
+			}
+			else {
+				//gridFiltro.Visibility = Visibility.Hidden;
+				listFiltro.Visibility = Visibility.Hidden;
+			}
+
+		}
+
+		private void tbBuscar_PreviewKeyDown(object sender, KeyEventArgs e) {
+			//Console.WriteLine(e.Key.ToString());
+			if (e.Key == Key.Down) {
+				//Console.WriteLine("DOWN");
+				//gridFiltro.SelectedItem = 0;
+				//gridFiltro.Focus();
+				//tbBuscar.MoveFocus(gridFiltro);
+				listFiltro.Focus();
+			}
+		}
+
+		private void tbBuscar_PreviewKeyUp(object sender, KeyEventArgs e) {
+
+		}
+
+		private void listFiltro_KeyDown(object sender, KeyEventArgs e) {
+			if (e.Key == Key.Escape) {
+				//Console.WriteLine("ESCAPE");
+				//gridFiltro.SelectedItem = 0;
+				//gridFiltro.Focus();
+				//tbBuscar.MoveFocus(gridFiltro);
+				tbBuscar.Focus();
+			}
+			if (e.Key == Key.Enter) {
+				//Console.WriteLine("ENTER");
+				var list = sender as ListView;
+				DataRowView fila = (DataRowView)list.SelectedItem;
+				String codigo = fila["codigo"].ToString();
+				String descripcion = fila["descripcion"].ToString();
+				String precio = fila["precio"].ToString();
+				//Console.WriteLine(valor);
+				//labelPreview.Content = valor;
+				tbCodigo.Text = codigo;
+				tbDescripcion.Text = descripcion;
+				tbPrecio.Text = precio;
+				tbBuscar.Text = "";
+				tbBuscar.Focus();
+				//listFiltro.Visibility = Visibility.Hidden;
+			}
+		}
+
 
 	}
 }

@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:SIV_Servidor"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+
     </Application.Resources>
 </Application>
