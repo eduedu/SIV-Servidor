@@ -20,6 +20,7 @@ namespace SIV_Servidor {
 	public partial class MainWindow : Window {
 		public MainWindow() {
 			InitializeComponent();
+
 		}
 	}
 }
