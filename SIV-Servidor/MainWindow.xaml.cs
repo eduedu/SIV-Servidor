@@ -23,12 +23,9 @@ using System.IO;
 using System.Data.SQLite; //Utilizamos la DLL
 using System.Data;
 
+
 namespace SIV_Servidor {
-	public enum DemoType {
-		Udp,
-		Tcp,
-		Multicast
-	}
+
 
 	public partial class MainWindow : Window {
 		static SQLiteConnection conexion;
@@ -37,12 +34,12 @@ namespace SIV_Servidor {
 			gridFiltro.Visibility = Visibility.Hidden;
 			gridFiltro.Margin = new Thickness(textBox.Margin.Left, gridFiltro.Margin.Top, 0, 0);
 
-			parteOSC();
-			conexionSQLite();
+			iniciarOSC();
+			gridFiltroSQL();
 		}
 		/*----------------------------------------------------------------------------------*/
 		/*----------------------------------------------------------------------------------*/
-		private void conexionSQLite(string filtro = "") {
+		private void gridFiltroSQL(string filtro = "") {
 			conexion = new SQLiteConnection
 				("Data Source=lista.db;Version=3;New=False;Compress=True;");
 			conexion.Open();
@@ -72,134 +69,6 @@ namespace SIV_Servidor {
 
 
 		}
-
-		private void parteOSC() {
-			Console.WriteLine("hola");
-
-			OscServer oscServer;
-
-			//DemoType demoType = GetDemoType();
-			DemoType demoType = DemoType.Udp;
-			IPAddress miIp;
-			//miIp=IPAddress.Loopback;
-			miIp = IPAddress.Parse("192.168.0.9");
-
-			oscServer = new OscServer(TransportType.Udp, miIp, Port);
-			//oscServer = new OscServer(miIp, Port);
-			//oscServer = new OscServer(IPAddress.Parse("224.25.26.27"), Port);
-
-			/*
-			switch (demoType)
-			{
-					case DemoType.Udp:
-							oscServer = new OscServer(TransportType.Udp, miIp, Port);
-							break;
-
-					case DemoType.Tcp:
-							oscServer = new OscServer(TransportType.Tcp, IPAddress.Loopback, Port);
-							break;
-
-					case DemoType.Multicast:
-							oscServer = new OscServer(IPAddress.Parse("224.25.26.27"), Port);
-							break;
-
-					default:
-							throw new Exception("Unsupported receiver type.");
-			}
-			*/
-			//Console.WriteLine("IP ADDRESSSSSSSSSSSSSS:" + IPAddress.Loopback);
-
-			oscServer.FilterRegisteredMethods = false;
-			oscServer.RegisterMethod(AliveMethod);
-			oscServer.RegisterMethod(TestMethod);
-			oscServer.BundleReceived += new EventHandler<OscBundleReceivedEventArgs>(oscServer_BundleReceived);
-			oscServer.MessageReceived += new EventHandler<OscMessageReceivedEventArgs>(oscServer_MessageReceived);
-			oscServer.ReceiveErrored += new EventHandler<Bespoke.Common.ExceptionEventArgs>(oscServer_ReceiveErrored);
-			oscServer.ConsumeParsingExceptions = false;
-
-			oscServer.Start();
-
-
-			Console.WriteLine("Osc Receiver: " + demoType.ToString());
-			Console.WriteLine("Press any key to exit.");
-			//Console.ReadKey();
-			//oscServer.Stop();
-		}
-		private static DemoType GetDemoType() {
-			Dictionary<ConsoleKey, DemoType> keyMappings = new Dictionary<ConsoleKey, DemoType>();
-			keyMappings.Add(ConsoleKey.D1, DemoType.Udp);
-			keyMappings.Add(ConsoleKey.D2, DemoType.Tcp);
-			keyMappings.Add(ConsoleKey.D3, DemoType.Multicast);
-
-			Console.WriteLine("\nWelcome to the Bespoke Osc Receiver Demo.\nPlease select the type of receiver you would like to use:");
-			Console.WriteLine("  1. Udp\n  2. Tcp\n  3. Udp Multicast");
-
-			ConsoleKeyInfo key = Console.ReadKey();
-			while (keyMappings.ContainsKey(key.Key) == false) {
-				Console.WriteLine("\nInvalid selection\n");
-				Console.WriteLine("  1. Udp\n  2. Tcp\n  3. Udp Multicast");
-				key = Console.ReadKey();
-			}
-
-			Console.Clear();
-
-			return keyMappings[key.Key];
-		}
-		private static void oscServer_BundleReceived(object sender, OscBundleReceivedEventArgs e) {
-			sBundlesReceivedCount++;
-
-			OscBundle bundle = e.Bundle;
-			Console.WriteLine(string.Format("\nBundle Received [{0}:{1}]: Nested Bundles: {2} Nested Messages: {3}", bundle.SourceEndPoint.Address, bundle.TimeStamp, bundle.Bundles.Count, bundle.Messages.Count));
-			Console.WriteLine("Total Bundles Received: {0}", sBundlesReceivedCount);
-		}
-		private void oscServer_MessageReceived(object sender, OscMessageReceivedEventArgs e) {
-			sMessagesReceivedCount++;
-
-			OscMessage message = e.Message;
-
-			Console.WriteLine(string.Format("\nMessage Received [{0}]: {1}", message.SourceEndPoint.Address, message.Address));
-			Console.WriteLine(string.Format("Message contains {0} objects.", message.Data.Count));
-
-			//label1.
-			Application.Current.Dispatcher.BeginInvoke((Action)(() => {
-				Label1.Content = "";
-				//txtUrlCompartirTitulo.Text = mCambioUrlCompartirTitulo;
-			}), DispatcherPriority.Normal, null);
-
-
-			for (int i = 0; i < message.Data.Count; i++) {
-				string dataString;
-
-				if (message.Data[i] == null) {
-					dataString = "Nil";
-				}
-				else {
-					dataString = (message.Data[i] is byte[] ? BitConverter.ToString((byte[])message.Data[i]) : message.Data[i].ToString());
-				}
-				Console.WriteLine(string.Format("[{0}]: {1}", i, dataString));
-
-
-				Application.Current.Dispatcher.BeginInvoke((Action)(() => {
-					Label1.Content = Label1.Content + dataString;
-				}), DispatcherPriority.Normal, null);
-
-			}
-
-			Console.WriteLine("Total Messages Received: {0}", sMessagesReceivedCount);
-		}
-
-		private static void oscServer_ReceiveErrored(object sender, Bespoke.Common.ExceptionEventArgs e) {
-			Console.WriteLine("Error during reception of packet: {0}", e.Exception.Message);
-		}
-
-		private static readonly int Port = 9999;
-		//private static readonly string AliveMethod = "/edu/alive";
-		//private static readonly string TestMethod = "/edu/test";
-		private static readonly string AliveMethod = "/edu";
-		private static readonly string TestMethod = "/edu";
-		private static int sBundlesReceivedCount;
-		private static int sMessagesReceivedCount;
-
 		private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 			var grid = sender as DataGrid;
 			if (grid.SelectedItem != null) {
@@ -238,7 +107,7 @@ namespace SIV_Servidor {
 			var textBox = sender as TextBox;
 			string filtro = textBox.Text.ToLower().Trim();
 			if (filtro != "") {
-				conexionSQLite(filtro);
+				gridFiltroSQL(filtro);
 				gridFiltro.Visibility = Visibility.Visible;
 			}
 			else {
@@ -246,6 +115,97 @@ namespace SIV_Servidor {
 			}
 
 		}
+		///OSC
+		public void iniciarOSC() {
+			//Console.WriteLine("hola");
+
+			OscServer oscServer;
+
+			//DemoType demoType = GetDemoType();
+			DemoType demoType = DemoType.Udp;
+			IPAddress miIp;
+			//miIp=IPAddress.Loopback;
+			//miIp= IP DEL SERVER:
+			miIp = IPAddress.Parse("192.168.0.9");
+
+			oscServer = new OscServer(TransportType.Udp, miIp, MiOSC.Port);
+			//oscServer = new OscServer(miIp, Port);
+			//oscServer = new OscServer(IPAddress.Parse("224.25.26.27"), Port);
+
+			/*
+			switch (demoType)
+			{
+					case DemoType.Udp:
+							oscServer = new OscServer(TransportType.Udp, miIp, Port);
+							break;
+
+					case DemoType.Tcp:
+							oscServer = new OscServer(TransportType.Tcp, IPAddress.Loopback, Port);
+							break;
+
+					case DemoType.Multicast:
+							oscServer = new OscServer(IPAddress.Parse("224.25.26.27"), Port);
+							break;
+
+					default:
+							throw new Exception("Unsupported receiver type.");
+			}
+			*/
+			//Console.WriteLine("IP ADDRESSSSSSSSSSSSSS:" + IPAddress.Loopback);
+
+			oscServer.FilterRegisteredMethods = false;
+			oscServer.RegisterMethod(MiOSC.AliveMethod);
+			oscServer.RegisterMethod(MiOSC.TestMethod);
+			oscServer.BundleReceived += new EventHandler<OscBundleReceivedEventArgs>(MiOSC.oscServer_BundleReceived);
+			//oscServer.MessageReceived += new EventHandler<OscMessageReceivedEventArgs>(MiOSC.oscServer_MessageReceived);
+			oscServer.MessageReceived += new EventHandler<OscMessageReceivedEventArgs>(NuevoMensajeOSC);
+			oscServer.ReceiveErrored += new EventHandler<Bespoke.Common.ExceptionEventArgs>(MiOSC.oscServer_ReceiveErrored);
+			oscServer.ConsumeParsingExceptions = false;
+
+			oscServer.Start();
+
+
+			Console.WriteLine("Osc Receiver: " + demoType.ToString());
+			Console.WriteLine("Press any key to exit.");
+			//Console.ReadKey();
+			//oscServer.Stop();
+		}
+		public void NuevoMensajeOSC(object sender, OscMessageReceivedEventArgs e) {
+			MiOSC.sMessagesReceivedCount++;
+
+			OscMessage message = e.Message;
+
+			Console.WriteLine(string.Format("\nMessage Received [{0}]: {1}", message.SourceEndPoint.Address, message.Address));
+			Console.WriteLine(string.Format("Message contains {0} objects.", message.Data.Count));
+
+			//ACCION LAYOUT
+			Application.Current.Dispatcher.BeginInvoke((Action)(() => {
+				Label1.Content = "";
+				//txtUrlCompartirTitulo.Text = mCambioUrlCompartirTitulo;
+			}), DispatcherPriority.Normal, null);
+			
+
+			for (int i = 0; i < message.Data.Count; i++) {
+				string dataString;
+
+				if (message.Data[i] == null) {
+					dataString = "Nil";
+				}
+				else {
+					dataString = (message.Data[i] is byte[] ? BitConverter.ToString((byte[])message.Data[i]) : message.Data[i].ToString());
+				}
+				Console.WriteLine(string.Format("[{0}]: {1}", i, dataString));
+
+				//ACCION LAYOUT
+				Application.Current.Dispatcher.BeginInvoke((Action)(() => {
+					Label1.Content = Label1.Content + "Mensaje:" + dataString;
+				}), DispatcherPriority.Normal, null);
+				
+			}
+
+			Console.WriteLine("Total Messages Received: {0}", MiOSC.sMessagesReceivedCount);
+		}
+
 	}
 }
 

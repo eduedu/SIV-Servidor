@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="950" Background="#FF969696">
     <Grid>
-        <Label x:Name="Label1" Content="Label" Margin="0,80,10,0" VerticalAlignment="Top" Height="315" Background="#FF00FF96" HorizontalAlignment="Right" Width="147"/>
+        <Label x:Name="Label1" x:FieldModifier="public" Content="Label" Margin="0,80,10,0" VerticalAlignment="Top" Height="315" Background="#FF00FF96" HorizontalAlignment="Right" Width="147"/>
         <DataGrid x:Name="gridFiltro"  ItemsSource="{Binding}" Margin="375,60,0,0" VerticalAlignment="Top" Height="165" SelectionChanged="dataGrid_SelectionChanged" HorizontalAlignment="Left" Width="520" Panel.ZIndex="1" Background="#FFFAFAB4"/>
         <Label x:Name="labelPreview" Content="labelPreview" HorizontalAlignment="Left" Margin="10,369,0,0" VerticalAlignment="Top" Width="315" Background="#FF00FF96" Height="32"/>
         <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="30" Margin="55,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="440" Background="#FFFFFF78" ToolTip="filtro" TextChanged="textBox_TextChanged"/>
