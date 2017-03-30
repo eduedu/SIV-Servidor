@@ -54,9 +54,7 @@
         <Label x:Name="label_Copy5" Content="Artículo" HorizontalAlignment="Left" Margin="28,7,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" Background="#FF828296"/>
         <Label x:Name="Label1" x:FieldModifier="public" Content="Label" Margin="0,563,95,0" VerticalAlignment="Top" Height="46" Background="#FF00FF96" HorizontalAlignment="Right" Width="147"/>
         <Label x:Name="LTemp" Content="LTemp" HorizontalAlignment="Left" Margin="21,577,0,0" VerticalAlignment="Top" Width="650" Background="#FF00FF96" Height="32"/>
-        <TextBox x:Name="tbBuscar" HorizontalAlignment="Left" Height="30" Margin="71,38,0,0" TextWrapping="Wrap" Width="350" Background="White" ToolTip="filtro" TextChanged="tbBuscar_TextChanged" PreviewKeyDown="tbBuscar_PreviewKeyDown" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
-        <Label x:Name="label" Content="Buscar" HorizontalAlignment="Left" Margin="23,39,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold"/>
-        <ListView x:Name="listFiltro"    Height="134" Margin="880,131,-558,0" VerticalAlignment="Top" Width="630" Background="#FFF0F0F0" KeyDown="listFiltro_KeyDown" HorizontalAlignment="Left" Panel.ZIndex="1" IsTabStop="True"  >
+        <ListView x:Name="listFiltro"    Height="224" Margin="865,130,-553,0" VerticalAlignment="Top" Width="630" Background="#FFF0F0F0" KeyDown="listFiltro_KeyDown" HorizontalAlignment="Left" Panel.ZIndex="1" IsTabStop="True"  >
             <ListView.Resources>
                 <!--
                 <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -89,7 +87,7 @@
         </ListView>
         <DataGrid x:Name="gridFiltro" ItemsSource="{Binding}" HorizontalAlignment="Left" Margin="545,445,0,0" VerticalAlignment="Top" Height="75" Width="387" Background="#FFF000F0"/>
         <TextBox x:Name="tbCodigo" HorizontalAlignment="Left" Height="30" Margin="20,116,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" Background="#FFB4FFB4" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" Focusable="False" IsTabStop="False" IsHitTestVisible="False"/>
-        <TextBox x:Name="tbDescripcion" HorizontalAlignment="Left" Height="30" Margin="128,116,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="350" Background="White" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="tbDescripcion" HorizontalAlignment="Left" Height="30" Margin="128,116,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="350" Background="White" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" TextChanged="tbDescripcion_TextChanged" PreviewKeyDown="tbDescripcion_PreviewKeyDown"/>
         <TextBox x:Name="tbSubtotal" HorizontalAlignment="Left" Height="30" Margin="654,116,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" Background="#FFB4FFB4" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" Focusable="False" IsHitTestVisible="False" IsTabStop="False" HorizontalContentAlignment="Right"/>
         <TextBox x:Name="tbPrecio" HorizontalAlignment="Left" Height="30" Margin="546,116,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" Background="White" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewKeyDown="tbPrecio_PreviewKeyDown" TextChanged="tbPrecio_TextChanged"/>
         <TextBox x:Name="tbCantidad" HorizontalAlignment="Left" Height="30" Margin="481,116,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="62" Background="White" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewKeyDown="tbCantidad_PreviewKeyDown" TextChanged="tbCantidad_TextChanged"/>
@@ -125,20 +123,38 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
-            <TabItem Header="1"></TabItem>
-            <TabItem Header="2"></TabItem>
-            <TabItem Header="3"></TabItem>
-            <TabItem Header="4"></TabItem>
-            <TabItem Header="5"></TabItem>
+            <TabItem Header="1" GotFocus="TabItem_GotFocus"/>
+            <TabItem Header="2" GotFocus="TabItem_GotFocus"/>
+            <TabItem Header="3" GotFocus="TabItem_GotFocus"/>
+            <TabItem Header="4" GotFocus="TabItem_GotFocus"/>
+            <TabItem Header="5" GotFocus="TabItem_GotFocus"/>
         </TabControl>
-        <ListView x:Name="listFiltro_Copy"    Height="202" Margin="21,204,0,0" VerticalAlignment="Top" Width="738" Background="#FFF0F0F0" KeyDown="listFiltro_KeyDown" HorizontalAlignment="Left"  >
+        <ListView x:Name="listVenta"    Height="202" Margin="21,204,0,0" VerticalAlignment="Top" Width="738" Background="#FFF0F0F0" HorizontalAlignment="Left"  >
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Código" Width="100"   DisplayMemberBinding="{Binding codigo}"  />
                     <GridViewColumn Header="Descripcion" Width="350" DisplayMemberBinding="{Binding descripcion}"  />
-                    <GridViewColumn Header="Cantidad" Width="80"   DisplayMemberBinding="{Binding cantidad}"  />
-                    <GridViewColumn Header="Precio $" Width="100"   DisplayMemberBinding="{Binding precio}"  />
-                    <GridViewColumn Header="Sub-total $" Width="100"   DisplayMemberBinding="{Binding total}"  />
+                    <GridViewColumn Header="Cantidad" Width="80"   >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding cantidad}" Width="80" TextAlignment="Right" HorizontalAlignment="Right"   />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Precio $" Width="100"   >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding precio, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Sub-total $" Width="100"   >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding subtotal, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"  FontWeight="Bold"  />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

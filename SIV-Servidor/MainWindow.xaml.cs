@@ -43,7 +43,7 @@ namespace SIV_Servidor
             ///SETEAR CONTROLES
             gridFiltro.Visibility = Visibility.Hidden;
             listFiltro.Visibility = Visibility.Hidden;
-            listFiltro.Margin = new Thickness(tbBuscar.Margin.Left, tbBuscar.Margin.Top + tbBuscar.Height + 2, 0, 0);
+            listFiltro.Margin = new Thickness(tbDescripcion.Margin.Left, tbDescripcion.Margin.Top + tbDescripcion.Height + 2, 0, 0);
             //tbBuscar.Focus();
 
 
@@ -283,26 +283,6 @@ namespace SIV_Servidor
             tbPrecio.Text = "";
             tbSubtotal.Text = "";
         }
-        private void agregarItemALista()
-        {
-            string codigo = "";
-            string descripcion = "";
-            string cantidad = "";
-            string precio = "";
-            string subtotal = "";
-
-            codigo = tbCodigo.Text;
-            descripcion = tbDescripcion.Text;
-            cantidad = tbCantidad.Text;
-            precio = tbPrecio.Text;
-            subtotal = tbSubtotal.Text;
-
-            string resultado = "";
-            resultado = "Codigo:" + codigo + "-Descripcion:" + descripcion + "-Cantidad:" + cantidad + "-Precio:" + precio + "-Subtotal:" + subtotal;
-            LTemp.Content = resultado;
-            //resetTb();
-            tbBuscar.Focus();
-        }
         private void consola(string texto)
         {
             Console.WriteLine(texto);
@@ -338,7 +318,7 @@ namespace SIV_Servidor
         }
         private void calcularSubtotal()
         {
-            
+
             tbCantidad.Text = tbCantidad.Text.Replace('.', ',');
             tbPrecio.Text = tbPrecio.Text.Replace('.', ',');
 
@@ -357,7 +337,47 @@ namespace SIV_Servidor
             resultado = subtotal.ToString();
             //consola(resultado);
 
-            tbSubtotal.Text = resultado;
+            //tbSubtotal.Text = resultado;
+            tbSubtotal.Text=subtotal.ToString("00.00");
+        }
+        private void agregarItemALista()
+        {
+            string codigo = "";
+            string descripcion = "";
+            string cantidad = "";
+            string precio = "";
+            string subtotal = "";
+
+            codigo = tbCodigo.Text;
+            descripcion = tbDescripcion.Text;
+            cantidad = tbCantidad.Text;
+            precio = tbPrecio.Text;
+            subtotal = tbSubtotal.Text;
+
+            ///agregar item al listbox
+            //float tmpCantidad = 0;
+            //float.TryParse(cantidad, out tmpCantidad);
+            //float tmpPrecio = 0;
+            //float.TryParse(precio, out tmpPrecio);
+            listVenta.Items.Add(new itemVenta{
+                codigo = codigo,
+                descripcion=descripcion,
+                cantidad=cantidad,
+                precio=precio,
+                subtotal=subtotal
+            });
+
+            ///agregar item a la tabla temporal
+
+
+
+            string resultado = "";
+            resultado = "Codigo:" + codigo + "-Descripcion:" + descripcion + "-Cantidad:" + cantidad + "-Precio:" + precio + "-Subtotal:" + subtotal;
+            LTemp.Content = resultado;
+            //resetTb();
+            //tbBuscar.Focus();
+            tbDescripcion.Focus();
+
         }
 
         ///CONTROLES
@@ -407,6 +427,10 @@ namespace SIV_Servidor
         {
             var textBox = sender as TextBox;
             textBox.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+            if (textBox.Name=="tbDescripcion")
+            {
+
+            }
         }
 
         private void btnNuevo_GotFocus(object sender, RoutedEventArgs e)
@@ -423,7 +447,7 @@ namespace SIV_Servidor
         {
             if (e.Key == Key.Left)
             {
-                tbBuscar.Focus();
+                //tbBuscar.Focus();
             }
             if (e.Key == Key.Right || e.Key == Key.Down || e.Key == Key.Up)
             {
@@ -434,11 +458,12 @@ namespace SIV_Servidor
         {
             consola("click!");
         }
-        private void tbBuscar_TextChanged(object sender, TextChangedEventArgs e)
+
+        private void tbDescripcion_TextChanged(object sender, TextChangedEventArgs e)
         {
             var textBox = sender as TextBox;
             string filtro = textBox.Text.Trim();
-            if (filtro != "")
+            if (filtro != "" && textBox.IsFocused)
             {
                 ///aplicar filtro
                 //gridFiltroSQL(filtro);
@@ -450,25 +475,30 @@ namespace SIV_Servidor
                 ///ocultar control si el text esta vacio
                 listFiltro.Visibility = Visibility.Hidden;
             }
-
         }
-        private void tbBuscar_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void tbDescripcion_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            //consola(e.Key.ToString());
             if (e.Key == Key.Down)
             {
                 listFiltro.Focus();
             }
             if (e.Key == Key.Right)
             {
-                btnNuevo.Focus();
-                e.Handled = true;
-                
+                //btnNuevo.Focus();
+                //e.Handled = true;
+
             }
             if (e.Key == Key.Escape)
             {
-                tbBuscar.Text = "";
+                tbDescripcion.Text = "";
                 resetTb();
+            }
+            if (e.Key == Key.Enter || e.Key==Key.Return)
+            {
+                tbCantidad.Text = "1";
+                tbCantidad.SelectAll();
+                tbCantidad.Focus();
+                listFiltro.Visibility = Visibility.Hidden;
             }
         }
 
@@ -481,7 +511,8 @@ namespace SIV_Servidor
                 //gridFiltro.SelectedItem = 0;
                 //gridFiltro.Focus();
                 //tbBuscar.MoveFocus(gridFiltro);
-                tbBuscar.Focus();
+                //tbBuscar.Focus();
+                tbDescripcion.Focus();
             }
             if (e.Key == Key.Enter)
             {
@@ -506,12 +537,13 @@ namespace SIV_Servidor
                 tbPrecio.Text = precio;
 
 
-                tbBuscar.Text = "";
+                //tbBuscar.Text = "";
+                //tbDescripcion.Text = "";
                 //tbBuscar.Focus();
                 tbCantidad.Text = "1";
                 tbCantidad.SelectAll();
                 tbCantidad.Focus();
-                //listFiltro.Visibility = Visibility.Hidden;
+                listFiltro.Visibility = Visibility.Hidden;
             }
         }
         private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -519,7 +551,8 @@ namespace SIV_Servidor
             var tab = sender as TabControl;
             int selected = tab.SelectedIndex;
             seleccionarPestana(selected);
-            consola(selected.ToString());
+            //consola(selected.ToString());
+            //tbDescripcion.Focus();
         }
 
         private void tbCantidad_TextChanged(object sender, TextChangedEventArgs e)
@@ -550,7 +583,8 @@ namespace SIV_Servidor
             if (e.Key == Key.Up || e.Key == Key.Escape)
             {
                 resetTb();
-                tbBuscar.Focus();
+                //tbBuscar.Focus();
+                tbDescripcion.Focus();
             }
 
         }
@@ -569,19 +603,23 @@ namespace SIV_Servidor
             if (e.Key == Key.Up || e.Key == Key.Escape)
             {
                 resetTb();
-                tbBuscar.Focus();
+                tbDescripcion.Focus();
+
             }
 
             if (e.Key == Key.Enter)
             {
                 agregarItemALista();
                 resetTb();
-                tbBuscar.Focus();
+                tbDescripcion.Focus();
             }
         }
 
+        private void TabItem_GotFocus(object sender, RoutedEventArgs e)
+        {
+            tbDescripcion.Focus();
+        }
 
-        
 
         ///-------------------------------------------------------------------------------------------
 

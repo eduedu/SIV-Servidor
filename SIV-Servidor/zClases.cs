@@ -17,4 +17,12 @@ namespace SIV_Servidor {
 		public float fechamodif { get; set; }
 		public string tags { get; set; }
 	}
+    class itemVenta
+    {
+        public string codigo { get; set; }
+        public string descripcion { get; set; }
+        public string cantidad { get; set; }
+        public string precio { get; set; }
+        public string subtotal { get; set; }
+    }
 }
