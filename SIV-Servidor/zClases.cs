@@ -24,5 +24,16 @@ namespace SIV_Servidor {
         public string cantidad { get; set; }
         public string precio { get; set; }
         public string subtotal { get; set; }
+        public string costo { get; set; }
+    }
+    class itemCaja
+    {
+        public int idventa { get; set; }
+        public float fecha { get; set; }
+        public string codigo { get; set; }
+        public string descripcion { get; set; }
+        public string cantidad { get; set; }
+        public string precio { get; set; }
+        public string costo { get; set; }
     }
 }

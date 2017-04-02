@@ -41,6 +41,7 @@ namespace SIV_Servidor
             mArticulos = new List<articuloClass>();
 
             ///SETEAR CONTROLES
+            LTemp.Content = "";
             gridFiltro.Visibility = Visibility.Hidden;
             listFiltro.Visibility = Visibility.Hidden;
             listFiltro.Margin = new Thickness(tbDescripcion.Margin.Left, tbDescripcion.Margin.Top + tbDescripcion.Height + 2, 0, 0);
@@ -52,6 +53,7 @@ namespace SIV_Servidor
             //gridFiltroSQL();
             seleccionarPestana(0);
             cargarListaDeArticulos();
+            calcularTotal();
             tbDescripcion.Focus();
         }
         ///---------------------------------------------------------------------------
@@ -221,16 +223,20 @@ namespace SIV_Servidor
                 //Console.WriteLine(registro["descripcion"]);
                 //Console.WriteLine(registro["id"]+"-"+registro["id"].GetType());
 
-                string tmpStringPrecio = registro["precio"].ToString();
-                float tmpPrecio = 0;
-                float.TryParse(tmpStringPrecio, out tmpPrecio);
+                //string tmpStringPrecio = registro["precio"].ToString();
+                //float tmpPrecio = 0;
+                //float.TryParse(tmpStringPrecio, out tmpPrecio);
+
+                float precio = toFloat(registro["precio"].ToString());
+                float costo = toFloat(registro["costo"].ToString());
 
                 articuloClass tempArticulo = new articuloClass();
                 tempArticulo.id = (long)registro["id"];
                 tempArticulo.codigo = registro["codigo"].ToString();
                 tempArticulo.codigopro = registro["codigopro"].ToString();
                 tempArticulo.descripcion = registro["descripcion"].ToString();
-                tempArticulo.precio = tmpPrecio;
+                tempArticulo.precio = precio;
+                tempArticulo.costo = costo;
 
                 mArticulos.Add(tempArticulo);
                 /*
@@ -267,13 +273,95 @@ namespace SIV_Servidor
 			}
 			*/
         }
+        private int obtenerIdVentaMax()
+        {
+            SQLiteConnection conexion;
+            conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
+            conexion.Open();
+
+            //string consulta = "select *, MAX(id) from articulos";
+            string consulta = "select MAX(idventa) from caja";
+
+            /// Adaptador de datos, DataSet y tabla
+            SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
+            DataSet dataSet = new DataSet();
+            DataTable dataTable = new DataTable();
+            dataSet.Reset();
+            db.Fill(dataSet);
+            dataTable = dataSet.Tables[0];
+
+            /// retornar valor maximo de idventa
+            int resultado = -1;
+            Int32.TryParse(dataTable.Rows[0].ItemArray.GetValue(0).ToString(), out resultado);
+
+            conexion.Close();
+            return resultado;
+        }
+        private void asentarVenta()
+        {
+            ///ejecutar si la lista no está vacía
+            if (listVenta.Items.Count > 0)
+            {
+                ///obtener idVentaMax
+                int idVentaMax = obtenerIdVentaMax() + 1;
+                //consola(idVentaMax.ToString());
+
+                ///abrir conexion DB
+                SQLiteConnection conexion;
+                conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
+                conexion.Open();
+
+                ///recorrer la lista (listVenta)
+                foreach (itemVenta item in listVenta.Items)
+                {
+                    asentarItem(item, idVentaMax, conexion);
+                }
+
+                ///Cerrar conexion
+                conexion.Close();
+            }
+            else
+            {
+                consola("No hay articulos en la lista.");
+            }
+
+            tbDescripcion.Focus();
+        }
+        private void asentarItem(itemVenta item, int idMax, SQLiteConnection conexion)
+        {
+            SQLiteCommand insertSQL = new SQLiteCommand("INSERT INTO caja (idventa, fecha, codigo, descripcion, cantidad, precio, costo) VALUES (?,DATETIME('NOW'),?,?,?,?,?)", conexion);
+            /*insertSQL.Parameters.Add(idMax.ToString());
+            insertSQL.Parameters.Add("1");
+            insertSQL.Parameters.Add(item.codigo);
+            insertSQL.Parameters.Add(item.descripcion);
+            insertSQL.Parameters.Add(item.cantidad);
+            insertSQL.Parameters.Add(item.precio);
+            */
+            insertSQL.Parameters.AddWithValue("idventa", idMax.ToString());
+            //insertSQL.Parameters.AddWithValue("fecha", "DATETIME('NOW')");
+            insertSQL.Parameters.AddWithValue("codigo", item.codigo);
+            insertSQL.Parameters.AddWithValue("descripcion", item.descripcion);
+            insertSQL.Parameters.AddWithValue("cantidad", item.cantidad);
+            insertSQL.Parameters.AddWithValue("precio", item.precio);
+            insertSQL.Parameters.AddWithValue("costo", item.costo);
+            try
+            {
+                insertSQL.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
 
         ///FUNCIONES GENERALES
         private void seleccionarPestana(int pestana)
         {
             mPestana = pestana;
 
-            LTemp.Content = mPestana;
+            //LTemp.Content = mPestana;
         }
         private void resetTb()
         {
@@ -338,7 +426,33 @@ namespace SIV_Servidor
             //consola(resultado);
 
             //tbSubtotal.Text = resultado;
-            tbSubtotal.Text=subtotal.ToString("00.00");
+            tbSubtotal.Text = subtotal.ToString("0.00");
+        }
+        private float toFloat(string cadena)
+        {
+            float resultado = 0;
+            float.TryParse(cadena, out resultado);
+            return resultado;
+        }
+        private void calcularTotal()
+        {
+            float total = 0;
+            float subtotal = 0;
+            if (listVenta.Items.Count > 0)
+            {
+                foreach (itemVenta item in listVenta.Items)
+                {
+                    //consola(item.descripcion);
+                    subtotal = 0;
+                    float.TryParse(item.subtotal, out subtotal);
+                    total = total + subtotal;
+                }
+                tbTotal.Text = "$ " + total.ToString("0.00");
+            }
+            else
+            {
+                tbTotal.Text = "$ 0.00";
+            }
         }
         private void agregarItemALista()
         {
@@ -347,37 +461,44 @@ namespace SIV_Servidor
             string cantidad = "";
             string precio = "";
             string subtotal = "";
+            string costo = "";
 
             codigo = tbCodigo.Text;
             descripcion = tbDescripcion.Text;
             cantidad = tbCantidad.Text;
             precio = tbPrecio.Text;
             subtotal = tbSubtotal.Text;
+            costo = tbPrecio.Tag.ToString();
 
             ///agregar item al listbox
             //float tmpCantidad = 0;
             //float.TryParse(cantidad, out tmpCantidad);
             //float tmpPrecio = 0;
             //float.TryParse(precio, out tmpPrecio);
-            listVenta.Items.Add(new itemVenta{
+            listVenta.Items.Add(new itemVenta
+            {
                 codigo = codigo,
-                descripcion=descripcion,
-                cantidad=cantidad,
-                precio=precio,
-                subtotal=subtotal
+                descripcion = descripcion,
+                cantidad = cantidad,
+                precio = precio,
+                subtotal = subtotal,
+                costo = costo
             });
 
             ///agregar item a la tabla temporal
 
 
 
-            string resultado = "";
-            resultado = "Codigo:" + codigo + "-Descripcion:" + descripcion + "-Cantidad:" + cantidad + "-Precio:" + precio + "-Subtotal:" + subtotal;
-            LTemp.Content = resultado;
+            //string resultado = "";
+            //resultado = "Codigo:" + codigo + "-Descripcion:" + descripcion + "-Cantidad:" + cantidad + "-Precio:" + precio + "-Subtotal:" + subtotal;
+            //LTemp.Content = resultado;
             //resetTb();
             //tbBuscar.Focus();
             tbDescripcion.Focus();
 
+
+            ///Calcular total
+            calcularTotal();
         }
 
         ///CONTROLES
@@ -403,7 +524,7 @@ namespace SIV_Servidor
 				*/
                 string tmpTexto = "";
                 //Console.WriteLine(selected);
-                consola(selected.ToString());
+                //consola(selected.ToString());
                 if (selected.ToString() == "System.Data.DataRowView")
                 {
                     DataRowView drv = (DataRowView)grid.SelectedItem;
@@ -427,24 +548,31 @@ namespace SIV_Servidor
         {
             var textBox = sender as TextBox;
             textBox.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
-            if (textBox.Name=="tbDescripcion")
+            if (textBox.Name == "tbDescripcion")
             {
 
             }
         }
+        private void TabItem_GotFocus(object sender, RoutedEventArgs e)
+        {
+            tbDescripcion.Focus();
+        }
 
-        private void btnNuevo_GotFocus(object sender, RoutedEventArgs e)
+        private void Button_GotFocus(object sender, RoutedEventArgs e)
         {
             var boton = sender as Button;
             boton.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 120));
         }
-        private void btnNuevo_LostFocus(object sender, RoutedEventArgs e)
+        private void Button_LostFocus(object sender, RoutedEventArgs e)
         {
             var boton = sender as Button;
             boton.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
         }
-        private void btnNuevo_PreviewKeyDown(object sender, KeyEventArgs e)
+
+
+        private void btnAsentar_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            //consola(e.Key.ToString());
             if (e.Key == Key.Left)
             {
                 //tbBuscar.Focus();
@@ -453,58 +581,19 @@ namespace SIV_Servidor
             {
                 e.Handled = true;
             }
-        }
-        private void btnNuevo_Click(object sender, RoutedEventArgs e)
-        {
-            consola("click!");
-        }
-
-        private void tbDescripcion_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            string filtro = textBox.Text.Trim();
-            if (filtro != "" && textBox.IsFocused)
+            if (e.Key == Key.Return || e.Key == Key.Enter)
             {
-                ///aplicar filtro
-                //gridFiltroSQL(filtro);
-                filtroArticulos(filtro);
-                listFiltro.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ///ocultar control si el text esta vacio
-                listFiltro.Visibility = Visibility.Hidden;
+                asentarVenta();
             }
         }
-        private void tbDescripcion_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void btnAsentar_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (e.Key == Key.Down)
-            {
-                listFiltro.Focus();
-            }
-            if (e.Key == Key.Right)
-            {
-                //btnNuevo.Focus();
-                //e.Handled = true;
-
-            }
-            if (e.Key == Key.Escape)
-            {
-                tbDescripcion.Text = "";
-                resetTb();
-            }
-            if (e.Key == Key.Enter || e.Key==Key.Return)
-            {
-                tbCantidad.Text = "1";
-                tbCantidad.SelectAll();
-                tbCantidad.Focus();
-                listFiltro.Visibility = Visibility.Hidden;
-            }
+            asentarVenta();
         }
 
         private void listFiltro_KeyDown(object sender, KeyEventArgs e)
         {
-            consola(e.Key.ToString());
+            //consola(e.Key.ToString());
             if (e.Key == Key.Escape)
             {
                 //Console.WriteLine("ESCAPE");
@@ -530,12 +619,14 @@ namespace SIV_Servidor
 
                 string codigopro = ((fila.codigo == "" || fila.codigo == null) ? "" : fila.codigo.ToString());
                 string descripcion = fila.descripcion.ToString();
-                string precio = fila.precio.ToString("00.00");
+                string precio = fila.precio.ToString("0.00");
 
                 tbCodigo.Text = codigopro;
                 tbDescripcion.Text = descripcion;
                 tbPrecio.Text = precio;
-
+                //consola("costo:" + fila.costo.ToString());
+                tbPrecio.Tag = fila.costo;
+                //consola("tbPrecio.Tag:"+tbPrecio.Tag.ToString());
 
                 //tbBuscar.Text = "";
                 //tbDescripcion.Text = "";
@@ -546,6 +637,7 @@ namespace SIV_Servidor
                 listFiltro.Visibility = Visibility.Hidden;
             }
         }
+
         private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var tab = sender as TabControl;
@@ -555,14 +647,71 @@ namespace SIV_Servidor
             //tbDescripcion.Focus();
         }
 
+        private void tbDescripcion_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            string filtro = textBox.Text.Trim();
+            //consola(listFiltro.Items.Count.ToString());
+            if (filtro != "" && textBox.IsFocused)
+            {
+                ///aplicar filtro
+                //gridFiltroSQL(filtro);
+                filtroArticulos(filtro);
+
+                if (listFiltro.Items.Count > 0)
+                {
+                    listFiltro.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    ///ocultar control si no hay resultados
+                    listFiltro.Visibility = Visibility.Hidden;
+                }
+            }
+            else
+            {
+                ///ocultar control si el text esta vacio
+                listFiltro.Visibility = Visibility.Hidden;
+            }
+        }
+        private void tbDescripcion_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Down)
+            {
+                listFiltro.Focus();
+            }
+            if (e.Key == Key.Right)
+            {
+                //btnNuevo.Focus();
+                //e.Handled = true;
+
+            }
+            if (e.Key == Key.Escape)
+            {
+                tbDescripcion.Text = "";
+                resetTb();
+            }
+            if (e.Key == Key.Enter || e.Key == Key.Return)
+            {
+                if (tbDescripcion.Text.Trim() == "")
+                {
+                    if (listVenta.Items.Count > 0)
+                    {
+                        tbPagaCon.Focus();
+                    }
+                }
+                else
+                {
+                    tbCantidad.Text = "1";
+                    tbCantidad.SelectAll();
+                    tbCantidad.Focus();
+                    listFiltro.Visibility = Visibility.Hidden;
+                }
+            }
+        }
         private void tbCantidad_TextChanged(object sender, TextChangedEventArgs e)
         {
             calcularSubtotal();
-        }
-        private void tbPrecio_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            calcularSubtotal();
-
         }
         private void tbCantidad_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -586,6 +735,11 @@ namespace SIV_Servidor
                 //tbBuscar.Focus();
                 tbDescripcion.Focus();
             }
+
+        }
+        private void tbPrecio_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            calcularSubtotal();
 
         }
         private void tbPrecio_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -615,9 +769,20 @@ namespace SIV_Servidor
             }
         }
 
-        private void TabItem_GotFocus(object sender, RoutedEventArgs e)
+        private void tbPagaCon_TextChanged(object sender, TextChangedEventArgs e)
         {
-            tbDescripcion.Focus();
+            string total = tbTotal.Text.Replace("$", "");
+            float vuelto = toFloat(tbPagaCon.Text) - toFloat(total);
+            tbVuelto.Text = vuelto.ToString();
+
+        }
+
+        private void tbPagaCon_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                btnAsentar.Focus();
+            }
         }
 
 
