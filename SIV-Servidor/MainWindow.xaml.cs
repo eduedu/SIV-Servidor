@@ -38,6 +38,7 @@ namespace SIV_Servidor
         public MainWindow()
         {
             InitializeComponent();
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
             mArticulos = new List<articuloClass>();
 
             ///SETEAR CONTROLES
@@ -297,36 +298,6 @@ namespace SIV_Servidor
             conexion.Close();
             return resultado;
         }
-        private void asentarVenta()
-        {
-            ///ejecutar si la lista no está vacía
-            if (listVenta.Items.Count > 0)
-            {
-                ///obtener idVentaMax
-                int idVentaMax = obtenerIdVentaMax() + 1;
-                //consola(idVentaMax.ToString());
-
-                ///abrir conexion DB
-                SQLiteConnection conexion;
-                conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
-                conexion.Open();
-
-                ///recorrer la lista (listVenta)
-                foreach (itemVenta item in listVenta.Items)
-                {
-                    asentarItem(item, idVentaMax, conexion);
-                }
-
-                ///Cerrar conexion
-                conexion.Close();
-            }
-            else
-            {
-                consola("No hay articulos en la lista.");
-            }
-
-            tbDescripcion.Focus();
-        }
         private void asentarItem(itemVenta item, int idMax, SQLiteConnection conexion)
         {
             SQLiteCommand insertSQL = new SQLiteCommand("INSERT INTO caja (idventa, fecha, codigo, descripcion, cantidad, precio, costo) VALUES (?,DATETIME('NOW'),?,?,?,?,?)", conexion);
@@ -501,6 +472,56 @@ namespace SIV_Servidor
             calcularTotal();
         }
 
+        private void asentarVenta()
+        {
+            ///ejecutar si la lista no está vacía
+            if (listVenta.Items.Count > 0)
+            {
+                ///obtener idVentaMax
+                int idVentaMax = obtenerIdVentaMax() + 1;
+                //consola(idVentaMax.ToString());
+
+                ///abrir conexion DB
+                SQLiteConnection conexion;
+                conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
+                conexion.Open();
+
+                ///recorrer la lista (listVenta) e ir asentando fila por fila
+                foreach (itemVenta item in listVenta.Items)
+                {
+                    asentarItem(item, idVentaMax, conexion);
+                }
+
+                ///Cerrar conexion
+                conexion.Close();
+
+                ///resetear list
+                resetListVenta();
+                resetTb();
+                calcularTotal();
+                
+            }
+            else
+            {
+                consola("No hay articulos en la lista.");
+            }
+
+            tbDescripcion.Focus();
+        }
+
+        private void resetListVenta()
+        {
+            listVenta.Items.Clear();
+        }
+        private void VentanaCaja()
+        {
+            winCaja ventana = new winCaja();
+            //ventana.Show();
+
+            ventana.Owner = this;
+            ventana.ShowDialog();
+        }
+
         ///CONTROLES
         private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -569,7 +590,6 @@ namespace SIV_Servidor
             boton.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
         }
 
-
         private void btnAsentar_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             //consola(e.Key.ToString());
@@ -589,6 +609,17 @@ namespace SIV_Servidor
         private void btnAsentar_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             asentarVenta();
+        }
+        private void btnVerCaja_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return || e.Key == Key.Enter)
+            {
+                VentanaCaja();
+            }
+        }
+        private void btnVerCaja_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            VentanaCaja();
         }
 
         private void listFiltro_KeyDown(object sender, KeyEventArgs e)
@@ -776,7 +807,6 @@ namespace SIV_Servidor
             tbVuelto.Text = vuelto.ToString();
 
         }
-
         private void tbPagaCon_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)

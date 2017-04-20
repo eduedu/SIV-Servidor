@@ -66,7 +66,6 @@
         -->
     </Window.Resources>
     <Grid>
-
         <Rectangle HorizontalAlignment="Left" Height="67" Margin="10,55,0,0" Stroke="#FFDCDCFF" VerticalAlignment="Top" Width="780"/>
 
         <Rectangle HorizontalAlignment="Left" Height="304" Margin="10,146,0,0" Stroke="#FFDCDCFF" VerticalAlignment="Top" Width="780"/>
@@ -163,7 +162,8 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button x:Name="btnAsentar" Content="Asentar" HorizontalAlignment="Left" Height="30" Margin="655,168,0,0" VerticalAlignment="Top" Width="105" GotFocus="Button_GotFocus" LostFocus="Button_LostFocus" ForceCursor="True" IsManipulationEnabled="True" Background="White" PreviewKeyDown="btnAsentar_PreviewKeyDown" FocusVisualStyle="{x:Null}" PreviewMouseLeftButtonUp="btnAsentar_PreviewMouseLeftButtonUp"/>
+
+        <Button x:Name="btnAsentar1" Content="Asentar" HorizontalAlignment="Left" Height="30" Margin="968,38,-131,0" VerticalAlignment="Top" Width="105" GotFocus="Button_GotFocus" LostFocus="Button_LostFocus" ForceCursor="True" IsManipulationEnabled="True" Background="White" PreviewKeyDown="btnAsentar_PreviewKeyDown" FocusVisualStyle="{x:Null}" PreviewMouseLeftButtonUp="btnAsentar_PreviewMouseLeftButtonUp"/>
         <TextBox x:Name="tbTotal" HorizontalAlignment="Left" Height="30" Margin="654,407,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" Background="#FFB4FFB4" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" Focusable="False" IsHitTestVisible="False" IsTabStop="False" HorizontalContentAlignment="Right" FontWeight="Bold"/>
         <Label x:Name="label_Copy6" Content="TOTAL" HorizontalAlignment="Left" Margin="608,407,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold"/>
         <Label x:Name="label_Copy7" Content="Ventas" HorizontalAlignment="Left" Margin="21,129,0,0" VerticalAlignment="Top" Foreground="White" Background="#FF828296" FontWeight="Bold"/>
@@ -171,6 +171,18 @@
         <Label x:Name="label_Copy8" Content="Paga con" HorizontalAlignment="Left" Margin="485,146,0,0" VerticalAlignment="Top" Foreground="White"/>
         <TextBox x:Name="tbVuelto" HorizontalAlignment="Left" Height="30" Margin="570,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" Background="#FFB4FFB4" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewKeyDown="tbCantidad_PreviewKeyDown" TextChanged="tbCantidad_TextChanged" Focusable="False" IsHitTestVisible="False" IsTabStop="False"/>
         <Label x:Name="label_Copy9" Content="Vuelto" HorizontalAlignment="Left" Margin="570,146,0,0" VerticalAlignment="Top" Foreground="White"/>
+        <Button x:Name="btnAsentar" Background="White" Height="30" Width="105" Margin="655,168,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" GotFocus="Button_GotFocus" LostFocus="Button_LostFocus" PreviewKeyDown="btnAsentar_PreviewKeyDown" PreviewMouseLeftButtonUp="btnAsentar_PreviewMouseLeftButtonUp">
+            <StackPanel Orientation='Horizontal'  Margin="0" >
+                <TextBlock Text="Asentar"  VerticalAlignment="Center" />
+                <Image Height="20" Margin="10,0,0,0" Source="save.png" />
+            </StackPanel>
+        </Button>
+        <Button x:Name="btnVerCaja" Background="White" Height="30" Width="105" Margin="655,498,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" GotFocus="Button_GotFocus" LostFocus="Button_LostFocus" PreviewKeyDown="btnVerCaja_PreviewKeyDown" PreviewMouseLeftButtonUp="btnVerCaja_PreviewMouseLeftButtonUp">
+            <StackPanel Orientation='Horizontal'  Margin="0" >
+                <TextBlock  VerticalAlignment="Center" Text="Ver Caja" />
+                <Image Height="20" Margin="10,0,0,0" Source="vercaja.png" />
+            </StackPanel>
+        </Button>
 
     </Grid>
 </Window>
