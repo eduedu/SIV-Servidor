@@ -563,12 +563,15 @@ namespace SIV_Servidor
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             var textBox = sender as TextBox;
-            textBox.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 120));
+            //textBox.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 120));
+            //textBox.Background = this.Resources["confoco1"] as SolidColorBrush;
+            textBox.Background = App.Current.Resources["confoco"] as SolidColorBrush;
         }
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             var textBox = sender as TextBox;
-            textBox.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+            //textBox.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+            textBox.Background = App.Current.Resources["sinfoco"] as SolidColorBrush;
             if (textBox.Name == "tbDescripcion")
             {
 
@@ -582,12 +585,14 @@ namespace SIV_Servidor
         private void Button_GotFocus(object sender, RoutedEventArgs e)
         {
             var boton = sender as Button;
-            boton.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 120));
+            //boton.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 120));
+            boton.Background = App.Current.Resources["confoco"] as SolidColorBrush;
         }
         private void Button_LostFocus(object sender, RoutedEventArgs e)
         {
             var boton = sender as Button;
-            boton.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+            //boton.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+            boton.Background = App.Current.Resources["boton"] as SolidColorBrush;
         }
 
         private void btnAsentar_PreviewKeyDown(object sender, KeyEventArgs e)

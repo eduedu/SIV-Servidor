@@ -29,11 +29,15 @@ namespace SIV_Servidor {
     class itemCaja
     {
         public int idventa { get; set; }
+        public string idventamostrar { get; set; }
+        public int color { get; set; }
         public float fecha { get; set; }
         public string codigo { get; set; }
         public string descripcion { get; set; }
         public string cantidad { get; set; }
         public string precio { get; set; }
         public string costo { get; set; }
+        public string subtotal { get; set; }
+        public string total { get; set; }
     }
 }

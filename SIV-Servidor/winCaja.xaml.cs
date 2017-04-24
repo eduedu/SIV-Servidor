@@ -41,6 +41,7 @@ namespace SIV_Servidor
             conexion.Open();
 
             string consulta = "select * from caja ORDER BY id DESC";
+            //string consulta = "select * from caja";
 
             /// Adaptador de datos, DataSet y tabla
             SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
@@ -62,6 +63,9 @@ namespace SIV_Servidor
             }
 
             ///Loop por todos los registros de la tabla
+            int idventaMostrar = -1;
+            float tmpTotal = 0;
+            int index = 0;
             foreach (DataRow registro in dataTable.Rows)
             {
                 //Console.WriteLine(registro.ItemArray.GetValue(0));
@@ -72,7 +76,10 @@ namespace SIV_Servidor
                 //float tmpPrecio = 0;
                 //float.TryParse(tmpStringPrecio, out tmpPrecio);
 
+                float cantidad = toFloat(registro["cantidad"].ToString());
                 float precio = toFloat(registro["precio"].ToString());
+                float tmpSubtotal = cantidad * precio;
+
                 //float costo = toFloat(registro["costo"].ToString());
                 //float cantidad = toFloat(registro["cantidad"].ToString());
                 consola(registro["precio"].ToString());
@@ -80,14 +87,48 @@ namespace SIV_Servidor
                 int tmpidventa = 0;
                 int.TryParse(registro["idventa"].ToString(), out tmpidventa);
 
+
                 itemCaja tempArticulo = new itemCaja();
+                if (tmpidventa != idventaMostrar)
+                {
+                    idventaMostrar = tmpidventa;
+                    tempArticulo.idventamostrar = idventaMostrar.ToString();
+                    tmpTotal = tmpSubtotal;
+                }
+                else
+                {
+                    tempArticulo.idventamostrar = "";
+                    tmpTotal = tmpTotal + tmpSubtotal;
+                }
+                if ((tmpidventa % 2) == 0)
+                {
+                    tempArticulo.color = 0;
+                }
+                else
+                {
+                    tempArticulo.color = 1;
+                }
                 tempArticulo.idventa = tmpidventa;
                 tempArticulo.codigo = registro["codigo"].ToString();
                 tempArticulo.descripcion = registro["descripcion"].ToString();
-                tempArticulo.cantidad = registro["cantidad"].ToString(); 
-                tempArticulo.precio = precio.ToString(); 
-                tempArticulo.costo = registro["costo"].ToString(); 
-
+                tempArticulo.cantidad = cantidad.ToString();
+                tempArticulo.precio = precio.ToString();
+                tempArticulo.costo = registro["costo"].ToString();
+                tempArticulo.subtotal = tmpSubtotal.ToString();
+                tempArticulo.total = "";
+                if (dataTable.Rows.Count != index + 1)
+                {
+                    String tmpSiguienteId = dataTable.Rows[index + 1]["idventa"].ToString();
+                    //consola(registro["idventa"].ToString() + "-" + tmpSiguienteId);
+                    if (registro["idventa"].ToString() != tmpSiguienteId)
+                    {
+                        tempArticulo.total = tmpTotal.ToString();
+                    }
+                }
+                else
+                {
+                    tempArticulo.total = tmpTotal.ToString();
+                }
                 mArticulosCaja.Add(tempArticulo);
                 /*
 				mArticulos.Add(new articuloClass() {
@@ -97,6 +138,7 @@ namespace SIV_Servidor
 					precio = tmpPrecio,
 				});
 				*/
+                index++;
             }
 
             //popular lista mArticulos con los datos de todos los registros (se puede??)
@@ -106,7 +148,15 @@ namespace SIV_Servidor
 
             //cerrar conexion
             //gridFiltro.ItemsSource = mArticulos;
+            //mArticulosCaja.Reverse();
             listCaja.ItemsSource = mArticulosCaja;
+
+            /*
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(listCaja.ItemsSource);
+            PropertyGroupDescription groupDescription = new PropertyGroupDescription("idventa");
+            view.GroupDescriptions.Add(groupDescription);
+            */
+
             conexion.Close();
         }
         private float toFloat(string cadena)
