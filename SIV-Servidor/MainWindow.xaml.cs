@@ -23,6 +23,7 @@ using System.IO;
 using System.Data.SQLite; //Utilizamos la DLL
 using System.Data;
 using System.Globalization;
+using System.Windows.Media.Animation;
 
 namespace SIV_Servidor
 {
@@ -31,15 +32,26 @@ namespace SIV_Servidor
         ///Variables Globales
         List<articuloClass> mArticulos;
         int mPestana;
+        List<itemCaja> mArticulosCaja;
 
         //static SQLiteConnection conexion;
 
+        ///Clic en todo el boton
+        ///borde de los listitems
+        ///color de seleccion sin gradiente
+
         ///MAIN
+        //////sasas
         public MainWindow()
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             mArticulos = new List<articuloClass>();
+            mArticulosCaja = new List<itemCaja>();
+
+
+
+
 
             ///SETEAR CONTROLES
             LTemp.Content = "";
@@ -56,6 +68,7 @@ namespace SIV_Servidor
             cargarListaDeArticulos();
             calcularTotal();
             tbDescripcion.Focus();
+            CargarDBCaja();
         }
         ///---------------------------------------------------------------------------
 
@@ -499,7 +512,7 @@ namespace SIV_Servidor
                 resetListVenta();
                 resetTb();
                 calcularTotal();
-                
+
             }
             else
             {
@@ -513,13 +526,142 @@ namespace SIV_Servidor
         {
             listVenta.Items.Clear();
         }
-        private void VentanaCaja()
+
+        /*private void VentanaCaja()
         {
             winCaja ventana = new winCaja();
             //ventana.Show();
 
             ventana.Owner = this;
             ventana.ShowDialog();
+        }
+        */
+
+        ///FUNCIONES CAJA
+        private void CargarDBCaja()
+        {
+            SQLiteConnection conexion;
+            conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
+            conexion.Open();
+
+            string consulta = "select * from caja ORDER BY id DESC";
+            //string consulta = "select * from caja";
+
+            /// Adaptador de datos, DataSet y tabla
+            SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
+            DataSet dataSet = new DataSet();
+            DataTable dataTable = new DataTable();
+            dataSet.Reset();
+            db.Fill(dataSet);
+            dataTable = dataSet.Tables[0];
+            //dataGrid.DataSource = dt;
+            //dataGrid.DataContext = dt.DefaultView;  //esto anda
+
+            //gridFiltro.ItemsSource = dataTable.DefaultView;
+            //listFiltro.ItemsSource = dataTable.DefaultView;
+
+            ///borrar todos los elementos de mArticulos
+            if (mArticulosCaja != null)
+            {
+                mArticulosCaja.Clear();
+            }
+
+            ///Loop por todos los registros de la tabla
+            int idventaMostrar = -1;
+            float tmpTotal = 0;
+            int index = 0;
+            foreach (DataRow registro in dataTable.Rows)
+            {
+                //Console.WriteLine(registro.ItemArray.GetValue(0));
+                //Console.WriteLine(registro["descripcion"]);
+                //Console.WriteLine(registro["id"]+"-"+registro["id"].GetType());
+
+                //string tmpStringPrecio = registro["precio"].ToString();
+                //float tmpPrecio = 0;
+                //float.TryParse(tmpStringPrecio, out tmpPrecio);
+
+                float cantidad = toFloat(registro["cantidad"].ToString());
+                float precio = toFloat(registro["precio"].ToString());
+                float tmpSubtotal = cantidad * precio;
+
+                //float costo = toFloat(registro["costo"].ToString());
+                //float cantidad = toFloat(registro["cantidad"].ToString());
+                consola(registro["precio"].ToString());
+
+                int tmpidventa = 0;
+                int.TryParse(registro["idventa"].ToString(), out tmpidventa);
+
+
+                itemCaja tempArticulo = new itemCaja();
+                if (tmpidventa != idventaMostrar)
+                {
+                    idventaMostrar = tmpidventa;
+                    tempArticulo.idventamostrar = idventaMostrar.ToString();
+                    tmpTotal = tmpSubtotal;
+                }
+                else
+                {
+                    tempArticulo.idventamostrar = "";
+                    tmpTotal = tmpTotal + tmpSubtotal;
+                }
+                if ((tmpidventa % 2) == 0)
+                {
+                    tempArticulo.color = 0;
+                }
+                else
+                {
+                    tempArticulo.color = 1;
+                }
+                tempArticulo.idventa = tmpidventa;
+                tempArticulo.codigo = registro["codigo"].ToString();
+                tempArticulo.descripcion = registro["descripcion"].ToString();
+                tempArticulo.cantidad = cantidad.ToString();
+                tempArticulo.precio = precio.ToString();
+                tempArticulo.costo = registro["costo"].ToString();
+                tempArticulo.subtotal = tmpSubtotal.ToString();
+                tempArticulo.total = "";
+                if (dataTable.Rows.Count != index + 1)
+                {
+                    String tmpSiguienteId = dataTable.Rows[index + 1]["idventa"].ToString();
+                    //consola(registro["idventa"].ToString() + "-" + tmpSiguienteId);
+                    if (registro["idventa"].ToString() != tmpSiguienteId)
+                    {
+                        tempArticulo.total = tmpTotal.ToString();
+                    }
+                }
+                else
+                {
+                    tempArticulo.total = tmpTotal.ToString();
+                }
+                mArticulosCaja.Add(tempArticulo);
+                /*
+				mArticulos.Add(new articuloClass() {
+					id = (long)registro["id"],
+					codigopro = registro["codigopro"].ToString(),
+					descripcion = registro["descripcion"].ToString(),
+					precio = tmpPrecio,
+				});
+				*/
+                index++;
+            }
+
+            //popular lista mArticulos con los datos de todos los registros (se puede??)
+            //List<articuloClass> tempArticulos = new List<articuloClass>();
+            //tempArticulos.AddRange(dataTable.Rows);
+
+
+            //cerrar conexion
+            //gridFiltro.ItemsSource = mArticulos;
+            //mArticulosCaja.Reverse();
+            listCaja.ItemsSource = mArticulosCaja;
+
+            /*
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(listCaja.ItemsSource);
+            PropertyGroupDescription groupDescription = new PropertyGroupDescription("idventa");
+            view.GroupDescriptions.Add(groupDescription);
+            */
+
+            conexion.Close();
         }
 
         ///CONTROLES
@@ -560,6 +702,24 @@ namespace SIV_Servidor
                 }
             }
         }
+        private void SistemaVentas_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F1)
+            {
+                tabMain.SelectedIndex = 0;
+                Storyboard sb = this.FindResource("Storyboard1") as Storyboard;
+                //Storyboard.SetTarget(sb, this.btn);
+                sb.Begin();
+            }
+            if (e.Key == Key.F2)
+            {
+                tabMain.SelectedIndex = 1;
+                Storyboard sb = this.FindResource("Storyboard2") as Storyboard;
+                //Storyboard.SetTarget(sb, this.btn);
+                sb.Begin();
+
+            }
+        }
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             var textBox = sender as TextBox;
@@ -577,9 +737,44 @@ namespace SIV_Servidor
 
             }
         }
+
         private void TabItem_GotFocus(object sender, RoutedEventArgs e)
         {
             tbDescripcion.Focus();
+        }
+        private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var tab = sender as TabControl;
+            int selected = tab.SelectedIndex;
+            seleccionarPestana(selected);
+            //consola(tab.Name);
+            //consola(selected.ToString());
+            //tbDescripcion.Focus();
+            e.Handled = true;
+        }
+        private void tabMain_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.Source is TabControl)
+            {
+                var tab = sender as TabControl;
+                int selected = tab.SelectedIndex;
+                //consola(e.Source.ToString());
+
+                if (selected == 0)
+                {
+                    Storyboard sb = this.FindResource("Storyboard1") as Storyboard;
+                    //Storyboard.SetTarget(sb, this.btn);
+                    sb.Begin();
+                }
+                if (selected == 1)
+                {
+                    Storyboard sb = this.FindResource("Storyboard2") as Storyboard;
+                    //Storyboard.SetTarget(sb, this.btn);
+                    sb.Begin();
+                }
+
+            }
+            e.Handled = true;
         }
 
         private void Button_GotFocus(object sender, RoutedEventArgs e)
@@ -615,17 +810,8 @@ namespace SIV_Servidor
         {
             asentarVenta();
         }
-        private void btnVerCaja_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Return || e.Key == Key.Enter)
-            {
-                VentanaCaja();
-            }
-        }
-        private void btnVerCaja_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            VentanaCaja();
-        }
+
+
 
         private void listFiltro_KeyDown(object sender, KeyEventArgs e)
         {
@@ -674,14 +860,6 @@ namespace SIV_Servidor
             }
         }
 
-        private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var tab = sender as TabControl;
-            int selected = tab.SelectedIndex;
-            seleccionarPestana(selected);
-            //consola(selected.ToString());
-            //tbDescripcion.Focus();
-        }
 
         private void tbDescripcion_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -819,6 +997,7 @@ namespace SIV_Servidor
                 btnAsentar.Focus();
             }
         }
+
 
 
         ///-------------------------------------------------------------------------------------------

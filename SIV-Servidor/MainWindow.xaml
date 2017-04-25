@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SIV_Servidor"
         mc:Ignorable="d"
-        Title="Sistema Ventas (Servidor)" Height="650" Width="950" Background="{DynamicResource colorfondo}">
+        Title="Sistema Ventas (Servidor)" Height="650" Width="997" Background="{DynamicResource colorfondo}" PreviewKeyDown="SistemaVentas_PreviewKeyDown">
     <Window.Resources>
 
 
@@ -68,16 +68,24 @@
         -->
 
         <Color x:Key="Foco1">#FFCCCCCC</Color>
+        <Storyboard x:Key="Storyboard1">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="grid">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="Storyboard2">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="grid1">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+
+        </Storyboard>
     </Window.Resources>
     <Grid>
-        <Rectangle HorizontalAlignment="Left" Height="67" Margin="10,55,0,0" Stroke="{DynamicResource detalles}" VerticalAlignment="Top" Width="780"/>
-
-        <Rectangle HorizontalAlignment="Left" Height="304" Margin="10,146,0,0" Stroke="{DynamicResource detalles}" VerticalAlignment="Top" Width="780"/>
-
-        <Label x:Name="label_Copy5" Content="Artículo" HorizontalAlignment="Left" Margin="21,38,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Background="{DynamicResource colorfondo}" FontWeight="Bold"/>
-        <Label x:Name="Label1" x:FieldModifier="public" Content="Label" Margin="0,587,0,0" VerticalAlignment="Top" Height="32" Background="{DynamicResource infocable}" HorizontalAlignment="Right" Width="147"/>
-        <Label x:Name="LTemp" Content="LTemp" HorizontalAlignment="Left" Margin="0,587,0,0" VerticalAlignment="Top" Width="650" Background="{DynamicResource infocable}" Height="32"/>
-        <ListView x:Name="listFiltro"    Height="224" Margin="968,106,-656,0" VerticalAlignment="Top" Width="630" Background="#FFF0F0F0" KeyDown="listFiltro_KeyDown" HorizontalAlignment="Left" Panel.ZIndex="1" IsTabStop="True" Foreground="Black"  >
+        <Label x:Name="Label1" x:FieldModifier="public" Content="Label" Margin="0,587,0,0" VerticalAlignment="Top" Height="32" Background="{DynamicResource infocable3}" HorizontalAlignment="Right" Width="147" Foreground="{DynamicResource textoobscuro}"/>
+        <Label x:Name="LTemp" Content="LTemp" HorizontalAlignment="Left" Margin="0,587,0,0" VerticalAlignment="Top" Width="790" Background="{DynamicResource infocable}" Height="32" Foreground="{DynamicResource textoobscuro}"/>
+        <ListView x:Name="listFiltro"    Height="224" Margin="1022,110,-663,0" VerticalAlignment="Top" Width="630" Background="#FFF0F0F0" KeyDown="listFiltro_KeyDown" HorizontalAlignment="Left" Panel.ZIndex="1" IsTabStop="True" Foreground="Black"  >
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="id" Width="50"   DisplayMemberBinding="{Binding id}"  />
@@ -93,37 +101,40 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <DataGrid x:Name="gridFiltro" ItemsSource="{Binding}" HorizontalAlignment="Left" Margin="968,449,-414,0" VerticalAlignment="Top" Height="104" Width="388" Background="#FFF000F0"/>
-        <TextBox x:Name="tbCodigo" HorizontalAlignment="Left" Height="30" Margin="20,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" Background="{DynamicResource infocable}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" Focusable="False" IsTabStop="False" IsHitTestVisible="False"/>
-        <TextBox x:Name="tbDescripcion" HorizontalAlignment="Left" Height="30" Margin="130,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="350" Background="{DynamicResource sinfoco}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" TextChanged="tbDescripcion_TextChanged" PreviewKeyDown="tbDescripcion_PreviewKeyDown"/>
-        <TextBox x:Name="tbSubtotal" HorizontalAlignment="Left" Height="30" Margin="655,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" Background="{DynamicResource infocable}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" Focusable="False" IsHitTestVisible="False" IsTabStop="False" HorizontalContentAlignment="Right"/>
-        <TextBox x:Name="tbPrecio" HorizontalAlignment="Left" Height="30" Margin="570,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" Background="{DynamicResource sinfoco}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewKeyDown="tbPrecio_PreviewKeyDown" TextChanged="tbPrecio_TextChanged"/>
-        <TextBox x:Name="tbCantidad" HorizontalAlignment="Left" Height="30" Margin="485,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" Background="{DynamicResource sinfoco}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewKeyDown="tbCantidad_PreviewKeyDown" TextChanged="tbCantidad_TextChanged"/>
-        <Label x:Name="label_Copy" Content="Código" HorizontalAlignment="Left" Margin="21,58,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
-        <Label x:Name="label_Copy1" Content="Descripción" HorizontalAlignment="Left" Margin="130,58,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
-        <Label x:Name="label_Copy2" Content="Cantidad" HorizontalAlignment="Left" Margin="485,58,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
-        <Label x:Name="label_Copy3" Content="Precio $" HorizontalAlignment="Left" Margin="570,58,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
-        <Label x:Name="label_Copy4" Content="Sub-total $" HorizontalAlignment="Left" Margin="655,58,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
-        <TabControl x:Name="tabControl" HorizontalAlignment="Left" Height="36" Margin="20,170,0,0" VerticalAlignment="Top" Width="339" SelectionChanged="tabControl_SelectionChanged" Focusable="False">
+        <DataGrid x:Name="gridFiltro" ItemsSource="{Binding}" HorizontalAlignment="Left" Margin="1022,388,-421,0" VerticalAlignment="Top" Height="104" Width="388" Background="#FFF000F0"/>
+
+        <Button x:Name="btnAsentar1" Content="Asentar" HorizontalAlignment="Left" Height="30" Margin="1040,32,-156,0" VerticalAlignment="Top" Width="105" GotFocus="Button_GotFocus" LostFocus="Button_LostFocus" ForceCursor="True" IsManipulationEnabled="True" Background="White" PreviewKeyDown="btnAsentar_PreviewKeyDown" FocusVisualStyle="{x:Null}" PreviewMouseLeftButtonUp="btnAsentar_PreviewMouseLeftButtonUp"/>
+        <TabControl x:Name="tabMain"  HorizontalAlignment="Left" Margin="10,10,0,37" Width="969"  Background="{x:Null}" BorderBrush="{x:Null}" SelectionChanged="tabMain_SelectionChanged">
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type TabItem}">
 
-                                <Border x:Name="Border" BorderThickness="1,1,1,0" BorderBrush="Gainsboro" CornerRadius="4,4,0,0" Margin="0,0,2,0">
+                                <Border x:Name="Border" BorderThickness="2,2,2,2" BorderBrush="{StaticResource textoclaro}" CornerRadius="0" Margin="0,0,5,0">
                                     <ContentPresenter x:Name="ContentSite"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"
-                                        ContentSource="Header"
-                                        Margin="26,8"/>
+										VerticalAlignment="Center"
+										HorizontalAlignment="Center"
+										ContentSource="Header"
+										Margin="26,8"/>
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
+                                        <!--
                                         <Setter TargetName="Border" Property="Background" Value="{StaticResource confoco}" />
+                                        <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
+                                        <Setter Property="TextBlock.FontWeight" Value="ExtraBlack" />
+                                        <Setter TargetName="Border" Property="BorderThickness" Value="4,4,4,4" />
+                                        -->
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource confoco}" />
+                                        <Setter Property="TextBlock.Foreground" Value="{StaticResource confoco}" />
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="False">
+                                        <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
+                                        <!--
+                                        <Setter Property="TextBlock.FontWeight" Value="Normal" />
                                         <Setter TargetName="Border" Property="Background" Value="{StaticResource sinfoco}" />
+                                        -->
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -131,62 +142,206 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
-            <TabItem Header="1" GotFocus="TabItem_GotFocus" Foreground="{DynamicResource textoobscuro}"/>
-            <TabItem Header="2" GotFocus="TabItem_GotFocus" Foreground="{DynamicResource textoobscuro}"/>
-            <TabItem Header="3" GotFocus="TabItem_GotFocus" Foreground="{DynamicResource textoobscuro}"/>
-            <TabItem Header="4" GotFocus="TabItem_GotFocus" Foreground="{DynamicResource textoobscuro}"/>
-            <TabItem Header="5" GotFocus="TabItem_GotFocus" Foreground="{DynamicResource textoobscuro}"/>
-        </TabControl>
-        <ListView x:Name="listVenta"    Height="197" Margin="21,205,0,0" VerticalAlignment="Top" Width="760" Background="#FFF0F0F0" HorizontalAlignment="Left" Foreground="Black"  >
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Código" Width="100"   DisplayMemberBinding="{Binding codigo}"  />
-                    <GridViewColumn Header="Descripción" Width="350" DisplayMemberBinding="{Binding descripcion}"  />
-                    <GridViewColumn Header="Cantidad" Width="90"   >
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding cantidad}" Width="80" TextAlignment="Right" HorizontalAlignment="Right"   />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Precio $" Width="90"   >
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding precio, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Sub-total $" Width="100"   >
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding subtotal, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"  FontWeight="Bold"  />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
+            <TabItem x:Name="tabItem" Header="F1-Ventas" FocusVisualStyle="{x:Null}" Cursor="Hand" ForceCursor="True">
+                <Grid x:Name="grid" Background="{DynamicResource colorfondo}" Margin="0,0,-12,0">
+                    <Rectangle HorizontalAlignment="Left" Height="67" Margin="0.517,26.5,0,0" Stroke="{DynamicResource detalles}" VerticalAlignment="Top" Width="780"/>
 
-        <Button x:Name="btnAsentar1" Content="Asentar" HorizontalAlignment="Left" Height="30" Margin="968,38,-131,0" VerticalAlignment="Top" Width="105" GotFocus="Button_GotFocus" LostFocus="Button_LostFocus" ForceCursor="True" IsManipulationEnabled="True" Background="White" PreviewKeyDown="btnAsentar_PreviewKeyDown" FocusVisualStyle="{x:Null}" PreviewMouseLeftButtonUp="btnAsentar_PreviewMouseLeftButtonUp"/>
-        <TextBox x:Name="tbTotal" HorizontalAlignment="Left" Height="30" Margin="654,407,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" Background="{DynamicResource infocable1}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" Focusable="False" IsHitTestVisible="False" IsTabStop="False" HorizontalContentAlignment="Right" FontWeight="Bold" BorderBrush="{DynamicResource detalles}" Foreground="{DynamicResource textoclaro}"/>
-        <Label x:Name="label_Copy6" Content="TOTAL" HorizontalAlignment="Left" Margin="608,407,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" FontWeight="Bold"/>
-        <Label x:Name="label_Copy7" Content="Ventas" HorizontalAlignment="Left" Margin="21,129,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Background="{DynamicResource colorfondo}" FontWeight="Bold"/>
-        <TextBox x:Name="tbPagaCon" HorizontalAlignment="Left" Height="30" Margin="485,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" Background="{DynamicResource sinfoco}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" TextChanged="tbPagaCon_TextChanged" PreviewKeyDown="tbPagaCon_PreviewKeyDown"/>
-        <Label x:Name="label_Copy8" Content="Paga con" HorizontalAlignment="Left" Margin="485,146,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
-        <TextBox x:Name="tbVuelto" HorizontalAlignment="Left" Height="30" Margin="570,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" Background="{DynamicResource infocable}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewKeyDown="tbCantidad_PreviewKeyDown" TextChanged="tbCantidad_TextChanged" Focusable="False" IsHitTestVisible="False" IsTabStop="False"/>
-        <Label x:Name="label_Copy9" Content="Vuelto" HorizontalAlignment="Left" Margin="570,146,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
-        <Button x:Name="btnAsentar" Background="{DynamicResource boton}" Height="30" Width="105" Margin="655,168,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" GotFocus="Button_GotFocus" LostFocus="Button_LostFocus" PreviewKeyDown="btnAsentar_PreviewKeyDown" PreviewMouseLeftButtonUp="btnAsentar_PreviewMouseLeftButtonUp">
-            <StackPanel Orientation='Horizontal'  Margin="0" >
-                <TextBlock Text="Asentar"  VerticalAlignment="Center" Foreground="{DynamicResource textoobscuro}" />
-                <Image Height="20" Margin="10,0,0,0" Source="save.png" />
-            </StackPanel>
-        </Button>
-        <Button x:Name="btnVerCaja" Background="{DynamicResource boton}" Height="30" Width="105" Margin="655,498,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" GotFocus="Button_GotFocus" LostFocus="Button_LostFocus" PreviewKeyDown="btnVerCaja_PreviewKeyDown" PreviewMouseLeftButtonUp="btnVerCaja_PreviewMouseLeftButtonUp">
-            <StackPanel Orientation='Horizontal'  Margin="0" >
-                <TextBlock  VerticalAlignment="Center" Text="Ver Caja" Foreground="{DynamicResource textoobscuro}" />
-                <Image Height="20" Margin="10,0,0,0" Source="vercaja.png" />
-            </StackPanel>
-        </Button>
+                    <Rectangle HorizontalAlignment="Left" Height="304" Margin="0.517,117.5,0,0" Stroke="{DynamicResource detalles}" VerticalAlignment="Top" Width="780"/>
+
+                    <Label x:Name="label_Copy5" Content="Artículo" HorizontalAlignment="Left" Margin="11.465,9.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Background="{DynamicResource colorfondo}" FontWeight="Bold"/>
+                    <TextBox x:Name="tbCodigo" HorizontalAlignment="Left" Height="30" Margin="10.517,53.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" Background="{DynamicResource infocable}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" Focusable="False" IsTabStop="False" IsHitTestVisible="False" RenderTransformOrigin="0.5,0.5">
+
+                    </TextBox>
+                    <TextBox x:Name="tbDescripcion" HorizontalAlignment="Left" Height="30" Margin="120.517,53.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="350" Background="{DynamicResource sinfoco}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" TextChanged="tbDescripcion_TextChanged" PreviewKeyDown="tbDescripcion_PreviewKeyDown"/>
+                    <TextBox x:Name="tbSubtotal" HorizontalAlignment="Left" Height="30" Margin="645.517,53.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" Background="{DynamicResource infocable}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" Focusable="False" IsHitTestVisible="False" IsTabStop="False" HorizontalContentAlignment="Right"/>
+                    <TextBox x:Name="tbPrecio" HorizontalAlignment="Left" Height="30" Margin="560.517,53.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" Background="{DynamicResource sinfoco}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewKeyDown="tbPrecio_PreviewKeyDown" TextChanged="tbPrecio_TextChanged"/>
+                    <TextBox x:Name="tbCantidad" HorizontalAlignment="Left" Height="30" Margin="475.517,53.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" Background="{DynamicResource sinfoco}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewKeyDown="tbCantidad_PreviewKeyDown" TextChanged="tbCantidad_TextChanged"/>
+                    <Label x:Name="label_Copy" Content="Código" HorizontalAlignment="Left" Margin="11.465,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
+                    <Label x:Name="label_Copy1" Content="Descripción" HorizontalAlignment="Left" Margin="120.465,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
+                    <Label x:Name="label_Copy2" Content="Cantidad" HorizontalAlignment="Left" Margin="475.465,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
+                    <Label x:Name="label_Copy3" Content="Precio $" HorizontalAlignment="Left" Margin="560.465,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
+                    <Label x:Name="label_Copy4" Content="Sub-total $" HorizontalAlignment="Left" Margin="645.465,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
+                    <TabControl x:Name="tabControl" HorizontalAlignment="Left" Margin="10.517,141.5,0,192.54" Width="443.667" SelectionChanged="tabControl_SelectionChanged" Focusable="False" Background="{x:Null}" BorderBrush="{x:Null}">
+                        <TabControl.Resources>
+                            <Style TargetType="{x:Type TabItem}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type TabItem}">
+
+                                            <Border x:Name="Border" BorderThickness="1,1,1,0" BorderBrush="Gainsboro" CornerRadius="4,4,0,0" Margin="0,0,2,0">
+                                                <ContentPresenter x:Name="ContentSite"
+										VerticalAlignment="Center"
+										HorizontalAlignment="Center"
+										ContentSource="Header"
+										Margin="26,8"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="Border" Property="Background" Value="{StaticResource confoco}" />
+                                                </Trigger>
+                                                <Trigger Property="IsSelected" Value="False">
+                                                    <Setter TargetName="Border" Property="Background" Value="{StaticResource sinfoco}" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TabControl.Resources>
+                        <TabItem Header="1" GotFocus="TabItem_GotFocus" Foreground="{DynamicResource textoobscuro}"/>
+                        <TabItem Header="2" GotFocus="TabItem_GotFocus" Foreground="{DynamicResource textoobscuro}"/>
+                        <TabItem Header="3" GotFocus="TabItem_GotFocus" Foreground="{DynamicResource textoobscuro}"/>
+                        <TabItem Header="4" GotFocus="TabItem_GotFocus" Foreground="{DynamicResource textoobscuro}"/>
+                        <TabItem Header="5" GotFocus="TabItem_GotFocus" Foreground="{DynamicResource textoobscuro}"/>
+                    </TabControl>
+                    <ListView x:Name="listVenta"    Height="197" Margin="11.517,176.5,0,0" VerticalAlignment="Top" Width="760" Background="#FFF0F0F0" HorizontalAlignment="Left" Foreground="Black"  >
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Código" Width="100"   DisplayMemberBinding="{Binding codigo}"  />
+                                <GridViewColumn Header="Descripción" Width="350" DisplayMemberBinding="{Binding descripcion}"  />
+                                <GridViewColumn Header="Cantidad" Width="90"   >
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding cantidad}" Width="80" TextAlignment="Right" HorizontalAlignment="Right"   />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Precio $" Width="90"   >
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding precio, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Sub-total $" Width="100"   >
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding subtotal, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"  FontWeight="Bold"  />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <TextBox x:Name="tbTotal" HorizontalAlignment="Left" Height="30" Margin="644.517,378.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" Background="{DynamicResource infocable1}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" Focusable="False" IsHitTestVisible="False" IsTabStop="False" HorizontalContentAlignment="Right" FontWeight="Bold" BorderBrush="{DynamicResource detalles}" Foreground="{DynamicResource textoclaro}"/>
+                    <Label x:Name="label_Copy6" Content="TOTAL" HorizontalAlignment="Left" Margin="598.465,378.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" FontWeight="Bold"/>
+                    <Label x:Name="label_Copy7" Content="Ventas" HorizontalAlignment="Left" Margin="11.465,100.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Background="{DynamicResource colorfondo}" FontWeight="Bold"/>
+                    <TextBox x:Name="tbPagaCon" HorizontalAlignment="Left" Margin="475.517,139.5,0,0" TextWrapping="Wrap" Width="80" Background="{DynamicResource sinfoco}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" TextChanged="tbPagaCon_TextChanged" PreviewKeyDown="tbPagaCon_PreviewKeyDown" Height="31.167" VerticalAlignment="Top"/>
+                    <Label x:Name="label_Copy8" Content="Paga con" HorizontalAlignment="Left" Margin="475.465,117.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
+                    <TextBox x:Name="tbVuelto" HorizontalAlignment="Left" Margin="560.517,139.5,0,0" TextWrapping="Wrap" Width="80" Background="{DynamicResource infocable}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewKeyDown="tbCantidad_PreviewKeyDown" TextChanged="tbCantidad_TextChanged" Focusable="False" IsHitTestVisible="False" IsTabStop="False" Height="31.167" VerticalAlignment="Top"/>
+                    <Label x:Name="label_Copy9" Content="Vuelto" HorizontalAlignment="Left" Margin="560.465,117.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
+                    <Button x:Name="btnAsentar" Background="{DynamicResource boton}" Width="105" Margin="645.517,139.5,0,0" HorizontalAlignment="Left" GotFocus="Button_GotFocus" LostFocus="Button_LostFocus" PreviewKeyDown="btnAsentar_PreviewKeyDown" PreviewMouseLeftButtonUp="btnAsentar_PreviewMouseLeftButtonUp" Height="31.167" VerticalAlignment="Top">
+                        <StackPanel Orientation='Horizontal'  Margin="0" >
+                            <TextBlock Text="Asentar"  VerticalAlignment="Center" Foreground="{DynamicResource textoobscuro}" />
+                            <Image Height="20" Margin="10,0,0,0" Source="save.png" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabItem1" Header="F2-Caja" FocusVisualStyle="{x:Null}" Cursor="Hand" ForceCursor="True" Background="{DynamicResource colorfondo}" >
+                <Grid x:Name="grid1" Margin="0">
+                    <ListView x:Name="listCaja"  Height="347" Margin="0,10,-36,0" VerticalAlignment="Top" Width="952" Background="{x:Null}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
+			BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single">
+
+                        <ListView.Resources>
+                            <Style TargetType="{x:Type ListViewItem}">
+
+                                <Style.Resources>
+                                    <Style TargetType="{x:Type Border}">
+
+                                        <Setter Property="CornerRadius" Value="0"/>
+                                    </Style>
+                                </Style.Resources>
+
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding color}" Value="0">
+                                        <Setter Property="Background" Value="LightGray" />
+                                        <Setter Property="BorderBrush" Value="red" />
+                                        <Setter Property="BorderThickness" Value="2" />
+                                        <Setter Property="Margin" Value="0" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding color}" Value="1">
+                                        <Setter Property="Background" Value="White" />
+                                        <Setter Property="BorderBrush" Value="White" />
+                                        <!--
+                                        <Setter Property="CornerRadius" Value="0"/>
+                                        <Setter TargetName="Border" Property="BorderThickness" Value="4,4,4,4" />
+                                        -->
+                                        <Setter Property="BorderThickness" Value="2" />
+                                        <Setter Property="Margin" Value="0" />
+                                    </DataTrigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsSelected" Value="true" />
+                                            <Condition Property="Selector.IsSelectionActive" Value="true" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Foreground" Value="Black" />
+                                        <Setter Property="Background" Value="#FFFF82" />
+                                        <Setter Property="BorderBrush" Value="#FFFF82" />
+                                    </MultiTrigger>
+
+                                    <!--
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="Transparent" />
+                        </Trigger>
+                        -->
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.Resources>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Nro Venta" Width="70"   DisplayMemberBinding="{Binding idventamostrar}"  />
+                                <GridViewColumn Header="idventa" Width="0"   DisplayMemberBinding="{Binding idventa}"   />
+                                <GridViewColumn Header="color" Width="0"   DisplayMemberBinding="{Binding color}"   />
+                                <GridViewColumn Header="Fecha" Width="90"   DisplayMemberBinding="{Binding fecha}"  />
+                                <GridViewColumn Header="Código" Width="100"   DisplayMemberBinding="{Binding codigo}"  />
+                                <GridViewColumn Header="Descripción" Width="350" DisplayMemberBinding="{Binding descripcion}"  />
+                                <GridViewColumn Header="Cant." Width="50"   >
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding cantidad}" Width="80" TextAlignment="Right" HorizontalAlignment="Right"   />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Precio $" Width="70"   >
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding precio, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Sub-total $" Width="90"   >
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding subtotal, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"    />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Total $" Width="90"   >
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding total, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"  FontWeight="Bold"  />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+
+                        <!--
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name}"></TextBlock>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListView.GroupStyle>-->
+                    </ListView>
+                </Grid>
+            </TabItem>
+        </TabControl>
 
     </Grid>
 </Window>

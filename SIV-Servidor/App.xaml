@@ -21,11 +21,11 @@
         <SolidColorBrush x:Key="infocable3" Color="#FFFF90B7"/>
         <SolidColorBrush x:Key="infocable4" Color="#FFE8A97C"/>
         <SolidColorBrush x:Key="sinfoco" Color="#fff0f0f0"/>
-        <SolidColorBrush x:Key="colorfondo" Color="#FF303030"/>
+        <SolidColorBrush x:Key="colorfondo" Color="#FF404050"/>
         <SolidColorBrush x:Key="boton" Color="#FFf0f0f0"/>
-        <SolidColorBrush x:Key="detalles" Color="#FF424242"/>
-        <SolidColorBrush x:Key="textoclaro" Color="#FFf0f0f0"/>
-        <SolidColorBrush x:Key="textoobscuro" Color="Black"/>
+        <SolidColorBrush x:Key="detalles" Color="#FF707080"/>
+        <SolidColorBrush x:Key="textoclaro" Color="#FFd0d0e0"/>
+        <SolidColorBrush x:Key="textoobscuro" Color="#FF222222"/>
 
 
     </Application.Resources>
