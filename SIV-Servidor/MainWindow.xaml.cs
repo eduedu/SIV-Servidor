@@ -33,12 +33,29 @@ namespace SIV_Servidor
         List<articuloClass> mArticulos;
         int mPestana;
         List<itemCaja> mArticulosCaja;
-
+        Storyboard sb;
+        Storyboard sb2;
+        Storyboard sbAyuda;
+        string ayudaDescripcion = ""+
+            "<NRO. DE CÓDIGO> + <ENTER> para cargar el artículo \n" +
+            "<TEXTO> para filtrar artículos y <FLECHA ABAJO> para acceder a la lista\n" +
+            "<TEXTO> + <ENTER> para agregar un nuevo artículo a la lista";
         //static SQLiteConnection conexion;
 
-        ///Clic en todo el boton
-        ///borde de los listitems
-        ///color de seleccion sin gradiente
+        ///Shortcuts
+        //Navigate Forward/Backward Ctrl+–/Ctrl+Shift+–
+        //Peek Definition Alt+F12
+        //Comment Code Block Ctrl+K+C/Ctrl+K+U
+
+        ///varios:
+        //animacion correr hacia los costados
+        //listArticulos alineada con los textboxes
+        //ctrl+1 seleccionar pestaña
+
+        //FOCO en control al cambiar pestaña
+        //color de seleccion sin gradiente????
+        //editar template del listVenta (hacer copia)
+
 
         ///MAIN
         //////sasas
@@ -50,14 +67,46 @@ namespace SIV_Servidor
             mArticulosCaja = new List<itemCaja>();
 
 
-
-
+            ///animacion
+            sb = this.FindResource("Storyboard1") as Storyboard;
+            sb2 = this.FindResource("Storyboard2") as Storyboard;
+            sbAyuda = this.FindResource("sbAyuda") as Storyboard;
+            sb.Completed += (s, e2) =>
+            {
+                ///FOCO en tbDescripcion
+                tbDescripcion.Focus();
+                //Keyboard.Focus(tbDescripcion);
+                //FocusManager.SetFocusedElement(this, tbDescripcion);
+                //consola("0");
+            };
+            sb2.Completed += (s, e2) =>
+            {
+                ///FOCO en listCaja
+                //FocusManager.SetFocusedElement(this, listVenta);
+                if (listCaja.SelectedIndex == -1)
+                {
+                    listCaja.SelectedIndex = 0;
+                }
+                var item = listCaja.ItemContainerGenerator.ContainerFromIndex(listCaja.SelectedIndex) as ListBoxItem;
+                if (item != null)
+                {
+                    item.Focus();
+                }
+                //Keyboard.Focus(listCaja);
+                //listCaja.Focus();
+                //listCaja.SelectedItem = 1;
+                //Keyboard.Focus(listCaja.SelectedIndex);
+                //consola("1");
+            };
 
             ///SETEAR CONTROLES
-            LTemp.Content = "";
+            //labelAyuda.Content = "";
+            tip();
+            ayuda();
             gridFiltro.Visibility = Visibility.Hidden;
             listFiltro.Visibility = Visibility.Hidden;
-            listFiltro.Margin = new Thickness(tbDescripcion.Margin.Left, tbDescripcion.Margin.Top + tbDescripcion.Height + 2, 0, 0);
+            //listFiltro.Margin = new Thickness(tabMain.Margin.Left + tbCodigo.Margin.Left + 2, tabMain.Margin.Top + gridTabItemVEntasHeader.Height + tbDescripcion.Margin.Top + tbDescripcion.Height + 10, 0, 0);
+            listFiltro.Margin = new Thickness(tbCodigo.Margin.Left + 2, tbDescripcion.Margin.Top + tbDescripcion.Height + 2, 0, 0);
             //tbBuscar.Focus();
 
 
@@ -251,6 +300,9 @@ namespace SIV_Servidor
                 tempArticulo.descripcion = registro["descripcion"].ToString();
                 tempArticulo.precio = precio;
                 tempArticulo.costo = costo;
+                tempArticulo.tags= registro["tags"].ToString();
+                tempArticulo.stock= registro["stock"].ToString();
+                //tempArticulo.stock = "1";
 
                 mArticulos.Add(tempArticulo);
                 /*
@@ -341,6 +393,15 @@ namespace SIV_Servidor
 
 
         ///FUNCIONES GENERALES
+        /*private void VentanaCaja()
+        {
+            winCaja ventana = new winCaja();
+            //ventana.Show();
+
+            ventana.Owner = this;
+            ventana.ShowDialog();
+        }
+        */
         private void seleccionarPestana(int pestana)
         {
             mPestana = pestana;
@@ -358,7 +419,27 @@ namespace SIV_Servidor
         private void consola(string texto)
         {
             Console.WriteLine(texto);
-            LTemp.Content = texto;
+            labelAyuda.Content = texto;
+        }
+        private void ayuda(string texto="")
+        {
+            //Console.WriteLine(texto);
+            labelAyuda.Content = texto;
+            sbAyuda.Begin();
+        }
+        private void tip(string texto="", string control="")
+        {
+            if (texto=="")
+            {
+                labelTip.Visibility = Visibility.Hidden;
+            } else
+            {
+                labelTip.Visibility = Visibility.Visible;
+                labelTip.Content = texto;
+                consola(control);
+            }
+            //Console.WriteLine(texto);
+            
         }
         public static bool esDecimal(Key key)
         {
@@ -521,21 +602,11 @@ namespace SIV_Servidor
 
             tbDescripcion.Focus();
         }
-
         private void resetListVenta()
         {
             listVenta.Items.Clear();
         }
 
-        /*private void VentanaCaja()
-        {
-            winCaja ventana = new winCaja();
-            //ventana.Show();
-
-            ventana.Owner = this;
-            ventana.ShowDialog();
-        }
-        */
 
         ///FUNCIONES CAJA
         private void CargarDBCaja()
@@ -586,7 +657,8 @@ namespace SIV_Servidor
 
                 //float costo = toFloat(registro["costo"].ToString());
                 //float cantidad = toFloat(registro["cantidad"].ToString());
-                consola(registro["precio"].ToString());
+                
+                //consola(registro["precio"].ToString());
 
                 int tmpidventa = 0;
                 int.TryParse(registro["idventa"].ToString(), out tmpidventa);
@@ -616,9 +688,9 @@ namespace SIV_Servidor
                 tempArticulo.codigo = registro["codigo"].ToString();
                 tempArticulo.descripcion = registro["descripcion"].ToString();
                 tempArticulo.cantidad = cantidad.ToString();
-                tempArticulo.precio = precio.ToString();
+                tempArticulo.precio = precio.ToString("0.00");
                 tempArticulo.costo = registro["costo"].ToString();
-                tempArticulo.subtotal = tmpSubtotal.ToString();
+                tempArticulo.subtotal = tmpSubtotal.ToString("0.00");
                 tempArticulo.total = "";
                 if (dataTable.Rows.Count != index + 1)
                 {
@@ -626,7 +698,7 @@ namespace SIV_Servidor
                     //consola(registro["idventa"].ToString() + "-" + tmpSiguienteId);
                     if (registro["idventa"].ToString() != tmpSiguienteId)
                     {
-                        tempArticulo.total = tmpTotal.ToString();
+                        tempArticulo.total = "$" + tmpTotal.ToString("0.00");
                     }
                 }
                 else
@@ -653,7 +725,9 @@ namespace SIV_Servidor
             //cerrar conexion
             //gridFiltro.ItemsSource = mArticulos;
             //mArticulosCaja.Reverse();
+            ///asigno la lista al control listCaja
             listCaja.ItemsSource = mArticulosCaja;
+
 
             /*
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(listCaja.ItemsSource);
@@ -698,7 +772,7 @@ namespace SIV_Servidor
                     //int columna = grid.CurrentColumn.DisplayIndex;
                     //valor = columna.ToString();
                     tmpTexto = valor;
-                    LTemp.Content = tmpTexto;
+                    labelAyuda.Content = tmpTexto;
                 }
             }
         }
@@ -707,51 +781,36 @@ namespace SIV_Servidor
             if (e.Key == Key.F1)
             {
                 tabMain.SelectedIndex = 0;
+                /*
                 Storyboard sb = this.FindResource("Storyboard1") as Storyboard;
                 //Storyboard.SetTarget(sb, this.btn);
                 sb.Begin();
+                tbDescripcion.Focus();
+                FocusManager.SetFocusedElement(this, tbDescripcion);
+                Keyboard.Focus(tbDescripcion);
+                tbDescripcion.Focus();
+                */
+                e.Handled = true;
+
             }
             if (e.Key == Key.F2)
             {
+
                 tabMain.SelectedIndex = 1;
+                /*
                 Storyboard sb = this.FindResource("Storyboard2") as Storyboard;
                 //Storyboard.SetTarget(sb, this.btn);
                 sb.Begin();
-
+                listVenta.Focus();
+                */
+                e.Handled = true;
             }
-        }
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            //textBox.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 120));
-            //textBox.Background = this.Resources["confoco1"] as SolidColorBrush;
-            textBox.Background = App.Current.Resources["confoco"] as SolidColorBrush;
-        }
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            //textBox.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
-            textBox.Background = App.Current.Resources["sinfoco"] as SolidColorBrush;
-            if (textBox.Name == "tbDescripcion")
+            if(e.Key== Key.Tab)
             {
-
+                e.Handled = true;
             }
         }
 
-        private void TabItem_GotFocus(object sender, RoutedEventArgs e)
-        {
-            tbDescripcion.Focus();
-        }
-        private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var tab = sender as TabControl;
-            int selected = tab.SelectedIndex;
-            seleccionarPestana(selected);
-            //consola(tab.Name);
-            //consola(selected.ToString());
-            //tbDescripcion.Focus();
-            e.Handled = true;
-        }
         private void tabMain_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source is TabControl)
@@ -762,19 +821,116 @@ namespace SIV_Servidor
 
                 if (selected == 0)
                 {
-                    Storyboard sb = this.FindResource("Storyboard1") as Storyboard;
+                    ///color texto pestaña
+                    tbPestanaVentas.Foreground = App.Current.Resources["confoco"] as SolidColorBrush;
+                    tbPestanaCaja.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
+
+                    ///animacion
+                    //Storyboard sb = this.FindResource("Storyboard1") as Storyboard;
                     //Storyboard.SetTarget(sb, this.btn);
+
+
                     sb.Begin();
+                    //sb.Completed -= Sb_Completed;
+
+                    /*
+                    sb.Completed += (s, e2) =>
+                    {
+
+                        ///FOCO en tbDescripcion
+                        tbDescripcion.Focus();
+                        Keyboard.Focus(tbDescripcion);
+                        FocusManager.SetFocusedElement(this, tbDescripcion);
+                        consola("0 - i=" + i.ToString());
+                        i++;
+                        //sb.Completed -= HandleCustomEvent;
+                    };
+                    */
+
+
+                    ///FOCO en tbDescripcion
+                    /*
+                    tbDescripcion.Focus();
+                    Keyboard.Focus(tbDescripcion);
+                    FocusManager.SetFocusedElement(this,tbDescripcion);
+                    consola("0");
+                    */
                 }
                 if (selected == 1)
                 {
-                    Storyboard sb = this.FindResource("Storyboard2") as Storyboard;
+                    ///color texto pestaña
+                    tbPestanaVentas.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
+                    tbPestanaCaja.Foreground = App.Current.Resources["confoco"] as SolidColorBrush;
+
+                    ///animacion
+                    //Storyboard sb2 = this.FindResource("Storyboard2") as Storyboard;
                     //Storyboard.SetTarget(sb, this.btn);
-                    sb.Begin();
+                    sb2.Begin();
+                    /*
+                    sb2.Completed += (s, e2) =>
+                    {
+                        ///FOCO en listVenta
+                        listVenta.Focus();
+                        Keyboard.Focus(listVenta);
+                        //FocusManager.SetFocusedElement(this, listVenta);
+                        //listVenta.SelectedIndex = 0;
+                        consola("1");
+                        e.Handled = true;
+                    };
+                    */
+
+                    /*
+                    listVenta.Focus();
+                    Keyboard.Focus(listVenta);
+                    FocusManager.SetFocusedElement(this, listVenta);
+                    consola("1");
+                    */
                 }
 
             }
             e.Handled = true;
+        }
+
+
+        private void tabVentas_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var tab = sender as TabControl;
+            int selected = tab.SelectedIndex;
+            seleccionarPestana(selected);
+            //consola(tab.Name);
+            //consola(selected.ToString());
+            //tbDescripcion.Focus();
+            e.Handled = true;
+        }
+        private void TabItem_GotFocus(object sender, RoutedEventArgs e)
+        {
+            tbDescripcion.Focus();
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            ayuda();
+            var textBox = sender as TextBox;
+            //textBox.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 120));
+            //textBox.Background = this.Resources["confoco1"] as SolidColorBrush;
+            textBox.Background = App.Current.Resources["confoco"] as SolidColorBrush;
+            if (textBox.Name == "tbDescripcion")
+            {
+                //tip(mensajeDescripcion, sender.GetType().ToString());
+                ayuda(ayudaDescripcion);
+            }
+            
+        }
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            ayuda();
+            var textBox = sender as TextBox;
+            //textBox.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+            textBox.Background = App.Current.Resources["sinfoco"] as SolidColorBrush;
+            if (textBox.Name == "tbDescripcion")
+            {
+
+            }
         }
 
         private void Button_GotFocus(object sender, RoutedEventArgs e)
@@ -810,8 +966,6 @@ namespace SIV_Servidor
         {
             asentarVenta();
         }
-
-
 
         private void listFiltro_KeyDown(object sender, KeyEventArgs e)
         {
@@ -860,7 +1014,6 @@ namespace SIV_Servidor
             }
         }
 
-
         private void tbDescripcion_TextChanged(object sender, TextChangedEventArgs e)
         {
             var textBox = sender as TextBox;
@@ -868,6 +1021,9 @@ namespace SIV_Servidor
             //consola(listFiltro.Items.Count.ToString());
             if (filtro != "" && textBox.IsFocused)
             {
+                ///primera letra mayuscula
+                //textBox.Text = char.ToUpper(filtro[0]) + filtro.Substring(1);
+
                 ///aplicar filtro
                 //gridFiltroSQL(filtro);
                 filtroArticulos(filtro);
@@ -982,7 +1138,6 @@ namespace SIV_Servidor
                 tbDescripcion.Focus();
             }
         }
-
         private void tbPagaCon_TextChanged(object sender, TextChangedEventArgs e)
         {
             string total = tbTotal.Text.Replace("$", "");

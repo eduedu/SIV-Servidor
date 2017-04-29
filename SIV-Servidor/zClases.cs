@@ -16,7 +16,8 @@ namespace SIV_Servidor {
 		public float fechacreacion { get; set; }
 		public float fechamodif { get; set; }
 		public string tags { get; set; }
-	}
+        public string stock { get; set; }
+    }
     class itemVenta
     {
         public string codigo { get; set; }
