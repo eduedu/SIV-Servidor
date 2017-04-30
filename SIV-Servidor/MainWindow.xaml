@@ -91,7 +91,7 @@
         <Storyboard x:Key="sbListVentas">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="listVenta">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
 
@@ -144,7 +144,6 @@
     </Window.Triggers>
     <Grid>
         <Label x:Name="Label1" x:FieldModifier="public" Content="Label" Margin="-580,170.05,0,0" VerticalAlignment="Top" Height="32" Background="{DynamicResource infocable3}" HorizontalAlignment="Left" Width="147" Foreground="{DynamicResource textoobscuro}" d:LayoutOverrides="VerticalAlignment"/>
-        <DataGrid x:Name="gridFiltro" ItemsSource="{Binding}" HorizontalAlignment="Left" Margin="-580,10,0,0" VerticalAlignment="Top" Height="104" Width="388" Background="#FFF000F0" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment"/>
 
         <Button x:Name="btnAsentar1" Content="Asentar" HorizontalAlignment="Left" Height="30" Margin="-252,188,0,0" VerticalAlignment="Top" Width="105" GotFocus="Button_GotFocus" LostFocus="Button_LostFocus" ForceCursor="True" IsManipulationEnabled="True" Background="White" PreviewKeyDown="btnAsentar_PreviewKeyDown" FocusVisualStyle="{x:Null}" PreviewMouseLeftButtonUp="btnAsentar_PreviewMouseLeftButtonUp" d:LayoutOverrides="HorizontalAlignment"/>
         <TabControl x:Name="tabMain"  HorizontalAlignment="Left" Margin="10,10,0,37" Width="969"  Background="{x:Null}" BorderBrush="{x:Null}" SelectionChanged="tabMain_SelectionChanged" Focusable="False">
@@ -205,7 +204,7 @@
                         </TransformGroup>
                     </Grid.RenderTransform>
 
-                    <ListView x:Name="listFiltro"    Height="224" Margin="-601.152,205.5,0,0" VerticalAlignment="Top" Width="660" Background="#FFF0F0F0" KeyDown="listFiltro_KeyDown" HorizontalAlignment="Left" Panel.ZIndex="1" IsTabStop="True" Foreground="Black" d:LayoutOverrides="HorizontalAlignment" GotFocus="listFiltro_GotFocus" LostFocus="listFiltro_LostFocus"  >
+                    <ListView x:Name="listFiltro"    Height="224" Margin="-601.152,205.5,0,0" VerticalAlignment="Top" Width="660" Background="{DynamicResource textoclaro}" KeyDown="listFiltro_KeyDown" HorizontalAlignment="Left" Panel.ZIndex="1" IsTabStop="True" Foreground="Black" d:LayoutOverrides="HorizontalAlignment" GotFocus="listFiltro_GotFocus" LostFocus="listFiltro_LostFocus"  >
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="id" Width="0"   DisplayMemberBinding="{Binding id}"  />
@@ -349,7 +348,7 @@
                         </TransformGroup>
                     </Grid.RenderTransform>
                     <ListView x:Name="listCaja"  Height="353" Margin="0,10,0,0" VerticalAlignment="Top" Width="952" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
-			BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single">
+			BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" GotFocus="listCaja_GotFocus">
 
                         <ListView.Resources>
                             <Style TargetType="{x:Type ListViewItem}">

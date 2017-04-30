@@ -31,12 +31,16 @@ namespace SIV_Servidor
     {
         ///Variables Globales
         List<articuloClass> mArticulos;
-        int mPestana;
+        List<itemVenta> mItemsVenta;
+        int mPestana;   //pestana venta activa
         List<itemCaja> mArticulosCaja;
         Storyboard sb;
         Storyboard sb2;
         Storyboard sbAyuda;
         Storyboard sbListVentas;
+        bool mBuscarArticuloPorCodigo = false;  //al apretar enter end escripcion, si empieza por un numero, busca el articulo
+        bool seEditoDescripcionDesdeElPrograma = false;
+
         //Storyboard sbGridVentasHolaIzquierda;
         //Storyboard sbGridVentasChauIzquierda;
         //Storyboard sbGridCajaHolaDerecha;
@@ -67,6 +71,7 @@ namespace SIV_Servidor
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             mArticulos = new List<articuloClass>();
+            mItemsVenta = new List<itemVenta>();
             mArticulosCaja = new List<itemCaja>();
 
 
@@ -111,10 +116,10 @@ namespace SIV_Servidor
             //labelAyuda.Content = "";
             tip();
             ayuda();
-            gridFiltro.Visibility = Visibility.Hidden;
+
             listFiltro.Visibility = Visibility.Hidden;
             //listFiltro.Margin = new Thickness(tabMain.Margin.Left + tbCodigo.Margin.Left + 2, tabMain.Margin.Top + gridTabItemVEntasHeader.Height + tbDescripcion.Margin.Top + tbDescripcion.Height + 10, 0, 0);
-            listFiltro.Margin = new Thickness(tbCodigo.Margin.Left + 2, tbDescripcion.Margin.Top + tbDescripcion.Height + 2, 0, 0);
+            listFiltro.Margin = new Thickness(tbCodigo.Margin.Left + 2, tbDescripcion.Margin.Top + tbDescripcion.Height + 20 + 2, 0, 0);
             //tbBuscar.Focus();
 
 
@@ -252,7 +257,7 @@ namespace SIV_Servidor
 
             //dataGrid.DataSource = dt;
             //dataGrid.DataContext = dt.DefaultView;  //esto anda
-            gridFiltro.ItemsSource = dt.DefaultView;
+
             listFiltro.ItemsSource = dt.DefaultView;
 
             // Y ya podemos cerrar la conexion
@@ -275,11 +280,6 @@ namespace SIV_Servidor
             dataSet.Reset();
             db.Fill(dataSet);
             dataTable = dataSet.Tables[0];
-            //dataGrid.DataSource = dt;
-            //dataGrid.DataContext = dt.DefaultView;  //esto anda
-
-            //gridFiltro.ItemsSource = dataTable.DefaultView;
-            //listFiltro.ItemsSource = dataTable.DefaultView;
 
             ///borrar todos los elementos de mArticulos
             if (mArticulos != null)
@@ -290,14 +290,6 @@ namespace SIV_Servidor
             ///Loop por todos los registros de la tabla
             foreach (DataRow registro in dataTable.Rows)
             {
-                //Console.WriteLine(registro.ItemArray.GetValue(0));
-                //Console.WriteLine(registro["descripcion"]);
-                //Console.WriteLine(registro["id"]+"-"+registro["id"].GetType());
-
-                //string tmpStringPrecio = registro["precio"].ToString();
-                //float tmpPrecio = 0;
-                //float.TryParse(tmpStringPrecio, out tmpPrecio);
-
                 float precio = toFloat(registro["precio"].ToString());
                 float costo = toFloat(registro["costo"].ToString());
 
@@ -313,25 +305,15 @@ namespace SIV_Servidor
                 //tempArticulo.stock = "1";
 
                 mArticulos.Add(tempArticulo);
-                /*
-				mArticulos.Add(new articuloClass() {
-					id = (long)registro["id"],
-					codigopro = registro["codigopro"].ToString(),
-					descripcion = registro["descripcion"].ToString(),
-					precio = tmpPrecio,
-				});
-				*/
             }
 
-            //popular lista mArticulos con los datos de todos los registros (se puede??)
-            //List<articuloClass> tempArticulos = new List<articuloClass>();
-            //tempArticulos.AddRange(dataTable.Rows);
 
-
-            //cerrar conexion
-            gridFiltro.ItemsSource = mArticulos;
-            listFiltro.ItemsSource = mArticulos;
+            ///cerrar conexion
             conexion.Close();
+
+            ///asignar datos al list
+            //gridFiltro.ItemsSource = mArticulos;
+            listFiltro.ItemsSource = mArticulos;
 
         }
         private void filtroArticulos(string filtro = "")
@@ -373,19 +355,20 @@ namespace SIV_Servidor
         }
         private void agregarItemALista()
         {
+            ///definir variables y obtener valores de los textbox
             string codigo = "";
             string descripcion = "";
             string cantidad = "";
             string precio = "";
             string subtotal = "";
             string costo = "";
-
             codigo = tbCodigo.Text;
             descripcion = tbDescripcion.Text;
             cantidad = tbCantidad.Text;
             precio = tbPrecio.Text;
             subtotal = tbSubtotal.Text;
-            costo = tbCantidad.Tag.ToString();
+            if (tbCantidad.Tag != null)
+                costo = tbCantidad.Tag.ToString();
 
             ///crear itemVenta
             itemVenta itemTemp = new itemVenta
@@ -403,32 +386,15 @@ namespace SIV_Servidor
             asentarDBItemVenta(itemTemp, tabla);
 
             ///agregar item al listbox
-            //float tmpCantidad = 0;
-            //float.TryParse(cantidad, out tmpCantidad);
-            //float tmpPrecio = 0;
-            //float.TryParse(precio, out tmpPrecio);
+            //listVenta.Items.Add(itemTemp);
 
-            //listVenta.Items.Add(new itemVenta
-            //{
-            //    codigo = codigo,
-            //    descripcion = descripcion,
-            //    cantidad = cantidad,
-            //    precio = precio,
-            //    subtotal = subtotal,
-            //    costo = costo
-            //});
-            listVenta.Items.Add(itemTemp);
-
-            //string resultado = "";
-            //resultado = "Codigo:" + codigo + "-Descripcion:" + descripcion + "-Cantidad:" + cantidad + "-Precio:" + precio + "-Subtotal:" + subtotal;
-            //LTemp.Content = resultado;
-            //resetTb();
-            //tbBuscar.Focus();
-            tbDescripcion.Focus();
-
+            ///actualizar listVenta
+            mostrarListVentaX();
 
             ///Calcular total
             calcularTotal();
+
+            tbDescripcion.Focus();
         }
         private void asentarDBItemVenta(itemVenta item, string tabla, int idMax = -1)
         {
@@ -449,13 +415,7 @@ namespace SIV_Servidor
                 insertSQL = new SQLiteCommand("INSERT INTO " + tabla + " (idventa, fecha, codigo, descripcion, cantidad, precio, costo) VALUES (?,DATETIME('NOW'),?,?,?,?,?)", conexion);
                 insertSQL.Parameters.AddWithValue("idventa", idMax.ToString());
             }
-            /*insertSQL.Parameters.Add(idMax.ToString());
-            insertSQL.Parameters.Add("1");
-            insertSQL.Parameters.Add(item.codigo);
-            insertSQL.Parameters.Add(item.descripcion);
-            insertSQL.Parameters.Add(item.cantidad);
-            insertSQL.Parameters.Add(item.precio);
-            */
+
             //insertSQL.Parameters.AddWithValue("fecha", "DATETIME('NOW')");
             insertSQL.Parameters.AddWithValue("codigo", item.codigo);
             insertSQL.Parameters.AddWithValue("descripcion", item.descripcion);
@@ -503,10 +463,11 @@ namespace SIV_Servidor
                 /////Cerrar conexion
                 //conexion.Close();
 
-                ///resetear list
+                ///resetear list y recalcular valores
                 resetListVenta();
                 resetTb();
                 calcularTotal();
+                CargarDBCaja();
 
             }
             else
@@ -516,8 +477,144 @@ namespace SIV_Servidor
 
             tbDescripcion.Focus();
         }
+        private void mostrarListVentaX()
+        {
+            SQLiteConnection conexion;
+            conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
+            conexion.Open();
+
+            string tabla = "listventa" + mPestana.ToString().Trim();
+            string consulta = "select * from " + tabla;
+
+            /// Adaptador de datos, DataSet y tabla
+            SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
+            DataSet dataSet = new DataSet();
+            DataTable dataTable = new DataTable();
+            dataSet.Reset();
+            db.Fill(dataSet);
+            dataTable = dataSet.Tables[0];
+
+            ///borrar todos los elementos de mItemsVenta
+            if (mItemsVenta != null)
+            {
+                mItemsVenta.Clear();
+
+            }
+
+            //consola("Registros: " + dataTable.Rows.Count.ToString());
+
+            ///Loop por todos los registros de la tabla
+            foreach (DataRow registro in dataTable.Rows)
+            {
+
+                //float cantidad = toFloat(registro["cantidad"].ToString());
+                //float precio = toFloat(registro["precio"].ToString());
+                //float subtotal= toFloat(registro["subtotal"].ToString());
+                //float costo = toFloat(registro["costo"].ToString());
+
+                itemVenta tempItem = new itemVenta();
+
+                tempItem.codigo = registro["codigo"].ToString();
+                tempItem.descripcion = registro["descripcion"].ToString();
+                tempItem.cantidad = registro["cantidad"].ToString();
+                tempItem.precio = registro["precio"].ToString();
+                tempItem.subtotal = registro["subtotal"].ToString();
+                tempItem.costo = registro["costo"].ToString();
+                //tempArticulo.stock = "1";
+
+                mItemsVenta.Add(tempItem);
+            }
+
+            ///cerrar conexion
+            conexion.Close();
+
+            ///asignar datos al list
+            listVenta.ItemsSource = null;
+            listVenta.ItemsSource = mItemsVenta;
+
+        }
+        private void resetBDventas()
+        {
+            ///tabla (actual), se borrara el contenido
+            string tabla = "listventa" + mPestana.ToString().Trim();
+
+            ///abrir conexion DB
+            SQLiteConnection conexion;
+            conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
+            conexion.Open();
+
+            ///establecer comando SQL y ejecutar
+            SQLiteCommand comando = new SQLiteCommand("DELETE FROM " + tabla, conexion);
+            try
+            {
+                comando.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
 
 
+            ///Cerrar conexion
+            conexion.Close();
+
+        }
+        private void resetListVenta()
+        {
+            ///Borrar items de la base de datos
+            resetBDventas();
+
+
+            ///borrar itemsVenta
+            if (mItemsVenta != null)
+            {
+                mItemsVenta.Clear();
+
+            }
+
+            ///des-asignar listVenta a datos
+            listVenta.ItemsSource = null;
+        }
+        private void buscarArticuloPorCodigo()
+        {
+            string codigoTemp = tbDescripcion.Text.Trim();
+            var listaTotal = from registro in mArticulos
+                             where registro.codigo.ToLower().Trim().Equals(codigoTemp)
+                             select registro;
+
+            int articulosEncontrados = listaTotal.Count();
+
+            ///si encuentra 1 articulo con codigo=codigoTemp, lo muestra, sino sale mensaje de art no encontrado
+            if (articulosEncontrados < 1)
+            {
+                tip("Artículo no encontrado", tbDescripcion);
+            }
+            else
+            {
+                articuloClass articulo;
+                articulo = listaTotal.ElementAt(0);
+
+                //consola("Res: " + tempArticulo.descripcion.ToString());
+                string codigopro = ((articulo.codigo == "" || articulo.codigo == null) ? "" : articulo.codigo.ToString());
+                string descripcion = articulo.descripcion.ToString();
+                string precio = articulo.precio.ToString("0.00");
+
+                tbCodigo.Text = codigopro;
+                seEditoDescripcionDesdeElPrograma = true;
+                tbDescripcion.Text = descripcion;
+                tbPrecio.Text = precio;
+                tbPrecio.Tag = precio;
+                tbCantidad.Tag = articulo.costo;
+
+                tbCantidad.Text = "1";
+                tbCantidad.SelectAll();
+                tbCantidad.Focus();
+                listFiltro.Visibility = Visibility.Hidden;
+
+            }
+
+
+        }
 
         ///FUNCIONES GENERALES
         /*private void VentanaCaja()
@@ -658,10 +755,6 @@ namespace SIV_Servidor
             }
         }
 
-        private void resetListVenta()
-        {
-            listVenta.Items.Clear();
-        }
 
 
         ///FUNCIONES CAJA
@@ -699,20 +792,9 @@ namespace SIV_Servidor
             int index = 0;
             foreach (DataRow registro in dataTable.Rows)
             {
-                //Console.WriteLine(registro.ItemArray.GetValue(0));
-                //Console.WriteLine(registro["descripcion"]);
-                //Console.WriteLine(registro["id"]+"-"+registro["id"].GetType());
-
-                //string tmpStringPrecio = registro["precio"].ToString();
-                //float tmpPrecio = 0;
-                //float.TryParse(tmpStringPrecio, out tmpPrecio);
-
                 float cantidad = toFloat(registro["cantidad"].ToString());
                 float precio = toFloat(registro["precio"].ToString());
                 float tmpSubtotal = cantidad * precio;
-
-                //float costo = toFloat(registro["costo"].ToString());
-                //float cantidad = toFloat(registro["cantidad"].ToString());
 
                 //consola(registro["precio"].ToString());
 
@@ -762,76 +844,19 @@ namespace SIV_Servidor
                     tempArticulo.total = tmpTotal.ToString();
                 }
                 mArticulosCaja.Add(tempArticulo);
-                /*
-				mArticulos.Add(new articuloClass() {
-					id = (long)registro["id"],
-					codigopro = registro["codigopro"].ToString(),
-					descripcion = registro["descripcion"].ToString(),
-					precio = tmpPrecio,
-				});
-				*/
                 index++;
             }
 
-            //popular lista mArticulos con los datos de todos los registros (se puede??)
-            //List<articuloClass> tempArticulos = new List<articuloClass>();
-            //tempArticulos.AddRange(dataTable.Rows);
 
-
-            //cerrar conexion
-            //gridFiltro.ItemsSource = mArticulos;
-            //mArticulosCaja.Reverse();
             ///asigno la lista al control listCaja
             listCaja.ItemsSource = mArticulosCaja;
+            //mArticulosCaja.Reverse();
 
-
-            /*
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(listCaja.ItemsSource);
-            PropertyGroupDescription groupDescription = new PropertyGroupDescription("idventa");
-            view.GroupDescriptions.Add(groupDescription);
-            */
-
+            ///cerrar conexion
             conexion.Close();
         }
 
         ///CONTROLES
-        private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var grid = sender as DataGrid;
-            if (grid.SelectedItem != null)
-            {
-                var selected = grid.SelectedItem;
-                // ... Set Title to selected names.
-                //this.Title = string.Join(", ", names);
-
-                /*var item = selected as usuarioClass;
-				if (item != null) {
-					//labelid.Content = item.id.ToString();
-					lNombre.Content = item.nya.ToString();
-					string tmpN = item.num.ToString();
-					if (tmpN.Length > 4) {
-						tmpN = tmpN.Substring(0, 3) + "-" + tmpN.Substring(3, tmpN.Length - 3);
-					}
-					lNumero.Content = tmpN;
-				}
-				*/
-                string tmpTexto = "";
-                //Console.WriteLine(selected);
-                //consola(selected.ToString());
-                if (selected.ToString() == "System.Data.DataRowView")
-                {
-                    DataRowView drv = (DataRowView)grid.SelectedItem;
-
-                    String valor = drv[3].ToString();
-
-                    tmpTexto = valor;
-                    //int columna = grid.CurrentColumn.DisplayIndex;
-                    //valor = columna.ToString();
-                    tmpTexto = valor;
-                    labelAyuda.Content = tmpTexto;
-                }
-            }
-        }
         private void SistemaVentas_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F1)
@@ -886,6 +911,95 @@ namespace SIV_Servidor
                 tabVentas.SelectedIndex = 4;
             }
 
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            //ayuda();
+            var textBox = sender as TextBox;
+            //textBox.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 120));
+            //textBox.Background = this.Resources["confoco1"] as SolidColorBrush;
+            textBox.Background = App.Current.Resources["confoco"] as SolidColorBrush;
+
+            if (textBox.Name == "tbPrecio")
+            {
+                ayuda(zAyuda.precio1);
+            }
+            else if (textBox.Name == "tbDescripcion")
+            {
+                //tip(mensajeDescripcion, sender.GetType().ToString());
+                //ayuda(zAyuda.ayudaDescripcion1);
+                string filtro = textBox.Text;
+                ///si no esta vacio el texto del filtro
+                if (filtro != "")
+                {
+                    ///comprobar si empieza por un numero o letra
+                    string primerLetra = filtro.Substring(0, 1);
+                    int valor;
+                    if (int.TryParse(primerLetra, out valor))
+                    ///si es un numero
+                    {
+                        ayuda(zAyuda.descripcion4);
+                    }
+                    else
+                    {
+                        ///si es una letra
+                        ///aplicar filtro
+                        //filtroArticulos(filtro);
+
+                        if (listFiltro.Items.Count > 0)
+                        {
+                            //listFiltro.Visibility = Visibility.Visible;
+                            ayuda(zAyuda.descripcion2);
+                        }
+                        else
+                        {
+                            ayuda(zAyuda.descripcion3);
+                            ///ocultar control si no hay resultados
+                            //listFiltro.Visibility = Visibility.Hidden;
+                        }
+                    }
+                }
+                else
+                {
+                    ///si esta vacio el texto del filtro
+                    ayuda(zAyuda.descripcion1);
+                    ///ocultar control si el text esta vacio
+                    //listFiltro.Visibility = Visibility.Hidden;
+                }
+            }
+            else
+            {
+                ayuda();
+            }
+
+        }
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            //ayuda();
+            var textBox = sender as TextBox;
+            //textBox.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+            textBox.Background = App.Current.Resources["sinfoco"] as SolidColorBrush;
+            if (textBox.Name == "tbDescripcion")
+            {
+                if (labelTip.Content.ToString() == zAyuda.nuevoArticulo)
+                {
+                    tip();
+                }
+            }
+        }
+
+        private void Button_GotFocus(object sender, RoutedEventArgs e)
+        {
+            var boton = sender as Button;
+            //boton.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 120));
+            boton.Background = App.Current.Resources["confoco"] as SolidColorBrush;
+        }
+        private void Button_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var boton = sender as Button;
+            //boton.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+            boton.Background = App.Current.Resources["boton"] as SolidColorBrush;
         }
 
         private void tabMain_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -976,6 +1090,7 @@ namespace SIV_Servidor
             var tab = sender as TabControl;
             int selected = tab.SelectedIndex;
             seleccionarPestana(selected);
+            mostrarListVentaX();
 
             sbListVentas.Begin();
             //consola(tab.Name);
@@ -986,92 +1101,6 @@ namespace SIV_Servidor
         private void TabItem_GotFocus(object sender, RoutedEventArgs e)
         {
             tbDescripcion.Focus();
-        }
-
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            //ayuda();
-            var textBox = sender as TextBox;
-            //textBox.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 120));
-            //textBox.Background = this.Resources["confoco1"] as SolidColorBrush;
-            textBox.Background = App.Current.Resources["confoco"] as SolidColorBrush;
-
-            if (textBox.Name == "tbPrecio")
-            {
-                ayuda(zAyuda.precio1);
-            }
-            else if (textBox.Name == "tbDescripcion")
-            {
-                //tip(mensajeDescripcion, sender.GetType().ToString());
-                //ayuda(zAyuda.ayudaDescripcion1);
-                string filtro = textBox.Text;
-                ///si no esta vacio el texto del filtro
-                if (filtro != "")
-                {
-                    ///comprobar si empieza por un numero o letra
-                    string primerLetra = filtro.Substring(0, 1);
-                    int valor;
-                    if (int.TryParse(primerLetra, out valor))
-                    ///si es un numero
-                    {
-                        ayuda(zAyuda.descripcion4);
-                    }
-                    else
-                    {
-                        ///si es una letra
-                        ///aplicar filtro
-                        //filtroArticulos(filtro);
-
-                        if (listFiltro.Items.Count > 0)
-                        {
-                            //listFiltro.Visibility = Visibility.Visible;
-                            ayuda(zAyuda.descripcion2);
-                        }
-                        else
-                        {
-                            ayuda(zAyuda.descripcion3);
-                            ///ocultar control si no hay resultados
-                            //listFiltro.Visibility = Visibility.Hidden;
-                        }
-                    }
-                }
-                else
-                {
-                    ///si esta vacio el texto del filtro
-                    ayuda(zAyuda.descripcion1);
-                    ///ocultar control si el text esta vacio
-                    //listFiltro.Visibility = Visibility.Hidden;
-                }
-            }
-            else
-            {
-                ayuda();
-            }
-
-        }
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            //ayuda();
-            var textBox = sender as TextBox;
-            //textBox.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
-            textBox.Background = App.Current.Resources["sinfoco"] as SolidColorBrush;
-            if (textBox.Name == "tbDescripcion")
-            {
-
-            }
-        }
-
-        private void Button_GotFocus(object sender, RoutedEventArgs e)
-        {
-            var boton = sender as Button;
-            //boton.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 120));
-            boton.Background = App.Current.Resources["confoco"] as SolidColorBrush;
-        }
-        private void Button_LostFocus(object sender, RoutedEventArgs e)
-        {
-            var boton = sender as Button;
-            //boton.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
-            boton.Background = App.Current.Resources["boton"] as SolidColorBrush;
         }
 
         private void btnAsentar_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -1126,6 +1155,7 @@ namespace SIV_Servidor
                 string precio = fila.precio.ToString("0.00");
 
                 tbCodigo.Text = codigopro;
+                seEditoDescripcionDesdeElPrograma = true;
                 tbDescripcion.Text = descripcion;
                 tbPrecio.Text = precio;
                 tbPrecio.Tag = precio;
@@ -1151,9 +1181,34 @@ namespace SIV_Servidor
         {
             //ayuda();
         }
+        private void listCaja_GotFocus(object sender, RoutedEventArgs e)
+        {
+            ayuda(zAyuda.listCaja1);
+        }
 
         private void tbDescripcion_TextChanged(object sender, TextChangedEventArgs e)
         {
+            mBuscarArticuloPorCodigo = false;
+
+            ///si anteriormente se busco un articulo y no se encontro, borrar mensaje al editer tbDescripcion
+            if (labelTip.Content.ToString() == zAyuda.articuloNoEncontrado)
+            {
+                tip();
+            }
+
+            ///borrar el tbCodigo ya que si se edita la descripcion, deja de ser ESE articulo
+            consola(seEditoDescripcionDesdeElPrograma.ToString());
+            if (seEditoDescripcionDesdeElPrograma)
+            {
+                seEditoDescripcionDesdeElPrograma = false;
+                e.Handled = true;
+            } else
+            {
+                tbCodigo.Text = "";
+
+            }
+
+
             var textBox = sender as TextBox;
             string filtro = textBox.Text.Trim();
             //consola(listFiltro.Items.Count.ToString());
@@ -1168,14 +1223,23 @@ namespace SIV_Servidor
                 {
                     ///si es un numero
                     ayuda(zAyuda.descripcion4);
+                    mBuscarArticuloPorCodigo = true;
                 }
                 else
                 {
                     ///si es una letra
+
                     ///aplicar filtro
                     //gridFiltroSQL(filtro);
                     filtroArticulos(filtro);
 
+                    ///mostrar tip paa agregar nuevo articulo
+                    if (tbDescripcion.IsFocused)
+                    {
+                        tip(zAyuda.nuevoArticulo,tbDescripcion);
+                    }
+
+                    ///mostrar list si hay resultados
                     if (listFiltro.Items.Count > 0)
                     {
                         listFiltro.Visibility = Visibility.Visible;
@@ -1234,6 +1298,7 @@ namespace SIV_Servidor
             }
             if (e.Key == Key.Enter || e.Key == Key.Return)
             {
+                ///si esta vacio tbDescipcion, ir a tbPagaCon
                 if (tbDescripcion.Text.Trim() == "")
                 {
                     if (listVenta.Items.Count > 0)
@@ -1243,10 +1308,20 @@ namespace SIV_Servidor
                 }
                 else
                 {
-                    tbCantidad.Text = "1";
-                    tbCantidad.SelectAll();
-                    tbCantidad.Focus();
-                    listFiltro.Visibility = Visibility.Hidden;
+                    ///comprobar si es un numero (para buscar articulo por codigo)
+                    if (mBuscarArticuloPorCodigo)
+                    {
+                        buscarArticuloPorCodigo();
+                        e.Handled = true;
+                    }
+                    else
+                    {
+                        tbCantidad.Text = "1";
+                        tbCantidad.SelectAll();
+                        tbCantidad.Focus();
+                        listFiltro.Visibility = Visibility.Hidden;
+
+                    }
                 }
             }
         }

@@ -42,5 +42,14 @@ namespace SIV_Servidor
             "<DELETE> Borrar artículo\n" +
             "<ESPACIO> Copiar descripción y crear un nuevo artículo \n" +
             "<ESCAPE> Cancelar";
+
+        public static string listCaja1 = "" +
+            "<ENTER> Seleccionar Venta \n" +
+            "" +
+            "" +
+            "";
+
+        public static string articuloNoEncontrado = "Artículo no encontrado";
+        public static string nuevoArticulo = "<ENTER> para crear un NUEVO artículo";
     }
 }
