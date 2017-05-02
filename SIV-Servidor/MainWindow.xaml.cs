@@ -38,6 +38,9 @@ namespace SIV_Servidor
         Storyboard sb2;
         Storyboard sbAyuda;
         Storyboard sbListVentas;
+        Storyboard sbSlideVentas;
+        Storyboard sbSlideCaja;
+        Storyboard sbListFiltroMostrar;
         bool mBuscarArticuloPorCodigo = false;  //al apretar enter end escripcion, si empieza por un numero, busca el articulo
         bool seEditoDescripcionDesdeElPrograma = false;
 
@@ -80,6 +83,9 @@ namespace SIV_Servidor
             sb2 = this.FindResource("Storyboard2") as Storyboard;
             sbAyuda = this.FindResource("sbAyuda") as Storyboard;
             sbListVentas = this.FindResource("sbListVentas") as Storyboard;
+            sbSlideCaja = this.FindResource("sbSlideCaja") as Storyboard;
+            sbSlideVentas = this.FindResource("sbSlideVentas") as Storyboard;
+            sbListFiltroMostrar = this.FindResource("sbListFiltroMostrar") as Storyboard;
             //sbGridVentasHolaIzquierda = this.FindResource("sbGridVentasHolaIzquierda") as Storyboard;
             //sbGridVentasChauIzquierda = this.FindResource("sbGridVentasChauIzquierda") as Storyboard;
             //sbGridCajaHolaDerecha = this.FindResource("sbGridCajaHolaDerecha") as Storyboard;
@@ -645,11 +651,12 @@ namespace SIV_Servidor
         private void consola(string texto)
         {
             Console.WriteLine(texto);
-            labelAyuda.Content = texto;
+            //labelAyuda.Content = texto;
         }
         private void ayuda(string texto = "")
         {
             //Console.WriteLine(texto);
+            //consola(labelAyuda.Content.ToString());
             if (labelAyuda.Content.ToString() != texto)
             {
                 labelAyuda.Content = texto;
@@ -859,6 +866,13 @@ namespace SIV_Servidor
         ///CONTROLES
         private void SistemaVentas_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.Escape)
+            {
+                tabMain.SelectedIndex = 0;
+                resetTb();
+                //tbBuscar.Focus();
+                tbDescripcion.Focus();
+            }
             if (e.Key == Key.F1)
             {
                 tabMain.SelectedIndex = 0;
@@ -1013,7 +1027,7 @@ namespace SIV_Servidor
                 if (selected == 0)
                 {
                     ///color texto pestaña
-                    tbPestanaVentas.Foreground = App.Current.Resources["confoco"] as SolidColorBrush;
+                    tbPestanaVentas.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
                     tbPestanaCaja.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
 
                     ///animacion
@@ -1021,7 +1035,9 @@ namespace SIV_Servidor
                     //Storyboard.SetTarget(sb, this.btn);
 
 
-                    sb.Begin();
+                    //sb.Begin();
+                    sbSlideVentas.Begin();
+
                     //sbGridCajaChauDerecha.Begin();
                     //sbGridVentasHolaIzquierda.Begin();
                     //sb.Completed -= Sb_Completed;
@@ -1053,12 +1069,15 @@ namespace SIV_Servidor
                 {
                     ///color texto pestaña
                     tbPestanaVentas.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
-                    tbPestanaCaja.Foreground = App.Current.Resources["confoco"] as SolidColorBrush;
+                    tbPestanaCaja.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
 
                     ///animacion
                     //Storyboard sb2 = this.FindResource("Storyboard2") as Storyboard;
                     //Storyboard.SetTarget(sb, this.btn);
-                    sb2.Begin();
+
+                    //sb2.Begin();
+                    sbSlideCaja.Begin();
+                    
                     //sbGridVentasChauIzquierda.Begin();
                     //sbGridCajaHolaDerecha.Begin();
                     /*
@@ -1197,7 +1216,7 @@ namespace SIV_Servidor
             }
 
             ///borrar el tbCodigo ya que si se edita la descripcion, deja de ser ESE articulo
-            consola(seEditoDescripcionDesdeElPrograma.ToString());
+            //consola(seEditoDescripcionDesdeElPrograma.ToString());
             if (seEditoDescripcionDesdeElPrograma)
             {
                 seEditoDescripcionDesdeElPrograma = false;
@@ -1414,6 +1433,12 @@ namespace SIV_Servidor
             }
         }
 
+        private void listFiltro_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            //consola(listFiltro.IsVisible.ToString());
+            //consola("ok");
+            sbListFiltroMostrar.Begin();
+        }
 
         ///-------------------------------------------------------------------------------------------
 
