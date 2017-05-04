@@ -25,8 +25,8 @@
         <SolidColorBrush x:Key="infocable4" Color="#FFE8A97C"/>
         <!--<SolidColorBrush x:Key="sinfoco" Color="#fff0f0f0"/>-->
         <SolidColorBrush x:Key="sinfoco" Color="#FFd0d0e0"/>
-        <SolidColorBrush x:Key="colorfondo" Color="#FF202035"/>
-        <SolidColorBrush x:Key="colorfondo2" Color="#FF303045"/>
+        <SolidColorBrush x:Key="colorfondo" Color="#FF202027"/>
+        <SolidColorBrush x:Key="colorfondo2" Color="#FF303039"/>
         <SolidColorBrush x:Key="boton" Color="#FFf0f0f0"/>
         <SolidColorBrush x:Key="detalles" Color="#FF707080"/>
         <SolidColorBrush x:Key="textoclaro" Color="#FFd0d0e0"/>

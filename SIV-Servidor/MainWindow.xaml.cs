@@ -41,9 +41,13 @@ namespace SIV_Servidor
         Storyboard sbSlideVentas;
         Storyboard sbSlideCaja;
         Storyboard sbListFiltroMostrar;
+        Storyboard sbSlideGrid;
         bool mBuscarArticuloPorCodigo = false;  //al apretar enter end escripcion, si empieza por un numero, busca el articulo
         bool seEditoDescripcionDesdeElPrograma = false;
 
+        public double gridXTo { get; set; }
+        public static double gridXFrom { get; set; }
+        double mAnchoPantalla;
         //Storyboard sbGridVentasHolaIzquierda;
         //Storyboard sbGridVentasChauIzquierda;
         //Storyboard sbGridCajaHolaDerecha;
@@ -77,6 +81,10 @@ namespace SIV_Servidor
             mItemsVenta = new List<itemVenta>();
             mArticulosCaja = new List<itemCaja>();
 
+            mAnchoPantalla = SistemaVentas.Width;
+            gridXTo = -500;
+            gridXFrom = 0;
+
 
             ///animacion
             sb = this.FindResource("Storyboard1") as Storyboard;
@@ -86,6 +94,7 @@ namespace SIV_Servidor
             sbSlideCaja = this.FindResource("sbSlideCaja") as Storyboard;
             sbSlideVentas = this.FindResource("sbSlideVentas") as Storyboard;
             sbListFiltroMostrar = this.FindResource("sbListFiltroMostrar") as Storyboard;
+            sbSlideGrid = this.FindResource("sbSlideGrid") as Storyboard;
             //sbGridVentasHolaIzquierda = this.FindResource("sbGridVentasHolaIzquierda") as Storyboard;
             //sbGridVentasChauIzquierda = this.FindResource("sbGridVentasChauIzquierda") as Storyboard;
             //sbGridCajaHolaDerecha = this.FindResource("sbGridCajaHolaDerecha") as Storyboard;
@@ -98,6 +107,7 @@ namespace SIV_Servidor
                 //FocusManager.SetFocusedElement(this, tbDescripcion);
                 //consola("0");
             };
+
             sb2.Completed += (s, e2) =>
             {
                 ///FOCO en listCaja
@@ -116,7 +126,30 @@ namespace SIV_Servidor
                 //listCaja.SelectedItem = 1;
                 //Keyboard.Focus(listCaja.SelectedIndex);
                 //consola("1");
+                //consola(gridVentas.RenderTransformOrigin.X.ToString());
             };
+
+            sbSlideCaja.Completed += (s, e2) =>
+             {
+                 tbDescripcion.Focus();
+
+                 //consola(gridVentas.RenderTransform.Value.OffsetX.ToString());
+             };
+            sbSlideVentas.Completed += (s, e2) =>
+            {
+                if (listCaja.SelectedIndex == -1)
+                {
+                    listCaja.SelectedIndex = 0;
+                }
+                var item = listCaja.ItemContainerGenerator.ContainerFromIndex(listCaja.SelectedIndex) as ListBoxItem;
+                if (item != null)
+                {
+                    item.Focus();
+                }
+                //consola(gridVentas.Margin.Left.ToString());
+                //consola(gridVentas.RenderTransform.Value.OffsetX.ToString());
+            };
+
 
             ///SETEAR CONTROLES
             //labelAyuda.Content = "";
@@ -653,13 +686,15 @@ namespace SIV_Servidor
             Console.WriteLine(texto);
             //labelAyuda.Content = texto;
         }
-        private void ayuda(string texto = "")
+        private void ayuda(string texto = "", string texto2 = "")
         {
             //Console.WriteLine(texto);
             //consola(labelAyuda.Content.ToString());
             if (labelAyuda.Content.ToString() != texto)
             {
                 labelAyuda.Content = texto;
+                labelAyuda2.Content = texto2;
+
                 sbAyuda.Begin();
             }
         }
@@ -937,7 +972,7 @@ namespace SIV_Servidor
 
             if (textBox.Name == "tbPrecio")
             {
-                ayuda(zAyuda.precio1);
+                ayuda(zAyuda.precio1a, zAyuda.precio1b);
             }
             else if (textBox.Name == "tbDescripcion")
             {
@@ -964,7 +999,7 @@ namespace SIV_Servidor
                         if (listFiltro.Items.Count > 0)
                         {
                             //listFiltro.Visibility = Visibility.Visible;
-                            ayuda(zAyuda.descripcion2);
+                            ayuda(zAyuda.descripcion2a, zAyuda.descripcion2b);
                         }
                         else
                         {
@@ -1036,7 +1071,14 @@ namespace SIV_Servidor
 
 
                     //sb.Begin();
-                    sbSlideVentas.Begin();
+                    //sbSlideVentas.Begin();
+
+
+
+
+
+                    //gridXFrom=gridVentas.RenderTransform.Transform.trans
+                    //sbSlideGrid.Begin();
 
                     //sbGridCajaChauDerecha.Begin();
                     //sbGridVentasHolaIzquierda.Begin();
@@ -1076,8 +1118,8 @@ namespace SIV_Servidor
                     //Storyboard.SetTarget(sb, this.btn);
 
                     //sb2.Begin();
-                    sbSlideCaja.Begin();
-                    
+                    //sbSlideCaja.Begin();
+
                     //sbGridVentasChauIzquierda.Begin();
                     //sbGridCajaHolaDerecha.Begin();
                     /*
@@ -1100,6 +1142,39 @@ namespace SIV_Servidor
                     consola("1");
                     */
                 }
+
+                //consola(gridVentas.RenderTransform.Value.OffsetX.ToString());
+
+                //consola("from:" + gridXFrom);
+                //consola("to:" + gridXTo);
+
+                //sbSlideGrid.Begin();
+                //gridVentas.Margin = new Thickness(mAnchoPantalla * selected * -1, gridVentas.Margin.Top, gridVentas.Margin.Right, gridVentas.Margin.Bottom);
+
+
+                /// animacion
+                gridXFrom = gridMain.RenderTransform.Value.OffsetX;
+                gridXTo = (double)(mAnchoPantalla * selected * -1);
+
+                ///easing
+                CircleEase easing = new CircleEase();  // or whatever easing class you want
+                easing.EasingMode = EasingMode.EaseInOut;
+                DoubleAnimation scrollQueue = new DoubleAnimation();
+                scrollQueue.By = -1;
+                scrollQueue.EasingFunction = easing;
+                //scrollQueue.Duration = new Duration(TimeSpan.FromSeconds(0.25));
+                //gridVentas.BeginAnimation(Grid.MarginProperty, scrollQueue);
+
+                ///animacion en sí
+                ThicknessAnimation ta = new ThicknessAnimation();
+                ta.From = gridMain.Margin;
+                ta.To = new Thickness(gridXTo, ta.From.Value.Top, ta.From.Value.Right, ta.From.Value.Bottom);
+                ta.Duration = new Duration(TimeSpan.FromSeconds(0.5));
+                ta.EasingFunction = easing;
+
+                //dont need to use story board but if you want pause,stop etc use story board
+                gridMain.BeginAnimation(Grid.MarginProperty, ta);
+
 
             }
             e.Handled = true;
@@ -1193,7 +1268,7 @@ namespace SIV_Servidor
         }
         private void listFiltro_GotFocus(object sender, RoutedEventArgs e)
         {
-            ayuda(zAyuda.listFiltro1);
+            ayuda(zAyuda.listFiltro1a, zAyuda.listFiltro1a);
 
         }
         private void listFiltro_LostFocus(object sender, RoutedEventArgs e)
@@ -1221,7 +1296,8 @@ namespace SIV_Servidor
             {
                 seEditoDescripcionDesdeElPrograma = false;
                 e.Handled = true;
-            } else
+            }
+            else
             {
                 tbCodigo.Text = "";
 
@@ -1255,14 +1331,14 @@ namespace SIV_Servidor
                     ///mostrar tip paa agregar nuevo articulo
                     if (tbDescripcion.IsFocused)
                     {
-                        tip(zAyuda.nuevoArticulo,tbDescripcion);
+                        tip(zAyuda.nuevoArticulo, tbDescripcion);
                     }
 
                     ///mostrar list si hay resultados
                     if (listFiltro.Items.Count > 0)
                     {
                         listFiltro.Visibility = Visibility.Visible;
-                        ayuda(zAyuda.descripcion2);
+                        ayuda(zAyuda.descripcion2a, zAyuda.descripcion2b);
                     }
                     else
                     {
@@ -1386,7 +1462,7 @@ namespace SIV_Servidor
                 }
                 if (texto != tag)
                 {
-                    ayuda(zAyuda.precio2);
+                    ayuda(zAyuda.precio2a, zAyuda.precio2b);
                     tip("<ENTER> Actualizar precio en Base de Datos\n<ESC> Cancelar", sender);
                 }
             }
