@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SIV_Servidor"
         xmlns:Properties="clr-namespace:SIV_Servidor.Properties" x:Name="SistemaVentas" x:Class="SIV_Servidor.MainWindow"
         mc:Ignorable="d"
-        Title="Sistema Ventas (Servidor)" Height="650" Width="1000" Background="{DynamicResource colorfondo2}" PreviewKeyDown="SistemaVentas_PreviewKeyDown" WindowStyle="ToolWindow" ResizeMode="NoResize" DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}">
+        Title="Sistema Ventas (Servidor)" Height="650" Width="1000" Background="{DynamicResource colorfondo2}" PreviewKeyDown="SistemaVentas_PreviewKeyDown" ResizeMode="NoResize" DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}" WindowStyle="ToolWindow" Loaded="SistemaVentas_Loaded">
     <Window.Resources>
 
 
@@ -365,98 +365,9 @@
             <Rectangle HorizontalAlignment="Left" Height="83.333" Margin="10,26.5,0,0" Stroke="{DynamicResource detalles}" VerticalAlignment="Top" Width="780"/>
             <Label x:Name="labelTip" Content="labelTip" HorizontalAlignment="Left" Margin="132.017,85.5,0,0" VerticalAlignment="Top" Background="{DynamicResource infocable3}" IsHitTestVisible="False" Padding="2,0" Foreground="{DynamicResource textoobscuro}"/>
             <Label x:Name="label_Copy5" Content="Artículo" HorizontalAlignment="Left" Margin="22.965,9.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Background="{DynamicResource colorfondo}" FontWeight="Bold"/>
-            <ListView x:Name="listCaja"  Height="353" VerticalAlignment="Top" Width="952" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
-                BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" GotFocus="listCaja_GotFocus" Margin="1004,28,0,0">
 
-                <ListView.Resources>
-                    <Style TargetType="{x:Type ListViewItem}">
-
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding color}" Value="0">
-                                <Setter Property="Background" Value="White" />
-                                <Setter Property="BorderBrush" Value="White" />
-                                <Setter Property="BorderThickness" Value="0" />
-                                <Setter Property="Margin" Value="0" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding color}" Value="1">
-                                <Setter Property="Background" Value="{StaticResource textoclaro}" />
-                                <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
-                                <!--
-                                        <Setter Property="CornerRadius" Value="0"/>
-                                        <Setter TargetName="Border" Property="BorderThickness" Value="4,4,4,4" />
-                                        -->
-                                <Setter Property="BorderThickness" Value="0" />
-                                <Setter Property="Margin" Value="0" />
-                            </DataTrigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsSelected" Value="true" />
-                                    <Condition Property="Selector.IsSelectionActive" Value="true" />
-                                </MultiTrigger.Conditions>
-                                <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
-                                <Setter Property="Background" Value="{StaticResource confoco}" />
-                                <Setter Property="BorderBrush" Value="{StaticResource confoco}" />
-                            </MultiTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ListView.Resources>
-                <!--
-            <ListView.GroupStyle>
-                <GroupStyle>
-                    <GroupStyle.HeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name}"></TextBlock>
-                        </DataTemplate>
-                    </GroupStyle.HeaderTemplate>
-                </GroupStyle>
-            </ListView.GroupStyle>-->
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Nro Venta" Width="70"   DisplayMemberBinding="{Binding idventamostrar}"  />
-                        <GridViewColumn Header="idventa" Width="0"   DisplayMemberBinding="{Binding idventa}"   />
-                        <GridViewColumn Header="color" Width="0"   DisplayMemberBinding="{Binding color}"   />
-                        <GridViewColumn Header="Fecha" Width="90"   DisplayMemberBinding="{Binding fecha}"  />
-                        <GridViewColumn Header="Código" Width="100"   DisplayMemberBinding="{Binding codigo}"  />
-                        <GridViewColumn Header="Descripción" Width="350" DisplayMemberBinding="{Binding descripcion}"  />
-                        <GridViewColumn Header="Cant." Width="50"   >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding cantidad}" Width="80" TextAlignment="Right" HorizontalAlignment="Right"   />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Precio" Width="70"   >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding precio, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Sub-total" Width="90"   >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding subtotal, StringFormat=$ \{0:c\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"    />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Total" Width="90"   >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <!--
-                                            <TextBlock Text="{Binding total, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"  FontWeight="Bold"  />
-                                            <TextBlock Text="{Binding total,  StringFormat=s{0:c}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"  FontWeight="Bold"  />
-                                            -->
-                                    <TextBlock Text="{Binding total}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" FontWeight="Bold"  />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-
-            </ListView>
-
+        <local:ucCaja x:Name="ucCaja" Margin="1000,20,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
         </Grid>
         <Label x:Name="labelAyuda2" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{x:Null}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="470" BorderBrush="{DynamicResource infocable}" Padding="5,0" Margin="520,0,0,0"/>
-
     </Grid>
 </Window>

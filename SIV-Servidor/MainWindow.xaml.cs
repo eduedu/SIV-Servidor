@@ -25,6 +25,7 @@ using System.Data;
 using System.Globalization;
 using System.Windows.Media.Animation;
 
+
 namespace SIV_Servidor
 {
     public partial class MainWindow : Window
@@ -48,6 +49,10 @@ namespace SIV_Servidor
         public double gridXTo { get; set; }
         public static double gridXFrom { get; set; }
         double mAnchoPantalla;
+
+
+
+
         //Storyboard sbGridVentasHolaIzquierda;
         //Storyboard sbGridVentasChauIzquierda;
         //Storyboard sbGridCajaHolaDerecha;
@@ -71,11 +76,27 @@ namespace SIV_Servidor
         //editar template del listVenta (hacer copia)
 
 
+        ///controles static
+        public static Label statAyuda1;
+        public static Label statAyuda2;
+        public static Storyboard statSbAyuda;
+        
+        private void SistemaVentas_Loaded(object sender, RoutedEventArgs e)
+        {
+            /// referencia a los controles static
+            statAyuda1 = labelAyuda;
+            statAyuda2 = labelAyuda2;
+            statSbAyuda = sbAyuda;
+        }
+
+
         ///MAIN
         //////sasas
         public MainWindow()
         {
             InitializeComponent();
+
+
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             mArticulos = new List<articuloClass>();
             mItemsVenta = new List<itemVenta>();
@@ -112,11 +133,11 @@ namespace SIV_Servidor
             {
                 ///FOCO en listCaja
                 //FocusManager.SetFocusedElement(this, listVenta);
-                if (listCaja.SelectedIndex == -1)
+                if (ucCaja.listCaja.SelectedIndex == -1)
                 {
-                    listCaja.SelectedIndex = 0;
+                    ucCaja.listCaja.SelectedIndex = 0;
                 }
-                var item = listCaja.ItemContainerGenerator.ContainerFromIndex(listCaja.SelectedIndex) as ListBoxItem;
+                var item = ucCaja.listCaja.ItemContainerGenerator.ContainerFromIndex(ucCaja.listCaja.SelectedIndex) as ListBoxItem;
                 if (item != null)
                 {
                     item.Focus();
@@ -137,11 +158,11 @@ namespace SIV_Servidor
              };
             sbSlideVentas.Completed += (s, e2) =>
             {
-                if (listCaja.SelectedIndex == -1)
+                if (ucCaja.listCaja.SelectedIndex == -1)
                 {
-                    listCaja.SelectedIndex = 0;
+                    ucCaja.listCaja.SelectedIndex = 0;
                 }
-                var item = listCaja.ItemContainerGenerator.ContainerFromIndex(listCaja.SelectedIndex) as ListBoxItem;
+                var item = ucCaja.listCaja.ItemContainerGenerator.ContainerFromIndex(ucCaja.listCaja.SelectedIndex) as ListBoxItem;
                 if (item != null)
                 {
                     item.Focus();
@@ -158,7 +179,7 @@ namespace SIV_Servidor
 
             listFiltro.Visibility = Visibility.Hidden;
             //listFiltro.Margin = new Thickness(tabMain.Margin.Left + tbCodigo.Margin.Left + 2, tabMain.Margin.Top + gridTabItemVEntasHeader.Height + tbDescripcion.Margin.Top + tbDescripcion.Height + 10, 0, 0);
-            listFiltro.Margin = new Thickness(tbCodigo.Margin.Left + 2, tbDescripcion.Margin.Top + tbDescripcion.Height + 20 + 2, 0, 0);
+            listFiltro.Margin = new Thickness(tbCodigo.Margin.Left + 2, tbDescripcion.Margin.Top + tbDescripcion.Height + 0 + 2, 0, 0);
             //tbBuscar.Focus();
 
 
@@ -681,15 +702,27 @@ namespace SIV_Servidor
             tip();
             //ayuda();
         }
-        private void consola(string texto)
+        public static void consola(string texto)
         {
             Console.WriteLine(texto);
             //labelAyuda.Content = texto;
         }
-        private void ayuda(string texto = "", string texto2 = "")
+        public static void ayuda2(string texto = "", string texto2 = "")
+        {
+                if (statAyuda1.Content.ToString() != texto)
+                {
+                    statAyuda1.Content = texto;
+                    statAyuda2.Content = texto2;
+
+                    statSbAyuda.Begin();
+                }
+
+        }
+        public void ayuda(string texto = "", string texto2 = "")
         {
             //Console.WriteLine(texto);
             //consola(labelAyuda.Content.ToString());
+
             if (labelAyuda.Content.ToString() != texto)
             {
                 labelAyuda.Content = texto;
@@ -706,13 +739,23 @@ namespace SIV_Servidor
             }
             else
             {
+                labelTip.Content = texto;
+
                 if (sender is TextBox)
                 {
                     var control = sender as TextBox;
-                    labelTip.Margin = new Thickness(control.Margin.Left + 2, control.Margin.Top + control.Height + 2, 0, 0);
+                    ///si es tbDescripcion, acomodo arriba del control, sino abajo
+                    if (control.Name == "tbDescripcion")
+                    {
+                        labelTip.Margin = new Thickness(control.Margin.Left + 135, control.Margin.Top - 16, 0, 0);
+                    }
+                    else
+                    {
+                        labelTip.Margin = new Thickness(control.Margin.Left + 2, control.Margin.Top + control.Height + 2, 0, 0);
+
+                    }
                     //consola(control.GetType().ToString());
                 }
-                labelTip.Content = texto;
                 labelTip.Visibility = Visibility.Visible;
             }
             //Console.WriteLine(texto);
@@ -891,7 +934,7 @@ namespace SIV_Servidor
 
 
             ///asigno la lista al control listCaja
-            listCaja.ItemsSource = mArticulosCaja;
+            ucCaja.listCaja.ItemsSource = mArticulosCaja;
             //mArticulosCaja.Reverse();
 
             ///cerrar conexion
@@ -1160,7 +1203,7 @@ namespace SIV_Servidor
                 CircleEase easing = new CircleEase();  // or whatever easing class you want
                 easing.EasingMode = EasingMode.EaseInOut;
                 DoubleAnimation scrollQueue = new DoubleAnimation();
-                scrollQueue.By = -1;
+                scrollQueue.By = -1;   //este valor invente yo
                 scrollQueue.EasingFunction = easing;
                 //scrollQueue.Duration = new Duration(TimeSpan.FromSeconds(0.25));
                 //gridVentas.BeginAnimation(Grid.MarginProperty, scrollQueue);
@@ -1171,6 +1214,31 @@ namespace SIV_Servidor
                 ta.To = new Thickness(gridXTo, ta.From.Value.Top, ta.From.Value.Right, ta.From.Value.Bottom);
                 ta.Duration = new Duration(TimeSpan.FromSeconds(0.5));
                 ta.EasingFunction = easing;
+                ta.Completed += (s, e2) =>
+                {
+                    ///pestana VENTAS
+                    if (selected == 0)
+                    {
+                        ///FOCO en tbDescripcion
+                        tbDescripcion.Focus();
+                    }
+                    ///pestana CAJA
+                    if (selected == 1)
+                    {
+                        ///FOCO en listCaja
+                        //FocusManager.SetFocusedElement(this, listVenta);
+                        if (ucCaja.listCaja.SelectedIndex == -1)
+                        {
+                            ucCaja.listCaja.SelectedIndex = 0;
+                        }
+                        var item = ucCaja.listCaja.ItemContainerGenerator.ContainerFromIndex(ucCaja.listCaja.SelectedIndex) as ListBoxItem;
+                        if (item != null)
+                        {
+                            item.Focus();
+                        }
+                    }
+
+                };
 
                 //dont need to use story board but if you want pause,stop etc use story board
                 gridMain.BeginAnimation(Grid.MarginProperty, ta);
@@ -1275,10 +1343,7 @@ namespace SIV_Servidor
         {
             //ayuda();
         }
-        private void listCaja_GotFocus(object sender, RoutedEventArgs e)
-        {
-            ayuda(zAyuda.listCaja1);
-        }
+
 
         private void tbDescripcion_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -1516,10 +1581,14 @@ namespace SIV_Servidor
             sbListFiltroMostrar.Begin();
         }
 
+
+
+
         ///-------------------------------------------------------------------------------------------
 
 
 
     }
 }
+
 

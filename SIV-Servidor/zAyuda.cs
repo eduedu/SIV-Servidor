@@ -17,11 +17,12 @@ namespace SIV_Servidor
             "<TEXTO> para filtrar artículos \n" +
             "<FLECHA ABAJO> para acceder a la lista \n";
         public static string descripcion2b = "" +
-            "<ENTER> para crear un NUEVO artículo con esa descripción y agregarlo a la Base de Datos \n" +
+            "<ENTER> crear artículo NUEVO y añadir a la Base de Datos \n" +
             "<ESCAPE> Cancelar";
 
         public static string descripcion3 = "" +
-            "<ENTER> para crear un NUEVO artículo con esa descripción y agregarlo a la Base de Datos\n";
+            "<ENTER> crear artículo NUEVO con esa descripción" +
+            "y añadir a la Base de Datos\n";
 
         public static string descripcion4 = "" +
             "<ENTER> para cargar el artículo con ese número de código \n";

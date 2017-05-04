@@ -1,0 +1,101 @@
+﻿<UserControl x:Class="SIV_Servidor.ucCaja"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SIV_Servidor"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" Width="970" Height="530">
+    <Grid>
+        <ListView x:Name="listCaja"  Height="353" VerticalAlignment="Top" Width="952" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
+            BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" GotFocus="listCaja_GotFocus" Margin="10,10,0,0">
+
+            <ListView.Resources>
+                <Style TargetType="{x:Type ListViewItem}">
+
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding color}" Value="0">
+                            <Setter Property="Background" Value="White" />
+                            <Setter Property="BorderBrush" Value="White" />
+                            <Setter Property="BorderThickness" Value="0" />
+                            <Setter Property="Margin" Value="0" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding color}" Value="1">
+                            <Setter Property="Background" Value="{StaticResource textoclaro}" />
+                            <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
+                            <!--
+                                        <Setter Property="CornerRadius" Value="0"/>
+                                        <Setter TargetName="Border" Property="BorderThickness" Value="4,4,4,4" />
+                                        -->
+                            <Setter Property="BorderThickness" Value="0" />
+                            <Setter Property="Margin" Value="0" />
+                        </DataTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="true" />
+                                <Condition Property="Selector.IsSelectionActive" Value="true" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+                            <Setter Property="Background" Value="{StaticResource confoco}" />
+                            <Setter Property="BorderBrush" Value="{StaticResource confoco}" />
+                        </MultiTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Resources>
+            <!--
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name}"></TextBlock>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListView.GroupStyle>-->
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Nro Venta" Width="70"   DisplayMemberBinding="{Binding idventamostrar}"  />
+                    <GridViewColumn Header="idventa" Width="0"   DisplayMemberBinding="{Binding idventa}"   />
+                    <GridViewColumn Header="color" Width="0"   DisplayMemberBinding="{Binding color}"   />
+                    <GridViewColumn Header="Fecha" Width="90"   DisplayMemberBinding="{Binding fecha}"  />
+                    <GridViewColumn Header="Código" Width="100"   DisplayMemberBinding="{Binding codigo}"  />
+                    <GridViewColumn Header="Descripción" Width="350" DisplayMemberBinding="{Binding descripcion}"  />
+                    <GridViewColumn Header="Cant." Width="50"   >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding cantidad}" Width="80" TextAlignment="Right" HorizontalAlignment="Right"   />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Precio" Width="70"   >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding precio, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Sub-total" Width="90"   >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding subtotal, StringFormat=$ \{0:c\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"    />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Total" Width="90"   >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <!--
+                                            <TextBlock Text="{Binding total, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"  FontWeight="Bold"  />
+                                            <TextBlock Text="{Binding total,  StringFormat=s{0:c}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"  FontWeight="Bold"  />
+                                            -->
+                                <TextBlock Text="{Binding total}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" FontWeight="Bold"  />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+
+        </ListView>
+
+    </Grid>
+</UserControl>
