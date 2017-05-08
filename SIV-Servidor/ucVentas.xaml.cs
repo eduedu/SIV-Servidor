@@ -18,6 +18,7 @@ using System.Data.SQLite; //Utilizamos la DLL
 using System.Data;
 using System.Globalization;
 using System.Windows.Media.Animation;
+using System.Collections.ObjectModel;
 
 namespace SIV_Servidor
 {
@@ -25,8 +26,9 @@ namespace SIV_Servidor
     public partial class ucVentas : UserControl
     {
         ///Variables Globales
-        List<articuloClass> mArticulos;
-        List<itemVenta> mItemsVenta;
+        List<articuloClass> mArticulos;     //Listado de articulos a la venta filtrados
+        public static ObservableCollection<itemVenta> mItemsVenta =
+            new ObservableCollection<itemVenta>();   //articulos cargados en la pestana venta actual
 
         int mPestana;   //pestana venta activa
         bool mBuscarArticuloPorCodigo = false;  //al apretar enter end escripcion, si empieza por un numero, busca el articulo
@@ -43,7 +45,8 @@ namespace SIV_Servidor
 
             ///variables globales, inicializacion
             mArticulos = new List<articuloClass>();
-            mItemsVenta = new List<itemVenta>();
+            //mItemsVenta = new List<itemVenta>();
+            listVenta.ItemsSource = mItemsVenta;
             
 
             ///SETEAR CONTROLES
@@ -54,6 +57,7 @@ namespace SIV_Servidor
             //listFiltro.Margin = new Thickness(tabMain.Margin.Left + tbCodigo.Margin.Left + 2, tabMain.Margin.Top + gridTabItemVEntasHeader.Height + tbDescripcion.Margin.Top + tbDescripcion.Height + 10, 0, 0);
             listFiltro.Margin = new Thickness(tbCodigo.Margin.Left + 2, tbDescripcion.Margin.Top + tbDescripcion.Height + 0 + 2, 0, 0);
             //tbBuscar.Focus();
+
 
             ///animaciones
             sbListVentas = this.FindResource("sbListVentas") as Storyboard;
@@ -286,10 +290,12 @@ namespace SIV_Servidor
             asentarDBItemVenta(itemTemp, tabla);
 
             ///agregar item al listbox
+            mItemsVenta.Add(itemTemp);
             //listVenta.Items.Add(itemTemp);
 
+
             ///actualizar listVenta
-            mostrarListVentaX();
+            //mostrarListVentaX();
 
             ///Calcular total
             calcularTotal();
@@ -368,7 +374,8 @@ namespace SIV_Servidor
                 resetTb();
                 calcularTotal();
 
-                ///CargarDBCaja();
+                //CargarDBCaja();
+                ucCaja.CargarDBCaja();
 
             }
             else
@@ -430,8 +437,8 @@ namespace SIV_Servidor
             conexion.Close();
 
             ///asignar datos al list
-            listVenta.ItemsSource = null;
-            listVenta.ItemsSource = mItemsVenta;
+            //listVenta.ItemsSource = null;
+            //listVenta.ItemsSource = mItemsVenta;
 
         }
         private void resetBDventas()
@@ -474,7 +481,7 @@ namespace SIV_Servidor
             }
 
             ///des-asignar listVenta a datos
-            listVenta.ItemsSource = null;
+            //listVenta.ItemsSource = null;
         }
         private void buscarArticuloPorCodigo()
         {
@@ -952,15 +959,15 @@ namespace SIV_Servidor
         }
         private float toFloat(string cadena)
         {
-            return MainWindow.toFloat(cadena);
-        }
-        private void consola(string texto)
-        {
-            MainWindow.consola(texto);
+            return funciones.toFloat(cadena);
         }
         private bool esDecimal(Key key)
         {
-            return MainWindow.esDecimal(key);
+            return funciones.esDecimal(key);
+        }
+        private void consola(string texto)
+        {
+            funciones.consola(texto);
         }
     }
 }

@@ -15,9 +15,6 @@ namespace SIV_Servidor
     class zdb
     {
         
-        public static float toFloat(string cadena)
-        {
-            return MainWindow.toFloat(cadena);
-        }
+
     }
 }

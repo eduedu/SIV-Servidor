@@ -26,46 +26,22 @@ using System.Windows.Threading;
 using System.Net;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Collections.ObjectModel;
 
 namespace SIV_Servidor
 {
     public partial class MainWindow : INotifyPropertyChanged
     {
-
-        ///Variables Globales
-        public static List<itemCaja> mArticulosCaja = new List<itemCaja>();
-
-        
         ///ver qué tanto lio seria hacer el binding de datos (masque nada para aprender)
         ///pero en todo caso, podria intentar armar funciones de actuaqlizacion,
         ///o una mezcla de tecnicoas
         ///Pero lo más importante es terminar esa parte rápido.
 
-        Storyboard sbAyuda;
-
-        public double gridXTo { get; set; }
-        public static double gridXFrom { get; set; }
-
-
-
-
-
-
-        double mAnchoPantalla;
-        
-        //Storyboard sbGridVentasHolaIzquierda;
-        //Storyboard sbGridVentasChauIzquierda;
-        //Storyboard sbGridCajaHolaDerecha;
-        //Storyboard sbGridCajaChauDerecha;
-        //static SQLiteConnection conexion;
-
-
-
         ///Shortcuts
         //Navigate Forward/Backward Ctrl+–/Ctrl+Shift+–
         //Peek Definition Alt+F12
         //Comment Code Block Ctrl+K+C/Ctrl+K+U
-
+        
         ///varios:
         //animacion correr hacia los costados
         //listArticulos alineada con los textboxes
@@ -76,6 +52,15 @@ namespace SIV_Servidor
         //editar template del listVenta (hacer copia)
 
 
+            ///Variables Globales
+        //public static List<itemCaja> mArticulosCaja = new List<itemCaja>();
+        //public static ObservableCollection<itemCaja> mArticulosCaja = new ObservableCollection<itemCaja>();
+        Storyboard sbAyuda;
+        public double gridXTo { get; set; }
+        public double gridXFrom { get; set; }
+        double mAnchoPantalla;
+
+        
         ///controles static
         public static Label statAyuda1;
         public static Label statAyuda2;
@@ -99,7 +84,7 @@ namespace SIV_Servidor
             statUcVentas = ucVentas;
             statUcVentas.tbDescripcion.Focus();
 
-            CargarDBCaja();
+            //CargarDBCaja();
         }
 
 
@@ -109,7 +94,8 @@ namespace SIV_Servidor
         {
             InitializeComponent();
 
-            DataContext = this;
+            //this.DataContext = this;
+            //listCaja.ItemsSource = mArticulosCaja;
 
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
@@ -247,17 +233,7 @@ namespace SIV_Servidor
         ///FUNCIONES GENERALES
 
 
-        public static float toFloat(string cadena)
-        {
-            float resultado = 0;
-            float.TryParse(cadena, out resultado);
-            return resultado;
-        }
-        public static void consola(string texto)
-        {
-            Console.WriteLine(texto);
-            //labelAyuda.Content = texto;
-        }
+        
 
         public void ayuda(string texto = "", string texto2 = "")
         {
@@ -287,34 +263,7 @@ namespace SIV_Servidor
 
 
         }
-        public static bool esDecimal(Key key)
-        {
-            bool respuesta = false;
 
-            if ((key >= Key.D0) && (key <= Key.D9))
-            {
-                respuesta = true;
-            }
-            if ((key >= Key.NumPad0) && (key <= Key.NumPad9))
-            {
-                respuesta = true;
-            }
-            if ((key == Key.OemPeriod) || (key == Key.Decimal) || (key == Key.OemComma))
-            {
-                respuesta = true;
-            }
-
-            if ((key == Key.Up) || (key == Key.Down) || (key == Key.Right) || (key == Key.Left))
-            {
-                respuesta = true;
-            }
-            if ((key == Key.Delete) || (key == Key.Back))
-            {
-                respuesta = true;
-            }
-
-            return respuesta;
-        }
 
 
 
@@ -477,8 +426,6 @@ namespace SIV_Servidor
 
                 //consola(gridVentas.RenderTransform.Value.OffsetX.ToString());
 
-                //consola("from:" + gridXFrom);
-                //consola("to:" + gridXTo);
 
                 //sbSlideGrid.Begin();
                 //gridVentas.Margin = new Thickness(mAnchoPantalla * selected * -1, gridVentas.Margin.Top, gridVentas.Margin.Right, gridVentas.Margin.Bottom);
@@ -487,6 +434,8 @@ namespace SIV_Servidor
                 /// animacion
                 gridXFrom = gridMain.RenderTransform.Value.OffsetX;
                 gridXTo = (double)(mAnchoPantalla * selected * -1);
+                consola("from:" + gridXFrom);
+                consola("to:" + gridXTo);
 
                 ///easing
                 CircleEase easing = new CircleEase();  // or whatever easing class you want
@@ -538,111 +487,21 @@ namespace SIV_Servidor
         }
 
 
-
-        ///Funciones caja
-        public static void CargarDBCaja()
+        ///extensiones
+        private float toFloat(string cadena)
         {
-            SQLiteConnection conexion;
-            conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
-            conexion.Open();
-
-            string consulta = "select * from caja ORDER BY id DESC";
-            //string consulta = "select * from caja";
-
-            /// Adaptador de datos, DataSet y tabla
-            SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
-            DataSet dataSet = new DataSet();
-            DataTable dataTable = new DataTable();
-            dataSet.Reset();
-            db.Fill(dataSet);
-            dataTable = dataSet.Tables[0];
-            //dataGrid.DataSource = dt;
-            //dataGrid.DataContext = dt.DefaultView;  //esto anda
-
-            //gridFiltro.ItemsSource = dataTable.DefaultView;
-            //listFiltro.ItemsSource = dataTable.DefaultView;
-
-            ///borrar todos los elementos de mArticulos
-            if (MainWindow.mArticulosCaja != null)
-            {
-                MainWindow.mArticulosCaja.Clear();
-            }
-
-            ///Loop por todos los registros de la tabla
-            int idventaMostrar = -1;
-            float tmpTotal = 0;
-            int index = 0;
-            foreach (DataRow registro in dataTable.Rows)
-            {
-                float cantidad = toFloat(registro["cantidad"].ToString());
-                float precio = toFloat(registro["precio"].ToString());
-                float tmpSubtotal = cantidad * precio;
-
-                //consola(registro["precio"].ToString());
-
-                int tmpidventa = 0;
-                int.TryParse(registro["idventa"].ToString(), out tmpidventa);
-
-
-                itemCaja tempArticulo = new itemCaja();
-                if (tmpidventa != idventaMostrar)
-                {
-                    idventaMostrar = tmpidventa;
-                    tempArticulo.idventamostrar = idventaMostrar.ToString();
-                    tmpTotal = tmpSubtotal;
-                }
-                else
-                {
-                    tempArticulo.idventamostrar = "";
-                    tmpTotal = tmpTotal + tmpSubtotal;
-                }
-                if ((tmpidventa % 2) == 0)
-                {
-                    tempArticulo.color = 0;
-                }
-                else
-                {
-                    tempArticulo.color = 1;
-                }
-                tempArticulo.idventa = tmpidventa;
-                tempArticulo.codigo = registro["codigo"].ToString();
-                tempArticulo.descripcion = registro["descripcion"].ToString();
-                tempArticulo.cantidad = cantidad.ToString();
-                tempArticulo.precio = precio.ToString("0.00");
-                tempArticulo.costo = registro["costo"].ToString();
-                tempArticulo.subtotal = tmpSubtotal.ToString("0.00");
-                tempArticulo.total = "";
-                if (dataTable.Rows.Count != index + 1)
-                {
-                    String tmpSiguienteId = dataTable.Rows[index + 1]["idventa"].ToString();
-                    //consola(registro["idventa"].ToString() + "-" + tmpSiguienteId);
-                    if (registro["idventa"].ToString() != tmpSiguienteId)
-                    {
-                        tempArticulo.total = "$" + tmpTotal.ToString("0.00");
-                    }
-                }
-                else
-                {
-                    tempArticulo.total = tmpTotal.ToString();
-                }
-                MainWindow.mArticulosCaja.Add(tempArticulo);
-                index++;
-            }
-
-
-            ///asigno la lista al control listCaja
-            
-            ///cargaError
-            //if (MainWindow.statUcCaja != null)
-            //{
-                statUcCaja.listCaja.ItemsSource = mArticulosCaja;
-
-            //}
-            mArticulosCaja.Reverse();
-
-            ///cerrar conexion
-            conexion.Close();
+            return funciones.toFloat(cadena);
         }
+        private bool esDecimal(Key key)
+        {
+            return funciones.esDecimal(key);
+        }
+        private void consola(string texto)
+        {
+            funciones.consola(texto);
+        }
+
+
 
         ///-------------------------------------------------------------------------------------------
 
