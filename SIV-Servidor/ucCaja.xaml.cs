@@ -25,6 +25,8 @@ namespace SIV_Servidor
         public ucCaja()
         {
             InitializeComponent();
+
+            DataContext = MainWindow.DataContextProperty;
         }
         private void listCaja_GotFocus(object sender, RoutedEventArgs e)
         {

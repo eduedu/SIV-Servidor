@@ -18,7 +18,7 @@ namespace SIV_Servidor {
 		public string tags { get; set; }
         public string stock { get; set; }
     }
-    class itemVenta
+    public class itemVenta
     {
         public string codigo { get; set; }
         public string descripcion { get; set; }
@@ -27,7 +27,7 @@ namespace SIV_Servidor {
         public string subtotal { get; set; }
         public string costo { get; set; }
     }
-    class itemCaja
+    public class itemCaja
     {
         public int idventa { get; set; }
         public string idventamostrar { get; set; }

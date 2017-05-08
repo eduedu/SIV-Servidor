@@ -6,9 +6,17 @@
              xmlns:local="clr-namespace:SIV_Servidor"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" Width="970" Height="530">
+
     <Grid>
+        <!--<Grid.Resources>
+            
+        </Grid.Resources>
+        <Grid.DataContext>
+            <Binding Source="{Binding mArticulosCaja}"></Binding>
+        </Grid.DataContext>-->
         <ListView x:Name="listCaja"  Height="353" VerticalAlignment="Top" Width="952" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
-            BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" GotFocus="listCaja_GotFocus" Margin="10,10,0,0">
+            BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" GotFocus="listCaja_GotFocus" Margin="10,10,0,0"
+                  ItemsSource="{Binding mArticulosCaja}">
 
             <ListView.Resources>
                 <Style TargetType="{x:Type ListViewItem}">
@@ -96,6 +104,8 @@
             </ListView.View>
 
         </ListView>
+        <TextBox Text="{Binding gridXFrom}"  HorizontalAlignment="Left" Height="60" Margin="164,398,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="256"/>
+
 
     </Grid>
 </UserControl>
