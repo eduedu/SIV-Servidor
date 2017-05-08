@@ -45,6 +45,40 @@ namespace SIV_Servidor
             //MainWindow.consola(zAyuda.listCaja1);
             
         }
+        private void listCaja_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var list = sender as ListView;
+
+                var selected = list.SelectedItem;
+                var fila = selected as itemCaja;
+
+                /*
+                string codigopro = ((fila.codigo == "" || fila.codigo == null) ? "" : fila.codigo.ToString());
+                string descripcion = fila.descripcion.ToString();
+                string precio = fila.precio.ToString("0.00");
+
+                tbCodigo.Text = codigopro;
+                seEditoDescripcionDesdeElPrograma = true;
+                tbDescripcion.Text = descripcion;
+                tbPrecio.Text = precio;
+                tbPrecio.Tag = precio;
+                //consola("costo:" + fila.costo.ToString());
+                tbCantidad.Tag = fila.costo;
+                //consola("tbPrecio.Tag:"+tbPrecio.Tag.ToString());
+
+                tbCantidad.Text = "1";
+                tbCantidad.SelectAll();
+                tbCantidad.Focus();
+                listFiltro.Visibility = Visibility.Hidden;
+                */
+                consola("Venta Nro:" + fila.idventa.ToString());
+                MessageBox.Show("Crear campos (nombre, direccion, cuit, etc. Qu");
+            }
+        }
+
+
 
 
         ///Funciones caja
@@ -164,5 +198,6 @@ namespace SIV_Servidor
         {
             funciones.consola(texto);
         }
+
     }
 }

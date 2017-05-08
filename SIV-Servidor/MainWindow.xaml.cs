@@ -30,7 +30,7 @@ using System.Collections.ObjectModel;
 
 namespace SIV_Servidor
 {
-    public partial class MainWindow : INotifyPropertyChanged
+    public partial class MainWindow : Window
     {
         ///ver qué tanto lio seria hacer el binding de datos (masque nada para aprender)
         ///pero en todo caso, podria intentar armar funciones de actuaqlizacion,
@@ -41,7 +41,7 @@ namespace SIV_Servidor
         //Navigate Forward/Backward Ctrl+–/Ctrl+Shift+–
         //Peek Definition Alt+F12
         //Comment Code Block Ctrl+K+C/Ctrl+K+U
-        
+
         ///varios:
         //animacion correr hacia los costados
         //listArticulos alineada con los textboxes
@@ -52,7 +52,7 @@ namespace SIV_Servidor
         //editar template del listVenta (hacer copia)
 
 
-            ///Variables Globales
+        ///Variables Globales
         //public static List<itemCaja> mArticulosCaja = new List<itemCaja>();
         //public static ObservableCollection<itemCaja> mArticulosCaja = new ObservableCollection<itemCaja>();
         Storyboard sbAyuda;
@@ -60,7 +60,7 @@ namespace SIV_Servidor
         public double gridXFrom { get; set; }
         double mAnchoPantalla;
 
-        
+
         ///controles static
         public static Label statAyuda1;
         public static Label statAyuda2;
@@ -69,7 +69,7 @@ namespace SIV_Servidor
         public static ucVentas statUcVentas;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string propertyName=null)
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -108,7 +108,7 @@ namespace SIV_Servidor
 
 
             ///FUNCIONES DE INICIO
-            
+
         }
 
         //------------------------------------------------------------------------------------------
@@ -306,19 +306,6 @@ namespace SIV_Servidor
                 int selected = tab.SelectedIndex;
                 //consola(e.Source.ToString());
 
-                if (selected == 0)
-                {
-                    ///color texto pestaña
-                    tbPestanaVentas.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
-                    tbPestanaCaja.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
-                }
-                if (selected == 1)
-                {
-                    ///color texto pestaña
-                    tbPestanaVentas.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
-                    tbPestanaCaja.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
-                }
-
 
                 /// animacion
                 gridXFrom = gridMain.RenderTransform.Value.OffsetX;
@@ -370,6 +357,23 @@ namespace SIV_Servidor
                 //dont need to use story board but if you want pause,stop etc use story board
                 gridMain.BeginAnimation(Grid.MarginProperty, ta);
 
+                ///color textblock de las pestañas en tabMain
+                tbPestanaCaja.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
+                tbPestanaVentas.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
+                tbPestanaOpciones.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
+
+                if (selected == 0)
+                {
+                    tbPestanaVentas.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
+                }
+                if (selected == 1)
+                {
+                    tbPestanaCaja.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
+                }
+                if (selected == 2)
+                {
+                    tbPestanaOpciones.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
+                }
 
             }
             e.Handled = true;

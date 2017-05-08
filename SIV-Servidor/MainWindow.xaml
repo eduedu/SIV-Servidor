@@ -10,53 +10,6 @@
     <Window.Resources>
 
 
-        <!--<Storyboard x:Key="sbGridVentasHolaIzquierda">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="gridVentas">
-                <EasingDoubleKeyFrame KeyTime="0" Value="-1000"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="0">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseInOut"/>
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
-        </Storyboard>
-        <Storyboard x:Key="sbGridVentasChauIzquierda">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="gridVentas">
-                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="-1000">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseInOut"/>
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
-        </Storyboard>
-        <Storyboard x:Key="sbGridCajaHolaDerecha">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="gridCaja">
-                <EasingDoubleKeyFrame KeyTime="0" Value="1000"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="0">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseInOut"/>
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
-        </Storyboard>
-        <Storyboard x:Key="sbGridCajaChauDerecha">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="gridCaja">
-                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="1000">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseInOut"/>
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
-        </Storyboard>-->
-        <!--<Style TargetType="{x:Type Button}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource MyFocusVisualStyle}" />
-        </Style>
-        <Style TargetType="{x:Type TextBox}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource MyFocusVisualStyle}" />
-        </Style>-->
-
         <Color x:Key="Foco1">#FFCCCCCC</Color>
 
 
@@ -170,7 +123,6 @@
             <TabItem x:Name="tabItemVentas" FocusVisualStyle="{x:Null}" Cursor="">
                 <TabItem.Header>
                     <Grid x:Name="gridTabItemVEntasHeader" Width="100" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
-                        <!--<TextBox Text="F1-Ventas" Width="120" Height="30" Background="{DynamicResource colorfondo}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="{DynamicResource textoclaro}" />-->
                         <TextBlock x:Name="tbPestanaVentas"  Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F1-VENTAS"/></TextBlock>
                     </Grid>
                 </TabItem.Header>
@@ -186,7 +138,7 @@
             <TabItem x:Name="tabItem2" FocusVisualStyle="{x:Null}"  Background="{DynamicResource colorfondo}" >
                 <TabItem.Header>
                     <Grid  Width="100" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
-                        <TextBlock x:Name="tbPestana3" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F3-opciones"/></TextBlock>
+                        <TextBlock x:Name="tbPestanaOpciones" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F3-OPCIONES"/></TextBlock>
                     </Grid>
                 </TabItem.Header>
                 <Grid />
