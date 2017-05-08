@@ -39,42 +39,36 @@ namespace SIV_Servidor
         Storyboard sbListVentas;
         Storyboard sbListFiltroMostrar;
 
+        /// MAIN
         public ucVentas()
         {
             InitializeComponent();
 
             ///variables globales, inicializacion
             mArticulos = new List<articuloClass>();
-            //mItemsVenta = new List<itemVenta>();
             listVenta.ItemsSource = mItemsVenta;
-            
 
             ///SETEAR CONTROLES
             ayuda();
-            //labelAyuda.Content = "";
             tip();
             listFiltro.Visibility = Visibility.Hidden;
-            //listFiltro.Margin = new Thickness(tabMain.Margin.Left + tbCodigo.Margin.Left + 2, tabMain.Margin.Top + gridTabItemVEntasHeader.Height + tbDescripcion.Margin.Top + tbDescripcion.Height + 10, 0, 0);
             listFiltro.Margin = new Thickness(tbCodigo.Margin.Left + 2, tbDescripcion.Margin.Top + tbDescripcion.Height + 0 + 2, 0, 0);
-            //tbBuscar.Focus();
-
 
             ///animaciones
             sbListVentas = this.FindResource("sbListVentas") as Storyboard;
             sbListFiltroMostrar = this.FindResource("sbListFiltroMostrar") as Storyboard;
 
             ///FUNCIONES DE INICIO
-            //iniciarOSC();
-            //gridFiltroSQL();
             seleccionarPestana(0);
-
             cargarListaDeArticulos();
             calcularTotal();
             tbDescripcion.Focus();
-            
 
 
         }
+
+        //------------------------------------------------------------------------------------------
+        ///-----------------------------------------------------------------------------------------
 
         ///FUNCIONES GENERALES
         private void seleccionarPestana(int pestana)
@@ -133,10 +127,6 @@ namespace SIV_Servidor
             float precio = 0;
             float cantidad = 0;
             float subtotal = 0;
-            //NumberStyles style;
-            //NumberFormatInfo culture;
-            //culture = CultureInfo.InvariantCulture.NumberFormat;
-            //style = NumberStyles.Number | NumberStyles.AllowCurrencySymbol;
             float.TryParse(tbCantidad.Text, out cantidad);
             float.TryParse(tbPrecio.Text, out precio);
 
@@ -144,7 +134,6 @@ namespace SIV_Servidor
             resultado = subtotal.ToString();
             //consola(resultado);
 
-            //tbSubtotal.Text = resultado;
             tbSubtotal.Text = subtotal.ToString("0.00");
         }
         private void calcularTotal()
@@ -216,7 +205,6 @@ namespace SIV_Servidor
             conexion.Close();
 
             ///asignar datos al list
-            //gridFiltro.ItemsSource = mArticulos;
             listFiltro.ItemsSource = mArticulos;
 
         }
@@ -226,13 +214,8 @@ namespace SIV_Servidor
                              where registro.descripcion.ToLower().Contains(filtro.ToLower())
                              select registro;
             listFiltro.ItemsSource = listaTotal;
-            /*
-			foreach (var reg in listaTotal) {
-				Console.WriteLine("Id = {0} , Descripcion = {1}",
-													reg.id, reg.descripcion);
-			}
-			*/
         }
+
         private int obtenerIdVentaMax()
         {
             SQLiteConnection conexion;
@@ -375,7 +358,7 @@ namespace SIV_Servidor
                 calcularTotal();
 
                 //CargarDBCaja();
-                ucCaja.CargarDBCaja();
+                ucCaja.ActualiarCajaDesdeDB();
 
             }
             else
@@ -414,12 +397,6 @@ namespace SIV_Servidor
             ///Loop por todos los registros de la tabla
             foreach (DataRow registro in dataTable.Rows)
             {
-
-                //float cantidad = toFloat(registro["cantidad"].ToString());
-                //float precio = toFloat(registro["precio"].ToString());
-                //float subtotal= toFloat(registro["subtotal"].ToString());
-                //float costo = toFloat(registro["costo"].ToString());
-
                 itemVenta tempItem = new itemVenta();
 
                 tempItem.codigo = registro["codigo"].ToString();
@@ -532,8 +509,6 @@ namespace SIV_Servidor
         {
             //ayuda();
             var textBox = sender as TextBox;
-            //textBox.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 120));
-            //textBox.Background = this.Resources["confoco1"] as SolidColorBrush;
             textBox.Background = App.Current.Resources["confoco"] as SolidColorBrush;
 
             if (textBox.Name == "tbPrecio")
@@ -542,8 +517,6 @@ namespace SIV_Servidor
             }
             else if (textBox.Name == "tbDescripcion")
             {
-                //tip(mensajeDescripcion, sender.GetType().ToString());
-                //ayuda(zAyuda.ayudaDescripcion1);
                 string filtro = textBox.Text;
                 ///si no esta vacio el texto del filtro
                 if (filtro != "")
@@ -560,8 +533,6 @@ namespace SIV_Servidor
                     {
                         ///si es una letra
                         ///aplicar filtro
-                        //filtroArticulos(filtro);
-
                         if (listFiltro.Items.Count > 0)
                         {
                             //listFiltro.Visibility = Visibility.Visible;
@@ -593,7 +564,6 @@ namespace SIV_Servidor
         {
             //ayuda();
             var textBox = sender as TextBox;
-            //textBox.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
             textBox.Background = App.Current.Resources["sinfoco"] as SolidColorBrush;
             if (textBox.Name == "tbDescripcion")
             {
@@ -662,23 +632,11 @@ namespace SIV_Servidor
             //consola(e.Key.ToString());
             if (e.Key == Key.Escape)
             {
-                //Console.WriteLine("ESCAPE");
-                //gridFiltro.SelectedItem = 0;
-                //gridFiltro.Focus();
-                //tbBuscar.MoveFocus(gridFiltro);
-                //tbBuscar.Focus();
                 tbDescripcion.Focus();
             }
             if (e.Key == Key.Enter)
             {
-                //Console.WriteLine("ENTER");
                 var list = sender as ListView;
-                /*
-				DataRowView fila = (DataRowView)list.SelectedItem;
-				String codigo = fila["codigo"].ToString();
-				String descripcion = fila["descripcion"].ToString();
-				String precio = fila["precio"].ToString();
-				*/
 
                 var selected = list.SelectedItem;
                 var fila = selected as articuloClass;
@@ -696,9 +654,6 @@ namespace SIV_Servidor
                 tbCantidad.Tag = fila.costo;
                 //consola("tbPrecio.Tag:"+tbPrecio.Tag.ToString());
 
-                //tbBuscar.Text = "";
-                //tbDescripcion.Text = "";
-                //tbBuscar.Focus();
                 tbCantidad.Text = "1";
                 tbCantidad.SelectAll();
                 tbCantidad.Focus();
@@ -712,7 +667,6 @@ namespace SIV_Servidor
         }
         private void listFiltro_LostFocus(object sender, RoutedEventArgs e)
         {
-            //ayuda();
         }
 
 
@@ -799,16 +753,10 @@ namespace SIV_Servidor
                 //listFiltro.Focus();
                 if (listFiltro.Visibility == Visibility.Visible)
                 {
-                    //consola("down-"+ listFiltro.SelectedIndex.ToString());
-                    //if (listFiltro.SelectedIndex == -1)
-                    //{
-                    //    listFiltro.SelectedIndex = 0;
-                    //}
                     listFiltro.SelectedIndex = 0;
                     var item = listFiltro.ItemContainerGenerator.ContainerFromIndex(listFiltro.SelectedIndex) as ListBoxItem;
                     if (item != null)
                     {
-                        //consola(listFiltro.SelectedItem.ToString());
                         item.Focus();
                         //listFiltro.ScrollIntoView(listFiltro.SelectedItem);
                     }
@@ -947,8 +895,6 @@ namespace SIV_Servidor
 
         private void listFiltro_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            //consola(listFiltro.IsVisible.ToString());
-            //consola("ok");
             sbListFiltroMostrar.Begin();
         }
 

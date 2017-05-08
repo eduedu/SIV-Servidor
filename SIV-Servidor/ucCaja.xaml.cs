@@ -19,26 +19,25 @@ using System.Collections.ObjectModel;
 
 namespace SIV_Servidor
 {
-    /// <summary>
-    /// Interaction logic for ucCaja.xaml
-    /// </summary>
     public partial class ucCaja : UserControl
     {
         ///Globales 
         public static ObservableCollection<itemCaja> mArticulosCaja = 
             new ObservableCollection<itemCaja>();   //Lista los articulos de la caja
 
+        ///MAIN
         public ucCaja()
         {
             InitializeComponent();
-
-            //DataContext = MainWindow.DataContextProperty;
-            //this.DataContext = this;
-
             listCaja.ItemsSource = mArticulosCaja;
 
-            CargarDBCaja();
+            ActualiarCajaDesdeDB();
         }
+
+        //------------------------------------------------------------------------------------------
+        ///-----------------------------------------------------------------------------------------
+
+        ///CONTROLES
         private void listCaja_GotFocus(object sender, RoutedEventArgs e)
         {
             ///ayuda(zAyuda.listCaja1);
@@ -46,27 +45,10 @@ namespace SIV_Servidor
             //MainWindow.consola(zAyuda.listCaja1);
             
         }
-        //public void ayuda2(string texto = "", string texto2 = "")
-        //{
-        //     if (MainWindow.statAyuda1.Content != null)
-        //    {
-        //        if (MainWindow.statAyuda1.Content.ToString() != texto)
-        //        {
-        //            MainWindow.statAyuda1.Content = texto;
-        //            MainWindow.statAyuda2.Content = texto2;
 
-        //            MainWindow.statSbAyuda.Begin();
-        //        }
-
-        //    }
-        //    else
-        //    {
-        //        MainWindow.consola("error, content nulo en statAyuda1");
-        //    }
-        //}
 
         ///Funciones caja
-        public static void CargarDBCaja()
+        public static void ActualiarCajaDesdeDB()
         {
             SQLiteConnection conexion;
             conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
@@ -157,14 +139,7 @@ namespace SIV_Servidor
 
 
             ///asigno la lista al control listCaja
-
-            ///cargaError
-            //if (MainWindow.statUcCaja != null)
-            //{
-
             //listCaja.ItemsSource = mArticulosCaja;
-
-            //}
             //mArticulosCaja.Reverse();
 
             ///cerrar conexion

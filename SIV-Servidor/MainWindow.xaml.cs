@@ -94,32 +94,14 @@ namespace SIV_Servidor
         {
             InitializeComponent();
 
-            //this.DataContext = this;
-            //listCaja.ItemsSource = mArticulosCaja;
-
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             mAnchoPantalla = SistemaVentas.Width;
             gridXTo = -500;
             gridXFrom = 0;
 
-            //mArticulosCaja = new List<itemCaja>();
-
             ///animacion
-            //sb = this.FindResource("Storyboard1") as Storyboard;
-            //sb2 = this.FindResource("Storyboard2") as Storyboard;
             sbAyuda = this.FindResource("sbAyuda") as Storyboard;
-
-            //sbSlideCaja = this.FindResource("sbSlideCaja") as Storyboard;
-            //sbSlideVentas = this.FindResource("sbSlideVentas") as Storyboard;
-            //sbSlideGrid = this.FindResource("sbSlideGrid") as Storyboard;
-            //sbGridVentasHolaIzquierda = this.FindResource("sbGridVentasHolaIzquierda") as Storyboard;
-            //sbGridVentasChauIzquierda = this.FindResource("sbGridVentasChauIzquierda") as Storyboard;
-            //sbGridCajaHolaDerecha = this.FindResource("sbGridCajaHolaDerecha") as Storyboard;
-            //sbGridCajaChauDerecha = this.FindResource("sbGridCajaChauDerecha") as Storyboard;
-
-
-
 
             ///SETEAR CONTROLES
             ayuda();
@@ -128,7 +110,9 @@ namespace SIV_Servidor
             ///FUNCIONES DE INICIO
             
         }
-        ///---------------------------------------------------------------------------
+
+        //------------------------------------------------------------------------------------------
+        ///-----------------------------------------------------------------------------------------
 
         ///OSC 
         public void iniciarOSC()
@@ -231,10 +215,6 @@ namespace SIV_Servidor
 
 
         ///FUNCIONES GENERALES
-
-
-        
-
         public void ayuda(string texto = "", string texto2 = "")
         {
             //Console.WriteLine(texto);
@@ -265,9 +245,6 @@ namespace SIV_Servidor
         }
 
 
-
-
-
         ///CONTROLES
         private void SistemaVentas_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -281,30 +258,20 @@ namespace SIV_Servidor
             if (e.Key == Key.F1)
             {
                 tabMain.SelectedIndex = 0;
-                /*
-                Storyboard sb = this.FindResource("Storyboard1") as Storyboard;
-                //Storyboard.SetTarget(sb, this.btn);
-                sb.Begin();
-                tbDescripcion.Focus();
-                FocusManager.SetFocusedElement(this, tbDescripcion);
-                Keyboard.Focus(tbDescripcion);
-                tbDescripcion.Focus();
-                */
                 e.Handled = true;
 
             }
             if (e.Key == Key.F2)
             {
-
                 tabMain.SelectedIndex = 1;
-                /*
-                Storyboard sb = this.FindResource("Storyboard2") as Storyboard;
-                //Storyboard.SetTarget(sb, this.btn);
-                sb.Begin();
-                listVenta.Focus();
-                */
                 e.Handled = true;
             }
+            if (e.Key == Key.F3)
+            {
+                tabMain.SelectedIndex = 2;
+                e.Handled = true;
+            }
+
             if (e.Key == Key.Tab)
             {
                 e.Handled = true;
@@ -331,7 +298,6 @@ namespace SIV_Servidor
             }
 
         }
-
         private void tabMain_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source is TabControl)
@@ -345,97 +311,20 @@ namespace SIV_Servidor
                     ///color texto pestaña
                     tbPestanaVentas.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
                     tbPestanaCaja.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
-
-                    ///animacion
-                    //Storyboard sb = this.FindResource("Storyboard1") as Storyboard;
-                    //Storyboard.SetTarget(sb, this.btn);
-
-
-                    //sb.Begin();
-                    //sbSlideVentas.Begin();
-
-
-
-
-
-                    //gridXFrom=gridVentas.RenderTransform.Transform.trans
-                    //sbSlideGrid.Begin();
-
-                    //sbGridCajaChauDerecha.Begin();
-                    //sbGridVentasHolaIzquierda.Begin();
-                    //sb.Completed -= Sb_Completed;
-
-                    /*
-                    sb.Completed += (s, e2) =>
-                    {
-
-                        ///FOCO en tbDescripcion
-                        tbDescripcion.Focus();
-                        Keyboard.Focus(tbDescripcion);
-                        FocusManager.SetFocusedElement(this, tbDescripcion);
-                        consola("0 - i=" + i.ToString());
-                        i++;
-                        //sb.Completed -= HandleCustomEvent;
-                    };
-                    */
-
-
-                    ///FOCO en tbDescripcion
-                    /*
-                    tbDescripcion.Focus();
-                    Keyboard.Focus(tbDescripcion);
-                    FocusManager.SetFocusedElement(this,tbDescripcion);
-                    consola("0");
-                    */
                 }
                 if (selected == 1)
                 {
                     ///color texto pestaña
                     tbPestanaVentas.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
                     tbPestanaCaja.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
-
-                    ///animacion
-                    //Storyboard sb2 = this.FindResource("Storyboard2") as Storyboard;
-                    //Storyboard.SetTarget(sb, this.btn);
-
-                    //sb2.Begin();
-                    //sbSlideCaja.Begin();
-
-                    //sbGridVentasChauIzquierda.Begin();
-                    //sbGridCajaHolaDerecha.Begin();
-                    /*
-                    sb2.Completed += (s, e2) =>
-                    {
-                        ///FOCO en listVenta
-                        listVenta.Focus();
-                        Keyboard.Focus(listVenta);
-                        //FocusManager.SetFocusedElement(this, listVenta);
-                        //listVenta.SelectedIndex = 0;
-                        consola("1");
-                        e.Handled = true;
-                    };
-                    */
-
-                    /*
-                    listVenta.Focus();
-                    Keyboard.Focus(listVenta);
-                    FocusManager.SetFocusedElement(this, listVenta);
-                    consola("1");
-                    */
                 }
-
-                //consola(gridVentas.RenderTransform.Value.OffsetX.ToString());
-
-
-                //sbSlideGrid.Begin();
-                //gridVentas.Margin = new Thickness(mAnchoPantalla * selected * -1, gridVentas.Margin.Top, gridVentas.Margin.Right, gridVentas.Margin.Bottom);
 
 
                 /// animacion
                 gridXFrom = gridMain.RenderTransform.Value.OffsetX;
                 gridXTo = (double)(mAnchoPantalla * selected * -1);
-                consola("from:" + gridXFrom);
-                consola("to:" + gridXTo);
+                //consola("from:" + gridXFrom);
+                //consola("to:" + gridXTo);
 
                 ///easing
                 CircleEase easing = new CircleEase();  // or whatever easing class you want
