@@ -16,7 +16,17 @@
         <Storyboard x:Key="sbListFiltroMostrar">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="listFiltro">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="224">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="224">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuarticEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="sbListFiltroOcultar">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="listFiltro">
+                <EasingDoubleKeyFrame KeyTime="0" Value="224"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
                     <EasingDoubleKeyFrame.EasingFunction>
                         <QuarticEase EasingMode="EaseOut"/>
                     </EasingDoubleKeyFrame.EasingFunction>
@@ -25,7 +35,7 @@
         </Storyboard>
     </UserControl.Resources>
     <Grid Background="{DynamicResource colorfondo}">
-        <ListView x:Name="listFiltro"    Height="224" Margin="-740.5,218.5,0,0" VerticalAlignment="Top" Width="660" Background="{DynamicResource textoclaro}" KeyDown="listFiltro_KeyDown" HorizontalAlignment="Left" Panel.ZIndex="1" IsTabStop="True" Foreground="Black" GotFocus="listFiltro_GotFocus" LostFocus="listFiltro_LostFocus" Style="{DynamicResource listFiltroStyle1}" IsVisibleChanged="listFiltro_IsVisibleChanged" >
+        <ListView x:Name="listFiltro"    Height="224" Margin="-693.5,175.197,0,0" VerticalAlignment="Top" Width="660" Background="{DynamicResource textoclaro}" KeyDown="listFiltro_KeyDown" HorizontalAlignment="Left" Panel.ZIndex="1" IsTabStop="True" Foreground="Black" GotFocus="listFiltro_GotFocus" LostFocus="listFiltro_LostFocus" Style="{DynamicResource listFiltroStyle1}" IsVisibleChanged="listFiltro_IsVisibleChanged" >
 
             <ListView.View>
                 <GridView>
@@ -65,14 +75,15 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
+        <Rectangle HorizontalAlignment="Left" Height="84" Margin="10,26.5,0,0" Stroke="{DynamicResource detalles}" VerticalAlignment="Top" Width="780"/>
         <TextBox x:Name="tbSubtotal" HorizontalAlignment="Left" Height="30" Margin="657.017,53.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" Background="{DynamicResource colorfondo}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" Focusable="False" IsHitTestVisible="False" IsTabStop="False" HorizontalContentAlignment="Right" BorderBrush="{DynamicResource textoclaro}" Foreground="{DynamicResource textoclaro}"/>
         <TextBox x:Name="tbPrecio" HorizontalAlignment="Left" Height="30" Margin="572.017,53.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" Background="{DynamicResource sinfoco}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewKeyDown="tbPrecio_PreviewKeyDown" TextChanged="tbPrecio_TextChanged"/>
         <TextBox x:Name="tbCantidad" HorizontalAlignment="Left" Height="30" Margin="487.017,53.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" Background="{DynamicResource sinfoco}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewKeyDown="tbCantidad_PreviewKeyDown" TextChanged="tbCantidad_TextChanged"/>
-        <Label x:Name="label_Copy" Content="Código" HorizontalAlignment="Left" Margin="22.965,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
-        <Label x:Name="label_Copy1" Content="Descripción" HorizontalAlignment="Left" Margin="131.965,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
-        <Label x:Name="label_Copy2" Content="Cantidad" HorizontalAlignment="Left" Margin="486.965,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
-        <Label x:Name="label_Copy3" Content="Precio $" HorizontalAlignment="Left" Margin="571.965,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
-        <Label x:Name="label_Copy4" Content="Sub-total $" HorizontalAlignment="Left" Margin="656.965,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
+        <Label x:Name="label_Copy" Content="Código" HorizontalAlignment="Left" Margin="22.965,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
+        <Label x:Name="label_Copy1" Content="Descripción" HorizontalAlignment="Left" Margin="131.965,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
+        <Label x:Name="label_Copy2" Content="Cantidad" HorizontalAlignment="Left" Margin="486.965,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
+        <Label x:Name="label_Copy3" Content="Precio $" HorizontalAlignment="Left" Margin="571.965,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
+        <Label x:Name="label_Copy4" Content="Sub-total $" HorizontalAlignment="Left" Margin="656.965,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
         <TabControl x:Name="tabVentas" HorizontalAlignment="Left" Margin="22.5,162,0,165" Width="465" SelectionChanged="tabVentas_SelectionChanged" Focusable="False" Background="{x:Null}" BorderBrush="{x:Null}">
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
@@ -140,16 +151,15 @@
         <Label x:Name="label_Copy6" Content="TOTAL" HorizontalAlignment="Left" Margin="609.965,399.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" FontWeight="Bold"/>
         <Label x:Name="label_Copy7" Content="Ventas" HorizontalAlignment="Left" Margin="22.965,121.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Background="{DynamicResource colorfondo}" FontWeight="Bold"/>
         <TextBox x:Name="tbPagaCon" HorizontalAlignment="Left" Margin="487.017,160.5,0,0" TextWrapping="Wrap" Width="80" Background="{DynamicResource sinfoco}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" TextChanged="tbPagaCon_TextChanged" PreviewKeyDown="tbPagaCon_PreviewKeyDown" Height="31.167" VerticalAlignment="Top"/>
-        <Label x:Name="label_Copy8" Content="Paga con" HorizontalAlignment="Left" Margin="486.965,138.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
+        <Label x:Name="label_Copy8" Content="Paga con" HorizontalAlignment="Left" Margin="486.965,138.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
         <TextBox x:Name="tbVuelto" HorizontalAlignment="Left" Margin="572.017,160.5,0,0" TextWrapping="Wrap" Width="80" Background="{DynamicResource colorfondo}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewKeyDown="tbCantidad_PreviewKeyDown" TextChanged="tbCantidad_TextChanged" Focusable="False" IsHitTestVisible="False" IsTabStop="False" Height="31.167" VerticalAlignment="Top" BorderBrush="{DynamicResource textoclaro}" Foreground="{DynamicResource textoclaro}"/>
-        <Label x:Name="label_Copy9" Content="Vuelto" HorizontalAlignment="Left" Margin="571.965,138.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"/>
+        <Label x:Name="label_Copy9" Content="Vuelto" HorizontalAlignment="Left" Margin="571.965,138.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
         <Button x:Name="btnAsentar" Background="{DynamicResource boton}" Width="105" Margin="657.017,160.5,0,0" HorizontalAlignment="Left" GotFocus="Button_GotFocus" LostFocus="Button_LostFocus" PreviewKeyDown="btnAsentar_PreviewKeyDown" PreviewMouseLeftButtonUp="btnAsentar_PreviewMouseLeftButtonUp" Height="31.167" VerticalAlignment="Top" Cursor="Hand">
             <StackPanel Orientation='Horizontal'  Margin="0" >
                 <TextBlock Text="Asentar"  VerticalAlignment="Center" Foreground="{DynamicResource textoobscuro}" />
                 <Image Height="20" Margin="10,0,0,0" Source="save.png" />
             </StackPanel>
         </Button>
-        <Rectangle HorizontalAlignment="Left" Height="83.333" Margin="10,26.5,0,0" Stroke="{DynamicResource detalles}" VerticalAlignment="Top" Width="780"/>
         <Label x:Name="labelTip" Content="labelTip" HorizontalAlignment="Left" Margin="132.017,85.5,0,0" VerticalAlignment="Top" Background="{DynamicResource infocable3}" IsHitTestVisible="False" Padding="2,0" Foreground="{DynamicResource textoobscuro}"/>
         <Label x:Name="label_Copy5" Content="Artículo" HorizontalAlignment="Left" Margin="22.965,9.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Background="{DynamicResource colorfondo}" FontWeight="Bold"/>
     </Grid>

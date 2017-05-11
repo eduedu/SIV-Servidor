@@ -16,6 +16,7 @@ using SIV_Servidor;
 using System.Data;
 using System.Data.SQLite;
 using System.Collections.ObjectModel;
+using System.Windows.Media.Animation;
 
 namespace SIV_Servidor
 {
@@ -25,10 +26,22 @@ namespace SIV_Servidor
         public static ObservableCollection<itemCaja> mArticulosCaja = 
             new ObservableCollection<itemCaja>();   //Lista los articulos de la caja
 
+        public double gridXTo { get; set; }
+        public double gridXFrom { get; set; }
+        double mAnchoPantalla;
+        double mMargen = 15;
+
         ///MAIN
         public ucCaja()
         {
             InitializeComponent();
+
+            mAnchoPantalla = 980; // gridCajaMain.Width;
+            //gridCajaSlide.Width = 970; //mAnchoPantalla - (mMargen * 2);
+            gridCajaSlide.Margin = new Thickness(gridCajaSlide.Margin.Left, gridCajaSlide.Margin.Top , gridCajaSlide.Margin.Bottom, 0);
+            gridXTo = -500;
+            gridXFrom = 0;
+
             listCaja.ItemsSource = mArticulosCaja;
 
             ActualiarCajaDesdeDB();
@@ -54,27 +67,41 @@ namespace SIV_Servidor
                 var selected = list.SelectedItem;
                 var fila = selected as itemCaja;
 
-                /*
-                string codigopro = ((fila.codigo == "" || fila.codigo == null) ? "" : fila.codigo.ToString());
-                string descripcion = fila.descripcion.ToString();
-                string precio = fila.precio.ToString("0.00");
 
-                tbCodigo.Text = codigopro;
-                seEditoDescripcionDesdeElPrograma = true;
-                tbDescripcion.Text = descripcion;
-                tbPrecio.Text = precio;
-                tbPrecio.Tag = precio;
-                //consola("costo:" + fila.costo.ToString());
-                tbCantidad.Tag = fila.costo;
-                //consola("tbPrecio.Tag:"+tbPrecio.Tag.ToString());
+                //string codigopro = ((fila.codigo == "" || fila.codigo == null) ? "" : fila.codigo.ToString());
+                //string descripcion = fila.descripcion.ToString();
+                //string precio = fila.precio.ToString("0.00");
 
-                tbCantidad.Text = "1";
-                tbCantidad.SelectAll();
-                tbCantidad.Focus();
-                listFiltro.Visibility = Visibility.Hidden;
-                */
-                consola("Venta Nro:" + fila.idventa.ToString());
-                MessageBox.Show("Crear campos (nombre, direccion, cuit, etc. Qu");
+                string fecha= fila.fecha.ToString();
+                string idVenta=fila.idventa.ToString();
+                string total= fila.totalmostrar.ToString();
+
+                tbFecha.Text = fecha;
+                tbIdVenta.Text = idVenta;
+                tbTotal.Text = total;
+
+                //tbCodigo.Text = codigopro;
+                //seEditoDescripcionDesdeElPrograma = true;
+                //tbDescripcion.Text = descripcion;
+                //tbPrecio.Text = precio;
+                //tbPrecio.Tag = precio;
+
+                //tbCantidad.Tag = fila.costo;
+
+                //tbCantidad.Focus();
+                //listFiltro.Visibility = Visibility.Hidden;
+
+                //consola("Venta Nro:" + fila.idventa.ToString());
+                //MessageBox.Show("Crear campos (nombre, direccion, cuit, etc. Qu");
+
+                ///consultar mArticulosCaja para filtrar solo los que coinciden con ese nro idVenta
+                var listaVentaId = from registro in mArticulosCaja
+                                 where registro.idventa.Equals(Int32.Parse(idVenta))
+                                 select registro;
+                listImpresion.ItemsSource = listaVentaId;
+
+
+                tabCaja.SelectedIndex = 1;
             }
         }
 
@@ -153,19 +180,19 @@ namespace SIV_Servidor
                 tempArticulo.precio = precio.ToString("0.00");
                 tempArticulo.costo = registro["costo"].ToString();
                 tempArticulo.subtotal = tmpSubtotal.ToString("0.00");
-                tempArticulo.total = "";
+                tempArticulo.totalmostrar = "";
                 if (dataTable.Rows.Count != index + 1)
                 {
                     String tmpSiguienteId = dataTable.Rows[index + 1]["idventa"].ToString();
                     //consola(registro["idventa"].ToString() + "-" + tmpSiguienteId);
                     if (registro["idventa"].ToString() != tmpSiguienteId)
                     {
-                        tempArticulo.total = "$" + tmpTotal.ToString("0.00");
+                        tempArticulo.totalmostrar = "$" + tmpTotal.ToString("0.00");
                     }
                 }
                 else
                 {
-                    tempArticulo.total = tmpTotal.ToString();
+                    tempArticulo.totalmostrar = tmpTotal.ToString();
                 }
                 mArticulosCaja.Add(tempArticulo);
                 index++;
@@ -199,5 +226,88 @@ namespace SIV_Servidor
             funciones.consola(texto);
         }
 
+        private void tabCaja_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.Source is TabControl)
+            {
+                var tab = sender as TabControl;
+                int selected = tab.SelectedIndex;
+                //consola(e.Source.ToString());
+
+
+                /// animacion
+                gridXFrom = gridCajaSlide.RenderTransform.Value.OffsetX;
+                gridXTo = (double)(mAnchoPantalla * selected * -1);
+                gridXTo += mMargen;
+                //consola("from:" + gridXFrom);
+                //consola("to:" + gridXTo);
+
+                ///easing
+                CircleEase easing = new CircleEase();  // or whatever easing class you want
+                easing.EasingMode = EasingMode.EaseInOut;
+                DoubleAnimation scrollQueue = new DoubleAnimation();
+                scrollQueue.By = -1;   //este valor invente yo
+                scrollQueue.EasingFunction = easing;
+                //scrollQueue.Duration = new Duration(TimeSpan.FromSeconds(0.25));
+                //gridVentas.BeginAnimation(Grid.MarginProperty, scrollQueue);
+
+                ///animacion en sí
+                ThicknessAnimation ta = new ThicknessAnimation();
+                ta.From = gridCajaSlide.Margin;
+                ta.To = new Thickness(gridXTo, ta.From.Value.Top, ta.From.Value.Right, ta.From.Value.Bottom);
+                ta.Duration = new Duration(TimeSpan.FromSeconds(0.5));
+                ta.EasingFunction = easing;
+                ta.Completed += (s, e2) =>
+                {
+                    ///pestana VENTAS
+                    if (selected == 0)
+                    {
+                        ///FOCO en tbDescripcion
+                        //ucVentas.tbDescripcion.Focus();
+                    }
+                    ///pestana Impresiones
+                    if (selected == 1)
+                    {
+                        ///FOCO en listCaja
+                        //if (ucCaja.listCaja.SelectedIndex == -1)
+                        //{
+                        //    ucCaja.listCaja.SelectedIndex = 0;
+                        //}
+                        //var item = ucCaja.listCaja.ItemContainerGenerator.ContainerFromIndex(ucCaja.listCaja.SelectedIndex) as ListBoxItem;
+                        //if (item != null)
+                        //{
+                        //    item.Focus();
+                        //}
+                    }
+
+                };
+
+                //dont need to use story board but if you want pause,stop etc use story board
+                gridCajaSlide.BeginAnimation(Grid.MarginProperty, ta);
+
+                ///color textblock de las pestañas en tabMain
+                //tbTabCajaItem0.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
+                //tbTabCajaItem1.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
+                //if (selected == 0)
+                //{
+                //    tbTabCajaItem0.Foreground = App.Current.Resources["infocable3"] as SolidColorBrush;
+                //}
+                //if (selected == 1)
+                //{
+                //    tbTabCajaItem1.Foreground = App.Current.Resources["infocable3"] as SolidColorBrush;
+                //}
+            }
+            e.Handled = true;
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -82,7 +82,7 @@
                     <Setter Property="Background" Value="{StaticResource  confoco}" />
                     <Setter Property="BorderBrush" Value="{StaticResource confoco}" />
                 </MultiTrigger>
-            
+
                 <!--<Trigger Property="IsSelected" Value="true" >
                     <Setter Property="Background" Value="#FFB4FFB4" />
                 </Trigger>-->
@@ -96,7 +96,7 @@
                     </MultiTrigger.Setters>
                 </MultiTrigger>-->
             </Style.Triggers>
-            
+
         </Style>
 
         <ControlTemplate x:Key="ListViewItemStyleParaListFiltro" TargetType="{x:Type ListViewItem}">
@@ -175,6 +175,34 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
 
+        <!--Estilo botones MENU-->
+        <Style TargetType="Button" x:Key="BotonMenu" >
+            <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+            <Setter Property="Background" Value="{StaticResource sinfoco}" />
+            <Setter Property="Template" >
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Name="border" 
+                            BorderThickness="1"
+                            Padding="0,0" 
+                            BorderBrush="DarkGray" 
+                            CornerRadius="3" 
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand" />
+                                <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+                                <Setter Property="Background" Value="{StaticResource sinfoco}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+
+        </Style>
 
 
 

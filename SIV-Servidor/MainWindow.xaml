@@ -75,12 +75,6 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type TabItem}">
-                                <!--
-
-										Margin="26,8"
-                                -->
-                                <!--<Border x:Name="Border" BorderThickness="1,1,1,1" BorderBrush="{StaticResource textoclaro}" CornerRadius="0" Margin="0,0,5,0">-->
-                                <!--<Border x:Name="Border"  BorderThickness="1,1,1,1" BorderBrush="{StaticResource textoclaro}" CornerRadius="0" Margin="0,0,5,0">-->
                                 <Border x:Name="Border"  BorderThickness="0" BorderBrush="{StaticResource textoclaro}" CornerRadius="0" Margin="0,0,5,0">
                                     <Border x:Name="bordeSel"  BorderThickness="0,0,0,5" BorderBrush="{DynamicResource colorfondo}" Background="{x:Null}">
                                         <Border BorderThickness="0,5,0,0" BorderBrush="{x:Null}" Background="{x:Null}">
@@ -94,25 +88,12 @@
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
-                                        <!--
-                                        <Setter TargetName="Border" Property="Background" Value="{StaticResource confoco}" />
-                                        <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
-                                        <Setter Property="TextBlock.FontWeight" Value="ExtraBlack" />
-                                        -->
-                                        <!--<Setter TargetName="Border" Property="BorderThickness" Value="1,1,1,5" />-->
-                                        <!--<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource confoco2}" />-->
                                         <Setter TargetName="bordeSel" Property="BorderBrush" Value="{StaticResource confoco2}" />
                                         <Setter Property="TextBlock.Foreground" Value="{StaticResource confoco2}" />
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="False">
                                         <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
-                                        <!--<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource textoclaro}" />-->
                                         <Setter TargetName="bordeSel" Property="BorderBrush" Value="{StaticResource colorfondo2}" />
-
-                                        <!--
-                                        <Setter Property="TextBlock.FontWeight" Value="Normal" />
-                                        <Setter TargetName="Border" Property="Background" Value="{StaticResource sinfoco}" />
-                                        -->
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -133,7 +114,7 @@
                         <TextBlock x:Name="tbPestanaCaja" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F2-CAJA"/></TextBlock>
                     </Grid>
                 </TabItem.Header>
-                <Grid x:Name="gridCaja" Margin="0" RenderTransformOrigin="0.5,0.5"/>
+                <!--<Grid x:Name="gridCaja" Margin="0" RenderTransformOrigin="0.5,0.5"/>-->
             </TabItem>
             <TabItem x:Name="tabItem2" FocusVisualStyle="{x:Null}"  Background="{DynamicResource colorfondo}" >
                 <TabItem.Header>
@@ -143,11 +124,11 @@
                 </TabItem.Header>
                 <Grid />
             </TabItem>
-            <Path Data="" Stretch="Fill"/>
+            <!--<Path Data="" Stretch="Fill"/>
             <Path Data="" Stretch="Fill"/>
             <Expander Header="Expander" Height="79.5" Width="209.295">
                 <Grid Background="#FFE5E5E5"/>
-            </Expander>
+            </Expander>-->
         </TabControl>
         <Label x:Name="labelAyuda" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{x:Null}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="460" BorderBrush="{DynamicResource infocable}" Padding="5,0" Margin="60,0,0,0"/>
         <Label x:Name="label_Copy10" Content="Ayuda" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="{DynamicResource textoclaro}" Background="{DynamicResource colorfondo}" FontWeight="Bold" Height="35" Width="60" HorizontalContentAlignment="Center" BorderBrush="{DynamicResource colorfondo}" Padding="5,0,5,5"/>
@@ -161,8 +142,8 @@
                     <TranslateTransform/>
                 </TransformGroup>
             </Grid.RenderTransform>
-            <local:ucCaja x:Name="ucCaja" Margin="1000,20,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
-            <local:ucVentas x:Name="ucVentas" Margin="0,20,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
+            <local:ucVentas x:Name="ucVentas" Margin="0,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
+            <local:ucCaja x:Name="ucCaja" Margin="1000,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
         </Grid>
         <Label x:Name="labelAyuda2" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{x:Null}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="470" BorderBrush="{DynamicResource infocable}" Padding="5,0" Margin="520,0,0,0"/>
     </Grid>

@@ -39,6 +39,7 @@ namespace SIV_Servidor {
         public string precio { get; set; }
         public string costo { get; set; }
         public string subtotal { get; set; }
-        public string total { get; set; }
+        //public string total { get; set; }
+        public string totalmostrar { get; set; }
     }
 }

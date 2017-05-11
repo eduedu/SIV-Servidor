@@ -38,7 +38,9 @@ namespace SIV_Servidor
         /// animaciones
         Storyboard sbListVentas;
         Storyboard sbListFiltroMostrar;
+        Storyboard sbListFiltroOcultar;
 
+        
         /// MAIN
         public ucVentas()
         {
@@ -57,6 +59,12 @@ namespace SIV_Servidor
             ///animaciones
             sbListVentas = this.FindResource("sbListVentas") as Storyboard;
             sbListFiltroMostrar = this.FindResource("sbListFiltroMostrar") as Storyboard;
+            sbListFiltroOcultar = this.FindResource("sbListFiltroOcultar") as Storyboard;
+
+            sbListFiltroOcultar.Completed += (s, o) =>
+            {
+                listFiltro.Visibility = Visibility.Hidden;
+            };
 
             ///FUNCIONES DE INICIO
             seleccionarPestana(0);
@@ -480,11 +488,11 @@ namespace SIV_Servidor
                 articulo = listaTotal.ElementAt(0);
 
                 //consola("Res: " + tempArticulo.descripcion.ToString());
-                string codigopro = ((articulo.codigo == "" || articulo.codigo == null) ? "" : articulo.codigo.ToString());
+                string codigo = ((articulo.codigo == "" || articulo.codigo == null) ? "" : articulo.codigo.ToString());
                 string descripcion = articulo.descripcion.ToString();
                 string precio = articulo.precio.ToString("0.00");
 
-                tbCodigo.Text = codigopro;
+                tbCodigo.Text = codigo;
                 seEditoDescripcionDesdeElPrograma = true;
                 tbDescripcion.Text = descripcion;
                 tbPrecio.Text = precio;
@@ -494,7 +502,7 @@ namespace SIV_Servidor
                 tbCantidad.Text = "1";
                 tbCantidad.SelectAll();
                 tbCantidad.Focus();
-                listFiltro.Visibility = Visibility.Hidden;
+                listFiltroOcultar();
 
             }
 
@@ -542,7 +550,7 @@ namespace SIV_Servidor
                         {
                             ayuda(zAyuda.descripcion3);
                             ///ocultar control si no hay resultados
-                            //listFiltro.Visibility = Visibility.Hidden;
+                            //listFiltroOcultar();
                         }
                     }
                 }
@@ -551,7 +559,7 @@ namespace SIV_Servidor
                     ///si esta vacio el texto del filtro
                     ayuda(zAyuda.descripcion1);
                     ///ocultar control si el text esta vacio
-                    //listFiltro.Visibility = Visibility.Hidden;
+                    //listFiltroOcultar();
                 }
             }
             else
@@ -657,7 +665,7 @@ namespace SIV_Servidor
                 tbCantidad.Text = "1";
                 tbCantidad.SelectAll();
                 tbCantidad.Focus();
-                listFiltro.Visibility = Visibility.Hidden;
+                listFiltroOcultar();
             }
         }
         private void listFiltro_GotFocus(object sender, RoutedEventArgs e)
@@ -680,19 +688,20 @@ namespace SIV_Servidor
                 tip();
             }
 
+
             ///borrar el tbCodigo ya que si se edita la descripcion, deja de ser ESE articulo
             //consola(seEditoDescripcionDesdeElPrograma.ToString());
             if (seEditoDescripcionDesdeElPrograma)
             {
                 seEditoDescripcionDesdeElPrograma = false;
                 e.Handled = true;
+                return;
             }
             else
             {
                 tbCodigo.Text = "";
 
             }
-
 
             var textBox = sender as TextBox;
             string filtro = textBox.Text.Trim();
@@ -734,7 +743,7 @@ namespace SIV_Servidor
                     {
                         ayuda(zAyuda.descripcion3);
                         ///ocultar control si no hay resultados
-                        listFiltro.Visibility = Visibility.Hidden;
+                        listFiltroOcultar();
                     }
                 }
             }
@@ -743,8 +752,12 @@ namespace SIV_Servidor
                 ///texto filtro vacio
                 ayuda(zAyuda.descripcion1);
                 ///ocultar control si el text esta vacio
-                listFiltro.Visibility = Visibility.Hidden;
+                listFiltroOcultar();
             }
+
+            
+
+
         }
         private void tbDescripcion_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -798,7 +811,7 @@ namespace SIV_Servidor
                         tbCantidad.Text = "1";
                         tbCantidad.SelectAll();
                         tbCantidad.Focus();
-                        listFiltro.Visibility = Visibility.Hidden;
+                        listFiltroOcultar();
 
                     }
                 }
@@ -895,7 +908,24 @@ namespace SIV_Servidor
 
         private void listFiltro_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            sbListFiltroMostrar.Begin();
+            var list = sender as ListView;
+            Boolean mostrar = list.IsVisible;
+            consola(list.IsVisible.ToString());
+
+            if (mostrar)
+            {
+                sbListFiltroMostrar.Begin();
+                
+            }
+            //else
+            //{
+            //    sbListFiltroOcultar.Begin();
+            //}
+            
+        }
+        private void listFiltroOcultar()
+        {
+            sbListFiltroOcultar.Begin();
         }
 
         ///extensiones
