@@ -35,7 +35,7 @@
         </Storyboard>
     </UserControl.Resources>
     <Grid Background="{DynamicResource colorfondo}">
-        <ListView x:Name="listFiltro"    Height="224" Margin="-693.5,175.197,0,0" VerticalAlignment="Top" Width="660" Background="{DynamicResource textoclaro}" KeyDown="listFiltro_KeyDown" HorizontalAlignment="Left" Panel.ZIndex="1" IsTabStop="True" Foreground="Black" GotFocus="listFiltro_GotFocus" LostFocus="listFiltro_LostFocus" Style="{DynamicResource listFiltroStyle1}" IsVisibleChanged="listFiltro_IsVisibleChanged" >
+        <ListView x:Name="listFiltro"    Height="224" Margin="-638,251,0,0" VerticalAlignment="Top" Width="660" Background="{DynamicResource textoclaro}" KeyDown="listFiltro_KeyDown" HorizontalAlignment="Left" Panel.ZIndex="1" IsTabStop="True" Foreground="Black" GotFocus="listFiltro_GotFocus" LostFocus="listFiltro_LostFocus" Style="{DynamicResource listFiltroStyle1}" IsVisibleChanged="listFiltro_IsVisibleChanged" >
 
             <ListView.View>
                 <GridView>
@@ -52,7 +52,7 @@
                     <GridViewColumn Header="Precio" Width="90"   >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding precio, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"  FontWeight="Bold"  />
+                                <TextBlock Text="{Binding precio, StringFormat=\{0:C\}}" Width="90" TextAlignment="Right" HorizontalAlignment="Right"  FontWeight="Bold"  />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -121,8 +121,15 @@
         <ListView x:Name="listVenta"    Height="197" Margin="20.017,197.5,0,0" VerticalAlignment="Top" Width="760" Background="#FFF0F0F0" HorizontalAlignment="Left" Foreground="Black" KeyDown="listVenta_KeyDown" GotFocus="listVenta_GotFocus"  >
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="id" Width="30"   DisplayMemberBinding="{Binding id}"  />
-                    <GridViewColumn Header="Código" Width="100"   DisplayMemberBinding="{Binding codigo}"  />
+                    <!--<GridViewColumn Header="id" Width="30"   DisplayMemberBinding="{Binding id}"  />-->
+                    <!--<GridViewColumn Header="Código" Width="100"   DisplayMemberBinding="{Binding codigo}"  />-->
+                    <GridViewColumn Header="Código" Width="100" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding codigo}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"  />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Header="Descripción" Width="350" DisplayMemberBinding="{Binding descripcion}"  />
                     <GridViewColumn Header="Cantidad" Width="90"   >
                         <GridViewColumn.CellTemplate>
@@ -162,8 +169,8 @@
                 <Image Height="20" Margin="10,0,0,0" Source="imagenes/save.png" />
             </StackPanel>
         </Button>
-        <Label x:Name="labelTip" Content="labelTip" HorizontalAlignment="Left" Margin="132.017,85.5,0,0" VerticalAlignment="Top" Background="{DynamicResource infocable3}" IsHitTestVisible="False" Padding="2,0" Foreground="{DynamicResource textoobscuro}"/>
         <Label x:Name="labelTip2" Content="labelTip2" HorizontalAlignment="Left" Margin="210,88,0,0" VerticalAlignment="Top" Background="{DynamicResource infocable3}" IsHitTestVisible="False" Padding="2,0" Foreground="{DynamicResource textoobscuro}"/>
         <Label x:Name="label_Copy5" Content="Artículo" HorizontalAlignment="Left" Margin="22.965,9.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Background="{DynamicResource colorfondo}" FontWeight="Bold"/>
+        <Label x:Name="labelTip" Content="labelTip" HorizontalAlignment="Left" Margin="132.017,85.5,0,0" VerticalAlignment="Top" Background="{DynamicResource infocable3}" IsHitTestVisible="False" Padding="2,0" Foreground="{DynamicResource textoobscuro}" Panel.ZIndex="2"/>
     </Grid>
 </UserControl>

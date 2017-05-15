@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace SIV_Servidor
 {
-    class funciones
+    class zfun
     {
         //private static int i=0;
         public static void consola(string texto)
@@ -15,11 +15,19 @@ namespace SIV_Servidor
             Console.WriteLine(texto);
             //labelAyuda.Content = texto;
         }
+        public static long toLong(string cadena)
+        {
+            //i++;
+            //consola(i.ToString());
+            long resultado = -1;
+            long.TryParse(cadena, out resultado);
+            return resultado;
+        }
         public static float toFloat(string cadena)
         {
             //i++;
             //consola(i.ToString());
-            float resultado = 0;
+            float resultado = -1;
             float.TryParse(cadena, out resultado);
             return resultado;
         }

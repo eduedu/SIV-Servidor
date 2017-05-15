@@ -77,7 +77,7 @@ namespace SIV_Servidor
             conexion = new SQLiteConnection("Data Source=" + archivoDb + ";Version=3;New=False;Compress=True;");
             conexion.Open();
 
-
+            
             ///definir comando
             SQLiteCommand comandoSQL;
             //comandoSQL = new SQLiteCommand(comando + " " + tabla + " " + parametros, conexion);

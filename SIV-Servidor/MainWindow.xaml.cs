@@ -415,15 +415,15 @@ namespace SIV_Servidor
         ///extensiones
         private float toFloat(string cadena)
         {
-            return funciones.toFloat(cadena);
+            return zfun.toFloat(cadena);
         }
         private bool esDecimal(Key key)
         {
-            return funciones.esDecimal(key);
+            return zfun.esDecimal(key);
         }
         private void consola(string texto)
         {
-            funciones.consola(texto);
+            zfun.consola(texto);
         }
 
 

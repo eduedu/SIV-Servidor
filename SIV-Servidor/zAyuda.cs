@@ -42,6 +42,7 @@ namespace SIV_Servidor
         public static string precio2b = "" +
             "<ESC> Cancelar";
 
+        public static string precio3AgregarArticulo = "<ENTER> Agregar artículo a Base de Datos\n<ESC> Cancelar";
         public static string listFiltro1a = "" +
             "<ENTER> Seleccionar artículo \n" +
             "<DELETE> Borrar artículo\n";
@@ -56,8 +57,8 @@ namespace SIV_Servidor
 
 
         public static string tipCambiarPrecio = "<ENTER> Actualizar precio en Base de Datos\n<ESC> Cancelar";
-
         public static string tipArticuloNuevo = "Artículo Nuevo";
+        public static string tipAgregarArticulo = "<ENTER> Agregar artículo a Base de Datos";
 
         /// AYUDA CONTROL CAJA
         public static string listCaja1 = "" +

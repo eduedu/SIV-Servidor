@@ -125,8 +125,8 @@ namespace SIV_Servidor
             int index = 0;
             foreach (DataRow registro in dataTable.Rows)
             {
-                float cantidad = funciones.toFloat(registro["cantidad"].ToString());
-                float precio = funciones.toFloat(registro["precio"].ToString());
+                float cantidad = zfun.toFloat(registro["cantidad"].ToString());
+                float precio = zfun.toFloat(registro["precio"].ToString());
                 float tmpSubtotal = cantidad * precio;
 
                 //consola(registro["precio"].ToString());
@@ -156,7 +156,7 @@ namespace SIV_Servidor
                     tempArticulo.color = 1;
                 }
                 tempArticulo.idventa = tmpidventa;
-                tempArticulo.codigo = registro["codigo"].ToString();
+                tempArticulo.codigo = zfun.toLong(registro["codigo"].ToString());
                 tempArticulo.descripcion = registro["descripcion"].ToString();
                 tempArticulo.cantidad = cantidad.ToString();
                 tempArticulo.precio = precio.ToString("0.00");
@@ -197,15 +197,15 @@ namespace SIV_Servidor
         }
         private float toFloat(string cadena)
         {
-            return funciones.toFloat(cadena);
+            return zfun.toFloat(cadena);
         }
         private bool esDecimal(Key key)
         {
-            return funciones.esDecimal(key);
+            return zfun.esDecimal(key);
         }
         private void consola(string texto)
         {
-            funciones.consola(texto);
+            zfun.consola(texto);
         }
 
         ///CONTROLES

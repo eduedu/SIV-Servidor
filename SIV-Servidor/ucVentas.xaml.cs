@@ -26,8 +26,8 @@ namespace SIV_Servidor
     public partial class ucVentas : UserControl
     {
         ///Variables Globales
-        public ObservableCollection<articuloClass>
-            mTotalArticulos = new ObservableCollection<articuloClass>();     //Listado de articulos a la venta filtrados
+        public ObservableCollection<itemArticulo>
+            mTotalArticulos = new ObservableCollection<itemArticulo>();     //Listado de articulos a la venta filtrados
         //public ObservableCollection<articuloClass>
         //    mTotalArticulosConFiltro = new ObservableCollection<articuloClass>();    //lista de mTotalArticulos filtrados por el campo descripcion
         //public List<articuloClass> mTotalArticulosConFiltro = new List<articuloClass>();
@@ -121,6 +121,7 @@ namespace SIV_Servidor
                 if (sender is TextBox)
                 {
                     var control = sender as TextBox;
+                    //labelTip.Margin = new Thickness(control.Margin.Left + 2, control.Margin.Top + control.Height + 2, 0, 0);
                     ///si es tbDescripcion, acomodo arriba del control, sino abajo
                     if (control.Name == "tbDescripcion")
                     {
@@ -129,9 +130,7 @@ namespace SIV_Servidor
                     else
                     {
                         labelTip.Margin = new Thickness(control.Margin.Left + 2, control.Margin.Top + control.Height + 2, 0, 0);
-
                     }
-                    //consola(control.GetType().ToString());
                 }
                 labelTip.Visibility = Visibility.Visible;
             }
@@ -147,12 +146,25 @@ namespace SIV_Servidor
             }
             else
             {
-                TextBox control = tbDescripcion;
+                ///mostrar tip2=articulo nuevo
+                TextBox control = tbCodigo;
                 labelTip2.Content = zAyuda.tipArticuloNuevo;
                 labelTip2.Margin = new Thickness(control.Margin.Left + 2, control.Margin.Top + control.Height + 2, 0, 0);
-                tbCodigo.Style = tbNoEditableNuevo;
                 labelTip2.Visibility = Visibility.Visible;
+
+                ///tbCodigo con style diferente
+                tbCodigo.Style = tbNoEditableNuevo;
+                //tbCodigo.Text = obtenerCodigoArticuloMax().ToString();
             }
+        }
+        private bool EsArticuloNuevo()
+        {
+            bool respuesta = false;
+            if (labelTip2.Visibility == Visibility.Visible)
+            {
+                respuesta = true;
+            }
+            return respuesta;
         }
         private bool estadoTip(string texto)
         {
@@ -233,9 +245,9 @@ namespace SIV_Servidor
             foreach (DataRow registro in dataTable.Rows)
             {
 
-                articuloClass tempArticulo = new articuloClass();
+                itemArticulo tempArticulo = new itemArticulo();
                 tempArticulo.id = (long)registro["id"];
-                tempArticulo.codigo = registro["codigo"].ToString();
+                tempArticulo.codigo = (long)registro["codigo"];
                 tempArticulo.codigopro = registro["codigopro"].ToString();
                 tempArticulo.descripcion = registro["descripcion"].ToString();
 
@@ -280,61 +292,25 @@ namespace SIV_Servidor
         {
             string tabla = "listventa" + mPestana.ToString().Trim();
 
-            //SQLiteConnection conexion;
-            //conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
-            //conexion.Open();
-
-            ////string consulta = "select *, MAX(id) from articulos";
-            //string consulta = "select MAX(id) from " + tabla;
-
-            ///// Adaptador de datos, DataSet y tabla
-            //SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
-            //DataSet dataSet = new DataSet();
-            //DataTable dataTable = new DataTable();
-            //dataSet.Reset();
-            //db.Fill(dataSet);
-            //dataTable = dataSet.Tables[0];
-            //conexion.Close();
-
-            ///// retornar valor maximo de idventa
-            //long resultado = -1;
-            //long.TryParse(dataTable.Rows[0].ItemArray.GetValue(0).ToString(), out resultado);
-
             int resultado = zdb.valorMaxDB("caja.db", tabla, "id");
             if (resultado != -1)
             {
                 resultado++;
             }
-
-
-
-
             return resultado;
         }
         private int obtenerIdVentaMax()
         {
-            //SQLiteConnection conexion;
-            //conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
-            //conexion.Open();
-
-            ////string consulta = "select *, MAX(id) from articulos";
-            //string consulta = "select MAX(idventa) from caja";
-
-            ///// Adaptador de datos, DataSet y tabla
-            //SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
-            //DataSet dataSet = new DataSet();
-            //DataTable dataTable = new DataTable();
-            //dataSet.Reset();
-            //db.Fill(dataSet);
-            //dataTable = dataSet.Tables[0];
-
-            ///// retornar valor maximo de idventa
-            //int resultado = -1;
-            //Int32.TryParse(dataTable.Rows[0].ItemArray.GetValue(0).ToString(), out resultado);
-
-            //conexion.Close();
-            //return resultado;
             int resultado = zdb.valorMaxDB("caja.db", "caja", "idventa");
+            if (resultado != -1)
+            {
+                resultado++;
+            }
+            return resultado;
+        }
+        private int obtenerCodigoArticuloMax()
+        {
+            int resultado = zdb.valorMaxDB("articulos.db", "articulos", "codigo");
             if (resultado != -1)
             {
                 resultado++;
@@ -374,7 +350,7 @@ namespace SIV_Servidor
             {
                 id = id,
 
-                codigo = codigo,
+                codigo = zfun.toLong(codigo),
                 descripcion = descripcion,
                 cantidad = cantidad,
                 precio = precio,
@@ -384,7 +360,7 @@ namespace SIV_Servidor
 
             ///agregar item a la tabla temporal
             string tabla = "listventa" + mPestana.ToString().Trim();
-            asentarDBItemVenta(itemTemp, tabla);
+            insertarItemVentaEnDB(itemTemp, tabla);
 
             ///agregar item al listbox
             mItemsListVenta.Add(itemTemp);
@@ -399,7 +375,7 @@ namespace SIV_Servidor
 
             tbDescripcion.Focus();
         }
-        private void asentarDBItemVenta(itemVenta item, string tabla, int idMax = -1)
+        private void insertarItemVentaEnDB(itemVenta item, string tabla, int idMax = -1)
         {
             ///abrir conexion DB
             SQLiteConnection conexion;
@@ -442,6 +418,41 @@ namespace SIV_Servidor
             conexion.Close();
 
         }
+        private void insertarItemArticuloEnDB(itemArticulo item)
+        {
+            string archivo = "articulos.db";
+            string tabla = "articulos";
+
+            ///abrir conexion DB
+            SQLiteConnection conexion;
+            conexion = new SQLiteConnection("Data Source=" + archivo + ";Version=3;New=False;Compress=True;");
+            conexion.Open();
+
+            ///comando SQL a ejecutar
+            SQLiteCommand insertSQL;
+            insertSQL = new SQLiteCommand("INSERT INTO " + tabla + " (proveedor, codigopro, codigo, descripcion, precio, costo, fechacreacion) VALUES (?,?,?,?,?,?,DATETIME('NOW'))", conexion);
+
+            insertSQL.Parameters.AddWithValue("proveedor", item.proveedor.ToString());
+            insertSQL.Parameters.AddWithValue("codigopro", item.codigopro.ToString());
+            insertSQL.Parameters.AddWithValue("codigo", item.codigo);
+            insertSQL.Parameters.AddWithValue("descripcion", item.descripcion);
+            insertSQL.Parameters.AddWithValue("precio", item.precio);
+            insertSQL.Parameters.AddWithValue("costo", item.costo);
+
+            ///ejecutar comando SQL
+            try
+            {
+                insertSQL.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            ///Cerrar conexion
+            conexion.Close();
+
+        }
         private void asentarVenta()
         {
             ///ejecutar si la lista no está vacía
@@ -449,24 +460,14 @@ namespace SIV_Servidor
             {
                 ///obtener idVentaMax
                 int idVentaMax = obtenerIdVentaMax();
-                //consola(idVentaMax.ToString());
-
-                /////abrir conexion DB
-                //SQLiteConnection conexion;
-                //conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
-                //conexion.Open();
 
                 ///recorrer la lista (listVenta) e ir asentando fila por fila
                 foreach (itemVenta item in listVenta.Items)
                 {
-                    //asentarDBItemVenta(item, "caja", conexion, idVentaMax);
-                    asentarDBItemVenta(item, "caja", idVentaMax);
+                    //insertarItemVentaEnDB(item, "caja", conexion, idVentaMax);
+                    insertarItemVentaEnDB(item, "caja", idVentaMax);
                 }
 
-                /////Cerrar conexion
-                //conexion.Close();
-
-                //CargarDBCaja();
                 ucCaja.ActualiarCajaDesdeDB();
 
                 ///resetear list y recalcular valores
@@ -520,7 +521,7 @@ namespace SIV_Servidor
                 }
                 itemVenta tempItem = new itemVenta();
                 tempItem.id = id;
-                tempItem.codigo = registro["codigo"].ToString();
+                tempItem.codigo = zfun.toLong(registro["codigo"].ToString());
                 tempItem.descripcion = registro["descripcion"].ToString();
                 tempItem.cantidad = registro["cantidad"].ToString();
                 tempItem.precio = registro["precio"].ToString();
@@ -585,7 +586,7 @@ namespace SIV_Servidor
         {
             string codigoTemp = tbDescripcion.Text.Trim();
             var listaTotal = from registro in mTotalArticulos
-                             where registro.codigo.ToLower().Trim().Equals(codigoTemp)
+                             where registro.codigo.ToString().Trim().Equals(codigoTemp)
                              select registro;
 
             int articulosEncontrados = listaTotal.Count();
@@ -597,11 +598,12 @@ namespace SIV_Servidor
             }
             else
             {
-                articuloClass articulo;
+                itemArticulo articulo;
                 articulo = listaTotal.ElementAt(0);
 
                 //consola("Res: " + tempArticulo.descripcion.ToString());
-                string codigo = ((articulo.codigo == "" || articulo.codigo == null) ? "" : articulo.codigo.ToString());
+                //string codigo = ((articulo.codigo == "" || articulo.codigo == null) ? "" : articulo.codigo.ToString());
+                string codigo = articulo.codigo.ToString();
                 string descripcion = articulo.descripcion.ToString();
 
                 tbCodigo.Text = codigo;
@@ -626,7 +628,7 @@ namespace SIV_Servidor
 
         }
 
-        ///FUNCIONES CAJA
+
 
 
         ///CONTROLES
@@ -636,10 +638,23 @@ namespace SIV_Servidor
             var textBox = sender as TextBox;
             textBox.Background = App.Current.Resources["confoco"] as SolidColorBrush;
 
+            ///tbPRECIO
             if (textBox.Name == "tbPrecio")
             {
-                ayuda(zAyuda.precio1a, zAyuda.precio1b);
+                ///si es un articulo nuevo (se hizo enter desde tbDescripcion y no desde listFiltro ni se cargo un nro de codigo)
+                if (EsArticuloNuevo())
+                {
+                    ayuda(zAyuda.precio3AgregarArticulo);
+                    tip(zAyuda.tipAgregarArticulo, tbPrecio);
+                }
+                else
+                ///si no es un articulo nuevo
+                {
+                    ayuda(zAyuda.precio1a, zAyuda.precio1b);
+
+                }
             }
+            ///tbDESCRIPCION
             else if (textBox.Name == "tbDescripcion")
             {
                 string filtro = textBox.Text;
@@ -755,7 +770,7 @@ namespace SIV_Servidor
         private void listFiltro_KeyDown(object sender, KeyEventArgs e)
         {
             var list = sender as ListView;
-            var item = list.SelectedItem as articuloClass;
+            var item = list.SelectedItem as itemArticulo;
             if (e.Key == Key.Escape)
             {
                 tbDescripcion.Focus();
@@ -763,7 +778,8 @@ namespace SIV_Servidor
             else if (e.Key == Key.Enter)
             {
 
-                string codigo = ((item.codigo == "" || item.codigo == null) ? "" : item.codigo.ToString());
+                //string codigo = ((item.codigo == "" || item.codigo == null) ? "" : item.codigo.ToString());
+                string codigo = item.codigo.ToString();
                 string descripcion = item.descripcion.ToString();
                 string precio = item.precio.ToString("0.00");
                 //string precio = string.Format("0.00", item.precio);
@@ -952,6 +968,7 @@ namespace SIV_Servidor
             {
                 ///texto filtro vacio
                 ayuda(zAyuda.descripcion1);
+                tip();
                 ///ocultar control si el text esta vacio
                 listFiltroOcultar();
             }
@@ -989,6 +1006,11 @@ namespace SIV_Servidor
                         {
                             tipArticuloNuevo(true);
                         }
+                        ///tbCodigo = codigoMax 
+                        tbCodigo.Text = obtenerCodigoArticuloMax().ToString();
+                        tbPrecio.Tag = "";
+                        tbCantidad.Tag = "";
+
                         tbCantidad.Text = "1";
                         tbCantidad.SelectAll();
                         tbCantidad.Focus();
@@ -1066,16 +1088,20 @@ namespace SIV_Servidor
             var textBox = sender as TextBox;
             if (textBox.IsFocused)
             {
-                string texto = textBox.Text.Trim();
-                string tag = "";
-                if (textBox.Tag != null)
+                ///si no es un articulo nuevo
+                if (!EsArticuloNuevo())
                 {
-                    tag = textBox.Tag.ToString();
-                }
-                if (texto != tag)
-                {
-                    ayuda(zAyuda.precio2a, zAyuda.precio2b);
-                    tip(zAyuda.tipCambiarPrecio, sender);
+                    string texto = textBox.Text.Trim();
+                    string tag = "";
+                    if (textBox.Tag != null)
+                    {
+                        tag = textBox.Tag.ToString();
+                    }
+                    if (texto != tag)
+                    {
+                        ayuda(zAyuda.precio2a, zAyuda.precio2b);
+                        tip(zAyuda.tipCambiarPrecio, sender);
+                    }
                 }
             }
             calcularSubtotal();
@@ -1119,10 +1145,12 @@ namespace SIV_Servidor
         }
         private void tbPrecio_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            ///Si no es una tecla 'decimal' que ignore
             if (esDecimal(e.Key) == false)
             {
                 e.Handled = true;
             }
+
 
             ///evitar que haya mas de 1 coma
             if ((e.Key == Key.OemPeriod) || (e.Key == Key.Decimal) || (e.Key == Key.OemComma))
@@ -1146,20 +1174,15 @@ namespace SIV_Servidor
                     //break;
                 }
             }
-
-            if (e.Key == Key.Left)
+            ///ENTER
+            if (e.Key == Key.Enter)
             {
-                tbCantidad.SelectAll();
-                tbCantidad.Focus();
-            }
-            else if (e.Key == Key.Up)
-            {
-                resetTb();
-                //tbDescripcion.Focus();
-
-            }
-            else if (e.Key == Key.Enter)
-            {
+                ///si los campos descripcion, codigo o precio estan vacios, q ignore
+                if (tbDescripcion.Text=="" || tbCodigo.Text=="" || tbPrecio.Text=="")
+                {
+                    e.Handled = true;
+                    return;
+                }
                 ///si se modifico el precio, ACTUALIZAR en la BD y en las mListas
                 if (estadoTip(zAyuda.tipCambiarPrecio))
                 {
@@ -1169,7 +1192,7 @@ namespace SIV_Servidor
                     string index = tbCodigo.Tag.ToString();
                     string campo = "precio";
                     //string valor = toFloat(tbPrecio.Text).ToString();
-                    string valor = funciones.toMoneda(tbPrecio.Text);
+                    string valor = zfun.toMoneda(tbPrecio.Text);
 
                     ///ACTUALIZAR EN BD
                     zdb.modificarRegistroDB(archivo, tabla, index, campo, valor, true);
@@ -1183,7 +1206,7 @@ namespace SIV_Servidor
                         var item = mTotalArticulos.First(i => i.id == itemId);
                         if (item != null)
                         {
-                            item.precio = funciones.toFloat(tbPrecio.Text);
+                            item.precio = zfun.toFloat(tbPrecio.Text);
                         }
                         else
                         {
@@ -1196,10 +1219,37 @@ namespace SIV_Servidor
                         consola("Error al querer leer el ID del articulo");
                     }
                 }
+                ///Si es un articulo NUEVO, agregar a BD de articulos
+                if (EsArticuloNuevo())
+                {
+                    ///item temporal
+                    itemArticulo item = new itemArticulo();
+                    item.proveedor = "interno";
+                    item.codigopro = "";
+                    item.codigo = zfun.toLong(tbCodigo.Text);
+                    item.descripcion = tbDescripcion.Text.Trim();
+                    item.precio = toFloat(tbPrecio.Text);
+                    item.costo = 0;
+
+                    insertarItemArticuloEnDB(item);
+                    mTotalArticulos.Add(item);
+                }
+
                 agregarItemALista();
                 resetTb();
                 //tbDescripcion.Focus();
                 e.Handled = true;
+            }
+            else if (e.Key == Key.Left)
+            {
+                tbCantidad.SelectAll();
+                tbCantidad.Focus();
+            }
+            else if (e.Key == Key.Up)
+            {
+                resetTb();
+                //tbDescripcion.Focus();
+
             }
 
             if (e.Key == Key.Escape)
@@ -1241,15 +1291,15 @@ namespace SIV_Servidor
         }
         private float toFloat(string cadena)
         {
-            return funciones.toFloat(cadena);
+            return zfun.toFloat(cadena);
         }
         private bool esDecimal(Key key)
         {
-            return funciones.esDecimal(key);
+            return zfun.esDecimal(key);
         }
         private void consola(string texto)
         {
-            funciones.consola(texto);
+            zfun.consola(texto);
         }
 
     }
