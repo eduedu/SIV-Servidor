@@ -9,6 +9,7 @@ namespace SIV_Servidor
 {
     class funciones
     {
+        //private static int i=0;
         public static void consola(string texto)
         {
             Console.WriteLine(texto);
@@ -16,6 +17,8 @@ namespace SIV_Servidor
         }
         public static float toFloat(string cadena)
         {
+            //i++;
+            //consola(i.ToString());
             float resultado = 0;
             float.TryParse(cadena, out resultado);
             return resultado;
@@ -47,6 +50,16 @@ namespace SIV_Servidor
             }
 
             return respuesta;
+        }
+        public static string toMoneda(string cadena)
+        {
+            string resultado = "";
+
+            resultado = cadena.Replace(".", "");
+            resultado = cadena.Replace(",", ".");
+            //consola(cadena);
+            //consola(resultado);
+            return resultado;
         }
     }
 }

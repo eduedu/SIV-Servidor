@@ -58,6 +58,7 @@ namespace SIV_Servidor
         Storyboard sbAyuda;
         public double gridXTo { get; set; }
         public double gridXFrom { get; set; }
+        public static int mPestanaMain { get; set; }
         double mAnchoPantalla;
 
 
@@ -100,6 +101,7 @@ namespace SIV_Servidor
             gridXTo = -500;
             gridXFrom = 0;
 
+
             ///animacion
             sbAyuda = this.FindResource("sbAyuda") as Storyboard;
 
@@ -108,7 +110,7 @@ namespace SIV_Servidor
 
 
             ///FUNCIONES DE INICIO
-
+            //MessageBox.Show("Armar esquema de todo lo q falta y priorizar");
         }
 
         //------------------------------------------------------------------------------------------
@@ -248,13 +250,13 @@ namespace SIV_Servidor
         ///CONTROLES
         private void SistemaVentas_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
-            {
-                tabMain.SelectedIndex = 0;
-                statUcVentas.resetTb();
-                //tbBuscar.Focus();
-                ucVentas.tbDescripcion.Focus();
-            }
+            //if (e.Key == Key.Escape)
+            //{
+            //    tabMain.SelectedIndex = 0;
+            //    statUcVentas.resetTb();
+            //    //tbBuscar.Focus();
+            //    ucVentas.tbDescripcion.Focus();
+            //}
             if (e.Key == Key.F1)
             {
                 tabMain.SelectedIndex = 0;
@@ -266,11 +268,11 @@ namespace SIV_Servidor
                 tabMain.SelectedIndex = 1;
                 e.Handled = true;
             }
-            if (e.Key == Key.F3)
-            {
-                tabMain.SelectedIndex = 2;
-                e.Handled = true;
-            }
+            //if (e.Key == Key.F3)
+            //{
+            //    tabMain.SelectedIndex = 2;
+            //    e.Handled = true;
+            //}
 
             if (e.Key == Key.Tab)
             {
@@ -306,7 +308,6 @@ namespace SIV_Servidor
                 int selected = tab.SelectedIndex;
                 //consola(e.Source.ToString());
 
-
                 /// animacion
                 gridXFrom = gridMain.RenderTransform.Value.OffsetX;
                 gridXTo = (double)(mAnchoPantalla * selected * -1);
@@ -326,10 +327,12 @@ namespace SIV_Servidor
                 ThicknessAnimation ta = new ThicknessAnimation();
                 ta.From = gridMain.Margin;
                 ta.To = new Thickness(gridXTo, ta.From.Value.Top, ta.From.Value.Right, ta.From.Value.Bottom);
-                ta.Duration = new Duration(TimeSpan.FromSeconds(0.5));
+                ta.Duration = new Duration(TimeSpan.FromSeconds((double)App.Current.Resources["TiempoAnimacion"]));
                 ta.EasingFunction = easing;
                 ta.Completed += (s, e2) =>
                 {
+                    //consola(selected.ToString());
+
                     ///pestana VENTAS
                     if (selected == 0)
                     {
@@ -339,16 +342,40 @@ namespace SIV_Servidor
                     ///pestana CAJA
                     if (selected == 1)
                     {
-                        ///FOCO en listCaja
-                        //FocusManager.SetFocusedElement(this, listVenta);
-                        if (ucCaja.listCaja.SelectedIndex == -1)
+                        //FOCO en listCaja
+                        //int tempSeleccion = ucCaja.tabCaja.SelectedIndex;
+                        //ucCaja.tabCaja.SelectedIndex = -1;
+                        //ucCaja.tabCaja.SelectedIndex = tempSeleccion;
+
+                        /// FOCO en listCaja
+                        if (ucCaja.mPestanaCaja == 0)
                         {
-                            ucCaja.listCaja.SelectedIndex = 0;
+                            if (ucCaja.listCaja.SelectedIndex == -1)
+                            {
+                                ucCaja.listCaja.SelectedIndex = 0;
+                            }
+
+                            var item = ucCaja.listCaja.ItemContainerGenerator.ContainerFromIndex(ucCaja.listCaja.SelectedIndex) as ListBoxItem;
+                            if (item != null)
+                            {
+                                item.Focus();
+                            }
                         }
-                        var item = ucCaja.listCaja.ItemContainerGenerator.ContainerFromIndex(ucCaja.listCaja.SelectedIndex) as ListBoxItem;
-                        if (item != null)
+                        else
+                        /// FOCO en PESTANA IMPRIMIR
                         {
-                            item.Focus();
+
+
+                            /// si el boton tiene el style de selecionado, hace foco en el textbox tbNombre, sino en el boton mBotonSelected
+
+                            if (ucCaja.mBotones[ucCaja.mBotonSelected].Style == ucCaja.styleBotonSelected)
+                            {
+                                ucCaja.tbNombre.Focus();
+                            }
+                            else
+                            {
+                                ucCaja.mBotones[ucCaja.mBotonSelected].Focus();
+                            }
                         }
                     }
 
@@ -357,24 +384,29 @@ namespace SIV_Servidor
                 //dont need to use story board but if you want pause,stop etc use story board
                 gridMain.BeginAnimation(Grid.MarginProperty, ta);
 
-                ///color textblock de las pestañas en tabMain
-                tbPestanaCaja.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
-                tbPestanaVentas.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
-                tbPestanaOpciones.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
 
+                ///color textblock de las pestañas en tabMain
+
+                tbPestanaCaja.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
                 if (selected == 0)
                 {
                     tbPestanaVentas.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
                 }
+
+                tbPestanaVentas.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
                 if (selected == 1)
                 {
                     tbPestanaCaja.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
                 }
-                if (selected == 2)
-                {
-                    tbPestanaOpciones.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
-                }
 
+                //tbPestanaOpciones.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
+                //if (selected == 2)
+                //{
+                //    tbPestanaOpciones.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
+                //}
+
+                ///Index Pestana MAIN seleecionada
+                mPestanaMain = selected;
             }
             e.Handled = true;
         }

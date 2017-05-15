@@ -3,21 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:SIV_Servidor"
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" x:Class="SIV_Servidor.App"
+            xmlns:sys="clr-namespace:System;assembly=mscorlib"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <!--DURACION ANIMACION-->
+        <sys:Double x:Key="TiempoAnimacion">0.3</sys:Double>
 
-        <!--
-        <SolidColorBrush x:Key="colorfondo" Color="#FF828296"/>
-        <SolidColorBrush x:Key="infocable1" Color="#FF9ccc65"/>
-        <SolidColorBrush x:Key="confoco1"   Color="#FFffee58"/>
-                
-        <SolidColorBrush x:Key="confoco1"   Color="#FFFFFF78"/>
-        <SolidColorBrush x:Key="infocable1" Color="#FFB4FFB4"/>
-        <SolidColorBrush x:Key="sinfoco1" Color="#fff0f0f0"/>
-        <SolidColorBrush x:Key="colorfondo" Color="#FF323232"/>
-        -->
-        <!--<SolidColorBrush x:Key="confoco"   Color="#FFFFED91"/>-->
-        <SolidColorBrush x:Key="confoco"   Color="#FFFFED91"/>
+        <!--COLORES-->
+        <SolidColorBrush x:Key="confoco"   Color="#FFFFF572"/>
         <SolidColorBrush x:Key="confoco2"   Color="#FFA2E87C"/>
         <SolidColorBrush x:Key="infocable" Color="#FFA2E87C"/>
         <SolidColorBrush x:Key="infocable2" Color="#FF88FFDE"/>
@@ -27,6 +20,7 @@
         <SolidColorBrush x:Key="sinfoco" Color="#FFd0d0e0"/>
         <SolidColorBrush x:Key="colorfondo" Color="#FF202027"/>
         <SolidColorBrush x:Key="colorfondo2" Color="#FF303039"/>
+        <SolidColorBrush x:Key="colorfondo3" Color="#FF404051"/>
         <SolidColorBrush x:Key="boton" Color="#FFf0f0f0"/>
         <SolidColorBrush x:Key="detalles" Color="#FF707080"/>
         <SolidColorBrush x:Key="textoclaro" Color="#FFd0d0e0"/>
@@ -34,6 +28,8 @@
 
 
         <SolidColorBrush x:Key="ListBorder" Color="#828790"/>
+        
+        <!--LISTFILTRO STYLE-->
         <Style x:Key="listFiltroStyle1" TargetType="{x:Type ListView}">
             <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
             <Setter Property="BorderBrush" Value="{StaticResource ListBorder}"/>
@@ -99,6 +95,7 @@
 
         </Style>
 
+        <!--LISTVIEW STYLE-->
         <ControlTemplate x:Key="ListViewItemStyleParaListFiltro" TargetType="{x:Type ListViewItem}">
             <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="2" SnapsToDevicePixels="True">
                 <Border x:Name="InnerBorder" BorderThickness="1" CornerRadius="1">
@@ -179,6 +176,7 @@
         <Style TargetType="Button" x:Key="BotonMenu" >
             <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
             <Setter Property="Background" Value="{StaticResource sinfoco}" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Template" >
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
@@ -196,15 +194,115 @@
                                 <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
                                 <Setter Property="Background" Value="{StaticResource sinfoco}" />
                             </Trigger>
+                            <Trigger Property="Button.IsFocused" Value="True">
+                                <Setter Property="Cursor" Value="Hand" />
+                                <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+                                <Setter Property="Background" Value="{StaticResource confoco}" />
+                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
             <Setter Property="SnapsToDevicePixels" Value="True" />
+        </Style>
+
+        <!--Estilo BOTON MENU SELECTED-->
+        <Style TargetType="Button" x:Key="BotonMenuSelected" >
+            <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+            <Setter Property="Background" Value="{StaticResource confoco2}" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template" >
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Name="border" 
+                            BorderThickness="1"
+                            Padding="0,0" 
+                            BorderBrush="DarkGray" 
+                            CornerRadius="3" 
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!--<Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand" />
+                                <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+                                <Setter Property="Background" Value="{StaticResource sinfoco}" />
+                            </Trigger>-->
+                            <Trigger Property="Button.IsFocused" Value="True">
+                                <Setter Property="Cursor" Value="Hand" />
+                                <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+                                <Setter Property="Background" Value="{StaticResource confoco}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+        </Style>
+
+        <!--Estilo TEXT BOXES-->
+        <Style TargetType="TextBox" x:Key="miTextbox" >
+            <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+            <Setter Property="Background" Value="{StaticResource sinfoco}" />
+            <!--<Setter Property="FocusVisualStyle" Value="{x:Null}"/>-->
+            <!--<Setter Property="Template" >
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border Name="border" 
+                            BorderThickness="1"
+                            Padding="0,0" 
+                            BorderBrush="DarkGray" 
+                            CornerRadius="3" 
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand" />
+                                <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+                                <Setter Property="Background" Value="{StaticResource sinfoco}" />
+                            </Trigger>
+                            <Trigger Property="Button.IsFocused" Value="True">
+                                <Setter Property="Cursor" Value="Hand" />
+                                <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+                                <Setter Property="Background" Value="{StaticResource confoco}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>-->
+
+            <!--<Setter Property="SnapsToDevicePixels" Value="True" />-->
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="true">
+                    <Setter Property="Background" Value="{StaticResource confoco}" />
+                </Trigger>
+            </Style.Triggers>
 
         </Style>
 
-
+        <Style TargetType="TextBox" x:Key="tbNoEditable" >
+            <Setter Property="Background" Value="{StaticResource colorfondo}" />
+            <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
+            <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Right" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="IsHitTestVisible" Value="False" />
+        </Style>
+        <Style TargetType="TextBox" x:Key="tbNoEditableNuevo" >
+            <Setter Property="Background" Value="{StaticResource infocable3}" />
+            <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+            <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Right" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="IsHitTestVisible" Value="False" />
+        </Style>
 
     </Application.Resources>
 </Application>

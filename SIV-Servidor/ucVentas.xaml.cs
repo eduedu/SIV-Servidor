@@ -26,29 +26,36 @@ namespace SIV_Servidor
     public partial class ucVentas : UserControl
     {
         ///Variables Globales
-        List<articuloClass> mArticulos;     //Listado de articulos a la venta filtrados
-        public static ObservableCollection<itemVenta> mItemsVenta =
-            new ObservableCollection<itemVenta>();   //articulos cargados en la pestana venta actual
+        public ObservableCollection<articuloClass>
+            mTotalArticulos = new ObservableCollection<articuloClass>();     //Listado de articulos a la venta filtrados
+        //public ObservableCollection<articuloClass>
+        //    mTotalArticulosConFiltro = new ObservableCollection<articuloClass>();    //lista de mTotalArticulos filtrados por el campo descripcion
+        //public List<articuloClass> mTotalArticulosConFiltro = new List<articuloClass>();
+        public static ObservableCollection<itemVenta>
+            mItemsListVenta = new ObservableCollection<itemVenta>();   //articulos cargados en la pestana venta actual
 
         int mPestana;   //pestana venta activa
         bool mBuscarArticuloPorCodigo = false;  //al apretar enter end escripcion, si empieza por un numero, busca el articulo
         bool seEditoDescripcionDesdeElPrograma = false;
 
+        Style tbNoEditable = Application.Current.FindResource("tbNoEditable") as Style;
+        Style tbNoEditableNuevo = Application.Current.FindResource("tbNoEditableNuevo") as Style;
 
         /// animaciones
         Storyboard sbListVentas;
         Storyboard sbListFiltroMostrar;
         Storyboard sbListFiltroOcultar;
 
-        
+
         /// MAIN
         public ucVentas()
         {
             InitializeComponent();
 
             ///variables globales, inicializacion
-            mArticulos = new List<articuloClass>();
-            listVenta.ItemsSource = mItemsVenta;
+            //mTotalArticulos = new List<articuloClass>();
+            //mTotalArticulosConFiltro = new List<articuloClass>();
+            listVenta.ItemsSource = mItemsListVenta;
 
             ///SETEAR CONTROLES
             ayuda();
@@ -70,8 +77,8 @@ namespace SIV_Servidor
             seleccionarPestana(0);
             cargarListaDeArticulos();
             calcularTotal();
-            tbDescripcion.Focus();
-
+            resetTb();
+            //tbDescripcion.Focus();
 
         }
 
@@ -87,14 +94,20 @@ namespace SIV_Servidor
         }
         public void resetTb()
         {
+            tbCodigo.Tag = "";
             tbCodigo.Text = "";
             tbDescripcion.Text = "";
             tbCantidad.Text = "";
+            tbCantidad.Tag = "";
             tbPrecio.Text = "";
+            tbPrecio.Tag = "";
             tbSubtotal.Text = "";
             tip();
+            tipArticuloNuevo();
+            tbDescripcion.Focus();
             //ayuda();
         }
+
         private void tip(string texto = "", object sender = null)
         {
             if (texto == "")
@@ -125,11 +138,39 @@ namespace SIV_Servidor
             //Console.WriteLine(texto);
 
         }
+        private void tipArticuloNuevo(bool mostrar = false)
+        {
+            if (!mostrar)
+            {
+                labelTip2.Visibility = Visibility.Hidden;
+                tbCodigo.Style = tbNoEditable;
+            }
+            else
+            {
+                TextBox control = tbDescripcion;
+                labelTip2.Content = zAyuda.tipArticuloNuevo;
+                labelTip2.Margin = new Thickness(control.Margin.Left + 2, control.Margin.Top + control.Height + 2, 0, 0);
+                tbCodigo.Style = tbNoEditableNuevo;
+                labelTip2.Visibility = Visibility.Visible;
+            }
+        }
+        private bool estadoTip(string texto)
+        {
+            if (labelTip.Content.ToString() == texto && labelTip.Visibility == Visibility.Visible)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         private void calcularSubtotal()
         {
 
             tbCantidad.Text = tbCantidad.Text.Replace('.', ',');
-            tbPrecio.Text = tbPrecio.Text.Replace('.', ',');
+            //tbPrecio.Text = tbPrecio.Text.Replace('.', ',');
+            //tbPrecio.CaretIndex = tbPrecio.Text.Length;   //poner el cursor al final
 
             string resultado = "";
             float precio = 0;
@@ -182,30 +223,35 @@ namespace SIV_Servidor
             db.Fill(dataSet);
             dataTable = dataSet.Tables[0];
 
-            ///borrar todos los elementos de mArticulos
-            if (mArticulos != null)
+            ///borrar todos los elementos de mTotalArticulos
+            if (mTotalArticulos != null)
             {
-                mArticulos.Clear();
+                mTotalArticulos.Clear();
             }
 
             ///Loop por todos los registros de la tabla
             foreach (DataRow registro in dataTable.Rows)
             {
-                float precio = toFloat(registro["precio"].ToString());
-                float costo = toFloat(registro["costo"].ToString());
 
                 articuloClass tempArticulo = new articuloClass();
                 tempArticulo.id = (long)registro["id"];
                 tempArticulo.codigo = registro["codigo"].ToString();
                 tempArticulo.codigopro = registro["codigopro"].ToString();
                 tempArticulo.descripcion = registro["descripcion"].ToString();
+
+                float precio = toFloat(registro["precio"].ToString());
                 tempArticulo.precio = precio;
+
+                //tempArticulo.precio= string.Format("0.00", registro["precio"].ToString());
+                //tempArticulo.precio = registro["precio"].ToString();
+
+                float costo = toFloat(registro["costo"].ToString());
                 tempArticulo.costo = costo;
                 tempArticulo.tags = registro["tags"].ToString();
                 tempArticulo.stock = registro["stock"].ToString();
                 //tempArticulo.stock = "1";
 
-                mArticulos.Add(tempArticulo);
+                mTotalArticulos.Add(tempArticulo);
             }
 
 
@@ -213,39 +259,86 @@ namespace SIV_Servidor
             conexion.Close();
 
             ///asignar datos al list
-            listFiltro.ItemsSource = mArticulos;
+            listFiltro.ItemsSource = mTotalArticulos;
 
         }
         private void filtroArticulos(string filtro = "")
         {
-            var listaTotal = from registro in mArticulos
-                             where registro.descripcion.ToLower().Contains(filtro.ToLower())
-                             select registro;
-            listFiltro.ItemsSource = listaTotal;
+            var articulosFiltrados = from registro in mTotalArticulos
+                                     where registro.descripcion.ToLower().Contains(filtro.ToLower())
+                                     select registro;
+
+            //mTotalArticulosConFiltro = null;
+            //mTotalArticulosConFiltro = articulosFiltrados.ToList();
+            //listFiltro.ItemsSource = mTotalArticulosConFiltro;
+            listFiltro.ItemsSource = articulosFiltrados;
+
+
         }
 
+        private long obtenerIdParaListVenta()
+        {
+            string tabla = "listventa" + mPestana.ToString().Trim();
+
+            //SQLiteConnection conexion;
+            //conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
+            //conexion.Open();
+
+            ////string consulta = "select *, MAX(id) from articulos";
+            //string consulta = "select MAX(id) from " + tabla;
+
+            ///// Adaptador de datos, DataSet y tabla
+            //SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
+            //DataSet dataSet = new DataSet();
+            //DataTable dataTable = new DataTable();
+            //dataSet.Reset();
+            //db.Fill(dataSet);
+            //dataTable = dataSet.Tables[0];
+            //conexion.Close();
+
+            ///// retornar valor maximo de idventa
+            //long resultado = -1;
+            //long.TryParse(dataTable.Rows[0].ItemArray.GetValue(0).ToString(), out resultado);
+
+            int resultado = zdb.valorMaxDB("caja.db", tabla, "id");
+            if (resultado != -1)
+            {
+                resultado++;
+            }
+
+
+
+
+            return resultado;
+        }
         private int obtenerIdVentaMax()
         {
-            SQLiteConnection conexion;
-            conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
-            conexion.Open();
+            //SQLiteConnection conexion;
+            //conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
+            //conexion.Open();
 
-            //string consulta = "select *, MAX(id) from articulos";
-            string consulta = "select MAX(idventa) from caja";
+            ////string consulta = "select *, MAX(id) from articulos";
+            //string consulta = "select MAX(idventa) from caja";
 
-            /// Adaptador de datos, DataSet y tabla
-            SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
-            DataSet dataSet = new DataSet();
-            DataTable dataTable = new DataTable();
-            dataSet.Reset();
-            db.Fill(dataSet);
-            dataTable = dataSet.Tables[0];
+            ///// Adaptador de datos, DataSet y tabla
+            //SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
+            //DataSet dataSet = new DataSet();
+            //DataTable dataTable = new DataTable();
+            //dataSet.Reset();
+            //db.Fill(dataSet);
+            //dataTable = dataSet.Tables[0];
 
-            /// retornar valor maximo de idventa
-            int resultado = -1;
-            Int32.TryParse(dataTable.Rows[0].ItemArray.GetValue(0).ToString(), out resultado);
+            ///// retornar valor maximo de idventa
+            //int resultado = -1;
+            //Int32.TryParse(dataTable.Rows[0].ItemArray.GetValue(0).ToString(), out resultado);
 
-            conexion.Close();
+            //conexion.Close();
+            //return resultado;
+            int resultado = zdb.valorMaxDB("caja.db", "caja", "idventa");
+            if (resultado != -1)
+            {
+                resultado++;
+            }
             return resultado;
         }
         private void agregarItemALista()
@@ -262,12 +355,25 @@ namespace SIV_Servidor
             cantidad = tbCantidad.Text;
             precio = tbPrecio.Text;
             subtotal = tbSubtotal.Text;
+
+            precio = toFloat(precio).ToString();
+
             if (tbCantidad.Tag != null)
                 costo = tbCantidad.Tag.ToString();
+
+
+            long id = obtenerIdParaListVenta();
+            if (id == -1)
+            {
+                consola("Error al intentar obtener IdParaListVenta");
+                return;
+            }
 
             ///crear itemVenta
             itemVenta itemTemp = new itemVenta
             {
+                id = id,
+
                 codigo = codigo,
                 descripcion = descripcion,
                 cantidad = cantidad,
@@ -281,7 +387,7 @@ namespace SIV_Servidor
             asentarDBItemVenta(itemTemp, tabla);
 
             ///agregar item al listbox
-            mItemsVenta.Add(itemTemp);
+            mItemsListVenta.Add(itemTemp);
             //listVenta.Items.Add(itemTemp);
 
 
@@ -342,7 +448,7 @@ namespace SIV_Servidor
             if (listVenta.Items.Count > 0)
             {
                 ///obtener idVentaMax
-                int idVentaMax = obtenerIdVentaMax() + 1;
+                int idVentaMax = obtenerIdVentaMax();
                 //consola(idVentaMax.ToString());
 
                 /////abrir conexion DB
@@ -360,21 +466,21 @@ namespace SIV_Servidor
                 /////Cerrar conexion
                 //conexion.Close();
 
-                ///resetear list y recalcular valores
-                resetListVenta();
-                resetTb();
-                calcularTotal();
-
                 //CargarDBCaja();
                 ucCaja.ActualiarCajaDesdeDB();
+
+                ///resetear list y recalcular valores
+                resetListVenta();
+                calcularTotal();
+                resetTb();
 
             }
             else
             {
                 consola("No hay articulos en la lista.");
+                tbDescripcion.Focus();
             }
 
-            tbDescripcion.Focus();
         }
         private void mostrarListVentaX()
         {
@@ -393,10 +499,10 @@ namespace SIV_Servidor
             db.Fill(dataSet);
             dataTable = dataSet.Tables[0];
 
-            ///borrar todos los elementos de mItemsVenta
-            if (mItemsVenta != null)
+            ///borrar todos los elementos de mItemsListVenta
+            if (mItemsListVenta != null)
             {
-                mItemsVenta.Clear();
+                mItemsListVenta.Clear();
 
             }
 
@@ -405,8 +511,15 @@ namespace SIV_Servidor
             ///Loop por todos los registros de la tabla
             foreach (DataRow registro in dataTable.Rows)
             {
+                int id = -1;
+                Int32.TryParse(registro["id"].ToString(), out id);
+                if (id == -1)
+                {
+                    consola("Error en campo ID al cargar registro (descripcion=" + registro["descripcion"].ToString() + ")");
+                    return;
+                }
                 itemVenta tempItem = new itemVenta();
-
+                tempItem.id = id;
                 tempItem.codigo = registro["codigo"].ToString();
                 tempItem.descripcion = registro["descripcion"].ToString();
                 tempItem.cantidad = registro["cantidad"].ToString();
@@ -415,7 +528,7 @@ namespace SIV_Servidor
                 tempItem.costo = registro["costo"].ToString();
                 //tempArticulo.stock = "1";
 
-                mItemsVenta.Add(tempItem);
+                mItemsListVenta.Add(tempItem);
             }
 
             ///cerrar conexion
@@ -423,7 +536,7 @@ namespace SIV_Servidor
 
             ///asignar datos al list
             //listVenta.ItemsSource = null;
-            //listVenta.ItemsSource = mItemsVenta;
+            //listVenta.ItemsSource = mItemsListVenta;
 
         }
         private void resetBDventas()
@@ -459,9 +572,9 @@ namespace SIV_Servidor
 
 
             ///borrar itemsVenta
-            if (mItemsVenta != null)
+            if (mItemsListVenta != null)
             {
-                mItemsVenta.Clear();
+                mItemsListVenta.Clear();
 
             }
 
@@ -471,7 +584,7 @@ namespace SIV_Servidor
         private void buscarArticuloPorCodigo()
         {
             string codigoTemp = tbDescripcion.Text.Trim();
-            var listaTotal = from registro in mArticulos
+            var listaTotal = from registro in mTotalArticulos
                              where registro.codigo.ToLower().Trim().Equals(codigoTemp)
                              select registro;
 
@@ -490,13 +603,17 @@ namespace SIV_Servidor
                 //consola("Res: " + tempArticulo.descripcion.ToString());
                 string codigo = ((articulo.codigo == "" || articulo.codigo == null) ? "" : articulo.codigo.ToString());
                 string descripcion = articulo.descripcion.ToString();
-                string precio = articulo.precio.ToString("0.00");
 
                 tbCodigo.Text = codigo;
+                tbCodigo.Tag = articulo.id;
                 seEditoDescripcionDesdeElPrograma = true;
                 tbDescripcion.Text = descripcion;
+
+                string precio = articulo.precio.ToString("0.00");
+                //string precio = string.Format("0.00", articulo.precio);
                 tbPrecio.Text = precio;
                 tbPrecio.Tag = precio;
+
                 tbCantidad.Tag = articulo.costo;
 
                 tbCantidad.Text = "1";
@@ -637,29 +754,28 @@ namespace SIV_Servidor
 
         private void listFiltro_KeyDown(object sender, KeyEventArgs e)
         {
-            //consola(e.Key.ToString());
+            var list = sender as ListView;
+            var item = list.SelectedItem as articuloClass;
             if (e.Key == Key.Escape)
             {
                 tbDescripcion.Focus();
             }
-            if (e.Key == Key.Enter)
+            else if (e.Key == Key.Enter)
             {
-                var list = sender as ListView;
 
-                var selected = list.SelectedItem;
-                var fila = selected as articuloClass;
+                string codigo = ((item.codigo == "" || item.codigo == null) ? "" : item.codigo.ToString());
+                string descripcion = item.descripcion.ToString();
+                string precio = item.precio.ToString("0.00");
+                //string precio = string.Format("0.00", item.precio);
 
-                string codigopro = ((fila.codigo == "" || fila.codigo == null) ? "" : fila.codigo.ToString());
-                string descripcion = fila.descripcion.ToString();
-                string precio = fila.precio.ToString("0.00");
-
-                tbCodigo.Text = codigopro;
+                tbCodigo.Text = codigo;
+                tbCodigo.Tag = item.id;
                 seEditoDescripcionDesdeElPrograma = true;
                 tbDescripcion.Text = descripcion;
                 tbPrecio.Text = precio;
                 tbPrecio.Tag = precio;
                 //consola("costo:" + fila.costo.ToString());
-                tbCantidad.Tag = fila.costo;
+                tbCantidad.Tag = item.costo;
                 //consola("tbPrecio.Tag:"+tbPrecio.Tag.ToString());
 
                 tbCantidad.Text = "1";
@@ -667,16 +783,100 @@ namespace SIV_Servidor
                 tbCantidad.Focus();
                 listFiltroOcultar();
             }
+            else if (e.Key == Key.Delete)
+            {
+                if (item != null)
+                {
+                    string mensaje = "¿Está seguro de eliminar:\n\n";
+                    mensaje = mensaje + item.descripcion.ToUpper() + " (cód:" + item.codigo + ")\n\n";
+                    mensaje = mensaje + "de la Base de Datos?";
+                    MessageBoxResult result = MessageBox.Show(mensaje, "Eliminar Artículo", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+                    switch (result)
+                    {
+                        case MessageBoxResult.Yes:
+                            string archivoDB = "articulos.db";
+                            string tabla = "articulos";
+                            long index = item.id;
+                            ///eliminar de la BD, de la lista principal y de la lista filtrada
+                            zdb.EliminarRegistroDB(archivoDB, tabla, index);
+                            mTotalArticulos.Remove(item);
+                            //mTotalArticulosConFiltro.Remove(item);
+
+                            ///volver a filtrar y dar el foco a descripcion
+                            string filtro = tbDescripcion.Text.Trim();
+                            filtroArticulos(filtro);
+                            tbDescripcion.Focus();
+
+                            consola("Se elimino el item:" + index.ToString());
+
+                            break;
+                        case MessageBoxResult.No:
+                            break;
+                    }
+
+
+                }
+                else
+                {
+                    consola("no hay ningun item seleccionado para borrar");
+                }
+            }
         }
         private void listFiltro_GotFocus(object sender, RoutedEventArgs e)
         {
-            ayuda(zAyuda.listFiltro1a, zAyuda.listFiltro1a);
+            ayuda(zAyuda.listFiltro1a, zAyuda.listFiltro1b);
 
         }
         private void listFiltro_LostFocus(object sender, RoutedEventArgs e)
         {
         }
+        private void listFiltro_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            var list = sender as ListView;
+            Boolean mostrar = list.IsVisible;
+            //consola(list.IsVisible.ToString());
 
+            if (mostrar)
+            {
+                sbListFiltroMostrar.Begin();
+
+            }
+            //else
+            //{
+            //    sbListFiltroOcultar.Begin();
+            //}
+
+        }
+        private void listFiltroOcultar()
+        {
+            sbListFiltroOcultar.Begin();
+        }
+
+        private void listVenta_GotFocus(object sender, RoutedEventArgs e)
+        {
+            ayuda(zAyuda.listVenta1);
+        }
+        private void listVenta_KeyDown(object sender, KeyEventArgs e)
+        {
+            var list = sender as ListView;
+            var item = list.SelectedItem as itemVenta;
+            if (e.Key == Key.Delete)
+            {
+                if (item != null)
+                {
+                    string archivoDB = "caja.db";
+                    string tabla = "listventa" + mPestana.ToString().Trim();
+                    long index = item.id;
+                    zdb.EliminarRegistroDB(archivoDB, tabla, index);
+                    mItemsListVenta.Remove(item);
+                    consola("Se elimino el item:" + index.ToString());
+                }
+                else
+                {
+                    consola("no hay ningun item seleccionado para borrar");
+                }
+            }
+        }
 
         private void tbDescripcion_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -745,6 +945,7 @@ namespace SIV_Servidor
                         ///ocultar control si no hay resultados
                         listFiltroOcultar();
                     }
+
                 }
             }
             else
@@ -755,12 +956,48 @@ namespace SIV_Servidor
                 listFiltroOcultar();
             }
 
-            
+
 
 
         }
         private void tbDescripcion_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            ///ENTER
+            if (e.Key == Key.Enter || e.Key == Key.Return)
+            {
+                ///si esta vacio tbDescipcion, ir a tbPagaCon
+                if (tbDescripcion.Text.Trim() == "")
+                {
+                    if (listVenta.Items.Count > 0)
+                    {
+                        tbPagaCon.Focus();
+                    }
+                }
+                else
+                ///si no esta vacio tbDescipcion
+                {
+                    ///comprobar si es un numero (para buscar articulo por codigo)
+                    if (mBuscarArticuloPorCodigo)
+                    {
+                        buscarArticuloPorCodigo();
+                        e.Handled = true;
+                    }
+                    else
+                    ///si no es un numero pero tampoco se selecciono de la lista, entonces es un ARTICULO NUEVO
+                    {
+                        if (estadoTip(zAyuda.nuevoArticulo))
+                        {
+                            tipArticuloNuevo(true);
+                        }
+                        tbCantidad.Text = "1";
+                        tbCantidad.SelectAll();
+                        tbCantidad.Focus();
+                        listFiltroOcultar();
+
+                    }
+                }
+            }
+            ///FLECHA ABAJO
             if (e.Key == Key.Down)
             {
                 //listFiltro.Focus();
@@ -777,44 +1014,17 @@ namespace SIV_Servidor
 
                 }
             }
+            ///FLECHA DERECHA
             if (e.Key == Key.Right)
             {
                 //btnNuevo.Focus();
                 //e.Handled = true;
 
             }
+            ///ESC
             if (e.Key == Key.Escape)
             {
-                tbDescripcion.Text = "";
                 resetTb();
-            }
-            if (e.Key == Key.Enter || e.Key == Key.Return)
-            {
-                ///si esta vacio tbDescipcion, ir a tbPagaCon
-                if (tbDescripcion.Text.Trim() == "")
-                {
-                    if (listVenta.Items.Count > 0)
-                    {
-                        tbPagaCon.Focus();
-                    }
-                }
-                else
-                {
-                    ///comprobar si es un numero (para buscar articulo por codigo)
-                    if (mBuscarArticuloPorCodigo)
-                    {
-                        buscarArticuloPorCodigo();
-                        e.Handled = true;
-                    }
-                    else
-                    {
-                        tbCantidad.Text = "1";
-                        tbCantidad.SelectAll();
-                        tbCantidad.Focus();
-                        listFiltroOcultar();
-
-                    }
-                }
             }
         }
         private void tbCantidad_TextChanged(object sender, TextChangedEventArgs e)
@@ -840,14 +1050,19 @@ namespace SIV_Servidor
             if (e.Key == Key.Up || e.Key == Key.Escape)
             {
                 resetTb();
-                //tbBuscar.Focus();
-                tbDescripcion.Focus();
+                //tbDescripcion.Focus();
             }
 
         }
+
         private void tbPrecio_TextChanged(object sender, TextChangedEventArgs e)
         {
-            calcularSubtotal();
+            //consola("textchanged");
+            tbPrecio.Text = tbPrecio.Text.Replace('.', ',');
+
+
+            tbPrecio.CaretIndex = tbPrecio.Text.Length;   //poner el cursor al final
+
             var textBox = sender as TextBox;
             if (textBox.IsFocused)
             {
@@ -860,10 +1075,47 @@ namespace SIV_Servidor
                 if (texto != tag)
                 {
                     ayuda(zAyuda.precio2a, zAyuda.precio2b);
-                    tip("<ENTER> Actualizar precio en Base de Datos\n<ESC> Cancelar", sender);
+                    tip(zAyuda.tipCambiarPrecio, sender);
                 }
             }
+            calcularSubtotal();
 
+        }
+        private void tbPrecio_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            //consola("previewtextinput");
+
+            ///solo acepta digitos y coma
+            //fsoreach (char ch in e.Text)
+            //{
+            //    if (!((Char.IsDigit(ch) || ch.Equals(','))))
+            //    {
+            //        consola("caracter no valido:" + ch.ToString());
+            //        e.Handled = true;
+            //        break;
+            //    }
+
+            //}
+
+            //var textbox = sender as TextBox;
+            //int comas = 0;
+            //foreach (char ch in textbox.Text)
+            //{
+
+            //        consola("caracter:" + ch.ToString());
+            //    if (ch.Equals(',') || ch.Equals('.'))
+            //    {
+            //        comas++;
+            //        //consola(comas.ToString());
+            //        //if (comas > 0)
+            //        //{
+            //        //    consola("Ya existe un separador decimal (1 coma).");
+            //        //    e.Handled = true;
+            //        //    break;
+            //        //}
+            //    }
+
+            //}
         }
         private void tbPrecio_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -872,23 +1124,98 @@ namespace SIV_Servidor
                 e.Handled = true;
             }
 
+            ///evitar que haya mas de 1 coma
+            if ((e.Key == Key.OemPeriod) || (e.Key == Key.Decimal) || (e.Key == Key.OemComma))
+            {
+                int comas = 0;
+                consola("--");
+                foreach (char ch in tbPrecio.Text)
+                {
+                    consola("caracter:" + ch.ToString());
+                    if (ch.Equals(',') || ch.Equals('.'))
+                    {
+                        comas++;
+                    }
+
+                }
+                consola(comas.ToString());
+                if (comas > 0)
+                {
+                    //consola("Ya existe un separador decimal (1 coma).");
+                    e.Handled = true;
+                    //break;
+                }
+            }
+
             if (e.Key == Key.Left)
             {
                 tbCantidad.SelectAll();
                 tbCantidad.Focus();
             }
-            if (e.Key == Key.Up || e.Key == Key.Escape)
+            else if (e.Key == Key.Up)
             {
                 resetTb();
-                tbDescripcion.Focus();
+                //tbDescripcion.Focus();
 
             }
-
-            if (e.Key == Key.Enter)
+            else if (e.Key == Key.Enter)
             {
+                ///si se modifico el precio, ACTUALIZAR en la BD y en las mListas
+                if (estadoTip(zAyuda.tipCambiarPrecio))
+                {
+                    //consola("cambiar precio");
+                    string archivo = "articulos.db";
+                    string tabla = "articulos";
+                    string index = tbCodigo.Tag.ToString();
+                    string campo = "precio";
+                    //string valor = toFloat(tbPrecio.Text).ToString();
+                    string valor = funciones.toMoneda(tbPrecio.Text);
+
+                    ///ACTUALIZAR EN BD
+                    zdb.modificarRegistroDB(archivo, tabla, index, campo, valor, true);
+
+                    ///ACTUALIZAR EN mTotalArticulos
+                    long itemId = -1;
+                    long.TryParse(index, out itemId);
+                    if (itemId != -1)
+                    {
+
+                        var item = mTotalArticulos.First(i => i.id == itemId);
+                        if (item != null)
+                        {
+                            item.precio = funciones.toFloat(tbPrecio.Text);
+                        }
+                        else
+                        {
+                            consola("Error al querer leer el ID del articulo. No se encuentra el item con id=" + itemId.ToString());
+                        }
+
+                    }
+                    else
+                    {
+                        consola("Error al querer leer el ID del articulo");
+                    }
+                }
                 agregarItemALista();
                 resetTb();
-                tbDescripcion.Focus();
+                //tbDescripcion.Focus();
+                e.Handled = true;
+            }
+
+            if (e.Key == Key.Escape)
+            {
+                ///si se modifico el precio, volver a mostrar el original
+                if (estadoTip(zAyuda.tipCambiarPrecio))
+                {
+                    tbPrecio.Text = tbPrecio.Tag.ToString();
+                    tip();
+                    e.Handled = true;
+                }
+                else
+                {
+                    resetTb();
+                    //tbDescripcion.Focus();
+                }
             }
         }
         private void tbPagaCon_TextChanged(object sender, TextChangedEventArgs e)
@@ -906,27 +1233,6 @@ namespace SIV_Servidor
             }
         }
 
-        private void listFiltro_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            var list = sender as ListView;
-            Boolean mostrar = list.IsVisible;
-            consola(list.IsVisible.ToString());
-
-            if (mostrar)
-            {
-                sbListFiltroMostrar.Begin();
-                
-            }
-            //else
-            //{
-            //    sbListFiltroOcultar.Begin();
-            //}
-            
-        }
-        private void listFiltroOcultar()
-        {
-            sbListFiltroOcultar.Begin();
-        }
 
         ///extensiones
         private void ayuda(string texto = "", string texto2 = "")
@@ -945,5 +1251,6 @@ namespace SIV_Servidor
         {
             funciones.consola(texto);
         }
+
     }
 }
