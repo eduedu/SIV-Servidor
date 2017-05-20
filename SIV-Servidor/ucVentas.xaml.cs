@@ -34,9 +34,9 @@ namespace SIV_Servidor
         public static ObservableCollection<itemVenta>
             mItemsListVenta = new ObservableCollection<itemVenta>();   //articulos cargados en la pestana venta actual
 
-        int mPestana;   //pestana venta activa
         bool mBuscarArticuloPorCodigo = false;  //al apretar enter end escripcion, si empieza por un numero, busca el articulo
         bool seEditoDescripcionDesdeElPrograma = false;
+        int mPestana;   //pestana venta activa
 
         Style tbNoEditable = Application.Current.FindResource("tbNoEditable") as Style;
         Style tbNoEditableNuevo = Application.Current.FindResource("tbNoEditableNuevo") as Style;
@@ -838,14 +838,6 @@ namespace SIV_Servidor
                 }
             }
         }
-        private void listFiltro_GotFocus(object sender, RoutedEventArgs e)
-        {
-            ayuda(zAyuda.listFiltro1a, zAyuda.listFiltro1b);
-
-        }
-        private void listFiltro_LostFocus(object sender, RoutedEventArgs e)
-        {
-        }
         private void listFiltro_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             var list = sender as ListView;
@@ -862,6 +854,14 @@ namespace SIV_Servidor
             //    sbListFiltroOcultar.Begin();
             //}
 
+        }
+        private void listFiltro_GotFocus(object sender, RoutedEventArgs e)
+        {
+            ayuda(zAyuda.listFiltro1a, zAyuda.listFiltro1b);
+
+        }
+        private void listFiltro_LostFocus(object sender, RoutedEventArgs e)
+        {
         }
         private void listFiltroOcultar()
         {

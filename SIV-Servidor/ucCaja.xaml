@@ -36,6 +36,30 @@
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <!--<Storyboard x:Key="sbGridBotonImprimir"/>-->
+
+
+
+        <Storyboard x:Key="sbListFiltroClientesMostrar">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="listFiltroClientes">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="115">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuarticEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="sbListFiltroClientesOcultar">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="listFiltroClientes">
+                <EasingDoubleKeyFrame KeyTime="0" Value="113"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuarticEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
     </UserControl.Resources>
 
     <Grid x:Name="gridCajaMain" Background="{DynamicResource colorfondo}" Width="1000">
@@ -210,7 +234,7 @@
                         </TransformGroup>
                     </Grid.RenderTransform>
                     <Rectangle Fill="{DynamicResource colorfondo3}" HorizontalAlignment="Left" Height="188" VerticalAlignment="Top" Width="785" Margin="0,0,-10,0"/>
-                    <Grid  HorizontalAlignment="Left" Height="177" Margin="8,0,0,0" VerticalAlignment="Top" Width="517" Background="{DynamicResource colorfondo3}" RenderTransformOrigin="0.5,0.5">
+                    <Grid  HorizontalAlignment="Left" Height="188" Margin="8,0,0,0" VerticalAlignment="Top" Width="577" Background="{DynamicResource colorfondo3}" RenderTransformOrigin="0.5,0.5">
                         <Grid.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -220,13 +244,13 @@
                             </TransformGroup>
                         </Grid.RenderTransform>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="11*"/>
-                            <ColumnDefinition Width="301*"/>
-                            <ColumnDefinition Width="17*"/>
-                            <ColumnDefinition Width="187*"/>
-                            <ColumnDefinition Width="11*"/>
+                            <ColumnDefinition Width="114*"/>
+                            <ColumnDefinition Width="278*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="163*"/>
+                            <ColumnDefinition Width="12*"/>
                         </Grid.ColumnDefinitions>
-                        <Border x:Name="border" BorderBrush="{DynamicResource textoclaro}" BorderThickness="1" Margin="0,9.333,0,0.667" Grid.ColumnSpan="5" RenderTransformOrigin="0.5,0.5">
+                        <Border x:Name="border" BorderBrush="{DynamicResource textoclaro}" BorderThickness="1" Margin="0,9,0,35" Grid.ColumnSpan="5" RenderTransformOrigin="0.5,0.5">
                             <Border.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -236,18 +260,18 @@
                                 </TransformGroup>
                             </Border.RenderTransform>
                         </Border>
-                        <Label Content="Datos del Cliente" HorizontalAlignment="Left" Height="22" Margin="10,0,0,0" VerticalAlignment="Top" Width="106.333" Foreground="{DynamicResource textoclaro}" FontWeight="Bold" Background="{DynamicResource colorfondo3}" Padding="5,0" Grid.ColumnSpan="2"/>
-                        <TextBox x:Name="tbNombre" Height="30" Margin="0,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="" VerticalContentAlignment="Center" Grid.Column="1" PreviewKeyDown="TextBox_PreviewKeyDown" Style="{DynamicResource miTextbox}"/>
-                        <Label x:Name="label_Copy2" Content="Nombre" HorizontalAlignment="Left" Margin="0,64.208,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Grid.Column="1" Height="25.96" Width="43.847"/>
-                        <TextBox x:Name="tbCuit" Height="30" Margin="0,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="" VerticalContentAlignment="Center" Grid.Column="3" Style="{DynamicResource miTextbox}" PreviewKeyDown="TextBox_PreviewKeyDown"/>
-                        <Label x:Name="label_Copy3" Content="CUIT" HorizontalAlignment="Left" Margin="0,64.208,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Grid.Column="3" Height="25.96" Width="45.184"/>
-                        <TextBox x:Name="tbDireccion" Height="30" Margin="0,137.181,0,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="" VerticalContentAlignment="Center" Grid.Column="1" Style="{DynamicResource miTextbox}" PreviewKeyDown="TextBox_PreviewKeyDown"/>
-                        <Label x:Name="label_Copy4" Content="Dirección" HorizontalAlignment="Left" Margin="0,120.559,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Grid.Column="1" Height="25.96" Width="49.584"/>
-                        <TextBox x:Name="tbTelefono" Height="30" Margin="0,137.181,0,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="" VerticalContentAlignment="Center" Grid.Column="3" Style="{DynamicResource miTextbox}" PreviewKeyDown="TextBox_PreviewKeyDown"/>
-                        <Label x:Name="label_Copy5" Content="Teléfono" HorizontalAlignment="Left" Margin="0,118.996,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Grid.Column="3" Height="25.96" Width="70.694"/>
-                        <Label x:Name="label_Copy8" Content="Código" HorizontalAlignment="Left" Margin="101.924,10,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Grid.Column="3" Height="25.96" Width="45.184"/>
-                        <TextBox x:Name="tbIdCliente" Margin="101.924,27.327,0,0" TextWrapping="Wrap" Background="{DynamicResource colorfondo3}" ToolTip="filtro"  VerticalContentAlignment="Center" HorizontalContentAlignment="Right"  Focusable="False" IsHitTestVisible="False" IsTabStop="False" Height="30" VerticalAlignment="Top" BorderBrush="{DynamicResource textoclaro}" Foreground="{DynamicResource textoclaro}" Grid.Column="3"/>
-                        <Grid x:Name="gridBotonImprimir"  HorizontalAlignment="Left" Height="164.332" Margin="20.791,9.333,-245,0" VerticalAlignment="Top" Width="235" Grid.Column="4" RenderTransformOrigin="0.5,0.5">
+                        <Label Content="Datos del Cliente" HorizontalAlignment="Left" Height="22" Margin="10,0,0,0" VerticalAlignment="Top" Width="106" Foreground="{DynamicResource textoclaro}" FontWeight="Bold" Background="{DynamicResource colorfondo3}" Padding="5,0" Grid.ColumnSpan="2"/>
+                        <TextBox x:Name="tbNombre" Height="30" Margin="0,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="" VerticalContentAlignment="Center" Grid.Column="1" Style="{DynamicResource miTextbox}" TextChanged="tbNombre_TextChanged" PreviewKeyDown="tbNombre_PreviewKeyDown"/>
+                        <Label x:Name="label_Copy2" Content="Nombre" HorizontalAlignment="Left" Margin="0,20,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Grid.Column="1" Height="26" Width="44"/>
+                        <TextBox x:Name="tbCuit" Height="30" Margin="0,101,0,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="" VerticalContentAlignment="Center" Grid.Column="3" Style="{DynamicResource miTextbox}" PreviewKeyDown="TextBox_PreviewKeyDown"/>
+                        <Label x:Name="label_Copy3" Content="CUIT" HorizontalAlignment="Left" Margin="0,83,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Grid.Column="3" Height="26" Width="45"/>
+                        <TextBox x:Name="tbDireccion" Height="30" Margin="0,101,0,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="" VerticalContentAlignment="Center" Grid.Column="1" Style="{DynamicResource miTextbox}" PreviewKeyDown="TextBox_PreviewKeyDown"/>
+                        <Label x:Name="label_Copy4" Content="Dirección" HorizontalAlignment="Left" Margin="0,85,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Grid.Column="1" Height="26" Width="50"/>
+                        <TextBox x:Name="tbTelefono" Height="30" Margin="0,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="" VerticalContentAlignment="Center" Grid.Column="3" Style="{DynamicResource miTextbox}" PreviewKeyDown="TextBox_PreviewKeyDown"/>
+                        <Label x:Name="label_Copy5" Content="Teléfono" HorizontalAlignment="Left" Margin="0,20,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Grid.Column="3" Height="26" Width="71"/>
+                        <Label x:Name="label_Copy8" Content="Código" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Height="26" Width="45"/>
+                        <TextBox x:Name="tbIdCliente" Margin="20,38,10,0" TextWrapping="Wrap" Background="{DynamicResource colorfondo3}" ToolTip="filtro"  VerticalContentAlignment="Center" HorizontalContentAlignment="Right"  Focusable="False" IsHitTestVisible="False" IsTabStop="False" Height="30" VerticalAlignment="Top" BorderBrush="{DynamicResource textoclaro}" Foreground="{DynamicResource textoclaro}"/>
+                        <Grid x:Name="gridBotonImprimir"  HorizontalAlignment="Left" Height="165" Margin="21,9,-190,0" VerticalAlignment="Top" Width="181" Grid.Column="4" RenderTransformOrigin="0.5,0.5">
                             <Grid.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -261,21 +285,39 @@
                                 <ColumnDefinition Width="3*"/>
                                 <ColumnDefinition Width="22*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox x:Name="tbFacturaNro" Margin="0,72.667,0,0" TextWrapping="Wrap" Background="{DynamicResource colorfondo3}" ToolTip="filtro" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Focusable="False" IsHitTestVisible="False" IsTabStop="False" Height="30" VerticalAlignment="Top" BorderBrush="{DynamicResource textoclaro}" Foreground="{DynamicResource textoclaro}" Grid.Column="2"/>
-                            <Label x:Name="labEntrega" Content="Entrega $" HorizontalAlignment="Left" Margin="0,54.875,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,0,5,0" Height="26" Width="84"/>
-                            <TextBox x:Name="tbEntrega" Height="30" Margin="0,72.667,0,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Style="{DynamicResource miTextbox}" PreviewKeyDown="TextBox_PreviewKeyDown"/>
-                            <Label x:Name="labFacturaNro" Content="Factura Nro." HorizontalAlignment="Left" Margin="0,54.875,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,0,0,5" Height="26" Width="73" Grid.Column="2"/>
-                            <Button x:Name="btnImprimir" Content="IMPRIMIR" Margin="0,127.832,0,0" Style="{DynamicResource BotonMenu}" Grid.ColumnSpan="3" Height="30" VerticalAlignment="Top"/>
+                            <TextBox x:Name="tbFacturaNro" Margin="0,29,0,0" TextWrapping="Wrap" Background="{DynamicResource colorfondo3}" ToolTip="filtro" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Focusable="False" IsHitTestVisible="False" IsTabStop="False" Height="30" VerticalAlignment="Top" BorderBrush="{DynamicResource textoclaro}" Foreground="{DynamicResource textoclaro}" Grid.Column="2"/>
+                            <Label x:Name="labEntrega" Content="Entrega $" HorizontalAlignment="Left" Margin="0,11,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,0,5,0" Height="26" Width="84"/>
+                            <TextBox x:Name="tbEntrega" Height="30" Margin="0,29,0,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Style="{DynamicResource miTextbox}" PreviewKeyDown="TextBox_PreviewKeyDown"/>
+                            <Label x:Name="labFacturaNro" Content="Factura Nro." HorizontalAlignment="Left" Margin="0,11,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,0,0,5" Height="26" Width="73" Grid.Column="2"/>
+                            <Button x:Name="btnImprimir" Content="IMPRIMIR" Margin="0,92,0,0" Style="{DynamicResource BotonMenu}" Grid.ColumnSpan="3" Height="30" VerticalAlignment="Top"/>
                         </Grid>
+                        <ListView x:Name="listFiltroClientes"    Height="115" Margin="0,73,0,0" VerticalAlignment="Top" Width="303" Background="{DynamicResource textoclaro}" KeyDown="listFiltroClientes_KeyDown" HorizontalAlignment="Left" Panel.ZIndex="1" IsTabStop="True" Foreground="Black" Style="{DynamicResource listFiltroStyle1}" IsVisibleChanged="listFiltroClientes_IsVisibleChanged" Grid.Column="1" Grid.ColumnSpan="3" >
+                            <ListView.Resources>
+                                <Style x:Key="myHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </Style>
+                            </ListView.Resources>
+                            <ListView.View>
+                                <GridView ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}">
+                                    <GridViewColumn Header="id" Width="0"   DisplayMemberBinding="{Binding id}"  />
+
+                                    <GridViewColumn Header="Nombre" Width="270" DisplayMemberBinding="{Binding nombre}"  />
+                                    <GridViewColumn Header="direccion" Width="0"   DisplayMemberBinding="{Binding direccion}"  />
+                                    <GridViewColumn Header="telefono" Width="0"   DisplayMemberBinding="{Binding telefono}"  />
+                                    <GridViewColumn Header="cuit" Width="0"   DisplayMemberBinding="{Binding cuit}"  />
+                                </GridView>
+                            </ListView.View>
+
+                        </ListView>
                     </Grid>
                     <Image x:Name="imgCerrarDatosCliente" HorizontalAlignment="Left" Height="24" Margin="763,0,-10,0" VerticalAlignment="Top" Width="22" Source="imagenes/cerrar.png" PreviewMouseDown="imgCerrarDatosCliente_PreviewMouseDown" Cursor="Hand"/>
                 </Grid>
                 <Grid x:Name="gridBotones" HorizontalAlignment="Left" Height="189" Margin="0,15,0,-1" VerticalAlignment="Top" Width="152">
-                    <Button x:Name="btnRemito" Content="REMITO" Margin="0,0,1,0" Height="30" VerticalAlignment="Top" Style="{DynamicResource BotonMenu}" PreviewKeyDown="Button_PreviewKeyDown" GotFocus="Button_GotFocus" Click="Button_Click"/>
-                    <Button x:Name="btnPendiente" Content="PENDIENTE" Margin="0,37,1,0" Height="30" VerticalAlignment="Top" Style="{DynamicResource BotonMenu}" PreviewKeyDown="Button_PreviewKeyDown" GotFocus="Button_GotFocus" Click="Button_Click"/>
-                    <Button x:Name="btnFactura" Content="FACTURA" Margin="0,74,1,0" Height="30" VerticalAlignment="Top" Style="{DynamicResource BotonMenu}" PreviewKeyDown="Button_PreviewKeyDown" GotFocus="Button_GotFocus" Click="Button_Click"/>
-                    <Button x:Name="btnTarjeta" Content="TARJETA" Margin="0,111,1,0" Height="30" VerticalAlignment="Top" Style="{DynamicResource BotonMenu}" PreviewKeyDown="Button_PreviewKeyDown" GotFocus="Button_GotFocus" Click="Button_Click"/>
-                    <Button x:Name="btnListaDeControl" Content="LISTA DE CONTROL" Margin="0,148,1,0" Height="30" VerticalAlignment="Top" Style="{DynamicResource BotonMenu}" PreviewKeyDown="Button_PreviewKeyDown" GotFocus="Button_GotFocus" Click="Button_Click"/>
+                    <Button x:Name="btnRemito" Content="REMITO" Margin="0,0,1,0" Height="30" VerticalAlignment="Top" Style="{DynamicResource BotonMenu}" PreviewKeyDown="Button_PreviewKeyDown" GotFocus="Button_GotFocus" Click="Button_Click" FontWeight="Bold"/>
+                    <Button x:Name="btnPendiente" Content="PENDIENTE" Margin="0,37,1,0" Height="30" VerticalAlignment="Top" Style="{DynamicResource BotonMenu}" PreviewKeyDown="Button_PreviewKeyDown" GotFocus="Button_GotFocus" Click="Button_Click" FontWeight="Bold"/>
+                    <Button x:Name="btnFactura" Content="FACTURA" Margin="0,74,1,0" Height="30" VerticalAlignment="Top" Style="{DynamicResource BotonMenu}" PreviewKeyDown="Button_PreviewKeyDown" GotFocus="Button_GotFocus" Click="Button_Click" FontWeight="Bold"/>
+                    <Button x:Name="btnTarjeta" Content="TARJETA" Margin="0,111,1,0" Height="30" VerticalAlignment="Top" Style="{DynamicResource BotonMenu}" PreviewKeyDown="Button_PreviewKeyDown" GotFocus="Button_GotFocus" Click="Button_Click" FontWeight="Bold"/>
+                    <Button x:Name="btnListaDeControl" Content="LISTA DE CONTROL" Margin="0,148,1,0" Height="30" VerticalAlignment="Top" Style="{DynamicResource BotonMenu}" PreviewKeyDown="Button_PreviewKeyDown" GotFocus="Button_GotFocus" Click="Button_Click" FontWeight="Bold"/>
                 </Grid>
 
             </Grid>
@@ -382,8 +424,6 @@
             <Rectangle Grid.ColumnSpan="2" Fill="{DynamicResource textoclaro}" HorizontalAlignment="Left" Height="4" Margin="984,261,0,0" Stroke="{DynamicResource textoclaro}" VerticalAlignment="Top" Width="936"/>
 
             <!--<TextBox Text="{Binding gridXFrom}"  HorizontalAlignment="Left" Height="60" Margin="164,398,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="256"/>-->
-
-
         </Grid>
     </Grid>
 </UserControl>

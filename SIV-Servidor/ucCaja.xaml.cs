@@ -35,9 +35,20 @@ namespace SIV_Servidor
         public static List<Button> mBotones = new List<Button>();
         public static int mBotonSelected = 0;
 
+        public ObservableCollection<itemCliente>
+            mTotalClientes = new ObservableCollection<itemCliente>();     //Listado de articulos a la venta filtrados
+
+
+
+        bool seEditoDescripcionDesdeElPrograma = false;
+
         /// animaciones
         Storyboard sbDatosDelClienteMostrar;
         Storyboard sbDatosDelClienteOcultar;
+        Storyboard sbListFiltroClientesMostrar;
+        Storyboard sbListFiltroClientesOcultar;
+
+
         ///ANIMACION BOTONES
         double botonXTo;
         CircleEase easing;
@@ -71,6 +82,15 @@ namespace SIV_Servidor
             {
                 gridDatosDelCliente.Visibility = Visibility.Hidden;
             };
+            sbListFiltroClientesMostrar = this.FindResource("sbListFiltroClientesMostrar") as Storyboard;
+            sbListFiltroClientesOcultar = this.FindResource("sbListFiltroClientesOcultar") as Storyboard;
+
+            sbListFiltroClientesOcultar.Completed += (s, o) =>
+            {
+                listFiltroClientes.Visibility = Visibility.Hidden;
+            };
+
+
             ///ANIMACION BOTONES
             botonXTo = (double)(gridBotones.Width - 3);
             //EASING
@@ -81,16 +101,20 @@ namespace SIV_Servidor
             aniAnchoBtn.EasingFunction = easing;
 
             ///INICIO Y ASIGNACIONES
+            listFiltroClientes.Visibility = Visibility.Hidden;
+            listFiltroClientes.Margin = new Thickness(tbNombre.Margin.Left + 0, tbNombre.Margin.Top + tbNombre.Height + 2, 0, 0);
+
             //gridDatosDelClienteOcultar();
             listCaja.ItemsSource = mArticulosCaja;
             gridDatosDelCliente.Visibility = Visibility.Hidden;
             ActualiarCajaDesdeDB();
+            cargarListaDeClientes();
         }
 
         //------------------------------------------------------------------------------------------
         ///-----------------------------------------------------------------------------------------
 
-        ///Funciones caja
+        ///Funciones DB
         public static void ActualiarCajaDesdeDB()
         {
             SQLiteConnection conexion;
@@ -111,7 +135,7 @@ namespace SIV_Servidor
             //dataGrid.DataContext = dt.DefaultView;  //esto anda
 
             //gridFiltro.ItemsSource = dataTable.DefaultView;
-            //listFiltro.ItemsSource = dataTable.DefaultView;
+            //listFiltroClientes.ItemsSource = dataTable.DefaultView;
 
             ///borrar todos los elementos de mArticulos
             if (mArticulosCaja != null)
@@ -188,7 +212,133 @@ namespace SIV_Servidor
             ///cerrar conexion
             conexion.Close();
         }
+        private void cargarListaDeClientes()
+        {
+            SQLiteConnection conexion;
+            conexion = new SQLiteConnection("Data Source=clientes.db;Version=3;New=False;Compress=True;");
+            conexion.Open();
 
+            string consulta = "select * from clientes";
+
+            /// Adaptador de datos, DataSet y tabla
+            SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
+            DataSet dataSet = new DataSet();
+            DataTable dataTable = new DataTable();
+            dataSet.Reset();
+            db.Fill(dataSet);
+            dataTable = dataSet.Tables[0];
+
+            ///borrar todos los elementos de mTotalArticulos
+            if (mTotalClientes != null)
+            {
+                mTotalClientes.Clear();
+            }
+
+            ///Loop por todos los registros de la tabla
+            foreach (DataRow registro in dataTable.Rows)
+            {
+
+                itemCliente tempArticulo = new itemCliente();
+                tempArticulo.id = (long)registro["id"];
+                tempArticulo.nombre = registro["nombre"].ToString();
+                tempArticulo.direccion = registro["direccion"].ToString();
+                tempArticulo.telefono = registro["telefono"].ToString();
+                tempArticulo.cuit = registro["cuit"].ToString();
+
+                mTotalClientes.Add(tempArticulo);
+            }
+
+
+            ///cerrar conexion
+            conexion.Close();
+
+            ///asignar datos al list
+            listFiltroClientes.ItemsSource = mTotalClientes;
+
+            consola("clientes: " + listFiltroClientes.Items.Count.ToString());
+
+        }
+        private void filtroClientes(string filtro = "")
+        {
+            var articulosFiltrados = from registro in mTotalClientes
+                                     where registro.nombre.ToLower().Contains(filtro.ToLower())
+                                     select registro;
+
+            //mTotalArticulosConFiltro = null;
+            //mTotalArticulosConFiltro = articulosFiltrados.ToList();
+            //listFiltro.ItemsSource = mTotalArticulosConFiltro;
+            listFiltroClientes.ItemsSource = articulosFiltrados;
+
+
+        }
+
+        ///funciones varias
+        private void ActivarBotonMenu(Button boton = null)
+        {
+            int selected = 0;
+            foreach (Button item in mBotones)
+            {
+                //string tmpTexto = item.Name;
+                if (item.Name == boton.Name)
+                {
+                    //tmpTexto = item + tmpTexto + " -SELECTED";
+                    mBotonSelected = selected;
+                }
+                else
+                {
+                    ///animacion en sí
+                    aniAnchoBtn.From = mBotones[selected].Margin;
+                    aniAnchoBtn.To = new Thickness(aniAnchoBtn.From.Value.Left, aniAnchoBtn.From.Value.Top, botonXTo, aniAnchoBtn.From.Value.Bottom);
+
+                    mBotones[selected].BeginAnimation(Button.MarginProperty, aniAnchoBtn);
+                    mBotones[selected].IsEnabled = false;
+                }
+                //consola(tmpTexto);
+                selected++;
+            }
+
+            //mBotones[mBotonSelected].Background = App.Current.Resources["confoco2"] as SolidColorBrush;
+            mBotones[mBotonSelected].Style = styleBotonSelected;
+
+            labEntrega.Visibility = Visibility.Visible;
+            tbEntrega.Visibility = Visibility.Visible;
+            labFacturaNro.Visibility = Visibility.Hidden;
+            tbFacturaNro.Visibility = Visibility.Hidden;
+            if (mBotones[mBotonSelected].Name == "btnFactura")
+            {
+                labFacturaNro.Visibility = Visibility.Visible;
+                tbFacturaNro.Visibility = Visibility.Visible;
+                labEntrega.Visibility = Visibility.Hidden;
+                tbEntrega.Visibility = Visibility.Hidden;
+            }
+
+
+            gridDatosDelCliente.Visibility = Visibility.Visible;
+            tbNombre.Focus();
+
+        }
+        private void MostrarBotones()
+        {
+            mBotones[mBotonSelected].Focus();
+            //gridDatosDelCliente.Visibility = Visibility.Hidden;
+            gridDatosDelClienteOcultar();
+
+            int selected = 0;
+            foreach (Button item in mBotones)
+            {
+                //mBotones[selected].Background = App.Current.Resources["sinfoco"] as SolidColorBrush;
+                //mBotones[selected].Style = null;
+                mBotones[selected].Style = styleBoton;
+
+                ///animacion en sí
+                aniAnchoBtn.From = mBotones[selected].Margin;
+                aniAnchoBtn.To = new Thickness(aniAnchoBtn.From.Value.Left, aniAnchoBtn.From.Value.Top, 0, aniAnchoBtn.From.Value.Bottom);
+                mBotones[selected].BeginAnimation(Button.MarginProperty, aniAnchoBtn);
+
+                mBotones[selected].IsEnabled = true;
+                selected++;
+            }
+        }
 
         ///extensiones
         private void ayuda(string texto = "", string texto2 = "")
@@ -370,101 +520,25 @@ namespace SIV_Servidor
 
             e.Handled = true;
         }
-
-        private void ActivarBotonMenu(Button boton = null)
-        {
-            int selected = 0;
-            foreach (Button item in mBotones)
-            {
-                //string tmpTexto = item.Name;
-                if (item.Name == boton.Name)
-                {
-                    //tmpTexto = item + tmpTexto + " -SELECTED";
-                    mBotonSelected = selected;
-                }
-                else
-                {
-                    ///animacion en sí
-                    aniAnchoBtn.From = mBotones[selected].Margin;
-                    aniAnchoBtn.To = new Thickness(aniAnchoBtn.From.Value.Left, aniAnchoBtn.From.Value.Top, botonXTo, aniAnchoBtn.From.Value.Bottom);
-
-                    mBotones[selected].BeginAnimation(Button.MarginProperty, aniAnchoBtn);
-                    mBotones[selected].IsEnabled = false;
-                }
-                //consola(tmpTexto);
-                selected++;
-            }
-
-            //mBotones[mBotonSelected].Background = App.Current.Resources["confoco2"] as SolidColorBrush;
-            mBotones[mBotonSelected].Style = styleBotonSelected;
-
-            labEntrega.Visibility = Visibility.Visible;
-            tbEntrega.Visibility = Visibility.Visible;
-            labFacturaNro.Visibility = Visibility.Hidden;
-            tbFacturaNro.Visibility = Visibility.Hidden;
-            if (mBotones[mBotonSelected].Name == "btnFactura")
-            {
-                labFacturaNro.Visibility = Visibility.Visible;
-                tbFacturaNro.Visibility = Visibility.Visible;
-                labEntrega.Visibility = Visibility.Hidden;
-                tbEntrega.Visibility = Visibility.Hidden;
-            }
-
-
-            gridDatosDelCliente.Visibility = Visibility.Visible;
-            tbNombre.Focus();
-
-        }
-        private void MostrarBotones()
-        {
-            mBotones[mBotonSelected].Focus();
-            //gridDatosDelCliente.Visibility = Visibility.Hidden;
-            gridDatosDelClienteOcultar();
-
-            int selected = 0;
-            foreach (Button item in mBotones)
-            {
-                //mBotones[selected].Background = App.Current.Resources["sinfoco"] as SolidColorBrush;
-                //mBotones[selected].Style = null;
-                mBotones[selected].Style = styleBoton;
-
-                ///animacion en sí
-                aniAnchoBtn.From = mBotones[selected].Margin;
-                aniAnchoBtn.To = new Thickness(aniAnchoBtn.From.Value.Left, aniAnchoBtn.From.Value.Top, 0, aniAnchoBtn.From.Value.Bottom);
-                mBotones[selected].BeginAnimation(Button.MarginProperty, aniAnchoBtn);
-
-                mBotones[selected].IsEnabled = true;
-                selected++;
-            }
-        }
-
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             var tb = sender as TextBox;
             string nombre = tb.Name;
             if (e.Key == Key.Enter || e.Key == Key.Return)
             {
-                if (nombre == "tbNombre")
-                {
-                    if (tbCuit.IsVisible)
-                    {
-                        tbCuit.Focus();
-                    }
-                    else
-                    {
-                        tbDireccion.Focus();
+                //if (nombre == "tbNombre")
+                //{
+                //if (tbCuit.IsVisible)
+                //{
+                //    tbCuit.Focus();
+                //}
+                //else
+                //{
+                //    tbDireccion.Focus();
 
-                    }
-                }
-                else if (nombre == "tbCuit")
-                {
-                    tbDireccion.Focus();
-                }
-                else if (nombre == "tbDireccion")
-                {
-                    tbTelefono.Focus();
-                }
-                else if (nombre == "tbTelefono")
+                //}
+                //}
+                if (nombre == "tbCuit")
                 {
                     if (tbEntrega.IsVisible)
                     {
@@ -475,13 +549,45 @@ namespace SIV_Servidor
                     {
                         btnImprimir.Focus();
                     }
+
+                }
+                else if (nombre == "tbDireccion")
+                {
+                    if (tbCuit.IsVisible)
+                    {
+                        tbCuit.Focus();
+                    }
+                    else
+                    {
+
+                        if (tbEntrega.IsVisible)
+                        {
+
+                            tbEntrega.Focus();
+                        }
+                        else
+                        {
+                            btnImprimir.Focus();
+                        }
+                    }
+
+                }
+                else if (nombre == "tbTelefono")
+                {
+                    tbDireccion.Focus();
                 }
                 else if (nombre == "tbEntrega")
                 {
-                    consola("hola");
+                    //consola("hola");
                     btnImprimir.Focus();
                 }
             }
+        }
+
+        private void imgCerrarDatosCliente_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+            MostrarBotones();
         }
 
         private void listCaja_GotFocus(object sender, RoutedEventArgs e)
@@ -522,7 +628,7 @@ namespace SIV_Servidor
                 //tbCantidad.Tag = fila.costo;
 
                 //tbCantidad.Focus();
-                //listFiltro.Visibility = Visibility.Hidden;
+                //listFiltroClientes.Visibility = Visibility.Hidden;
 
                 //consola("Venta Nro:" + fila.idventa.ToString());
                 //MessageBox.Show("Crear campos (nombre, direccion, cuit, etc. Qu");
@@ -535,6 +641,53 @@ namespace SIV_Servidor
 
 
                 tabCaja.SelectedIndex = 1;
+            }
+        }
+
+        private void listFiltroOcultar()
+        {
+            sbListFiltroClientesOcultar.Begin();
+        }
+        private void listFiltroClientes_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            var list = sender as ListView;
+            Boolean mostrar = list.IsVisible;
+
+            if (mostrar)
+            {
+                sbListFiltroClientesMostrar.Begin();
+
+            }
+
+        }
+        private void listFiltroClientes_KeyDown(object sender, KeyEventArgs e)
+        {
+            var list = sender as ListView;
+            var item = list.SelectedItem as itemCliente;
+            if (e.Key == Key.Escape)
+            {
+                tbNombre.Focus();
+            }
+            else if (e.Key == Key.Enter)
+            {
+
+                //string codigo = ((item.codigo == "" || item.codigo == null) ? "" : item.codigo.ToString());
+                string id = item.id.ToString();
+                string nombre = item.nombre.ToString();
+                string direccion = item.direccion.ToString();
+                string telefono = item.telefono.ToString();
+                string cuit = item.cuit.ToString();
+
+                seEditoDescripcionDesdeElPrograma = true;
+
+                tbIdCliente.Text = id;
+                tbNombre.Text = nombre;
+                tbDireccion.Text = direccion;
+                tbTelefono.Text = telefono;
+                tbCuit.Tag = cuit;
+
+                tbTelefono.Focus();
+                listFiltroOcultar();
             }
         }
 
@@ -569,11 +722,148 @@ namespace SIV_Servidor
             sbDatosDelClienteOcultar.Begin();
         }
 
-        private void imgCerrarDatosCliente_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void tbNombre_PreviewKeyDown(object sender, KeyEventArgs e)
         {
 
-            MostrarBotones();
+            ///ENTER
+            if (e.Key == Key.Enter || e.Key == Key.Return)
+            {
+                tbTelefono.Focus();
+                //    ///si esta vacio tbDescipcion, ir a tbPagaCon
+                //    if (tbDescripcion.Text.Trim() == "")
+                //    {
+                //        if (listVenta.Items.Count > 0)
+                //        {
+                //            tbPagaCon.Focus();
+                //        }
+                //    }
+                //    else
+                //    ///si no esta vacio tbDescipcion
+                //    {
+                //        ///comprobar si es un numero (para buscar articulo por codigo)
+                //        if (mBuscarArticuloPorCodigo)
+                //        {
+                //            buscarArticuloPorCodigo();
+                //            e.Handled = true;
+                //        }
+                //        else
+                //        ///si no es un numero pero tampoco se selecciono de la lista, entonces es un ARTICULO NUEVO
+                //        {
+                //            if (estadoTip(zAyuda.nuevoArticulo))
+                //            {
+                //                tipArticuloNuevo(true);
+                //            }
+                //            ///tbCodigo = codigoMax 
+                //            tbCodigo.Text = obtenerCodigoArticuloMax().ToString();
+                //            tbPrecio.Tag = "";
+                //            tbCantidad.Tag = "";
+
+                //            tbCantidad.Text = "1";
+                //            tbCantidad.SelectAll();
+                //            tbCantidad.Focus();
+                //            listFiltroOcultar();
+
+                //        }
+                //    }
+            }
+            ///FLECHA ABAJO
+            if (e.Key == Key.Down)
+            {
+                //listFiltro.Focus();
+                if (listFiltroClientes.Visibility == Visibility.Visible)
+                {
+                    listFiltroClientes.SelectedIndex = 0;
+                    var item = listFiltroClientes.ItemContainerGenerator.ContainerFromIndex(listFiltroClientes.SelectedIndex) as ListBoxItem;
+                    if (item != null)
+                    {
+                        item.Focus();
+                        //listFiltro.ScrollIntoView(listFiltro.SelectedItem);
+                    }
+                    e.Handled = true;
+
+                }
+            }
+            ///FLECHA DERECHA
+            if (e.Key == Key.Right)
+            {
+                //btnNuevo.Focus();
+                //e.Handled = true;
+
+            }
+            ///ESC
+            if (e.Key == Key.Escape)
+            {
+                //resetTb();
+            }
         }
+        private void tbNombre_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+            ///si anteriormente se busco un articulo y no se encontro, borrar mensaje al editer tbDescripcion
+            //if (labelTip.Content.ToString() == zAyuda.articuloNoEncontrado)
+            //{
+            //    tip();
+            //}
+
+
+            ///borrar el tbCodigo ya que si se edita la descripcion, deja de ser ESE articulo
+            //if (seEditoDescripcionDesdeElPrograma)
+            //{
+            //    seEditoDescripcionDesdeElPrograma = false;
+            //    e.Handled = true;
+            //    return;
+            //}
+            //else
+            //{
+            //    tbCodigo.Text = "";
+
+            //}
+
+            var textBox = sender as TextBox;
+            string filtro = textBox.Text.Trim();
+            //consola(listFiltroClientes.Items.Count.ToString());
+            if (filtro != "" && textBox.IsFocused)
+            {
+                ///texto filtro NO esta vacio
+
+                ///si es una letra
+
+                ///aplicar filtro
+                //gridFiltroSQL(filtro);
+                filtroClientes(filtro);
+
+                ///mostrar tip paa agregar nuevo articulo
+                //if (tbDescripcion.IsFocused)
+                //{
+                //    tip(zAyuda.nuevoArticulo, tbDescripcion);
+                //}
+
+                ///mostrar list si hay resultados
+                if (listFiltroClientes.Items.Count > 0)
+                {
+                    listFiltroClientes.Visibility = Visibility.Visible;
+                    ayuda(zAyuda.descripcion2a, zAyuda.descripcion2b);
+                }
+                else
+                {
+                    ayuda(zAyuda.descripcion3);
+                    ///ocultar control si no hay resultados
+                    listFiltroOcultar();
+                }
+
+
+            }
+            else
+            {
+                ///texto filtro vacio
+                //ayuda(zAyuda.descripcion1);
+                //tip();
+                /////ocultar control si el text esta vacio
+                listFiltroOcultar();
+            }
+        }
+
+
 
     }
 }

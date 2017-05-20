@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace SIV_Servidor {
 	public class itemArticulo{
+        ///se usa en la BD Articulos y en listFiltro
 		public long id { get; set; }
 		public string proveedor { get; set; }
 		public string codigopro { get; set; }
@@ -21,6 +22,7 @@ namespace SIV_Servidor {
     }
     public class itemVenta
     {
+        ///se usa en listVentaX y luego pasa a la caja
         public long id { get; set; }
         public long codigo { get; set; }
         public string descripcion { get; set; }
@@ -30,6 +32,7 @@ namespace SIV_Servidor {
         public string costo { get; set; }
     }
     public class itemCaja
+        ///se usa en la BD caja y en el listCaja
     {
         public long id { get; set; }
         public int idventa { get; set; }
@@ -44,5 +47,16 @@ namespace SIV_Servidor {
         public string subtotal { get; set; }
         //public string total { get; set; }
         public string totalmostrar { get; set; }
+    }
+
+    public class itemCliente
+        ///se usa en la BD clientes y en el listClientes
+    {
+        public long id { get; set; }
+        public string nombre { get; set; }
+        public string direccion { get; set; }
+        public string telefono { get; set; }
+        public string cuit { get; set; }
+
     }
 }
