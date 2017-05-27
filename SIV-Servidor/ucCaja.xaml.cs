@@ -38,6 +38,13 @@ namespace SIV_Servidor
         public ObservableCollection<itemCliente>
             mTotalClientes = new ObservableCollection<itemCliente>();     //Listado de articulos a la venta filtrados
 
+        Style StyleTbNoEditable = Application.Current.FindResource("StyleTBNoEditableFondo2") as Style;
+        Style StyleTbNoEditableNuevo = Application.Current.FindResource("StyleTbNoEditableNuevo2") as Style;
+        Style StyleTextbox = Application.Current.FindResource("StyleTextbox") as Style;
+        Style StyleTextboxUpper = Application.Current.FindResource("StyleTextboxUpper") as Style;
+        Style StyleTBNoEditableFondo2Left = Application.Current.FindResource("StyleTBNoEditableFondo2Left") as Style;
+        Style StyleTextboxModificar = Application.Current.FindResource("StyleTextboxModificar") as Style;
+
 
 
         bool seEditoDescripcionDesdeElPrograma = false;
@@ -81,6 +88,7 @@ namespace SIV_Servidor
             sbDatosDelClienteOcultar.Completed += (s, o) =>
             {
                 gridDatosDelCliente.Visibility = Visibility.Hidden;
+                btnImprimir.Tag = "";
             };
             sbListFiltroClientesMostrar = this.FindResource("sbListFiltroClientesMostrar") as Storyboard;
             sbListFiltroClientesOcultar = this.FindResource("sbListFiltroClientesOcultar") as Storyboard;
@@ -103,6 +111,7 @@ namespace SIV_Servidor
             ///INICIO Y ASIGNACIONES
             listFiltroClientes.Visibility = Visibility.Hidden;
             listFiltroClientes.Margin = new Thickness(tbNombre.Margin.Left + 0, tbNombre.Margin.Top + tbNombre.Height + 2, 0, 0);
+            btnImprimir.Tag = "";
 
             //gridDatosDelClienteOcultar();
             listCaja.ItemsSource = mArticulosCaja;
@@ -252,6 +261,9 @@ namespace SIV_Servidor
             ///cerrar conexion
             conexion.Close();
 
+            ///ordenar lista (coleccion)
+            //mTotalClientes = new ObservableCollection<itemCliente>(mTotalClientes.OrderBy(i => i));
+
             ///asignar datos al list
             listFiltroClientes.ItemsSource = mTotalClientes;
 
@@ -262,6 +274,7 @@ namespace SIV_Servidor
         {
             var articulosFiltrados = from registro in mTotalClientes
                                      where registro.nombre.ToLower().Contains(filtro.ToLower())
+                                     orderby registro.nombre
                                      select registro;
 
             //mTotalArticulosConFiltro = null;
@@ -271,51 +284,114 @@ namespace SIV_Servidor
 
 
         }
+        private void insertarItemClienteEnDB(itemCliente item)
+        {
+            ///parametros
+            string archivo = "clientes.db";
+            string tabla = "clientes";
+            //int idMax = -1;
+
+            ///abrir conexion DB
+            SQLiteConnection conexion;
+            conexion = new SQLiteConnection("Data Source=" + archivo + ";Version=3;New=False;Compress=True;");
+            conexion.Open();
+
+            ///comando SQL a ejecutar
+            SQLiteCommand insertSQL;
+            //insertSQL = new SQLiteCommand("INSERT INTO " + tabla + " (proveedor, codigopro, codigo, descripcion, precio, costo, fechacreacion) VALUES (?,?,?,?,?,?,DATETIME('NOW'))", conexion);
+            insertSQL = new SQLiteCommand("INSERT INTO " + tabla + " (nombre, direccion, telefono, cuit) VALUES (?,?,?,?)", conexion);
+
+            insertSQL.Parameters.AddWithValue("nombre", item.nombre.ToString());
+            insertSQL.Parameters.AddWithValue("direccion", item.direccion.ToString());
+            insertSQL.Parameters.AddWithValue("telefono", item.telefono.ToString());
+            insertSQL.Parameters.AddWithValue("cuit", item.cuit);
+
+            ///ejecutar comando SQL
+            try
+            {
+                insertSQL.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            ///Cerrar conexion
+            conexion.Close();
+
+
+
+        }
 
         ///funciones varias
-        private void ActivarBotonMenu(Button boton = null)
+        private void tip(string texto = "", object sender = null)
         {
-            int selected = 0;
-            foreach (Button item in mBotones)
+            if (texto == "")
             {
-                //string tmpTexto = item.Name;
-                if (item.Name == boton.Name)
-                {
-                    //tmpTexto = item + tmpTexto + " -SELECTED";
-                    mBotonSelected = selected;
-                }
-                else
-                {
-                    ///animacion en sí
-                    aniAnchoBtn.From = mBotones[selected].Margin;
-                    aniAnchoBtn.To = new Thickness(aniAnchoBtn.From.Value.Left, aniAnchoBtn.From.Value.Top, botonXTo, aniAnchoBtn.From.Value.Bottom);
-
-                    mBotones[selected].BeginAnimation(Button.MarginProperty, aniAnchoBtn);
-                    mBotones[selected].IsEnabled = false;
-                }
-                //consola(tmpTexto);
-                selected++;
+                labelTip.Visibility = Visibility.Hidden;
             }
-
-            //mBotones[mBotonSelected].Background = App.Current.Resources["confoco2"] as SolidColorBrush;
-            mBotones[mBotonSelected].Style = styleBotonSelected;
-
-            labEntrega.Visibility = Visibility.Visible;
-            tbEntrega.Visibility = Visibility.Visible;
-            labFacturaNro.Visibility = Visibility.Hidden;
-            tbFacturaNro.Visibility = Visibility.Hidden;
-            if (mBotones[mBotonSelected].Name == "btnFactura")
+            else
             {
-                labFacturaNro.Visibility = Visibility.Visible;
-                tbFacturaNro.Visibility = Visibility.Visible;
-                labEntrega.Visibility = Visibility.Hidden;
-                tbEntrega.Visibility = Visibility.Hidden;
+                labelTip.Content = texto;
+
+                if (sender is TextBox)
+                {
+                    var control = sender as TextBox;
+                    //labelTip.Margin = new Thickness(control.Margin.Left + 2, control.Margin.Top + control.Height + 2, 0, 0);
+                    ///si es tbNombre, acomodo arriba del control, sino abajo
+                    if (control.Name == "tbNombre")
+                    {
+                        labelTip.Margin = new Thickness(control.Margin.Left + 240, control.Margin.Top - 18, control.Margin.Right - 278, 0);
+                    }
+                    else
+                    {
+                        labelTip.Margin = new Thickness(control.Margin.Left + 2, control.Margin.Top + control.Height + 2, 0, 0);
+                    }
+                    //labelTip.Margin = new Thickness(control.Margin.Left + 2, control.Margin.Top + control.Height + 2, 0, 0);
+                }
+                else if (sender is Border)
+                {
+                    var control = sender as Border;
+                    labelTip.Margin = new Thickness(control.Margin.Left + 2 - 1, control.Margin.Top + control.Height + 2, 0, 0);
+
+                }
+                labelTip.Visibility = Visibility.Visible;
             }
+            //Console.WriteLine(texto);
 
+        }
+        private void tipClienteNuevo(bool mostrar = false)
+        {
+            if (!mostrar)
+            {
+                //labelTip2.Visibility = Visibility.Hidden;
+                tbIdCliente.Style = StyleTbNoEditable;
+                //tbIdCliente.Text = "";
+            }
+            else
+            {
+                /////mostrar tip2=articulo nuevo
+                TextBox control = tbIdCliente;
+                //labelTip2.Content = zAyuda.tipArticuloNuevo;
+                //labelTip2.Margin = new Thickness(control.Margin.Left + 2, control.Margin.Top + control.Height + 2, 0, 0);
+                //labelTip2.Visibility = Visibility.Visible;
 
-            gridDatosDelCliente.Visibility = Visibility.Visible;
-            tbNombre.Focus();
-
+                ///tbIdCliente con style diferente
+                tbIdCliente.Style = StyleTbNoEditableNuevo;
+                tbIdCliente.Text = "Nuevo";
+                //tbCodigo.Text = obtenerCodigoArticuloMax().ToString();
+            }
+        }
+        private bool estadoTip(string texto)
+        {
+            if (labelTip.Content.ToString() == texto && labelTip.Visibility == Visibility.Visible)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         private void MostrarBotones()
         {
@@ -339,6 +415,41 @@ namespace SIV_Servidor
                 selected++;
             }
         }
+        private void resetTB()
+        {
+            tbIdCliente.Tag = "";
+            tbNombre.Tag = "";
+            tbDireccion.Tag = "";
+            tbTelefono.Tag = "";
+            tbCuit.Tag = "";
+            tbEntrega.Tag = "";
+
+            tbIdCliente.Text = "";
+            tbNombre.Text = "";
+            tbDireccion.Text = "";
+            tbTelefono.Text = "";
+            tbCuit.Text = "";
+            tbEntrega.Text = "";
+
+            tbNombre.Style = StyleTextboxUpper;
+
+            tipClienteNuevo();
+        }
+        private bool tbEstanVacios()
+        {
+            ///devuelve TRUE si todos los textos estan vacios
+            bool respuesta = false;
+            if (tbIdCliente.Text == "" &&
+                tbNombre.Text == "" &&
+                tbDireccion.Text == "" &&
+                tbTelefono.Text == "" &&
+                tbCuit.Text == "")
+            {
+                respuesta = true;
+            }
+            return respuesta;
+        }
+
 
         ///extensiones
         private void ayuda(string texto = "", string texto2 = "")
@@ -464,6 +575,58 @@ namespace SIV_Servidor
 
         }
 
+        private void gridDatosDelCliente_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            ///tecla ESC
+            if (e.Key == Key.Escape)
+            {
+                //mBotones[mBotonSelected].Focus();
+                ////gridDatosDelCliente.Visibility = Visibility.Hidden;
+                //gridDatosDelClienteOcultar();
+                ///si estoy filtrando, que se cierre el listFiltroClientes
+                if (listFiltroClientes.Visibility == Visibility.Visible)
+                {
+                    listFiltroOcultar();
+
+                }
+                else
+                {
+                    ///si los TB estan vacios, ocultar el gridCliente y mostrar botones de opciones
+                    if (tbEstanVacios())
+                    {
+                        MostrarBotones();
+                    }
+                    else
+                    ///si alguno de los TB de datos del cliente tiene texto, resetear TB
+                    {
+                        resetTB();
+                        tbNombre.Focus();
+                    }
+                }
+
+            }
+        }
+
+        private void gridDatosDelCliente_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            var objeto = sender as Grid;
+            Boolean mostrar = objeto.IsVisible;
+            //consola(list.IsVisible.ToString());
+
+            if (mostrar)
+            {
+                sbDatosDelClienteMostrar.Begin();
+
+                //} else
+                //{
+                //    sbDatosDelClienteOcultar.Begin();
+            }
+        }
+        private void gridDatosDelClienteOcultar()
+        {
+            sbDatosDelClienteOcultar.Begin();
+        }
+
         private void Button_GotFocus(object sender, RoutedEventArgs e)
         {
             ayuda(zAyuda.bontonMenu1a, zAyuda.bontonMenu1b);
@@ -520,24 +683,96 @@ namespace SIV_Servidor
 
             e.Handled = true;
         }
+        private void ActivarBotonMenu(Button boton = null)
+        {
+            int selected = 0;
+            foreach (Button item in mBotones)
+            {
+                //string tmpTexto = item.Name;
+                if (item.Name == boton.Name)
+                {
+                    //tmpTexto = item + tmpTexto + " -SELECTED";
+                    mBotonSelected = selected;
+                }
+                else
+                {
+                    ///animacion en sí
+                    aniAnchoBtn.From = mBotones[selected].Margin;
+                    aniAnchoBtn.To = new Thickness(aniAnchoBtn.From.Value.Left, aniAnchoBtn.From.Value.Top, botonXTo, aniAnchoBtn.From.Value.Bottom);
+
+                    mBotones[selected].BeginAnimation(Button.MarginProperty, aniAnchoBtn);
+                    mBotones[selected].IsEnabled = false;
+                }
+                //consola(tmpTexto);
+                selected++;
+            }
+
+            //mBotones[mBotonSelected].Background = App.Current.Resources["confoco2"] as SolidColorBrush;
+            mBotones[mBotonSelected].Style = styleBotonSelected;
+
+            labEntrega.Visibility = Visibility.Hidden;
+            tbEntrega.Visibility = Visibility.Hidden;
+            labFacturaNro.Visibility = Visibility.Hidden;
+            tbFacturaNro.Visibility = Visibility.Hidden;
+            labCuit.Visibility = Visibility.Hidden;
+            tbCuit.Visibility = Visibility.Hidden;
+            btnImprimir.Content = "IMPRIMIR";
+
+            ///REMITO
+            if (mBotones[mBotonSelected].Name == "btnRemito")
+            {
+                btnImprimir.Tag = "remito";
+            }
+
+            ///PENDIENTE
+            if (mBotones[mBotonSelected].Name == "btnPendiente")
+            {
+                labEntrega.Visibility = Visibility.Visible;
+                tbEntrega.Visibility = Visibility.Visible;
+                btnImprimir.Content = "GUARDAR";
+
+                btnImprimir.Tag = "pendiente";
+            }
+
+            ///FACTURA
+            if (mBotones[mBotonSelected].Name == "btnFactura")
+            {
+                labFacturaNro.Visibility = Visibility.Visible;
+                tbFacturaNro.Visibility = Visibility.Visible;
+                labCuit.Visibility = Visibility.Visible;
+                tbCuit.Visibility = Visibility.Visible;
+
+                btnImprimir.Tag = "factura";
+            }
+
+            ///TARJETA
+            if (mBotones[mBotonSelected].Name == "btnTarjeta")
+            {
+                btnImprimir.Content = "GUARDAR";
+
+                btnImprimir.Tag = "tarjeta";
+            }
+
+            ///LISTA DE CONTROL
+            if (mBotones[mBotonSelected].Name == "btnListaDeControl")
+            {
+                btnImprimir.Tag = "lista_de_control";
+            }
+
+
+            ///mostrar grid datos del cliente
+            gridDatosDelCliente.Visibility = Visibility.Visible;
+            tbNombre.Focus();
+
+        }
+
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             var tb = sender as TextBox;
             string nombre = tb.Name;
+            ///ENTER
             if (e.Key == Key.Enter || e.Key == Key.Return)
             {
-                //if (nombre == "tbNombre")
-                //{
-                //if (tbCuit.IsVisible)
-                //{
-                //    tbCuit.Focus();
-                //}
-                //else
-                //{
-                //    tbDireccion.Focus();
-
-                //}
-                //}
                 if (nombre == "tbCuit")
                 {
                     if (tbEntrega.IsVisible)
@@ -581,6 +816,215 @@ namespace SIV_Servidor
                     //consola("hola");
                     btnImprimir.Focus();
                 }
+            }
+
+        }
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            var tb = sender as TextBox;
+            if (tb.Name == "tbNombre")
+            {
+                if (tb.Text == "")
+                {
+                    ayuda(zAyuda.tbNombreVacioEnGridClientes);
+                }
+                else
+                {
+                    ayuda(zAyuda.tbNombreEnGridClientes1, zAyuda.tbNombreEnGridClientes2);
+                }
+            }
+            else
+            {
+                ayuda(zAyuda.tbEnGridClientes);
+            }
+        }
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var tb = sender as TextBox;
+            string text = tb.Text;
+            string tag = "";
+            if (tb.Tag != null)
+            {
+                tag = tb.Tag.ToString();
+            }
+
+            ///Ver si se modificaron los datos de los TB (comparando con el campo Tag)
+
+            ///Si son iguales, textbox con fondo blanco
+            if (text.Equals(tag))
+            {
+                if (tb.Style != StyleTextbox)
+                {
+                    tb.Style = StyleTextbox;
+                }
+            }
+            ///si son diferentes, tb con fondo rosado y tip diciendo q se grabaran los cambios
+            else
+            {
+                ///mostrar que se modificara solo si no es un usuario nuevo
+                if (tbIdCliente.Text != "Nuevo")
+                {
+
+                    //consola("no son iguales:" + text + "-" + tag + ".");
+                    if (tb.Style != StyleTextboxModificar)
+                    {
+                        tb.Style = StyleTextboxModificar;
+                        tip("Se grabarán las modificaciones en la Base de Datos", bordeBlancoGridCliente);
+                    }
+                }
+            }
+        }
+        private void tbNombre_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+            ///si anteriormente se busco un articulo y no se encontro, borrar mensaje al editer tbDescripcion
+            //if (labelTip.Content.ToString() == zAyuda.articuloNoEncontrado)
+            //{
+            //    tip();
+            //}
+
+
+            ///borrar el tbCodigo ya que si se edita la descripcion, deja de ser ESE articulo
+            //if (seEditoDescripcionDesdeElPrograma)
+            //{
+            //    seEditoDescripcionDesdeElPrograma = false;
+            //    e.Handled = true;
+            //    return;
+            //}
+            //else
+            //{
+            //    tbCodigo.Text = "";
+
+            //}
+
+            var textBox = sender as TextBox;
+            string filtro = textBox.Text.Trim();
+            //consola(listFiltroClientes.Items.Count.ToString());
+            if (filtro != "" && textBox.IsFocused)
+            {
+                ///texto filtro NO esta vacio
+
+                ///si es una letra
+
+                ///aplicar filtro
+                //gridFiltroSQL(filtro);
+                filtroClientes(filtro);
+
+                ///mostrar tip paa agregar nuevo articulo
+                if (tbNombre.IsFocused)
+                {
+                    tip(zAyuda.tipAgregarNuevoCliente, tbNombre);
+                }
+
+                ///mostrar list si hay resultados
+                if (listFiltroClientes.Items.Count > 0)
+                {
+                    listFiltroClientes.Visibility = Visibility.Visible;
+                    //ayuda(zAyuda.descripcion2a, zAyuda.descripcion2b);
+                    ayuda(zAyuda.tbNombreEnGridClientes1, zAyuda.tbNombreEnGridClientes2);
+                }
+                else
+                {
+                    //ayuda(zAyuda.descripcion3);
+                    ayuda(zAyuda.tbNombreEnGridClientesCrearNuevo1, zAyuda.tbNombreEnGridClientesCrearNuevo2);
+                    ///ocultar control si no hay resultados
+                    listFiltroOcultar();
+                }
+
+
+            }
+            else
+            {
+                ///texto filtro vacio
+                ayuda(zAyuda.tbNombreVacioEnGridClientes);
+                tip();
+                /////ocultar control si el text esta vacio
+                listFiltroOcultar();
+            }
+        }
+        private void tbNombre_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+
+            ///ENTER
+            if (e.Key == Key.Enter || e.Key == Key.Return)
+            {
+
+                ///si esta vacio tbNombre, no hacer nada
+                if (tbNombre.Text.Trim() == "")
+                {
+                    //if (listVenta.Items.Count > 0)
+                    //{
+                    //    tbPagaCon.Focus();
+                    //}
+                    e.Handled = true;
+                    return;
+                }
+                else
+                ///si no esta vacio tbNombre
+                {
+                    //        ///comprobar si es un numero (para buscar articulo por codigo)
+                    //        if (mBuscarArticuloPorCodigo)
+                    //        {
+                    //            buscarArticuloPorCodigo();
+                    //            e.Handled = true;
+                    //        }
+                    //        else
+                    //        ///si no es un numero pero tampoco se selecciono de la lista, entonces es un ARTICULO NUEVO
+                    //        {
+                    if (estadoTip(zAyuda.tipAgregarNuevoCliente))
+                    {
+                        tipClienteNuevo(true);
+                    }
+                    //            ///tbCodigo = codigoMax 
+                    //            tbCodigo.Text = obtenerCodigoArticuloMax().ToString();
+                    //            tbPrecio.Tag = "";
+                    //            tbCantidad.Tag = "";
+
+                    //            tbCantidad.Text = "1";
+                    //            tbCantidad.SelectAll();
+                    //            tbCantidad.Focus();
+                    tip();
+                    listFiltroOcultar();
+
+                    //        }
+                }
+                tbTelefono.Focus();
+            }
+            ///FLECHA ABAJO
+            if (e.Key == Key.Down)
+            {
+                //listFiltro.Focus();
+                if (listFiltroClientes.Visibility == Visibility.Visible)
+                {
+                    listFiltroClientes.SelectedIndex = 0;
+                    var item = listFiltroClientes.ItemContainerGenerator.ContainerFromIndex(listFiltroClientes.SelectedIndex) as ListBoxItem;
+                    if (item != null)
+                    {
+                        item.Focus();
+                        //listFiltro.ScrollIntoView(listFiltro.SelectedItem);
+                    }
+                    e.Handled = true;
+
+                }
+            }
+            ///FLECHA DERECHA
+            if (e.Key == Key.Right)
+            {
+                //btnNuevo.Focus();
+                //e.Handled = true;
+
+            }
+            ///ESC
+            if (e.Key == Key.Escape)
+            {
+                //resetTb();
+            }
+        }
+        private void tbNombre_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (estadoTip(zAyuda.tipAgregarNuevoCliente))
+            {
+                tip();
             }
         }
 
@@ -680,189 +1124,148 @@ namespace SIV_Servidor
 
                 seEditoDescripcionDesdeElPrograma = true;
 
+                tbIdCliente.Tag = id;
+                tbNombre.Tag = nombre;
+                tbDireccion.Tag = direccion;
+                tbTelefono.Tag = telefono;
+                tbCuit.Tag = cuit;
+
                 tbIdCliente.Text = id;
                 tbNombre.Text = nombre;
                 tbDireccion.Text = direccion;
                 tbTelefono.Text = telefono;
-                tbCuit.Tag = cuit;
+                tbCuit.Text = cuit;
 
                 tbTelefono.Focus();
+                tbNombre.Style = StyleTBNoEditableFondo2Left;
+
                 listFiltroOcultar();
             }
-        }
-
-        private void gridDatosDelCliente_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Escape)
+            else if (e.Key == Key.Escape)
             {
-                //mBotones[mBotonSelected].Focus();
-                ////gridDatosDelCliente.Visibility = Visibility.Hidden;
-                //gridDatosDelClienteOcultar();
-                MostrarBotones();
-
+                e.Handled = true;
             }
         }
-        private void gridDatosDelCliente_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void listFiltroClientes_GotFocus(object sender, RoutedEventArgs e)
         {
-            var objeto = sender as Grid;
-            Boolean mostrar = objeto.IsVisible;
-            //consola(list.IsVisible.ToString());
-
-            if (mostrar)
-            {
-                sbDatosDelClienteMostrar.Begin();
-
-                //} else
-                //{
-                //    sbDatosDelClienteOcultar.Begin();
-            }
-        }
-        private void gridDatosDelClienteOcultar()
-        {
-            sbDatosDelClienteOcultar.Begin();
+            ayuda(zAyuda.ListFiltroClientes);
         }
 
-        private void tbNombre_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
 
-            ///ENTER
+        private void btnImprimir_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
             if (e.Key == Key.Enter || e.Key == Key.Return)
             {
-                tbTelefono.Focus();
-                //    ///si esta vacio tbDescipcion, ir a tbPagaCon
-                //    if (tbDescripcion.Text.Trim() == "")
-                //    {
-                //        if (listVenta.Items.Count > 0)
-                //        {
-                //            tbPagaCon.Focus();
-                //        }
-                //    }
-                //    else
-                //    ///si no esta vacio tbDescipcion
-                //    {
-                //        ///comprobar si es un numero (para buscar articulo por codigo)
-                //        if (mBuscarArticuloPorCodigo)
-                //        {
-                //            buscarArticuloPorCodigo();
-                //            e.Handled = true;
-                //        }
-                //        else
-                //        ///si no es un numero pero tampoco se selecciono de la lista, entonces es un ARTICULO NUEVO
-                //        {
-                //            if (estadoTip(zAyuda.nuevoArticulo))
-                //            {
-                //                tipArticuloNuevo(true);
-                //            }
-                //            ///tbCodigo = codigoMax 
-                //            tbCodigo.Text = obtenerCodigoArticuloMax().ToString();
-                //            tbPrecio.Tag = "";
-                //            tbCantidad.Tag = "";
-
-                //            tbCantidad.Text = "1";
-                //            tbCantidad.SelectAll();
-                //            tbCantidad.Focus();
-                //            listFiltroOcultar();
-
-                //        }
-                //    }
-            }
-            ///FLECHA ABAJO
-            if (e.Key == Key.Down)
-            {
-                //listFiltro.Focus();
-                if (listFiltroClientes.Visibility == Visibility.Visible)
-                {
-                    listFiltroClientes.SelectedIndex = 0;
-                    var item = listFiltroClientes.ItemContainerGenerator.ContainerFromIndex(listFiltroClientes.SelectedIndex) as ListBoxItem;
-                    if (item != null)
-                    {
-                        item.Focus();
-                        //listFiltro.ScrollIntoView(listFiltro.SelectedItem);
-                    }
-                    e.Handled = true;
-
-                }
-            }
-            ///FLECHA DERECHA
-            if (e.Key == Key.Right)
-            {
-                //btnNuevo.Focus();
-                //e.Handled = true;
-
-            }
-            ///ESC
-            if (e.Key == Key.Escape)
-            {
-                //resetTb();
+                AsentarProceso();
+                e.Handled = true;
             }
         }
-        private void tbNombre_TextChanged(object sender, TextChangedEventArgs e)
+        private void btnImprimir_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            AsentarProceso();
+            //e.Handled = true;
+
+        }
+        private void AsentarProceso()
         {
 
-            ///si anteriormente se busco un articulo y no se encontro, borrar mensaje al editer tbDescripcion
-            //if (labelTip.Content.ToString() == zAyuda.articuloNoEncontrado)
-            //{
-            //    tip();
-            //}
-
-
-            ///borrar el tbCodigo ya que si se edita la descripcion, deja de ser ESE articulo
-            //if (seEditoDescripcionDesdeElPrograma)
-            //{
-            //    seEditoDescripcionDesdeElPrograma = false;
-            //    e.Handled = true;
-            //    return;
-            //}
-            //else
-            //{
-            //    tbCodigo.Text = "";
-
-            //}
-
-            var textBox = sender as TextBox;
-            string filtro = textBox.Text.Trim();
-            //consola(listFiltroClientes.Items.Count.ToString());
-            if (filtro != "" && textBox.IsFocused)
+            ///si es un cliente nuevo, agregar a la BD
+            if (tbIdCliente.Text == "Nuevo")
             {
-                ///texto filtro NO esta vacio
+                ///definir variables y obtener valores de los textbox
+                string nombre = "";
+                string direccion = "";
+                string telefono = "";
+                string cuit = "";
+                nombre = tbNombre.Text.Trim();
+                direccion = tbDireccion.Text.Trim();
+                telefono = tbTelefono.Text.Trim();
+                cuit = tbCuit.Text.Trim();
 
-                ///si es una letra
-
-                ///aplicar filtro
-                //gridFiltroSQL(filtro);
-                filtroClientes(filtro);
-
-                ///mostrar tip paa agregar nuevo articulo
-                //if (tbDescripcion.IsFocused)
-                //{
-                //    tip(zAyuda.nuevoArticulo, tbDescripcion);
-                //}
-
-                ///mostrar list si hay resultados
-                if (listFiltroClientes.Items.Count > 0)
+                ///crear itemVenta
+                itemCliente nuevoItem = new itemCliente
                 {
-                    listFiltroClientes.Visibility = Visibility.Visible;
-                    ayuda(zAyuda.descripcion2a, zAyuda.descripcion2b);
-                }
-                else
-                {
-                    ayuda(zAyuda.descripcion3);
-                    ///ocultar control si no hay resultados
-                    listFiltroOcultar();
-                }
+                    nombre = nombre,
+                    direccion = direccion,
+                    telefono = telefono,
+                    cuit = cuit
+                };
 
+                ///agregar item a la tabla temporal
+                insertarItemClienteEnDB(nuevoItem);
 
+                ///agregar item a mTotalClientes
+                //mTotalClientes.Add(nuevoItem);
+                cargarListaDeClientes();
+
+                //consola("Cliente nuevo. ID:"+zdb.valorMaxDB("clientes.db","clientes","id"));
             }
-            else
+
+            ///si se modificaron los datos del cliente, actualizar BD
+
+            ///variables:
+            string archivoDB = "clientes.db";
+            string tabla = "clientes";
+
+            string index = tbIdCliente.Text.ToString();
+            string campo = "";
+            string valor = "";
+
+
+            //en textChanged, si el valor de los TB es diferente al tag, poner el fondo rosado
+            //acá evaluar si el fondo es rosado
+            //ir TB por TB, si es rosado, hacer un UPDATE de ese campo
+
+            ///si encuentra el item, ver si se hicieron modificaciones
+            if (mTotalClientes.Any((i => i.id.ToString() == index)))
             {
-                ///texto filtro vacio
-                //ayuda(zAyuda.descripcion1);
-                //tip();
-                /////ocultar control si el text esta vacio
-                listFiltroOcultar();
+
+                var item = mTotalClientes.First(i => i.id.ToString() == index);
+                if (item != null)
+                {
+
+                    ///modificacion en telefono
+                    if (tbTelefono.Style == StyleTextboxModificar)
+                    {
+                        //consola("grabar modificación en teléfono");
+                        campo = "telefono";
+                        valor = tbTelefono.Text.ToString();
+                        zdb.modificarRegistroDB(archivoDB, tabla, index, campo, valor);
+                        item.telefono = valor;
+                    }
+
+                    ///modificacion en direccion
+                    if (tbDireccion.Style == StyleTextboxModificar)
+                    {
+                        //consola("grabar modificación en Dirección");
+                        campo = "direccion";
+                        valor = tbDireccion.Text.ToString();
+                        zdb.modificarRegistroDB(archivoDB, tabla, index, campo, valor);
+                        item.direccion = valor;
+                    }
+
+                    ///modificacion en cuit
+                    if (tbCuit.Style == StyleTextboxModificar && tbCuit.IsVisible == true)
+                    {
+                        //consola("grabar modificación en cuit");
+                        campo = "cuit";
+                        valor = tbCuit.Text.ToString();
+                        zdb.modificarRegistroDB(archivoDB, tabla, index, campo, valor);
+                        item.cuit = valor;
+                    }
+
+                }
             }
+
+            ///comprobar proceso a realizar para guardar en BD del proceso
+            //consola("PROCESO:" + btnImprimir.Tag.ToString());
+
+
+            ///Reset estado
+            resetTB();
+            tbNombre.Focus();
+            MostrarBotones();
         }
-
 
 
     }

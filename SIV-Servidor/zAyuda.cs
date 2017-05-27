@@ -55,6 +55,8 @@ namespace SIV_Servidor
         public static string listVenta1 = "" +
             "<DEL> Eliminar Item \n";
 
+        public static string articuloNoEncontrado = "Artículo no encontrado";
+        public static string nuevoArticulo = "<ENTER> para crear un NUEVO artículo";
 
         public static string tipCambiarPrecio = "<ENTER> Actualizar precio en Base de Datos\n<ESC> Cancelar";
         public static string tipArticuloNuevo = "Artículo Nuevo";
@@ -71,12 +73,35 @@ namespace SIV_Servidor
         public static string bontonMenu1b = "" +
             "<ESC> Volver al Listado de Movimientos \n";
 
+        public static string tbEnGridClientes = "" +
+            "<ENTER> Continuar \n" +
+            "<ESC> Resetear datos del cliente \n";
 
+        public static string tbNombreVacioEnGridClientes = "" +
+            "Escriba un nombre para filtrar de la lista \n" +
+            "<ESC> Para cancelar \n";
 
+        public static string tbNombreEnGridClientes1 = "" +
+            "<ENTER> Para crear un Cliente Nuevo \n" +
+            "<FLECHA ABAJO> para acceder a la lista \n";
 
+        public static string tbNombreEnGridClientes2 = "" +
+            "<ESC> Resetear datos del cliente \n" +
+            "";
+
+        public static string tbNombreEnGridClientesCrearNuevo1 = "" +
+            "<ENTER> Para crear un Cliente Nuevo \n" +
+            "" ;
+        public static string tbNombreEnGridClientesCrearNuevo2 = "" +
+            "<ESC> Resetear datos del cliente  \n" +
+            "";
+
+        public static string ListFiltroClientes = "" +
+            "<ENTER> Seleccionar Cliente \n" +
+            "<ESC> Cancelar \n";
+
+        public static string tipAgregarNuevoCliente = "<ENTER> Agregar cliente";
         /// 
 
-        public static string articuloNoEncontrado = "Artículo no encontrado";
-        public static string nuevoArticulo = "<ENTER> para crear un NUEVO artículo";
     }
 }

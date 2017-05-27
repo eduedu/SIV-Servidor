@@ -28,7 +28,7 @@
 
 
         <SolidColorBrush x:Key="ListBorder" Color="#828790"/>
-        
+
         <!--LISTFILTRO STYLE-->
         <Style x:Key="listFiltroStyle1" TargetType="{x:Type ListView}">
             <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
@@ -241,7 +241,7 @@
         </Style>
 
         <!--Estilo TEXT BOXES-->
-        <Style TargetType="TextBox" x:Key="miTextbox" >
+        <Style TargetType="TextBox" x:Key="StyleTextbox" >
             <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
             <Setter Property="Background" Value="{StaticResource sinfoco}" />
             <!--<Setter Property="FocusVisualStyle" Value="{x:Null}"/>-->
@@ -280,8 +280,32 @@
             </Style.Triggers>
 
         </Style>
+        <Style TargetType="TextBox" x:Key="StyleTextboxModificar" >
+            <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+            <Setter Property="Background" Value="{StaticResource infocable3}" />
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="true">
+                    <Setter Property="Background" Value="{StaticResource infocable4}" />
+                </Trigger>
+            </Style.Triggers>
 
-        <Style TargetType="TextBox" x:Key="tbNoEditable" >
+        </Style>
+
+
+        <Style TargetType="TextBox" x:Key="StyleTextboxUpper" >
+            <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+            <Setter Property="Background" Value="{StaticResource sinfoco}" />
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="true">
+                    <Setter Property="Background" Value="{StaticResource confoco}" />
+                </Trigger>
+                <DataTrigger Binding="{Binding Text.Length, RelativeSource={RelativeSource Self}}" Value="0">
+                    <Setter Property="CharacterCasing" Value="Upper"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="TextBox" x:Key="StyleTBNoEditable" >
             <Setter Property="Background" Value="{StaticResource colorfondo}" />
             <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
             <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
@@ -292,9 +316,9 @@
             <Setter Property="IsTabStop" Value="False" />
             <Setter Property="IsHitTestVisible" Value="False" />
         </Style>
-        <Style TargetType="TextBox" x:Key="tbNoEditableNuevo" >
-            <Setter Property="Background" Value="{StaticResource infocable3}" />
-            <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+        <Style TargetType="TextBox" x:Key="StyleTBNoEditableFondo2">
+            <Setter Property="Background" Value="{StaticResource colorfondo3}" />
+            <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
             <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -303,6 +327,40 @@
             <Setter Property="IsTabStop" Value="False" />
             <Setter Property="IsHitTestVisible" Value="False" />
         </Style>
+        <Style TargetType="TextBox" x:Key="StyleTBNoEditableFondo2Left">
+            <Setter Property="Background" Value="{StaticResource colorfondo3}" />
+            <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
+            <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="IsHitTestVisible" Value="False" />
+        </Style>
+        <Style TargetType="TextBox" x:Key="StyleTbNoEditableNuevo" >
+            <Setter Property="Background" Value="{StaticResource infocable3}" />
+            <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+            <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <!--<Setter Property="HorizontalContentAlignment" Value="{x:Null}" />-->
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="IsHitTestVisible" Value="False" />
+        </Style>
+        <Style TargetType="TextBox" x:Key="StyleTbNoEditableNuevo2" >
+            <Setter Property="Background" Value="{StaticResource infocable3}" />
+            <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+            <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="IsHitTestVisible" Value="False" />
+        </Style>
+
 
     </Application.Resources>
 </Application>
