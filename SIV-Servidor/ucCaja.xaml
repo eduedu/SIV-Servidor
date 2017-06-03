@@ -193,14 +193,16 @@
                         <GridViewColumn Header="Precio" Width="70"   >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding precio, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />
+                                    <!--<TextBlock Text="{Binding precio, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />-->
+                                    <TextBlock Text="{Binding precio, StringFormat=$ \{0:F\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn Header="Sub-total" Width="90"   >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding subtotal, StringFormat=$ \{0:c\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"    />
+                                    <!--<TextBlock Text="{Binding subtotal, StringFormat=$ \{0:c\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"    />-->
+                                    <TextBlock Text="{Binding subtotal, StringFormat=$ \{0:F\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"    />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

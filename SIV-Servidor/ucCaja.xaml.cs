@@ -158,8 +158,10 @@ namespace SIV_Servidor
             int index = 0;
             foreach (DataRow registro in dataTable.Rows)
             {
-                float cantidad = zfun.toFloat(registro["cantidad"].ToString());
+
+                long cantidad = zfun.toLong(registro["cantidad"].ToString());
                 float precio = zfun.toFloat(registro["precio"].ToString());
+
                 float tmpSubtotal = cantidad * precio;
 
                 //consola(registro["precio"].ToString());
@@ -191,10 +193,20 @@ namespace SIV_Servidor
                 tempArticulo.idventa = tmpidventa;
                 tempArticulo.codigo = zfun.toLong(registro["codigo"].ToString());
                 tempArticulo.descripcion = registro["descripcion"].ToString();
-                tempArticulo.cantidad = cantidad.ToString();
-                tempArticulo.precio = precio.ToString("0.00");
-                tempArticulo.costo = registro["costo"].ToString();
-                tempArticulo.subtotal = tmpSubtotal.ToString("0.00");
+
+                //tempArticulo.cantidad = cantidad.ToString();
+                tempArticulo.cantidad = cantidad;
+                //tempArticulo.precio = precio.ToString("0.00");
+                tempArticulo.costo = zfun.toFloat(registro["costo"].ToString());
+
+                //tempArticulo.subtotal = tmpSubtotal.ToString("0.00");
+                tempArticulo.subtotal = zfun.toFloat(tmpSubtotal.ToString("0.00"));
+
+                //tempArticulo.cantidad = (long)cantidad;
+                tempArticulo.precio = precio;
+                //tempArticulo.costo = zfun.toFloat( registro["costo"].ToString());
+                //tempArticulo.subtotal =zfun.toFloat(tmpSubtotal.ToString("0.00"));
+
                 tempArticulo.totalmostrar = "";
                 if (dataTable.Rows.Count != index + 1)
                 {
@@ -202,7 +214,8 @@ namespace SIV_Servidor
                     //consola(registro["idventa"].ToString() + "-" + tmpSiguienteId);
                     if (registro["idventa"].ToString() != tmpSiguienteId)
                     {
-                        tempArticulo.totalmostrar = "$" + tmpTotal.ToString("0.00");
+                        //tempArticulo.totalmostrar = "$" + tmpTotal.ToString("0.00");
+                        tempArticulo.totalmostrar = "" + tmpTotal.ToString("0.00");
                     }
                 }
                 else
@@ -460,6 +473,7 @@ namespace SIV_Servidor
         {
             return zfun.toFloat(cadena);
         }
+
         private bool esDecimal(Key key)
         {
             return zfun.esDecimal(key);
@@ -1198,10 +1212,10 @@ namespace SIV_Servidor
                 //mTotalClientes.Add(nuevoItem);
                 cargarListaDeClientes();
 
-                //consola("Cliente nuevo. ID:"+zdb.valorMaxDB("clientes.db","clientes","id"));
+
             }
 
-            ///si se modificaron los datos del cliente, actualizar BD
+            ///si no es un cliente nuevo, pero se modificaron los datos del cliente, actualizar BD
 
             ///variables:
             string archivoDB = "clientes.db";
@@ -1258,7 +1272,20 @@ namespace SIV_Servidor
             }
 
             ///comprobar proceso a realizar para guardar en BD del proceso
-            //consola("PROCESO:" + btnImprimir.Tag.ToString());
+            string proceso = btnImprimir.Tag.ToString();
+            //consola("PROCESO:" + proceso);
+
+            ///REMITO
+            if (proceso == "remito")
+            {
+                AsentarProcesoRemito();
+            }
+
+            ///FACTURA
+            if (proceso == "factura")
+            {
+                AsentarProcesoFactura();
+            }
 
 
             ///Reset estado
@@ -1267,6 +1294,91 @@ namespace SIV_Servidor
             MostrarBotones();
         }
 
+        private void AsentarProcesoRemito()
+        {
+            //consola("Asentar proceso REMITO");
+            /// 0) definir variables
 
+            /// 0.1) variables archivo
+            string archivoDB = "remitos.db";
+            string tabla = "remitos";
+            string parametros = "";
+
+            /// 0.2) variables venta
+            int remitonro = zdb.valorMaxDB(archivoDB, tabla, "remitonro");
+            if (remitonro > -1)
+            {
+                remitonro++;
+            }
+            float fecha = 0;
+            long codigo = -1;
+            string descripcion = "";
+            long cantidad = 0;
+            float precio = 0;
+            float subtotal = 0;
+            string direccion = "";
+            string telefono = "";
+
+
+            /// 1) cargar el primer registro con los datos del cliente
+
+            /// 1.1) Datos del primer registro: 'codigo'='zcliente', 'descripcion'=nombre del cliente, 'subtotal'= total de la factura.
+            fecha = 0;
+            codigo = -100;
+            descripcion = tbNombre.Text.Trim();
+            subtotal = toFloat(tbTotal.Text.Replace("$", ""));
+            direccion = tbDireccion.Text.Trim();
+            telefono = tbTelefono.Text.Trim();
+
+            /// 1.2) ejecutar comando SQL
+            //parametros = "(nombre, direccion, telefono, cuit) VALUES(?,?,?,?)";
+            parametros = "(remitonro, fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono) VALUES" +
+                "(" + remitonro + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precio + "," + subtotal + ",'" + direccion + "','" + telefono + "')";
+
+            zdb.InsertDB(archivoDB, tabla, parametros);
+
+
+            /// 2) el resto de los registros son los mismos de la listImpresion, pero compartiendo el nro de remito
+
+            /// 2.1) procesar cada articulo de la listImpresion
+            direccion = "";
+            telefono = "";
+            //fecha = 0;
+            foreach (var itemventa in listImpresion.Items)
+            {
+                var item = itemventa as itemCaja;
+
+                ///setear variables:
+                codigo = 0;
+                descripcion = "";
+                cantidad = 0;
+                precio = 0;
+                subtotal = 0;
+
+                codigo = item.codigo;
+                descripcion = item.descripcion;
+                cantidad = item.cantidad;
+                precio = item.precio;
+                subtotal = item.subtotal;
+
+                //consola("desc:" + item.descripcion.ToString());
+                
+                ///comando sql para agregar el registro
+                parametros = "(remitonro, fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono) VALUES" +
+                    "(" + remitonro + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precio + "," + subtotal + ",'" + direccion + "','" + telefono + "')";
+
+                zdb.InsertDB(archivoDB, tabla, parametros);
+            }
+
+        }
+        private void AsentarProcesoFactura()
+        {
+            consola("Asentar proceso factura");
+            ///obtener el nro de factura de la BD de configuracion, y NO de la ultima factura
+        }
+        private void imprimir(string proceso)
+        {
+
+        }
     }
 }

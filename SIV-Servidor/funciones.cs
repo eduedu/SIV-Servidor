@@ -28,6 +28,7 @@ namespace SIV_Servidor
             //i++;
             //consola(i.ToString());
             float resultado = -1;
+            cadena.Replace(",", ".");
             float.TryParse(cadena, out resultado);
             return resultado;
         }

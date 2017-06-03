@@ -117,14 +117,15 @@
                 <!--<Grid x:Name="gridCaja" Margin="0" RenderTransformOrigin="0.5,0.5"/>-->
             </TabItem>
 
-            <!--<TabItem x:Name="tabItem2" FocusVisualStyle="{x:Null}"  Background="{DynamicResource colorfondo}" >
+            <TabItem x:Name="tabItem2" FocusVisualStyle="{x:Null}"  Background="{DynamicResource colorfondo}" >
                 <TabItem.Header>
                     <Grid  Width="100" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
-                        <TextBlock x:Name="tbPestanaOpciones" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F3-OPCIONES"/></TextBlock>
+                        <!--<TextBlock x:Name="tbPestanaOpciones" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F3-OPCIONES"/></TextBlock>-->
+                        <TextBlock x:Name="tbPestanaConsultas" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F3-CONSULTAS"/></TextBlock>
                     </Grid>
                 </TabItem.Header>
                 <Grid />
-            </TabItem>-->
+            </TabItem>
             
             <!--<Path Data="" Stretch="Fill"/>
             <Path Data="" Stretch="Fill"/>

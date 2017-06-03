@@ -207,7 +207,8 @@ namespace SIV_Servidor
                 {
                     //consola(item.descripcion);
                     subtotal = 0;
-                    float.TryParse(item.subtotal, out subtotal);
+                    //float.TryParse(item.subtotal, out subtotal);
+                    subtotal = item.subtotal;
                     total = total + subtotal;
                 }
                 tbTotal.Text = "$ " + total.ToString("0.00");
@@ -234,6 +235,7 @@ namespace SIV_Servidor
             dataSet.Reset();
             db.Fill(dataSet);
             dataTable = dataSet.Tables[0];
+
 
             ///borrar todos los elementos de mTotalArticulos
             if (mTotalArticulos != null)
@@ -323,20 +325,24 @@ namespace SIV_Servidor
             ///definir variables y obtener valores de los textbox
             string codigo = "";
             string descripcion = "";
-            string cantidad = "";
+            long cantidad = 0;
             string precio = "";
-            string subtotal = "";
-            string costo = "";
+            //string subtotal = "";
+
+            //string costo = "";
             codigo = tbCodigo.Text;
             descripcion = tbDescripcion.Text;
-            cantidad = tbCantidad.Text;
+            cantidad = zfun.toLong(tbCantidad.Text);
             precio = tbPrecio.Text;
-            subtotal = tbSubtotal.Text;
+            float subtotal = zfun.toFloat(tbSubtotal.Text);
 
             precio = toFloat(precio).ToString();
 
+            float flPrecio = toFloat(precio);
+
+            float costo = 0;
             if (tbCantidad.Tag != null)
-                costo = tbCantidad.Tag.ToString();
+                costo = zfun.toFloat(tbCantidad.Tag.ToString());
 
 
             long id = obtenerIdParaListVenta();
@@ -354,7 +360,7 @@ namespace SIV_Servidor
                 codigo = zfun.toLong(codigo),
                 descripcion = descripcion,
                 cantidad = cantidad,
-                precio = precio,
+                precio = flPrecio,
                 subtotal = subtotal,
                 costo = costo
             };
@@ -524,10 +530,11 @@ namespace SIV_Servidor
                 tempItem.id = id;
                 tempItem.codigo = zfun.toLong(registro["codigo"].ToString());
                 tempItem.descripcion = registro["descripcion"].ToString();
-                tempItem.cantidad = registro["cantidad"].ToString();
-                tempItem.precio = registro["precio"].ToString();
-                tempItem.subtotal = registro["subtotal"].ToString();
-                tempItem.costo = registro["costo"].ToString();
+                tempItem.cantidad = zfun.toLong(registro["cantidad"].ToString());
+                //tempItem.precio = registro["precio"].ToString();
+                tempItem.precio = toFloat(registro["precio"].ToString());
+                tempItem.subtotal = zfun.toFloat(registro["subtotal"].ToString());
+                tempItem.costo = zfun.toFloat(registro["costo"].ToString());
                 //tempArticulo.stock = "1";
 
                 mItemsListVenta.Add(tempItem);
@@ -1157,17 +1164,17 @@ namespace SIV_Servidor
             if ((e.Key == Key.OemPeriod) || (e.Key == Key.Decimal) || (e.Key == Key.OemComma))
             {
                 int comas = 0;
-                consola("--");
+
                 foreach (char ch in tbPrecio.Text)
                 {
-                    consola("caracter:" + ch.ToString());
+                    //consola("caracter:" + ch.ToString());
                     if (ch.Equals(',') || ch.Equals('.'))
                     {
                         comas++;
                     }
 
                 }
-                consola(comas.ToString());
+                //consola(comas.ToString());
                 if (comas > 0)
                 {
                     //consola("Ya existe un separador decimal (1 coma).");
@@ -1179,7 +1186,7 @@ namespace SIV_Servidor
             if (e.Key == Key.Enter)
             {
                 ///si los campos descripcion, codigo o precio estan vacios, q ignore
-                if (tbDescripcion.Text=="" || tbCodigo.Text=="" || tbPrecio.Text=="")
+                if (tbDescripcion.Text == "" || tbCodigo.Text == "" || tbPrecio.Text == "")
                 {
                     e.Handled = true;
                     return;

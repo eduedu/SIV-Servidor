@@ -26,10 +26,11 @@ namespace SIV_Servidor {
         public long id { get; set; }
         public long codigo { get; set; }
         public string descripcion { get; set; }
-        public string cantidad { get; set; }
-        public string precio { get; set; }
-        public string subtotal { get; set; }
-        public string costo { get; set; }
+        //public string cantidad { get; set; }
+        public long cantidad { get; set; }
+        public float precio { get; set; }
+        public float subtotal { get; set; }
+        public float costo { get; set; }
     }
     public class itemCaja
         ///se usa en la BD caja y en el listCaja
@@ -41,10 +42,18 @@ namespace SIV_Servidor {
         public float fecha { get; set; }
         public long codigo { get; set; }
         public string descripcion { get; set; }
-        public string cantidad { get; set; }
-        public string precio { get; set; }
-        public string costo { get; set; }
-        public string subtotal { get; set; }
+
+        //public string cantidad { get; set; }
+        //public string precio { get; set; }
+        //public string costo { get; set; }
+        //public string subtotal { get; set; }
+
+        public long cantidad { get; set; }
+        public float precio { get; set; }
+        public float costo { get; set; }
+        public float subtotal { get; set; }
+
+
         //public string total { get; set; }
         public string totalmostrar { get; set; }
     }

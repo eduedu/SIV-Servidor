@@ -77,7 +77,7 @@ namespace SIV_Servidor
             conexion = new SQLiteConnection("Data Source=" + archivoDb + ";Version=3;New=False;Compress=True;");
             conexion.Open();
 
-            
+
             ///definir comando
             SQLiteCommand comandoSQL;
             //comandoSQL = new SQLiteCommand(comando + " " + tabla + " " + parametros, conexion);
@@ -99,5 +99,34 @@ namespace SIV_Servidor
 
         }
 
+        public static void InsertDB(string archivoDB, string tabla, string parametrosInsert)
+        {
+            ///parametros
+            //FORMATO DE PARAMETROS INSERT: " (nombre, direccion, telefono, cuit) VALUES (?,?,?,?)"
+
+            ///abrir conexion DB
+            SQLiteConnection conexion;
+            conexion = new SQLiteConnection("Data Source=" + archivoDB + ";Version=3;New=False;Compress=True;");
+            conexion.Open();
+
+            ///comando SQL a ejecutar
+            SQLiteCommand insertSQL;
+            //insertSQL = new SQLiteCommand("INSERT INTO " + tabla + " (nombre, direccion, telefono, cuit) VALUES (?,?,?,?)", conexion);
+            insertSQL = new SQLiteCommand("INSERT INTO " + tabla + " " + parametrosInsert, conexion);
+
+            
+            ///ejecutar comando SQL
+            try
+            {
+                insertSQL.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            ///Cerrar conexion
+            conexion.Close();
+        }
     }
 }

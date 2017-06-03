@@ -268,11 +268,11 @@ namespace SIV_Servidor
                 tabMain.SelectedIndex = 1;
                 e.Handled = true;
             }
-            //if (e.Key == Key.F3)
-            //{
-            //    tabMain.SelectedIndex = 2;
-            //    e.Handled = true;
-            //}
+            if (e.Key == Key.F3)
+            {
+                tabMain.SelectedIndex = 2;
+                e.Handled = true;
+            }
 
             if (e.Key == Key.Tab)
             {
@@ -387,23 +387,23 @@ namespace SIV_Servidor
 
                 ///color textblock de las pestañas en tabMain
 
-                tbPestanaCaja.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
+                tbPestanaVentas.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
                 if (selected == 0)
                 {
                     tbPestanaVentas.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
                 }
 
-                tbPestanaVentas.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
+                tbPestanaCaja.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
                 if (selected == 1)
                 {
                     tbPestanaCaja.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
                 }
 
-                //tbPestanaOpciones.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
-                //if (selected == 2)
-                //{
-                //    tbPestanaOpciones.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
-                //}
+                tbPestanaConsultas.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
+                if (selected == 2)
+                {
+                    tbPestanaConsultas.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
+                }
 
                 ///Index Pestana MAIN seleecionada
                 mPestanaMain = selected;
