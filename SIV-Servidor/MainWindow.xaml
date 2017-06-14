@@ -103,15 +103,15 @@
             </TabControl.Resources>
             <TabItem x:Name="tabItemVentas" FocusVisualStyle="{x:Null}" Cursor="">
                 <TabItem.Header>
-                    <Grid x:Name="gridTabItemVEntasHeader" Width="100" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
+                    <Grid x:Name="gridTabItemVEntasHeader" Width="120" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
                         <TextBlock x:Name="tbPestanaVentas"  Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F1-VENTAS"/></TextBlock>
                     </Grid>
                 </TabItem.Header>
             </TabItem>
             <TabItem x:Name="tabItem1" FocusVisualStyle="{x:Null}"  Background="{DynamicResource colorfondo}" >
                 <TabItem.Header>
-                    <Grid  Width="100" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
-                        <TextBlock x:Name="tbPestanaCaja" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F2-CAJA"/></TextBlock>
+                    <Grid  Width="120" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
+                        <TextBlock x:Name="tbPestanaCaja" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F2-MOVIMIENTOS"/></TextBlock>
                     </Grid>
                 </TabItem.Header>
                 <!--<Grid x:Name="gridCaja" Margin="0" RenderTransformOrigin="0.5,0.5"/>-->
@@ -119,7 +119,7 @@
 
             <TabItem x:Name="tabItem2" FocusVisualStyle="{x:Null}"  Background="{DynamicResource colorfondo}" >
                 <TabItem.Header>
-                    <Grid  Width="100" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
+                    <Grid  Width="120" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
                         <!--<TextBlock x:Name="tbPestanaOpciones" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F3-OPCIONES"/></TextBlock>-->
                         <TextBlock x:Name="tbPestanaConsultas" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F3-CONSULTAS"/></TextBlock>
                     </Grid>
