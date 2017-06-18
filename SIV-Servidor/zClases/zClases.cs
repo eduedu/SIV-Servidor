@@ -4,20 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SIV_Servidor {
-	public class itemArticulo{
+namespace SIV_Servidor
+{
+    public class itemArticulo
+    {
         ///se usa en la BD Articulos y en listFiltro
 		public long id { get; set; }
-		public string proveedor { get; set; }
-		public string codigopro { get; set; }
-		public long codigo { get; set; }
-		public string descripcion { get; set; }
+        public string proveedor { get; set; }
+        public string codigopro { get; set; }
+        public long codigo { get; set; }
+        public string descripcion { get; set; }
         //public float  precio { get; set; }
         public float precio { get; set; }
         public float costo { get; set; }
-		public float fechacreacion { get; set; }
-		public float fechamodif { get; set; }
-		public string tags { get; set; }
+        public float fechacreacion { get; set; }
+        public float fechamodif { get; set; }
+        public string tags { get; set; }
         public string stock { get; set; }
     }
     public class itemVenta
@@ -33,7 +35,7 @@ namespace SIV_Servidor {
         public float costo { get; set; }
     }
     public class itemCaja
-        ///se usa en la BD caja y en el listCaja
+    ///se usa en la BD caja y en el listCaja
     {
         public long id { get; set; }
         public int idventa { get; set; }
@@ -59,7 +61,7 @@ namespace SIV_Servidor {
     }
 
     public class itemCliente
-        ///se usa en la BD clientes y en el listClientes
+    ///se usa en la BD clientes y en el listClientes
     {
         public long id { get; set; }
         public string nombre { get; set; }
@@ -67,5 +69,38 @@ namespace SIV_Servidor {
         public string telefono { get; set; }
         public string cuit { get; set; }
 
+    }
+    public class itemListConsultas
+    ///se usa en la BD remitos, facturas y pendientes, para el listConsultas
+    {
+        /// carga los datos con codigo=-100, total=campo "subtotal" 
+        public long id { get; set; }
+        public long nro { get; set; }
+        public float fecha { get; set; }
+        public string nombre { get; set; }
+        public string direccion { get; set; }
+        public string telefono { get; set; }
+        public string cuit { get; set; }
+
+        public float total { get; set; }
+    }
+    public class itemListDetalles
+    ///se usa en la BD remitos, facturas y pendientes, para el listDetalle
+    {
+        /// carga los datos con codigo=-100, total=campo "subtotal" 
+        public long id { get; set; }
+        public long nro { get; set; }
+        //public float fecha { get; set; }
+        //public string nombre { get; set; }
+        //public string direccion { get; set; }
+        //public string telefono { get; set; }
+        //public string cuit { get; set; }
+
+        //public float total { get; set; }
+        public long codigo { get; set; }
+        public string descripcion { get; set; }
+        public long cantidad { get; set; }
+        public float precio { get; set; }
+        public float subtotal { get; set; }
     }
 }

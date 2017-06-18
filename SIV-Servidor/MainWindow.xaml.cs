@@ -62,6 +62,7 @@ namespace SIV_Servidor
         double mAnchoPantalla;
 
 
+
         ///controles static
         public static Label statAyuda1;
         public static Label statAyuda2;
@@ -272,6 +273,26 @@ namespace SIV_Servidor
             {
                 tabMain.SelectedIndex = 2;
                 e.Handled = true;
+            }
+
+            if (tabMain.SelectedIndex == 2)
+            {
+                if (e.Key == Key.F5)
+                {
+                    ucConsultas.tabConsultas.SelectedIndex = 0;
+                    e.Handled = true;
+
+                }
+                if (e.Key == Key.F6)
+                {
+                    ucConsultas.tabConsultas.SelectedIndex = 1;
+                    e.Handled = true;
+                }
+                if (e.Key == Key.F7)
+                {
+                    ucConsultas.tabConsultas.SelectedIndex = 2;
+                    e.Handled = true;
+                }
             }
 
             if (e.Key == Key.Tab)

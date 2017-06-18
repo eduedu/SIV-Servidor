@@ -463,6 +463,300 @@ namespace SIV_Servidor
             return respuesta;
         }
 
+        private void AsentarProceso()
+        {
+
+            ///si es un cliente nuevo, agregar a la BD
+            if (tbIdCliente.Text == "Nuevo")
+            {
+                ///definir variables y obtener valores de los textbox
+                string nombre = "";
+                string direccion = "";
+                string telefono = "";
+                string cuit = "";
+                nombre = tbNombre.Text.Trim();
+                direccion = tbDireccion.Text.Trim();
+                telefono = tbTelefono.Text.Trim();
+                cuit = tbCuit.Text.Trim();
+
+                ///crear itemVenta
+                itemCliente nuevoItem = new itemCliente
+                {
+                    nombre = nombre,
+                    direccion = direccion,
+                    telefono = telefono,
+                    cuit = cuit
+                };
+
+                ///agregar item a la tabla temporal
+                insertarItemClienteEnDB(nuevoItem);
+
+                ///agregar item a mTotalClientes
+                //mTotalClientes.Add(nuevoItem);
+                cargarListaDeClientes();
+
+
+            }
+
+            ///si no es un cliente nuevo, pero se modificaron los datos del cliente, actualizar BD
+
+            ///variables:
+            string archivoDB = "clientes.db";
+            string tabla = "clientes";
+
+            string index = tbIdCliente.Text.ToString();
+            string campo = "";
+            string valor = "";
+
+
+            //en textChanged, si el valor de los TB es diferente al tag, poner el fondo rosado
+            //acá evaluar si el fondo es rosado
+            //ir TB por TB, si es rosado, hacer un UPDATE de ese campo
+
+            ///si encuentra el item, ver si se hicieron modificaciones
+            if (mTotalClientes.Any((i => i.id.ToString() == index)))
+            {
+
+                var item = mTotalClientes.First(i => i.id.ToString() == index);
+                if (item != null)
+                {
+
+                    ///modificacion en telefono
+                    if (tbTelefono.Style == StyleTextboxModificar)
+                    {
+                        //consola("grabar modificación en teléfono");
+                        campo = "telefono";
+                        valor = tbTelefono.Text.ToString();
+                        zdb.modificarRegistroDB(archivoDB, tabla, index, campo, valor);
+                        item.telefono = valor;
+                    }
+
+                    ///modificacion en direccion
+                    if (tbDireccion.Style == StyleTextboxModificar)
+                    {
+                        //consola("grabar modificación en Dirección");
+                        campo = "direccion";
+                        valor = tbDireccion.Text.ToString();
+                        zdb.modificarRegistroDB(archivoDB, tabla, index, campo, valor);
+                        item.direccion = valor;
+                    }
+
+                    ///modificacion en cuit
+                    if (tbCuit.Style == StyleTextboxModificar && tbCuit.IsVisible == true)
+                    {
+                        //consola("grabar modificación en cuit");
+                        campo = "cuit";
+                        valor = tbCuit.Text.ToString();
+                        zdb.modificarRegistroDB(archivoDB, tabla, index, campo, valor);
+                        item.cuit = valor;
+                    }
+
+                }
+            }
+
+            ///comprobar proceso a realizar para guardar en BD del proceso
+            string proceso = btnImprimir.Tag.ToString();
+            //consola("PROCESO:" + proceso);
+
+            ///REMITO
+            if (proceso == "remito")
+            {
+                AsentarProcesoRemito();
+            }
+
+            ///FACTURA
+            if (proceso == "factura")
+            {
+                AsentarProcesoFactura();
+            }
+            
+            
+
+            ///Reset estado
+            resetTB();
+            tbNombre.Focus();
+            MostrarBotones();
+        }
+
+        private void AsentarProcesoRemito()
+        {
+            //consola("Asentar proceso REMITO");
+            /// 0) definir variables
+
+            /// 0.1) variables archivo
+            string archivoDB = "remitos.db";
+            string tabla = "remitos";
+            string parametros = "";
+
+            /// 0.2) variables venta
+            int remitonro = zdb.valorMaxDB(archivoDB, tabla, "remitonro");
+            if (remitonro > -1)
+            {
+                remitonro++;
+            }
+            float fecha = 0;
+            long codigo = -1;
+            string descripcion = "";
+            long cantidad = 0;
+            float precio = 0;
+            string precioStr = "0";
+            float subtotal = 0;
+            string subtotalStr;
+            string direccion = "";
+            string telefono = "";
+
+
+            /// 1) cargar el primer registro con los datos del cliente
+
+            /// 1.1) Datos del primer registro: 'codigo'='zcliente', 'descripcion'=nombre del cliente, 'subtotal'= total de la factura.
+            fecha = 0;
+            codigo = -100;
+            descripcion = tbNombre.Text.Trim();
+            subtotal = toFloat(tbTotal.Text.Replace("$", ""));
+            subtotalStr = subtotal.ToString().Replace(",", ".");
+            direccion = tbDireccion.Text.Trim();
+            telefono = tbTelefono.Text.Trim();
+
+            /// 1.2) ejecutar comando SQL
+            //parametros = "(nombre, direccion, telefono, cuit) VALUES(?,?,?,?)";
+            parametros = "(remitonro, fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono) VALUES" +
+                "(" + remitonro + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precioStr + "," + subtotalStr + ",'" + direccion + "','" + telefono + "')";
+
+            zdb.InsertDB(archivoDB, tabla, parametros);
+
+
+            /// 2) el resto de los registros son los mismos de la listImpresion, pero compartiendo el nro de remito
+
+            /// 2.1) procesar cada articulo de la listImpresion
+            direccion = "";
+            telefono = "";
+            //fecha = 0;
+            foreach (var itemventa in listImpresion.Items)
+            {
+                var item = itemventa as itemCaja;
+
+                ///setear variables:
+                codigo = 0;
+                descripcion = "";
+                cantidad = 0;
+                precio = 0;
+                subtotal = 0;
+
+                codigo = item.codigo;
+                descripcion = item.descripcion;
+                cantidad = item.cantidad;
+                //precio = item.precio;
+                precio = toFloat(item.precio.ToString());
+                precioStr = precio.ToString().Replace(",", ".");
+                subtotal = item.subtotal;
+                subtotalStr = subtotal.ToString().Replace(",", ".");
+
+                //consola("desc:" + item.descripcion.ToString());
+
+                ///comando sql para agregar el registro
+                parametros = "(remitonro, fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono) VALUES" +
+                    "(" + remitonro + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precioStr + "," + subtotalStr + ",'" + direccion + "','" + telefono + "')";
+
+                zdb.InsertDB(archivoDB, tabla, parametros);
+            }
+
+        }
+        private void AsentarProcesoFactura()
+        {
+
+
+            /// 0) definir variables
+
+            /// 0.1) variables archivo
+            string archivoDB = "facturas.db";
+            string tabla = "facturas";
+            string parametros = "";
+
+            /// 0.2) variables venta
+            //int nro = zdb.valorMaxDB(archivoDB, tabla, "remitonro");
+            //long nro = facturaNro;
+            long nro = zfun.toLong(tbFacturaNro.Text);
+
+            //if (nro > -1)
+            //{
+            //    nro++;
+            //}
+            float fecha = 0;
+            long codigo = -1;
+            string descripcion = "";
+            long cantidad = 0;
+            float precio = 0;
+            string precioStr = "0";
+            float subtotal = 0;
+            string subtotalStr;
+            string direccion = "";
+            string telefono = "";
+            string cuit = "";
+
+
+            /// 1) cargar el primer registro con los datos del cliente
+
+            /// 1.1) Datos del primer registro: 'codigo'='zcliente', 'descripcion'=nombre del cliente, 'subtotal'= total de la factura.
+            fecha = 0;
+            codigo = -100;
+            descripcion = tbNombre.Text.Trim();
+            subtotal = toFloat(tbTotal.Text.Replace("$", ""));
+            subtotalStr = subtotal.ToString().Replace(",", ".");
+            direccion = tbDireccion.Text.Trim();
+            telefono = tbTelefono.Text.Trim();
+            cuit = tbCuit.Text.Trim();
+
+            /// 1.2) ejecutar comando SQL
+            //parametros = "(nombre, direccion, telefono, cuit) VALUES(?,?,?,?)";
+            parametros = "(facturanro, fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono, cuit) VALUES" +
+                "(" + nro + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precioStr + "," + subtotalStr + ",'" + direccion + "','" + telefono + "','" + cuit + "')";
+
+            zdb.InsertDB(archivoDB, tabla, parametros);
+
+
+            /// 2) el resto de los registros son los mismos de la listImpresion, pero compartiendo el nro de remito
+
+            /// 2.1) procesar cada articulo de la listImpresion
+            direccion = "";
+            telefono = "";
+            cuit = "";
+            //fecha = 0;
+            foreach (var itemventa in listImpresion.Items)
+            {
+                var item = itemventa as itemCaja;
+
+                ///setear variables:
+                codigo = 0;
+                descripcion = "";
+                cantidad = 0;
+                precio = 0;
+                subtotal = 0;
+
+                codigo = item.codigo;
+                descripcion = item.descripcion;
+                cantidad = item.cantidad;
+                //precio = item.precio;
+                precio = toFloat(item.precio.ToString());
+                precioStr = precio.ToString().Replace(",", ".");
+                subtotal = item.subtotal;
+                subtotalStr = subtotal.ToString().Replace(",", ".");
+
+                //consola("desc:" + item.descripcion.ToString());
+
+                ///comando sql para agregar el registro
+                parametros = "(facturanro, fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono, cuit) VALUES" +
+                    "(" + nro + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precioStr + "," + subtotalStr + ",'" + direccion + "','" + telefono + "','" + cuit + "')";
+
+                zdb.InsertDB(archivoDB, tabla, parametros);
+            }
+
+            ///grabar el nuevo nro de factura
+            zdb.grabarConfig("nroFactura", nro.ToString());
+        }
+        private void imprimir(string proceso)
+        {
+
+        }
 
         ///extensiones
         private void ayuda(string texto = "", string texto2 = "")
@@ -551,6 +845,8 @@ namespace SIV_Servidor
                                 //    item.Focus();
                                 //}
                                 //btnRemito.Focus();
+
+                                seleccionarVenta();
 
                                 /// si el boton tiene el style de selecionado, hace foco en el textbox tbNombre, sino en el boton mBotonSelected
                                 if (mBotones[mBotonSelected].Style == styleBotonSelected)
@@ -732,6 +1028,8 @@ namespace SIV_Servidor
             tbCuit.Visibility = Visibility.Hidden;
             btnImprimir.Content = "IMPRIMIR";
 
+            bool mostrarGridCliente = true;
+
             ///REMITO
             if (mBotones[mBotonSelected].Name == "btnRemito")
             {
@@ -751,6 +1049,12 @@ namespace SIV_Servidor
             ///FACTURA
             if (mBotones[mBotonSelected].Name == "btnFactura")
             {
+                ///consultar y aumentar el nro de factura (leer desde BD configuracion.db)
+                string ftemp = zdb.leerConfig("nroFactura");
+                long facturaNro = zfun.toLong(ftemp);
+                facturaNro++;
+                tbFacturaNro.Text = facturaNro.ToString();
+
                 labFacturaNro.Visibility = Visibility.Visible;
                 tbFacturaNro.Visibility = Visibility.Visible;
                 labCuit.Visibility = Visibility.Visible;
@@ -762,21 +1066,28 @@ namespace SIV_Servidor
             ///TARJETA
             if (mBotones[mBotonSelected].Name == "btnTarjeta")
             {
-                btnImprimir.Content = "GUARDAR";
+                //btnImprimir.Content = "GUARDAR";
 
                 btnImprimir.Tag = "tarjeta";
+
+                mostrarGridCliente = false;
             }
 
             ///LISTA DE CONTROL
             if (mBotones[mBotonSelected].Name == "btnListaDeControl")
             {
                 btnImprimir.Tag = "lista_de_control";
+                mostrarGridCliente = false;
             }
 
 
             ///mostrar grid datos del cliente
-            gridDatosDelCliente.Visibility = Visibility.Visible;
-            tbNombre.Focus();
+            if (mostrarGridCliente)
+            {
+                gridDatosDelCliente.Visibility = Visibility.Visible;
+                tbNombre.Focus();
+
+            }
 
         }
 
@@ -1059,47 +1370,52 @@ namespace SIV_Servidor
         {
             if (e.Key == Key.Enter)
             {
-                var list = sender as ListView;
-
-                var selected = list.SelectedItem;
-                var fila = selected as itemCaja;
-
-
-                //string codigopro = ((fila.codigo == "" || fila.codigo == null) ? "" : fila.codigo.ToString());
-                //string descripcion = fila.descripcion.ToString();
-                //string precio = fila.precio.ToString("0.00");
-
-                string fecha = fila.fecha.ToString();
-                string idVenta = fila.idventa.ToString();
-                string total = fila.totalmostrar.ToString();
-
-                tbFecha.Text = fecha;
-                tbIdVenta.Text = idVenta;
-                tbTotal.Text = total;
-
-                //tbCodigo.Text = codigopro;
-                //seEditoDescripcionDesdeElPrograma = true;
-                //tbDescripcion.Text = descripcion;
-                //tbPrecio.Text = precio;
-                //tbPrecio.Tag = precio;
-
-                //tbCantidad.Tag = fila.costo;
-
-                //tbCantidad.Focus();
-                //listFiltroClientes.Visibility = Visibility.Hidden;
-
-                //consola("Venta Nro:" + fila.idventa.ToString());
-                //MessageBox.Show("Crear campos (nombre, direccion, cuit, etc. Qu");
-
-                ///consultar mArticulosCaja para filtrar solo los que coinciden con ese nro idVenta
-                var listaVentaId = from registro in mArticulosCaja
-                                   where registro.idventa.Equals(Int32.Parse(idVenta))
-                                   select registro;
-                listImpresion.ItemsSource = listaVentaId;
-
-
-                tabCaja.SelectedIndex = 1;
+                seleccionarVenta();
             }
+        }
+        private void seleccionarVenta()
+        {
+            //var list = sender as ListView;
+            var list = listCaja;
+
+            var selected = list.SelectedItem;
+            var fila = selected as itemCaja;
+
+
+            //string codigopro = ((fila.codigo == "" || fila.codigo == null) ? "" : fila.codigo.ToString());
+            //string descripcion = fila.descripcion.ToString();
+            //string precio = fila.precio.ToString("0.00");
+
+            string fecha = fila.fecha.ToString();
+            string idVenta = fila.idventa.ToString();
+            string total = fila.totalmostrar.ToString();
+
+            tbFecha.Text = fecha;
+            tbIdVenta.Text = idVenta;
+            tbTotal.Text = total;
+
+            //tbCodigo.Text = codigopro;
+            //seEditoDescripcionDesdeElPrograma = true;
+            //tbDescripcion.Text = descripcion;
+            //tbPrecio.Text = precio;
+            //tbPrecio.Tag = precio;
+
+            //tbCantidad.Tag = fila.costo;
+
+            //tbCantidad.Focus();
+            //listFiltroClientes.Visibility = Visibility.Hidden;
+
+            //consola("Venta Nro:" + fila.idventa.ToString());
+            //MessageBox.Show("Crear campos (nombre, direccion, cuit, etc. Qu");
+
+            ///consultar mArticulosCaja para filtrar solo los que coinciden con ese nro idVenta
+            var listaVentaId = from registro in mArticulosCaja
+                               where registro.idventa.Equals(Int32.Parse(idVenta))
+                               select registro;
+            listImpresion.ItemsSource = listaVentaId;
+
+
+            tabCaja.SelectedIndex = 1;
         }
 
         private void listFiltroOcultar()
@@ -1178,206 +1494,6 @@ namespace SIV_Servidor
         {
             AsentarProceso();
             //e.Handled = true;
-
-        }
-        private void AsentarProceso()
-        {
-
-            ///si es un cliente nuevo, agregar a la BD
-            if (tbIdCliente.Text == "Nuevo")
-            {
-                ///definir variables y obtener valores de los textbox
-                string nombre = "";
-                string direccion = "";
-                string telefono = "";
-                string cuit = "";
-                nombre = tbNombre.Text.Trim();
-                direccion = tbDireccion.Text.Trim();
-                telefono = tbTelefono.Text.Trim();
-                cuit = tbCuit.Text.Trim();
-
-                ///crear itemVenta
-                itemCliente nuevoItem = new itemCliente
-                {
-                    nombre = nombre,
-                    direccion = direccion,
-                    telefono = telefono,
-                    cuit = cuit
-                };
-
-                ///agregar item a la tabla temporal
-                insertarItemClienteEnDB(nuevoItem);
-
-                ///agregar item a mTotalClientes
-                //mTotalClientes.Add(nuevoItem);
-                cargarListaDeClientes();
-
-
-            }
-
-            ///si no es un cliente nuevo, pero se modificaron los datos del cliente, actualizar BD
-
-            ///variables:
-            string archivoDB = "clientes.db";
-            string tabla = "clientes";
-
-            string index = tbIdCliente.Text.ToString();
-            string campo = "";
-            string valor = "";
-
-
-            //en textChanged, si el valor de los TB es diferente al tag, poner el fondo rosado
-            //acá evaluar si el fondo es rosado
-            //ir TB por TB, si es rosado, hacer un UPDATE de ese campo
-
-            ///si encuentra el item, ver si se hicieron modificaciones
-            if (mTotalClientes.Any((i => i.id.ToString() == index)))
-            {
-
-                var item = mTotalClientes.First(i => i.id.ToString() == index);
-                if (item != null)
-                {
-
-                    ///modificacion en telefono
-                    if (tbTelefono.Style == StyleTextboxModificar)
-                    {
-                        //consola("grabar modificación en teléfono");
-                        campo = "telefono";
-                        valor = tbTelefono.Text.ToString();
-                        zdb.modificarRegistroDB(archivoDB, tabla, index, campo, valor);
-                        item.telefono = valor;
-                    }
-
-                    ///modificacion en direccion
-                    if (tbDireccion.Style == StyleTextboxModificar)
-                    {
-                        //consola("grabar modificación en Dirección");
-                        campo = "direccion";
-                        valor = tbDireccion.Text.ToString();
-                        zdb.modificarRegistroDB(archivoDB, tabla, index, campo, valor);
-                        item.direccion = valor;
-                    }
-
-                    ///modificacion en cuit
-                    if (tbCuit.Style == StyleTextboxModificar && tbCuit.IsVisible == true)
-                    {
-                        //consola("grabar modificación en cuit");
-                        campo = "cuit";
-                        valor = tbCuit.Text.ToString();
-                        zdb.modificarRegistroDB(archivoDB, tabla, index, campo, valor);
-                        item.cuit = valor;
-                    }
-
-                }
-            }
-
-            ///comprobar proceso a realizar para guardar en BD del proceso
-            string proceso = btnImprimir.Tag.ToString();
-            //consola("PROCESO:" + proceso);
-
-            ///REMITO
-            if (proceso == "remito")
-            {
-                AsentarProcesoRemito();
-            }
-
-            ///FACTURA
-            if (proceso == "factura")
-            {
-                AsentarProcesoFactura();
-            }
-
-
-            ///Reset estado
-            resetTB();
-            tbNombre.Focus();
-            MostrarBotones();
-        }
-
-        private void AsentarProcesoRemito()
-        {
-            //consola("Asentar proceso REMITO");
-            /// 0) definir variables
-
-            /// 0.1) variables archivo
-            string archivoDB = "remitos.db";
-            string tabla = "remitos";
-            string parametros = "";
-
-            /// 0.2) variables venta
-            int remitonro = zdb.valorMaxDB(archivoDB, tabla, "remitonro");
-            if (remitonro > -1)
-            {
-                remitonro++;
-            }
-            float fecha = 0;
-            long codigo = -1;
-            string descripcion = "";
-            long cantidad = 0;
-            float precio = 0;
-            float subtotal = 0;
-            string direccion = "";
-            string telefono = "";
-
-
-            /// 1) cargar el primer registro con los datos del cliente
-
-            /// 1.1) Datos del primer registro: 'codigo'='zcliente', 'descripcion'=nombre del cliente, 'subtotal'= total de la factura.
-            fecha = 0;
-            codigo = -100;
-            descripcion = tbNombre.Text.Trim();
-            subtotal = toFloat(tbTotal.Text.Replace("$", ""));
-            direccion = tbDireccion.Text.Trim();
-            telefono = tbTelefono.Text.Trim();
-
-            /// 1.2) ejecutar comando SQL
-            //parametros = "(nombre, direccion, telefono, cuit) VALUES(?,?,?,?)";
-            parametros = "(remitonro, fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono) VALUES" +
-                "(" + remitonro + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precio + "," + subtotal + ",'" + direccion + "','" + telefono + "')";
-
-            zdb.InsertDB(archivoDB, tabla, parametros);
-
-
-            /// 2) el resto de los registros son los mismos de la listImpresion, pero compartiendo el nro de remito
-
-            /// 2.1) procesar cada articulo de la listImpresion
-            direccion = "";
-            telefono = "";
-            //fecha = 0;
-            foreach (var itemventa in listImpresion.Items)
-            {
-                var item = itemventa as itemCaja;
-
-                ///setear variables:
-                codigo = 0;
-                descripcion = "";
-                cantidad = 0;
-                precio = 0;
-                subtotal = 0;
-
-                codigo = item.codigo;
-                descripcion = item.descripcion;
-                cantidad = item.cantidad;
-                precio = item.precio;
-                subtotal = item.subtotal;
-
-                //consola("desc:" + item.descripcion.ToString());
-                
-                ///comando sql para agregar el registro
-                parametros = "(remitonro, fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono) VALUES" +
-                    "(" + remitonro + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precio + "," + subtotal + ",'" + direccion + "','" + telefono + "')";
-
-                zdb.InsertDB(archivoDB, tabla, parametros);
-            }
-
-        }
-        private void AsentarProcesoFactura()
-        {
-            consola("Asentar proceso factura");
-            ///obtener el nro de factura de la BD de configuracion, y NO de la ultima factura
-        }
-        private void imprimir(string proceso)
-        {
 
         }
     }

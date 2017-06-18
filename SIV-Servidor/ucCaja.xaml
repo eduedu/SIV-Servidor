@@ -129,8 +129,8 @@
                 <ColumnDefinition Width="22*"/>
                 <ColumnDefinition Width="3*"/>-->
             </Grid.ColumnDefinitions>
-            <ListView x:Name="listCaja"  Height="376" VerticalAlignment="Top" Width="940" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
-            BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" GotFocus="listCaja_GotFocus" Margin="10,25,0,0" KeyDown="listCaja_KeyDown"
+            <ListView x:Name="listCaja"  Height="407" VerticalAlignment="Top" Width="940" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
+            BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" GotFocus="listCaja_GotFocus" Margin="10,38,0,0" KeyDown="listCaja_KeyDown"
                   >
 
                 <ListView.Resources>
@@ -425,6 +425,7 @@
             <TextBox x:Name="tbIdVenta" Margin="627,0,0,0" TextWrapping="Wrap" Background="{DynamicResource colorfondo2}" ToolTip="filtro" VerticalContentAlignment="Center" Focusable="False" IsHitTestVisible="False" IsTabStop="False" Height="30" VerticalAlignment="Top" BorderBrush="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" Grid.Column="1" HorizontalAlignment="Left" Width="64" FontWeight="Bold" Text="tbIdVenta"/>
             <Label x:Name="label_Copy9" Content="Nro de Venta" HorizontalAlignment="Left" Margin="532,0,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5,5,5" Height="30" Width="95" HorizontalContentAlignment="Right" Grid.Column="1" VerticalContentAlignment="Center"/>
             <Rectangle Grid.ColumnSpan="2" Fill="{DynamicResource textoclaro}" HorizontalAlignment="Left" Height="4" Margin="984,261,0,0" Stroke="{DynamicResource textoclaro}" VerticalAlignment="Top" Width="936"/>
+            <Label x:Name="label_Copy6" Content="Seleccione una venta para imprimir FACTURA, REMITO o cargar como PENDIENTE" HorizontalAlignment="Left" Margin="10,12,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" FontWeight="Bold" Width="541"/>
 
             <!--<TextBox Text="{Binding gridXFrom}"  HorizontalAlignment="Left" Height="60" Margin="164,398,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="256"/>-->
         </Grid>

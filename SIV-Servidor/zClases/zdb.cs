@@ -99,6 +99,78 @@ namespace SIV_Servidor
 
         }
 
+        public static void grabarConfig(string parametro, string valor)
+        {
+            /// Trabaja con CONFIGURACION.DB; guarda "valor" en el registro cuyo campo parametro sea igual a "parametro"
+
+            ///definir variables
+            string archivoDB = "configuracion.db";
+            string tabla = "configuracion";
+            string campo = "valor";
+            string valorAnterior = "";
+            string comando = "";
+
+            ///comprobar si ya existia el campo
+            valorAnterior = leerConfig(parametro);
+            if (valorAnterior == "registroInexistente")
+            {
+                ///crear nuevo registro
+                string parametrosInsert = "(parametro, valor) VALUES ('" + parametro + "','" + valor + "')";
+                InsertDB(archivoDB, tabla, parametrosInsert);
+
+            }
+            else
+            {
+                ///modificar el valor del registro
+                comando = "UPDATE  " + tabla + " SET " + campo + "='" + valor + "' WHERE parametro='" + parametro + "'";
+                ejecutarComandoSql(archivoDB, comando);
+
+            }
+
+        }
+
+        public static string leerConfig(string parametro)
+        {
+            /// Trabaja con CONFIGURACION.DB: Devuelve el valor del parametro guardado con anterioridad. Si no existe, devuelve la cadena "registroInexistente".
+
+            ///definir parametros y variables
+            string valor = "registroInexistente";
+            string archivoDB = "configuracion.db";
+            string tabla = "configuracion";
+
+            ///abrir conexion DB
+            SQLiteConnection conexion;
+            conexion = new SQLiteConnection("Data Source=" + archivoDB + ";Version=3;New=False;Compress=True;");
+            conexion.Open();
+
+            ///realizar CONSULTA
+            //string consulta = "select *, MAX(id) from articulos";
+            //string consulta = "select MAX(" + campo + ") from " + tabla;
+            string consulta = "SELECT * FROM " + tabla + " WHERE parametro='" + parametro + "'";
+
+            /// Adaptador de datos, DataSet y tabla
+            SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
+            DataSet dataSet = new DataSet();
+            DataTable dataTable = new DataTable();
+            dataSet.Reset();
+            db.Fill(dataSet);
+            dataTable = dataSet.Tables[0];
+
+            ///cierro base de datos
+            conexion.Close();
+
+            ///// retornar valor maximo de idventa (error=-1)
+            //int resultado = -1;
+            //Int32.TryParse(dataTable.Rows[0].ItemArray.GetValue(0).ToString(), out resultado);
+
+            if (dataTable.Rows.Count > 0)
+            {
+                valor = dataTable.Rows[0].ItemArray.GetValue(2).ToString();
+            }
+
+            return valor;
+        }
+
         public static void InsertDB(string archivoDB, string tabla, string parametrosInsert)
         {
             ///parametros
@@ -114,7 +186,7 @@ namespace SIV_Servidor
             //insertSQL = new SQLiteCommand("INSERT INTO " + tabla + " (nombre, direccion, telefono, cuit) VALUES (?,?,?,?)", conexion);
             insertSQL = new SQLiteCommand("INSERT INTO " + tabla + " " + parametrosInsert, conexion);
 
-            
+
             ///ejecutar comando SQL
             try
             {

@@ -128,21 +128,28 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="funciones.cs" />
+    <Compile Include="ucConsultas.xaml.cs">
+      <DependentUpon>ucConsultas.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="zClases\funciones.cs" />
     <Compile Include="ucCaja.xaml.cs">
       <DependentUpon>ucCaja.xaml</DependentUpon>
     </Compile>
     <Compile Include="ucVentas.xaml.cs">
       <DependentUpon>ucVentas.xaml</DependentUpon>
     </Compile>
-    <Compile Include="zAyuda.cs" />
-    <Compile Include="zdb.cs" />
-    <Compile Include="zClases.cs" />
+    <Compile Include="zClases\zAyuda.cs" />
+    <Compile Include="zClases\zdb.cs" />
+    <Compile Include="zClases\zClases.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ucCaja.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ucConsultas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -152,7 +159,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MiOSC.cs" />
+    <Compile Include="zClases\MiOSC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -214,6 +221,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="imagenes\cerrar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="zControles\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.105.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.105.0\build\net451\System.Data.SQLite.Core.targets')" />

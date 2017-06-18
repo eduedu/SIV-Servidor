@@ -126,7 +126,7 @@
                 </TabItem.Header>
                 <Grid />
             </TabItem>
-            
+
             <!--<Path Data="" Stretch="Fill"/>
             <Path Data="" Stretch="Fill"/>
             <Expander Header="Expander" Height="79.5" Width="209.295">
@@ -135,7 +135,7 @@
         </TabControl>
         <Label x:Name="labelAyuda" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{x:Null}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="460" BorderBrush="{DynamicResource infocable}" Padding="5,0" Margin="60,0,0,0"/>
         <Label x:Name="label_Copy10" Content="Ayuda" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="{DynamicResource textoclaro}" Background="{DynamicResource colorfondo}" FontWeight="Bold" Height="35" Width="60" HorizontalContentAlignment="Center" BorderBrush="{DynamicResource colorfondo}" Padding="5,0,5,5"/>
-        <Grid x:Name="gridMain" Background="{DynamicResource colorfondo}" Margin="0,50,-996,35" Cursor="" RenderTransformOrigin="0.5,0.5">
+        <Grid x:Name="gridMain" Background="{DynamicResource colorfondo}" Margin="0,50,-2214,35" Cursor="" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Stretch" Width="Auto">
             <Grid.RenderTransform>
                 <TransformGroup>
 
@@ -145,6 +145,7 @@
                     <TranslateTransform/>
                 </TransformGroup>
             </Grid.RenderTransform>
+            <local:ucConsultas x:Name="ucConsultas" Margin="2000,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
             <local:ucCaja x:Name="ucCaja" Margin="1000,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
             <local:ucVentas x:Name="ucVentas" Margin="0,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
         </Grid>
