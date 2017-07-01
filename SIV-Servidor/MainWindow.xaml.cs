@@ -69,6 +69,7 @@ namespace SIV_Servidor
         public static Storyboard statSbAyuda;
         public static ucCaja statUcCaja;
         public static ucVentas statUcVentas;
+        public static ucConsultas statUcConsultas;
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -85,7 +86,7 @@ namespace SIV_Servidor
             statUcCaja = ucCaja;
             statUcVentas = ucVentas;
             statUcVentas.tbDescripcion.Focus();
-
+            statUcConsultas = ucConsultas;
             //CargarDBCaja();
         }
 
