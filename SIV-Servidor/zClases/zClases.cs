@@ -41,7 +41,8 @@ namespace SIV_Servidor
         public int idventa { get; set; }
         public string idventamostrar { get; set; }
         public int color { get; set; }
-        public float fecha { get; set; }
+        public string fecha { get; set; }
+        public string fechaMostrar { get; set; }
         public long codigo { get; set; }
         public string descripcion { get; set; }
 
@@ -76,7 +77,7 @@ namespace SIV_Servidor
         /// carga los datos con codigo=-100, total=campo "subtotal" 
         public long id { get; set; }
         public long nro { get; set; }
-        public float fecha { get; set; }
+        public string fecha { get; set; }
         public string nombre { get; set; }
         public string direccion { get; set; }
         public string telefono { get; set; }
@@ -90,7 +91,7 @@ namespace SIV_Servidor
         /// carga los datos con codigo=-100, total=campo "subtotal" 
         public long id { get; set; }
         public long nro { get; set; }
-        //public float fecha { get; set; }
+        public string fecha { get; set; }
         //public string nombre { get; set; }
         //public string direccion { get; set; }
         //public string telefono { get; set; }

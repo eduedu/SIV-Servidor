@@ -132,11 +132,11 @@
       <DependentUpon>ucConsultas.xaml</DependentUpon>
     </Compile>
     <Compile Include="zClases\funciones.cs" />
-    <Compile Include="ucCaja.xaml.cs">
-      <DependentUpon>ucCaja.xaml</DependentUpon>
+    <Compile Include="ucImpresiones.xaml.cs">
+      <DependentUpon>ucImpresiones.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ucVentas.xaml.cs">
-      <DependentUpon>ucVentas.xaml</DependentUpon>
+    <Compile Include="ucInicio.xaml.cs">
+      <DependentUpon>ucInicio.xaml</DependentUpon>
     </Compile>
     <Compile Include="zClases\zAyuda.cs" />
     <Compile Include="zClases\zdb.cs" />
@@ -145,7 +145,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ucCaja.xaml">
+    <Page Include="ucImpresiones.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -153,7 +153,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ucVentas.xaml">
+    <Page Include="ucInicio.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -23,7 +23,7 @@ using System.Collections.ObjectModel;
 namespace SIV_Servidor
 {
 
-    public partial class ucVentas : UserControl
+    public partial class ucInicio : UserControl
     {
         ///Variables Globales
         public ObservableCollection<itemArticulo>
@@ -48,7 +48,7 @@ namespace SIV_Servidor
 
 
         /// MAIN
-        public ucVentas()
+        public ucInicio()
         {
             InitializeComponent();
 
@@ -398,7 +398,9 @@ namespace SIV_Servidor
             else
             {
                 ///asentar en tabla "caja", con IDVENTA
-                insertSQL = new SQLiteCommand("INSERT INTO " + tabla + " (idventa, fecha, codigo, descripcion, cantidad, precio, costo) VALUES (?,DATETIME('NOW'),?,?,?,?,?)", conexion);
+                //string fecha = "DATETIME('NOW')";
+                string fecha = zfun.getFechaNow();
+                insertSQL = new SQLiteCommand("INSERT INTO " + tabla + " (idventa, fecha, codigo, descripcion, cantidad, precio, costo) VALUES (?," + fecha + ",?,?,?,?,?)", conexion);
                 insertSQL.Parameters.AddWithValue("idventa", idMax.ToString());
             }
 
@@ -475,7 +477,7 @@ namespace SIV_Servidor
                     insertarItemVentaEnDB(item, "caja", idVentaMax);
                 }
 
-                ucCaja.ActualiarCajaDesdeDB();
+                ucImpresiones.ActualiarCajaDesdeDB();
 
                 ///resetear list y recalcular valores
                 resetListVenta();

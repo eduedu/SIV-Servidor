@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SIV_Servidor.ucCaja"
+﻿<UserControl x:Class="SIV_Servidor.ucImpresiones"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -180,7 +180,7 @@
                         <GridViewColumn Header="Nro Venta" Width="70"   DisplayMemberBinding="{Binding idventamostrar}"  />
                         <GridViewColumn Header="idventa" Width="0"   DisplayMemberBinding="{Binding idventa}"   />
                         <GridViewColumn Header="color" Width="0"   DisplayMemberBinding="{Binding color}"   />
-                        <GridViewColumn Header="Fecha" Width="90"   DisplayMemberBinding="{Binding fecha}"  />
+                        <GridViewColumn Header="Fecha" Width="95"   DisplayMemberBinding="{Binding fechaMostrar}"  />
                         <GridViewColumn Header="Código" Width="100"   DisplayMemberBinding="{Binding codigo}"  />
                         <GridViewColumn Header="Descripción" Width="350" DisplayMemberBinding="{Binding descripcion}"  />
                         <GridViewColumn Header="Cant." Width="50"   >
@@ -390,14 +390,14 @@
                         <GridViewColumn Header="Precio" Width="70"   >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding precio, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />
+                                    <TextBlock Text="{Binding precio, StringFormat=$ \{0:F\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn Header="Sub-total" Width="90"   >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding subtotal, StringFormat=$ \{0:c\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"    />
+                                    <TextBlock Text="{Binding subtotal, StringFormat=$ \{0:F\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"    />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

@@ -44,10 +44,7 @@ namespace SIV_Servidor
             sbListDetalles = this.FindResource("sbListDetalles") as Storyboard;
 
             ///INICIO Y ASIGNACIONES
-            labNombre.Content = "";
-            labTotal.Content = "$ ";
-            labId.Content = "";
-
+            resetTextos();
             listConsultas.ItemsSource = mItemsConsulta;
             listDetalles.ItemsSource = mItemsDetalle;
             ActualizarListConsultasDesdeDB();
@@ -55,8 +52,22 @@ namespace SIV_Servidor
 
         ///--------------------------------------------------------------------------------------------------------
 
+        ///FUNCIONES VARIAS
+        private void resetTextos()
+        {
+            labId.Content = "";
+            labFecha.Content = "";
+            labNombre.Content = "";
+            labDireccion.Content = "";
+            labTelefono.Content = "";
+            labCuit.Content = "";
+
+            labTotal.Content = "$ 0,00";
+        }
+
+
         ///FUNCIONES BD
-        private void ActualizarListConsultasDesdeDB()
+        public void ActualizarListConsultasDesdeDB()
         {
             ///definicion de parametros 
             string archivo = "";
@@ -66,24 +77,33 @@ namespace SIV_Servidor
             ///asignacion de valores segun el tipo de consulta (mTipoDeConsulta) seleccionado
 
             //mTipoDeConsulta = "remitos";
+            string consulta = "";
+            //consulta = "select * from " + tabla + " ORDER BY id DESC";
 
             if (mTipoDeConsulta == "pendientes")
             {
                 archivo = "pendientes.db";
                 tabla = "pendientes";
                 campoNro = "pendientenro";
+                consulta = "select id, pendientenro, datetime(fecha), codigo, descripcion, cantidad, precio, subtotal, direccion, telefono from "
+                    + tabla + " ORDER BY id DESC";
             }
             if (mTipoDeConsulta == "remitos")
             {
                 archivo = "remitos.db";
                 tabla = "remitos";
                 campoNro = "remitonro";
+                consulta = "select id, remitonro, datetime(fecha), codigo, descripcion, cantidad, precio, subtotal, direccion, telefono from "
+                    + tabla + " ORDER BY id DESC";
+
             }
             if (mTipoDeConsulta == "facturas")
             {
                 archivo = "facturas.db";
                 tabla = "facturas";
                 campoNro = "facturanro";
+                consulta = "select id, facturanro, datetime(fecha), codigo, descripcion, cantidad, precio, subtotal, direccion, telefono, cuit from "
+                    + tabla + " ORDER BY id DESC";
             }
 
 
@@ -92,7 +112,6 @@ namespace SIV_Servidor
             conexion = new SQLiteConnection("Data Source=" + archivo + ";Version=3;New=False;Compress=True;");
             conexion.Open();
 
-            string consulta = "select * from " + tabla + " ORDER BY id DESC";
 
             /// Adaptador de datos, DataSet y tabla
             SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
@@ -123,13 +142,13 @@ namespace SIV_Servidor
                     itemListConsultas tempItem = new itemListConsultas();
 
                     tempItem.nro = zfun.toLong(registro[campoNro].ToString());
-                    tempItem.fecha = zfun.toLong(registro["fecha"].ToString());
+                    tempItem.fecha = zfun.toFechaMostrar(registro[2].ToString());
                     tempItem.nombre = registro["descripcion"].ToString();
                     tempItem.direccion = registro["direccion"].ToString();
                     tempItem.telefono = registro["telefono"].ToString();
-                    if (mTipoDeConsulta == "factura")
+                    if (mTipoDeConsulta == "facturas")
                     {
-                        tempItem.cuit = registro["descripcion"].ToString();
+                        tempItem.cuit = registro["cuit"].ToString();
                     }
                     else
                     {
@@ -172,7 +191,7 @@ namespace SIV_Servidor
             string tabla = "";
             string campoNro = "";
             string id = labId.Content.ToString().Trim();
-
+            string consulta = "";
 
             ///Si la ID no está vacia, buscar los registros con esa ID
             if (id != "")
@@ -183,19 +202,28 @@ namespace SIV_Servidor
                     archivo = "pendientes.db";
                     tabla = "pendientes";
                     campoNro = "pendientenro";
+                    consulta = "select id, pendientenro, datetime(fecha), codigo, descripcion, cantidad, precio, subtotal, direccion, telefono from "
+                        + tabla + " WHERE " + campoNro + " = " + id + " ORDER BY id DESC";
                 }
                 if (mTipoDeConsulta == "remitos")
                 {
                     archivo = "remitos.db";
                     tabla = "remitos";
                     campoNro = "remitonro";
+                    consulta = "select id, remitonro, datetime(fecha), codigo, descripcion, cantidad, precio, subtotal, direccion, telefono from "
+                        + tabla + " WHERE " + campoNro + " = " + id + " ORDER BY id DESC";
+
                 }
                 if (mTipoDeConsulta == "facturas")
                 {
                     archivo = "facturas.db";
                     tabla = "facturas";
                     campoNro = "facturanro";
+                    consulta = "select id, facturanro, datetime(fecha), codigo, descripcion, cantidad, precio, subtotal, direccion, telefono, cuit from "
+                        + tabla + " WHERE " + campoNro + " = " + id + " ORDER BY id DESC";
+
                 }
+                //string consulta = "select * from " + tabla + " WHERE " + campoNro + " = " + id + " ORDER BY id DESC";
 
 
                 ///establecer conexion SQL
@@ -203,7 +231,6 @@ namespace SIV_Servidor
                 conexion = new SQLiteConnection("Data Source=" + archivo + ";Version=3;New=False;Compress=True;");
                 conexion.Open();
 
-                string consulta = "select * from " + tabla + " WHERE " + campoNro + " = " + id + " ORDER BY id DESC";
 
                 /// Adaptador de datos, DataSet y tabla
                 SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
@@ -234,11 +261,12 @@ namespace SIV_Servidor
                         itemListDetalles tempItem = new itemListDetalles();
 
                         tempItem.nro = zfun.toLong(registro[campoNro].ToString());
+                        tempItem.fecha = zfun.toFechaMostrar(registro[2].ToString());
                         tempItem.codigo = zfun.toLong(registro["codigo"].ToString());
-                        tempItem.descripcion= registro["descripcion"].ToString();
-                        tempItem.cantidad = zfun.toLong( registro["cantidad"].ToString());
-                        tempItem.precio = zfun.toFloat( registro["precio"].ToString());
-                        tempItem.subtotal= zfun.toFloat(registro["subtotal"].ToString());
+                        tempItem.descripcion = registro["descripcion"].ToString();
+                        tempItem.cantidad = zfun.toLong(registro["cantidad"].ToString());
+                        tempItem.precio = zfun.toFloat(registro["precio"].ToString());
+                        tempItem.subtotal = zfun.toFloat(registro["subtotal"].ToString());
 
                         mItemsDetalle.Add(tempItem);
 
@@ -277,22 +305,72 @@ namespace SIV_Servidor
                 if (selected == 0)
                 {
                     mTipoDeConsulta = "pendientes";
+                    labIdTexto.Content = "Nro de Pendiente";
                 }
                 if (selected == 1)
                 {
                     mTipoDeConsulta = "remitos";
+                    labIdTexto.Content = "Nro de Remito";
                 }
                 if (selected == 2)
                 {
                     mTipoDeConsulta = "facturas";
+                    labIdTexto.Content = "Nro de Factura";
                 }
 
                 ///animacion
-                sbListConsultas.Begin();
+                //sbListConsultas.Begin();
+
+                ///color textblock de las pestañas en tabConsultas
+                tbTabCajaItem0.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
+                if (selected == 0)
+                {
+                    tbTabCajaItem0.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
+                }
+
+                tbTabCajaItem1.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
+                if (selected == 1)
+                {
+                    tbTabCajaItem1.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
+                }
+
+                tbTabCajaItem2.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
+                if (selected == 2)
+                {
+                    tbTabCajaItem2.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
+                }
 
                 ///actualizar datos a mostrar
                 ActualizarListConsultasDesdeDB();
+
             }
+            ///foco en el listConsultas
+            if (listConsultas.SelectedIndex == -1)
+            {
+                listConsultas.SelectedIndex = 0;
+            }
+
+            //listConsultas.SelectedIndex = 0;
+            //var item = listConsultas.ItemContainerGenerator.ContainerFromIndex(listConsultas.SelectedIndex) as ListViewItem;
+
+            listConsultas.UpdateLayout();
+            var ind = listConsultas.SelectedIndex;
+            if (ind >= 0)
+            {
+                listConsultas.ScrollIntoView(listConsultas.Items[ind]);
+            }
+            var item = (ListViewItem)listConsultas.ItemContainerGenerator.ContainerFromIndex(ind);
+
+            consola("hola " + listConsultas.SelectedIndex);
+            if (item != null)
+            {
+                item.Focus();
+                consola("chau: " + item.ToString());
+            }
+            //listConsultas.Focus();
+
+
+
         }
 
         private void listConsultas_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -307,18 +385,40 @@ namespace SIV_Servidor
             if (selected >= 0)
             {
                 var item = list.SelectedItem as itemListConsultas;
-                labNombre.Content = item.nombre;
-                labTotal.Content = "$ " + item.total.ToString("#.##");
                 labId.Content = item.nro;
+                labFecha.Content = item.fecha.Substring(0, 8);
+                labNombre.Content = item.nombre;
+                labDireccion.Content = item.direccion;
+                labTelefono.Content = item.telefono;
+                labCuit.Content = item.cuit;
+
+                labTotal.Content = "$ " + item.total.ToString("0.00");
 
                 ActualizarListDetallesDesdeDB();
             }
             else
             {
-                labNombre.Content = "";
-                labTotal.Content = "$ ";
+                resetTextos();
 
             }
+        }
+
+        ///extensiones
+        private void ayuda(string texto = "", string texto2 = "")
+        {
+            MainWindow.ayuda2(texto, texto2);
+        }
+        private float toFloat(string cadena)
+        {
+            return zfun.toFloat(cadena);
+        }
+        private bool esDecimal(Key key)
+        {
+            return zfun.esDecimal(key);
+        }
+        private void consola(string texto)
+        {
+            zfun.consola(texto);
         }
     }
 }

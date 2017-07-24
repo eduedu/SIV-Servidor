@@ -67,8 +67,8 @@ namespace SIV_Servidor
         public static Label statAyuda1;
         public static Label statAyuda2;
         public static Storyboard statSbAyuda;
-        public static ucCaja statUcCaja;
-        public static ucVentas statUcVentas;
+        public static ucImpresiones statucImpresiones;
+        public static ucInicio statucInicio;
         public static ucConsultas statUcConsultas;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -83,9 +83,9 @@ namespace SIV_Servidor
             statAyuda1 = labelAyuda;
             statAyuda2 = labelAyuda2;
             statSbAyuda = sbAyuda;
-            statUcCaja = ucCaja;
-            statUcVentas = ucVentas;
-            statUcVentas.tbDescripcion.Focus();
+            statucImpresiones = ucImpresiones;
+            statucInicio = ucInicio;
+            statucInicio.tbDescripcion.Focus();
             statUcConsultas = ucConsultas;
             //CargarDBCaja();
         }
@@ -255,9 +255,9 @@ namespace SIV_Servidor
             //if (e.Key == Key.Escape)
             //{
             //    tabMain.SelectedIndex = 0;
-            //    statUcVentas.resetTb();
+            //    statucInicio.resetTb();
             //    //tbBuscar.Focus();
-            //    ucVentas.tbDescripcion.Focus();
+            //    ucInicio.tbDescripcion.Focus();
             //}
             if (e.Key == Key.F1)
             {
@@ -302,23 +302,23 @@ namespace SIV_Servidor
             }
             if (e.Key == Key.D1 && Keyboard.Modifiers == System.Windows.Input.ModifierKeys.Control)
             {
-                ucVentas.tabVentas.SelectedIndex = 0;
+                ucInicio.tabVentas.SelectedIndex = 0;
             }
             if (e.Key == Key.D2 && Keyboard.Modifiers == System.Windows.Input.ModifierKeys.Control)
             {
-                ucVentas.tabVentas.SelectedIndex = 1;
+                ucInicio.tabVentas.SelectedIndex = 1;
             }
             if (e.Key == Key.D3 && Keyboard.Modifiers == System.Windows.Input.ModifierKeys.Control)
             {
-                ucVentas.tabVentas.SelectedIndex = 2;
+                ucInicio.tabVentas.SelectedIndex = 2;
             }
             if (e.Key == Key.D4 && Keyboard.Modifiers == System.Windows.Input.ModifierKeys.Control)
             {
-                ucVentas.tabVentas.SelectedIndex = 3;
+                ucInicio.tabVentas.SelectedIndex = 3;
             }
             if (e.Key == Key.D5 && Keyboard.Modifiers == System.Windows.Input.ModifierKeys.Control)
             {
-                ucVentas.tabVentas.SelectedIndex = 4;
+                ucInicio.tabVentas.SelectedIndex = 4;
             }
 
         }
@@ -359,25 +359,25 @@ namespace SIV_Servidor
                     if (selected == 0)
                     {
                         ///FOCO en tbDescripcion
-                        ucVentas.tbDescripcion.Focus();
+                        ucInicio.tbDescripcion.Focus();
                     }
                     ///pestana CAJA
                     if (selected == 1)
                     {
                         //FOCO en listCaja
-                        //int tempSeleccion = ucCaja.tabCaja.SelectedIndex;
-                        //ucCaja.tabCaja.SelectedIndex = -1;
-                        //ucCaja.tabCaja.SelectedIndex = tempSeleccion;
+                        //int tempSeleccion = ucImpresiones.tabCaja.SelectedIndex;
+                        //ucImpresiones.tabCaja.SelectedIndex = -1;
+                        //ucImpresiones.tabCaja.SelectedIndex = tempSeleccion;
 
                         /// FOCO en listCaja
-                        if (ucCaja.mPestanaCaja == 0)
+                        if (ucImpresiones.mPestanaCaja == 0)
                         {
-                            if (ucCaja.listCaja.SelectedIndex == -1)
+                            if (ucImpresiones.listCaja.SelectedIndex == -1)
                             {
-                                ucCaja.listCaja.SelectedIndex = 0;
+                                ucImpresiones.listCaja.SelectedIndex = 0;
                             }
 
-                            var item = ucCaja.listCaja.ItemContainerGenerator.ContainerFromIndex(ucCaja.listCaja.SelectedIndex) as ListBoxItem;
+                            var item = ucImpresiones.listCaja.ItemContainerGenerator.ContainerFromIndex(ucImpresiones.listCaja.SelectedIndex) as ListBoxItem;
                             if (item != null)
                             {
                                 item.Focus();
@@ -390,13 +390,13 @@ namespace SIV_Servidor
 
                             /// si el boton tiene el style de selecionado, hace foco en el textbox tbNombre, sino en el boton mBotonSelected
 
-                            if (ucCaja.mBotones[ucCaja.mBotonSelected].Style == ucCaja.styleBotonSelected)
+                            if (ucImpresiones.mBotones[ucImpresiones.mBotonSelected].Style == ucImpresiones.styleBotonSelected)
                             {
-                                ucCaja.tbNombre.Focus();
+                                ucImpresiones.tbNombre.Focus();
                             }
                             else
                             {
-                                ucCaja.mBotones[ucCaja.mBotonSelected].Focus();
+                                ucImpresiones.mBotones[ucImpresiones.mBotonSelected].Focus();
                             }
                         }
                     }

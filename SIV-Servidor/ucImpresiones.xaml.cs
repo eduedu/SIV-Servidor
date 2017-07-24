@@ -17,10 +17,11 @@ using System.Data;
 using System.Data.SQLite;
 using System.Collections.ObjectModel;
 using System.Windows.Media.Animation;
+using System.Globalization;
 
 namespace SIV_Servidor
 {
-    public partial class ucCaja : UserControl
+    public partial class ucImpresiones : UserControl
     {
         ///Globales 
         public static ObservableCollection<itemCaja> mArticulosCaja =
@@ -63,8 +64,11 @@ namespace SIV_Servidor
         Style styleBoton = Application.Current.FindResource("BotonMenu") as Style;
         public static Style styleBotonSelected = Application.Current.FindResource("BotonMenuSelected") as Style;
 
+
+
+
         ///MAIN
-        public ucCaja()
+        public ucImpresiones()
         {
             InitializeComponent();
 
@@ -130,8 +134,8 @@ namespace SIV_Servidor
             conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
             conexion.Open();
 
-            string consulta = "select * from caja ORDER BY id DESC";
-            //string consulta = "select * from caja";
+            //string consulta = "select * from caja ORDER BY id DESC";
+            string consulta = "select id, idventa, datetime(fecha), codigo, descripcion, cantidad, precio, costo from caja ORDER BY id DESC";
 
             /// Adaptador de datos, DataSet y tabla
             SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
@@ -207,6 +211,11 @@ namespace SIV_Servidor
                 //tempArticulo.costo = zfun.toFloat( registro["costo"].ToString());
                 //tempArticulo.subtotal =zfun.toFloat(tmpSubtotal.ToString("0.00"));
 
+                ///formato fecha
+                tempArticulo.fecha = registro[2].ToString();
+                tempArticulo.fechaMostrar = zfun.toFechaMostrar(registro[2].ToString());
+
+
                 tempArticulo.totalmostrar = "";
                 if (dataTable.Rows.Count != index + 1)
                 {
@@ -237,7 +246,8 @@ namespace SIV_Servidor
         private void cargarListaDeClientes()
         {
             SQLiteConnection conexion;
-            conexion = new SQLiteConnection("Data Source=clientes.db;Version=3;New=False;Compress=True;");
+            //conexion = new SQLiteConnection("Data Source=clientes.db;Version=3;New=False;Compress=True;");
+            conexion = new SQLiteConnection("Data Source=pendientes.db;Version=3;New=False;Compress=True;");
             conexion.Open();
 
             string consulta = "select * from clientes";
@@ -300,7 +310,8 @@ namespace SIV_Servidor
         private void insertarItemClienteEnDB(itemCliente item)
         {
             ///parametros
-            string archivo = "clientes.db";
+            //string archivo = "clientes.db";
+            string archivo = "pendientes.db";
             string tabla = "clientes";
             //int idMax = -1;
 
@@ -501,7 +512,8 @@ namespace SIV_Servidor
             ///si no es un cliente nuevo, pero se modificaron los datos del cliente, actualizar BD
 
             ///variables:
-            string archivoDB = "clientes.db";
+            //string archivoDB = "|123456";
+            string archivoDB = "pendientes.db";
             string tabla = "clientes";
 
             string index = tbIdCliente.Text.ToString();
@@ -569,10 +581,11 @@ namespace SIV_Servidor
             {
                 AsentarProcesoFactura();
             }
-            
-            
+
+
 
             ///Reset estado
+            MainWindow.statUcConsultas.ActualizarListConsultasDesdeDB();
             resetTB();
             tbNombre.Focus();
             MostrarBotones();
@@ -594,7 +607,7 @@ namespace SIV_Servidor
             {
                 remitonro++;
             }
-            float fecha = 0;
+            string fecha = "";
             long codigo = -1;
             string descripcion = "";
             long cantidad = 0;
@@ -609,7 +622,8 @@ namespace SIV_Servidor
             /// 1) cargar el primer registro con los datos del cliente
 
             /// 1.1) Datos del primer registro: 'codigo'='zcliente', 'descripcion'=nombre del cliente, 'subtotal'= total de la factura.
-            fecha = 0;
+            //fecha = "DATETIME('NOW')";
+            fecha = zfun.getFechaNow();
             codigo = -100;
             descripcion = tbNombre.Text.Trim();
             subtotal = toFloat(tbTotal.Text.Replace("$", ""));
@@ -619,6 +633,8 @@ namespace SIV_Servidor
 
             /// 1.2) ejecutar comando SQL
             //parametros = "(nombre, direccion, telefono, cuit) VALUES(?,?,?,?)";
+            //parametros = "(remitonro, fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono) VALUES" +
+            //    "(" + remitonro + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precioStr + "," + subtotalStr + ",'" + direccion + "','" + telefono + "')";
             parametros = "(remitonro, fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono) VALUES" +
                 "(" + remitonro + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precioStr + "," + subtotalStr + ",'" + direccion + "','" + telefono + "')";
 
@@ -645,13 +661,12 @@ namespace SIV_Servidor
                 codigo = item.codigo;
                 descripcion = item.descripcion;
                 cantidad = item.cantidad;
-                //precio = item.precio;
                 precio = toFloat(item.precio.ToString());
                 precioStr = precio.ToString().Replace(",", ".");
                 subtotal = item.subtotal;
                 subtotalStr = subtotal.ToString().Replace(",", ".");
+                fecha = "DATETIME('" + item.fecha + "')";
 
-                //consola("desc:" + item.descripcion.ToString());
 
                 ///comando sql para agregar el registro
                 parametros = "(remitonro, fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono) VALUES" +
@@ -681,7 +696,7 @@ namespace SIV_Servidor
             //{
             //    nro++;
             //}
-            float fecha = 0;
+            string fecha = "";
             long codigo = -1;
             string descripcion = "";
             long cantidad = 0;
@@ -697,7 +712,7 @@ namespace SIV_Servidor
             /// 1) cargar el primer registro con los datos del cliente
 
             /// 1.1) Datos del primer registro: 'codigo'='zcliente', 'descripcion'=nombre del cliente, 'subtotal'= total de la factura.
-            fecha = 0;
+            fecha = zfun.getFechaNow();
             codigo = -100;
             descripcion = tbNombre.Text.Trim();
             subtotal = toFloat(tbTotal.Text.Replace("$", ""));
@@ -740,6 +755,7 @@ namespace SIV_Servidor
                 precioStr = precio.ToString().Replace(",", ".");
                 subtotal = item.subtotal;
                 subtotalStr = subtotal.ToString().Replace(",", ".");
+                fecha = "DATETIME('" + item.fecha + "')";
 
                 //consola("desc:" + item.descripcion.ToString());
 
@@ -835,11 +851,11 @@ namespace SIV_Servidor
                             if (selected == 1)
                             {
                                 ///FOCO en botones
-                                //if (ucCaja.listCaja.SelectedIndex == -1)
+                                //if (ucImpresiones.listCaja.SelectedIndex == -1)
                                 //{
-                                //    ucCaja.listCaja.SelectedIndex = 0;
+                                //    ucImpresiones.listCaja.SelectedIndex = 0;
                                 //}
-                                //var item = ucCaja.listCaja.ItemContainerGenerator.ContainerFromIndex(ucCaja.listCaja.SelectedIndex) as ListBoxItem;
+                                //var item = ucImpresiones.listCaja.ItemContainerGenerator.ContainerFromIndex(ucImpresiones.listCaja.SelectedIndex) as ListBoxItem;
                                 //if (item != null)
                                 //{
                                 //    item.Focus();
@@ -868,17 +884,17 @@ namespace SIV_Servidor
                     ///Index Pestana CAJA seleecionada
                     mPestanaCaja = selected;
 
-                    ///color textblock de las pestañas en tabMain
-                    //tbTabCajaItem0.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
-                    //tbTabCajaItem1.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
-                    //if (selected == 0)
-                    //{
-                    //    tbTabCajaItem0.Foreground = App.Current.Resources["infocable3"] as SolidColorBrush;
-                    //}
-                    //if (selected == 1)
-                    //{
-                    //    tbTabCajaItem1.Foreground = App.Current.Resources["infocable3"] as SolidColorBrush;
-                    //}
+                }
+                ///color textblock de las pestañas en tabCaja
+                tbTabCajaItem0.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
+                if (selected == 0)
+                {
+                    tbTabCajaItem0.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
+                }
+                tbTabCajaItem1.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
+                if (selected == 1)
+                {
+                    tbTabCajaItem1.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
                 }
             }
             e.Handled = true;
@@ -1372,6 +1388,7 @@ namespace SIV_Servidor
             {
                 seleccionarVenta();
             }
+
         }
         private void seleccionarVenta()
         {
@@ -1386,13 +1403,28 @@ namespace SIV_Servidor
             //string descripcion = fila.descripcion.ToString();
             //string precio = fila.precio.ToString("0.00");
 
-            string fecha = fila.fecha.ToString();
+            string fecha = fila.fechaMostrar;
             string idVenta = fila.idventa.ToString();
-            string total = fila.totalmostrar.ToString();
+
+            ///calcular total
+            string idven = fila.idventa.ToString();
+
+            var filasFiltradas = from registro in mArticulosCaja
+                                 where registro.idventa.ToString().Equals(idven)
+                                 select registro;
+            float sumador = 0;
+            foreach (itemCaja item in filasFiltradas)
+            {
+                sumador += item.subtotal;
+            }
+            //consola(fila.idventa.ToString() + ":" + sumador.ToString());
+            //string total = fila.totalmostrar.ToString();
+            string total = sumador.ToString("0.00");
+
 
             tbFecha.Text = fecha;
             tbIdVenta.Text = idVenta;
-            tbTotal.Text = total;
+            tbTotal.Text = "$ " + total;
 
             //tbCodigo.Text = codigopro;
             //seEditoDescripcionDesdeElPrograma = true;
@@ -1496,5 +1528,6 @@ namespace SIV_Servidor
             //e.Handled = true;
 
         }
+
     }
 }

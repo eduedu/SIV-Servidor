@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -68,6 +69,27 @@ namespace SIV_Servidor
             resultado = cadena.Replace(",", ".");
             //consola(cadena);
             //consola(resultado);
+            return resultado;
+        }
+        public static string toFechaMostrar(string registro)
+        {
+            DateTime fecha = DateTime.ParseExact(registro, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+            string resultado = fecha.ToString("dd/MM/yy HH:mm");
+
+            return resultado;
+        }
+        
+        public static string getFechaNow()
+        {
+            //DateTime fecha = DateTime.ParseExact(registro, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+            //string resultado = fecha.ToString("dd/MM/yy HH:mm");
+            DateTime nowGMT = DateTime.Now;
+            TimeSpan menos3horas = new TimeSpan(0, 0, 0, 0);
+            DateTime nowMenos3horas = nowGMT.Subtract(menos3horas);
+            //DateTime fecha = DateTime.ParseExact(registro, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+            string now = nowMenos3horas.ToString("yyyy-MM-dd HH:mm:ss");
+
+            string resultado="DATETIME('"+ now + "')";
             return resultado;
         }
     }
