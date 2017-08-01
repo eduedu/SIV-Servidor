@@ -12,6 +12,7 @@
         <!--COLORES-->
         <SolidColorBrush x:Key="confoco"   Color="#FFFFF572"/>
         <SolidColorBrush x:Key="confoco2"   Color="#FFA2E87C"/>
+        <!--<SolidColorBrush x:Key="confoco2"   Color="#FF0092CC"/>-->
         <SolidColorBrush x:Key="infocable" Color="#FFA2E87C"/>
         <SolidColorBrush x:Key="infocable2" Color="#FF88FFDE"/>
         <SolidColorBrush x:Key="infocable3" Color="#FFFF90B7"/>
@@ -20,11 +21,16 @@
         <SolidColorBrush x:Key="sinfoco" Color="#FFd0d0e0"/>
         <SolidColorBrush x:Key="colorfondo" Color="#FF202027"/>
         <SolidColorBrush x:Key="colorfondo2" Color="#FF303039"/>
-        <SolidColorBrush x:Key="colorfondo3" Color="#FF404051"/>
+        <SolidColorBrush x:Key="colorfondo3" Color="#FF404047"/>
         <SolidColorBrush x:Key="boton" Color="#FFf0f0f0"/>
         <SolidColorBrush x:Key="detalles" Color="#FF707080"/>
         <SolidColorBrush x:Key="textoclaro" Color="#FFd0d0e0"/>
         <SolidColorBrush x:Key="textoobscuro" Color="#FF222222"/>
+        
+        <SolidColorBrush x:Key="celeste" Color="#FF0092CC"/>
+        <SolidColorBrush x:Key="azul" Color="#FF087099"/>
+        <SolidColorBrush x:Key="rojo" Color="#FF222222"/>
+        <SolidColorBrush x:Key="bordo" Color="#FF222222"/>
 
 
         <SolidColorBrush x:Key="ListBorder" Color="#828790"/>
@@ -174,6 +180,47 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
 
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--  BOTONESSSSS  -->
+        
+        <!--Estilo botones en MENU OPCIONES-->
+        <Style TargetType="Button" x:Key="BotonOpciones" >
+            <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
+            <!--<Setter Property="Background" Value="{StaticResource colorfondo2}" />-->
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template" >
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Name="border" 
+                            BorderThickness="0"
+                            Padding="20, 8" 
+                            BorderBrush="DarkGray" 
+                            CornerRadius="0" 
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand" />
+                                <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
+                                <Setter Property="Background" Value="{StaticResource azul}" />
+                            </Trigger>
+                            <Trigger Property="Button.IsFocused" Value="True">
+                                <Setter Property="Cursor" Value="Hand" />
+                                <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
+                                <Setter Property="Background" Value="{StaticResource celeste}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+        </Style>
+
         <!--Estilo botones MENU-->
         <Style TargetType="Button" x:Key="BotonMenu" >
             <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
@@ -207,6 +254,7 @@
             </Setter>
             <Setter Property="SnapsToDevicePixels" Value="True" />
         </Style>
+        
 
         <!--Estilo BOTON MENU SELECTED-->
         <Style TargetType="Button" x:Key="BotonMenuSelected" >
@@ -307,13 +355,54 @@
             </Style.Triggers>
         </Style>
 
+        <Style TargetType="TextBox" x:Key="StyleTextboxUpperConPlaceholder" >
+
+            <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+            <Setter Property="Background" Value="{StaticResource sinfoco}" />
+            <!--
+            <Style.Triggers>
+            </Style.Triggers>
+            -->
+
+
+            <Style.Resources>
+                <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                    <VisualBrush.Visual>
+                        <!--<Label Content="MM:SS:HH AM/PM" Foreground="LightGray" />-->
+                        <Label Content="(Filtrar)" Foreground="LightGray" />
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Style.Resources>
+            <Style.Triggers>
+                <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                    <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                </Trigger>
+                <Trigger Property="Text" Value="{x:Null}">
+                    <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                </Trigger>
+                <Trigger Property="IsKeyboardFocused" Value="True">
+                    <Setter Property="Background" Value="White" />
+                </Trigger>
+                <Trigger Property="IsFocused" Value="true">
+                    <Setter Property="Background" Value="{StaticResource confoco}" />
+                </Trigger>
+                <DataTrigger Binding="{Binding Text.Length, RelativeSource={RelativeSource Self}}" Value="0">
+                    <Setter Property="CharacterCasing" Value="Upper"/>
+                </DataTrigger>
+            </Style.Triggers>
+            <!--<Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                </Style>-->
+
+        </Style>
+
         <Style TargetType="TextBox" x:Key="StyleTBNoEditable" >
             <Setter Property="Background" Value="{StaticResource colorfondo}" />
             <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
             <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="HorizontalContentAlignment" Value="Right" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="Focusable" Value="False" />
             <Setter Property="IsTabStop" Value="False" />
             <Setter Property="IsHitTestVisible" Value="False" />
@@ -357,12 +446,306 @@
             <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="Focusable" Value="False" />
             <Setter Property="IsTabStop" Value="False" />
             <Setter Property="IsHitTestVisible" Value="False" />
         </Style>
 
 
+        <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!-- CONTROL 'EXPANDER' PERSONALIZADO -->
+        <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        
+        
+        <!-- Animated Expander Button's Template-->
+        <ControlTemplate x:Key="AnimatedExpanderButtonTemp" TargetType="{x:Type ToggleButton}">
+            <Border x:Name="ExpanderButtonBorder"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Padding="{TemplateBinding Padding}"
+                    >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter x:Name="HeaderContent"
+                                      Grid.Column="0"
+                                      Margin="4,0,8,0"
+                                      ContentSource="Content"/>
+                    <Rectangle Fill="Transparent"
+                               Grid.ColumnSpan="2"/>
+                    <Ellipse Name="Circle"
+                         Grid.Column="1"
+                         Stroke="{DynamicResource textoclaro}"
+                         Width="20"
+                         Height="20"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         />
+                    <Path x:Name="Arrow"
+                      Grid.Column="1"
+                      Data="M 1,1.5 L 4.5,5 8,1.5"
+                      Stroke="{DynamicResource textoclaro}"
+                      StrokeThickness="2"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      RenderTransformOrigin="0.5,0.5"
+                      >
+                        <Path.RenderTransform>
+                            <RotateTransform Angle="0"/>
+                        </Path.RenderTransform>
+                    </Path>
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <!-- Animate arrow when toggled-->
+                <Trigger Property="IsChecked"
+                         Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="Arrow"
+                                                 Storyboard.TargetProperty="(Path.RenderTransform).(RotateTransform.Angle)"
+                                                 To="180"
+                                                 Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="Arrow"
+                                                 Storyboard.TargetProperty="(Path.RenderTransform).(RotateTransform.Angle)"
+                                                 To="0"
+                                                 Duration="0:0:0.15"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+
+                <!-- MouseOver, Pressed behaviours-->
+                <!--<Trigger Property="IsMouseOver"
+                                 Value="true">
+                    <Setter Property="Stroke"
+                                    Value="{DynamicResource azul}"
+                                    TargetName="Circle"/>
+                    <Setter Property="Stroke"
+                                    Value="{DynamicResource azul}"
+                                    TargetName="Arrow"/>
+                </Trigger>-->
+                <Trigger Property="IsPressed"
+                                 Value="true">
+                    <!--<Setter Property="Stroke"
+                                    Value="{DynamicResource celeste}"
+                                    TargetName="Circle"/>
+                    <Setter Property="Stroke"
+                                    Value="{DynamicResource celeste}"
+                                    TargetName="Arrow"/>
+                    <Setter Property="StrokeThickness"
+                                    Value="1.5"
+                                    TargetName="Circle"/>-->
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <!-- Stretch Out Content Expander's Template,
+        Uses: AnimatedExpanderButtonTemp from above-->
+        <!--
+        <ControlTemplate x:Key="StretchyExpanderTemp" TargetType="{x:Type Expander}">
+            <DockPanel>
+                <ToggleButton x:Name="ExpanderButton" 
+                              DockPanel.Dock="Top"
+                              Template="{StaticResource AnimatedExpanderButtonTemp}"
+                              Content="{TemplateBinding Header}"
+                              IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                              OverridesDefaultStyle="True"
+                              Padding="11.5,0">
+                </ToggleButton>
+                <ContentPresenter x:Name="ExpanderContent"
+                                  ContentSource="Content"
+                                  DockPanel.Dock="Bottom"
+                                  >
+                    <ContentPresenter.LayoutTransform>
+                        <ScaleTransform ScaleY="0"/>
+                    </ContentPresenter.LayoutTransform>
+                </ContentPresenter>
+            </DockPanel>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsExpanded" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="ExpanderContent"
+                                                 Storyboard.TargetProperty="(ContentPresenter.LayoutTransform).(ScaleTransform.ScaleY)"                                                 
+                                                 To="1"
+                                                 Duration="0:0:0.4"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="ExpanderContent"
+                                                 Storyboard.TargetProperty="(ContentPresenter.LayoutTransform).(ScaleTransform.ScaleY)"
+                                                 To="0"
+                                                 Duration="0:0:0.4"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        -->
+
+        <!-- Slide Out Content Expander's Template, 
+        Uses: AnimatedExpanderButtonTemp from above, 
+              MultiplyConverter in codebehind-->
+        <local:MultiplyConverter x:Key="multiplyConverter" />
+        <ControlTemplate x:Key="RevealExpanderTemp" TargetType="{x:Type Expander}">
+            <DockPanel>
+                <ToggleButton x:Name="ExpanderButton" 
+                              DockPanel.Dock="Top"
+                              Background="{DynamicResource colorfondo2}"
+                              Template="{StaticResource AnimatedExpanderButtonTemp}"
+                              Content="{TemplateBinding Header}"
+                              IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                              OverridesDefaultStyle="True"
+                              HorizontalContentAlignment="Right"
+                              HorizontalAlignment="Right"
+                              Cursor="Hand"
+                              Padding="10,0">
+                </ToggleButton>
+                <ScrollViewer x:Name="ExpanderContentScrollView" 
+                              HorizontalScrollBarVisibility="Hidden"
+                              VerticalScrollBarVisibility="Hidden"
+                              HorizontalContentAlignment="Center"
+                              VerticalContentAlignment="Bottom"
+                              Background="{DynamicResource colorfondo2}"
+                              Padding="0"
+                              BorderBrush="Aqua"
+                              BorderThickness="20"
+                              >
+                    <ScrollViewer.Tag>
+                        <sys:Double>0.0</sys:Double>
+                    </ScrollViewer.Tag>
+                    <ScrollViewer.Height>
+                        <MultiBinding Converter="{StaticResource multiplyConverter}">
+                            <Binding Path="ActualHeight" ElementName="ExpanderContent"/>
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                        </MultiBinding>
+                    </ScrollViewer.Height>
+                    <ContentPresenter x:Name="ExpanderContent" ContentSource="Content"/>
+                </ScrollViewer>
+            </DockPanel>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsExpanded" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="ExpanderContentScrollView"
+                                                 Storyboard.TargetProperty="Tag"                                                 
+                                                 To="1"
+                                                 Duration="0:0:0.3"/>
+
+                            </Storyboard>
+                            
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="ExpanderContentScrollView"
+                                                 Storyboard.TargetProperty="Tag"                                                 
+                                                 To="0"
+                                                 Duration="0:0:0.15"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        
+        
+        <!-- expander CORTINA NEGRA cortinaNegra-->
+        <ControlTemplate x:Key="cortinaNegra" TargetType="{x:Type Button}" >
+            <Grid x:Name="cortina" Background="Black" ></Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsVisible" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <!--<DoubleAnimation Storyboard.TargetName="cortina"
+                                                 Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                 To="0.5"
+                                                 Duration="0:0:1.3"/>-->
+                                <DoubleAnimationUsingKeyFrames 
+                                    Storyboard.TargetProperty="(UIElement.Opacity)" 
+                                    Storyboard.TargetName="cortina">
+                                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.4"/>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="cortina"
+                                                 Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                 To="0.1"
+                                                 Duration="0:0:1.3"/>
+                                <!--<DoubleAnimationUsingKeyFrames 
+                                    Storyboard.TargetProperty="(UIElement.Opacity)" 
+                                    Storyboard.TargetName="cortina">
+                                    <EasingDoubleKeyFrame KeyTime="0" Value="0.7"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                                </DoubleAnimationUsingKeyFrames>-->
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+                <!--<Trigger Property="IsVisible" Value="False">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                --><!--<DoubleAnimation Storyboard.TargetName="cortina"
+                                                 Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                 To="0.5"
+                                                 Duration="0:0:1.3"/>--><!--
+                                <DoubleAnimationUsingKeyFrames 
+                                    Storyboard.TargetProperty="(UIElement.Opacity)" 
+                                    Storyboard.TargetName="cortina">
+                                    --><!--<EasingDoubleKeyFrame KeyTime="0" Value="0.6"/>--><!--
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.0"/>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                </Trigger>-->
+                <!--<Trigger Property="Visibility" Value="Hidden">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="cortina"
+                                                 Storyboard.TargetProperty="(UIElement.Opacity)"                        
+                                                 To="0"
+                                                 Duration="0:0:0.15"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                </Trigger>-->
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
     </Application.Resources>
 </Application>

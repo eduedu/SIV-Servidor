@@ -28,10 +28,14 @@ namespace SIV_Servidor
         public static ObservableCollection<itemListDetalles> mItemsDetalle =
             new ObservableCollection<itemListDetalles>();   //Lista los items en listDetalles
 
+        public static bool actualizarListConsultas = true;
 
         public string mTipoDeConsulta = "pendientes";
         Storyboard sbListConsultas;
         Storyboard sbListDetalles;
+
+        ///animacion
+        Storyboard sbMyInputBox_Show;
 
 
         ///MAIN
@@ -43,10 +47,24 @@ namespace SIV_Servidor
             sbListConsultas = this.FindResource("sbListConsultas") as Storyboard;
             sbListDetalles = this.FindResource("sbListDetalles") as Storyboard;
 
+            ///myInputBox
+            sbMyInputBox_Show = this.FindResource("sbMyInputBox_Show") as Storyboard;
+            sbMyInputBox_Show.Completed += (s, o) =>
+            {
+                myInputBox.Visibility = Visibility.Visible;
+                myInputBox_Texto.Focus();
+            };
+
             ///INICIO Y ASIGNACIONES
             resetTextos();
             listConsultas.ItemsSource = mItemsConsulta;
             listDetalles.ItemsSource = mItemsDetalle;
+
+            //listPendientes.ItemsSource = mItemsConsulta;
+            listNombres.ItemsSource = mItemsConsulta;
+
+
+            gridPendientes.Margin = new Thickness(gridRemitosyfacturas.Margin.Left, gridRemitosyfacturas.Margin.Top, 0, 0);
             ActualizarListConsultasDesdeDB();
         }
 
@@ -63,8 +81,29 @@ namespace SIV_Servidor
             labCuit.Content = "";
 
             labTotal.Content = "$ 0,00";
-        }
 
+            mItemsDetalle.Clear();
+
+            habilitarBotones(false);
+        }
+        private void habilitarBotones(bool habilitar)
+        {
+            if (habilitar)
+            {
+                //btnImprimir.Opacity = 1.0;
+                //btnImprimir.IsEnabled = true;
+                btnPagar.Opacity = 1.0;
+                btnPagar.IsEnabled = true;
+            }
+            else
+            {
+                btnImprimir.Opacity = 0.3;
+                btnImprimir.IsEnabled = false;
+                btnPagar.Opacity = 0.3;
+                btnPagar.IsEnabled = false;
+
+            }
+        }
 
         ///FUNCIONES BD
         public void ActualizarListConsultasDesdeDB()
@@ -146,6 +185,8 @@ namespace SIV_Servidor
                     tempItem.nombre = registro["descripcion"].ToString();
                     tempItem.direccion = registro["direccion"].ToString();
                     tempItem.telefono = registro["telefono"].ToString();
+
+                    ///si es consulta 'facturas'
                     if (mTipoDeConsulta == "facturas")
                     {
                         tempItem.cuit = registro["cuit"].ToString();
@@ -154,6 +195,23 @@ namespace SIV_Servidor
                     {
                         tempItem.cuit = "";
                     }
+
+                    ///si es consulta 'pendientes'
+                    if (mTipoDeConsulta == "pendientes")
+                    {
+                        ///calcular el saldo consultando en la base de datos los pendientes con el mismo numero
+                        object tmpSaldo;
+                        tmpSaldo = dataTable.Compute("Sum(subtotal)", "pendientenro = " + tempItem.nro.ToString() + " AND codigo<>-100");
+                        tempItem.saldo = zfun.toFloat(tmpSaldo.ToString());
+
+                        //tempItem.saldo = zfun.toFloat(registro["subtotal"].ToString());
+                    }
+                    else
+                    {
+                        tempItem.saldo = 0;
+                    }
+
+
                     tempItem.total = zfun.toFloat(registro["subtotal"].ToString());
 
 
@@ -170,18 +228,27 @@ namespace SIV_Servidor
             ///cerrar conexion
             conexion.Close();
 
-            ///seleccionar el primer item (o ninguno) de listConsultas
-            if (mItemsConsulta.Count > 0)
+            ///si es un pendiente, dar el foco al filtro, sino a la lista consulta
+            if (mTipoDeConsulta == "pendientes")
             {
-                listConsultas.SelectedIndex = 0;
+                tbFiltrar.Focus();
             }
             else
             {
-                listConsultas.SelectedIndex = -1;
+                ///seleccionar el primer item (o ninguno) de listConsultas
+                if (mItemsConsulta.Count > 0)
+                {
+                    listConsultas.SelectedIndex = 0;
+                }
+                else
+                {
+                    listConsultas.SelectedIndex = -1;
 
+                }
             }
 
             ActualizarListDetallesDesdeDB();
+            //actualizarListConsultas = false;
 
         }
         private void ActualizarListDetallesDesdeDB()
@@ -268,6 +335,11 @@ namespace SIV_Servidor
                         tempItem.precio = zfun.toFloat(registro["precio"].ToString());
                         tempItem.subtotal = zfun.toFloat(registro["subtotal"].ToString());
 
+                        ///color
+                        tempItem.color = 0;
+                        if (codigo == -99)
+                            tempItem.color = 1;
+
                         mItemsDetalle.Add(tempItem);
 
                     }
@@ -292,6 +364,28 @@ namespace SIV_Servidor
 
                 }
             }
+            //else
+            //{
+            //    resetTextos();
+            //}
+        }
+
+        ///extensiones
+        private void ayuda(string texto = "", string texto2 = "")
+        {
+            MainWindow.ayuda2(texto, texto2);
+        }
+        private float toFloat(string cadena)
+        {
+            return zfun.toFloat(cadena);
+        }
+        private bool esDecimal(Key key)
+        {
+            return zfun.esDecimal(key);
+        }
+        private void consola(string texto)
+        {
+            zfun.consola(texto);
         }
 
         /// CONTROLES
@@ -306,16 +400,22 @@ namespace SIV_Servidor
                 {
                     mTipoDeConsulta = "pendientes";
                     labIdTexto.Content = "Nro de Pendiente";
+                    gridPendientes.Visibility = Visibility.Visible;
+                    gridRemitosyfacturas.Visibility = Visibility.Hidden;
                 }
                 if (selected == 1)
                 {
                     mTipoDeConsulta = "remitos";
                     labIdTexto.Content = "Nro de Remito";
+                    gridPendientes.Visibility = Visibility.Hidden;
+                    gridRemitosyfacturas.Visibility = Visibility.Visible;
                 }
                 if (selected == 2)
                 {
                     mTipoDeConsulta = "facturas";
                     labIdTexto.Content = "Nro de Factura";
+                    gridPendientes.Visibility = Visibility.Hidden;
+                    gridRemitosyfacturas.Visibility = Visibility.Visible;
                 }
 
                 ///animacion
@@ -341,40 +441,59 @@ namespace SIV_Servidor
                 }
 
                 ///actualizar datos a mostrar
+                //if (mTipoDeConsulta == "facturas" || mTipoDeConsulta == "remitos")
+                //{
                 ActualizarListConsultasDesdeDB();
+                //}
 
             }
-            ///foco en el listConsultas
-            if (listConsultas.SelectedIndex == -1)
+            /// si es factura o remito, foco en listConsultas. Sino, en el tbFiltrar
+            if (mTipoDeConsulta == "facturas" || mTipoDeConsulta == "remitos")
             {
-                listConsultas.SelectedIndex = 0;
+                ///foco en el listConsultas
+                if (listConsultas.SelectedIndex == -1)
+                {
+                    listConsultas.SelectedIndex = 0;
+                }
+
+                //listConsultas.SelectedIndex = 0;
+                //var item = listConsultas.ItemContainerGenerator.ContainerFromIndex(listConsultas.SelectedIndex) as ListViewItem;
+
+                listConsultas.UpdateLayout();
+                var ind = listConsultas.SelectedIndex;
+                if (ind >= 0)
+                {
+                    listConsultas.ScrollIntoView(listConsultas.Items[ind]);
+                }
+                var item = (ListViewItem)listConsultas.ItemContainerGenerator.ContainerFromIndex(ind);
+
+                //consola("hola " + listConsultas.SelectedIndex);
+                if (item != null)
+                {
+                    item.Focus();
+                    //consola("chau: " + item.ToString());
+                }
+                //listConsultas.Focus();
             }
 
-            //listConsultas.SelectedIndex = 0;
-            //var item = listConsultas.ItemContainerGenerator.ContainerFromIndex(listConsultas.SelectedIndex) as ListViewItem;
-
-            listConsultas.UpdateLayout();
-            var ind = listConsultas.SelectedIndex;
-            if (ind >= 0)
+            if (mTipoDeConsulta == "pendientes")
             {
-                listConsultas.ScrollIntoView(listConsultas.Items[ind]);
+                resetTextos();
+                tbFiltrar.Focus();
             }
-            var item = (ListViewItem)listConsultas.ItemContainerGenerator.ContainerFromIndex(ind);
-
-            consola("hola " + listConsultas.SelectedIndex);
-            if (item != null)
-            {
-                item.Focus();
-                consola("chau: " + item.ToString());
-            }
-            //listConsultas.Focus();
-
-
 
         }
 
-        private void listConsultas_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void listConsultasYlistPendientes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            //if (mTipoDeConsulta == "pendientes")
+            //{
+            //    resetTextos();
+            //}
+            //if (mTipoDeConsulta == "facturas" || mTipoDeConsulta == "remitos")
+            //{
+            //}
+
             ///animacion
             sbListDetalles.Begin();
 
@@ -395,6 +514,12 @@ namespace SIV_Servidor
                 labTotal.Content = "$ " + item.total.ToString("0.00");
 
                 ActualizarListDetallesDesdeDB();
+
+                if (mTipoDeConsulta == "pendientes")
+                {
+                    ///habilitar botones de imprimir y de pagar
+                    habilitarBotones(true);
+                }
             }
             else
             {
@@ -402,23 +527,336 @@ namespace SIV_Servidor
 
             }
         }
+        private void listNombres_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (mTipoDeConsulta == "pendientes")
+            {
+                var list = listNombres;
 
-        ///extensiones
-        private void ayuda(string texto = "", string texto2 = "")
-        {
-            MainWindow.ayuda2(texto, texto2);
+                if (list.SelectedIndex > -1)
+                {
+                    var selected = list.SelectedItem;
+                    var fila = selected as itemListConsultas;
+
+                    //var textBox = sender as TextBox;
+                    //string filtro = textBox.Text.Trim();
+                    string filtro = fila.nombre.ToString();
+
+                    var pendientesFiltrados = from registro in mItemsConsulta
+                                              where registro.nombre.ToLower().Equals(filtro.ToLower())
+                                              orderby registro.nombre
+                                              select registro;
+
+                    listPendientes.ItemsSource = pendientesFiltrados;
+                }
+                else
+                {
+                    listPendientes.ItemsSource = null;
+                }
+            }
         }
-        private float toFloat(string cadena)
+        private void listNombres_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            return zfun.toFloat(cadena);
+            if (e.Key == Key.Enter || e.Key == Key.Return)
+            {
+
+                if (listPendientes.Items.Count > 0)
+                {
+                    //listPendientes.Focus();
+                    //listPendientes.SelectedIndex = 0;
+                    var ind = 0;
+                    var item = (ListViewItem)listPendientes.ItemContainerGenerator.ContainerFromIndex(ind);
+                    if (item != null)
+                    {
+                        item.Focus();
+                        listPendientes.SelectedIndex = ind;
+                    }
+                }
+                e.Handled = true;
+            }
+            if (e.Key == Key.Escape)
+            {
+                listNombres.SelectedIndex = -1;
+                tbFiltrar.Text = "";
+                tbFiltrar.Focus();
+            }
         }
-        private bool esDecimal(Key key)
+        private void listPendientes_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            return zfun.esDecimal(key);
+            if (e.Key == Key.Enter || e.Key == Key.Return)
+            {
+                if (listPendientes.SelectedIndex > -1)
+                {
+                    btnPagar.Focus();
+                    e.Handled = true;
+                }
+            }
+            if (e.Key == Key.Escape)
+            {
+                if (listNombres.Items.Count > 0)
+                {
+                    //listNombres.UpdateLayout();
+                    var ind = listNombres.SelectedIndex;
+                    //var ind = 0;
+                    if (ind >= 0)
+                    {
+                        listNombres.ScrollIntoView(listConsultas.Items[ind]);
+                    }
+                    var item = (ListViewItem)listNombres.ItemContainerGenerator.ContainerFromIndex(ind);
+                    //consola("hola " + listConsultas.SelectedIndex);
+                    if (item != null)
+                    {
+                        item.Focus();
+                        listNombres.SelectedIndex = ind;
+                        //consola("chau: " + item.ToString());
+                    }
+                }
+            }
         }
-        private void consola(string texto)
+
+        private void tbFiltrar_TextChanged(object sender, TextChangedEventArgs e)
         {
-            zfun.consola(texto);
+            if (mTipoDeConsulta == "pendientes")
+            {
+                var textBox = sender as TextBox;
+                string filtro = textBox.Text.Trim();
+                if (filtro == "(Filtrar)")
+                    filtro = "";
+
+                if (filtro != "")
+                {
+                    var nombresFiltrados = from registro in mItemsConsulta
+                                           where registro.nombre.ToLower().Contains(filtro.ToLower())
+                                           orderby registro.nombre
+                                           select registro;
+
+                    listNombres.ItemsSource = nombresFiltrados;
+                }
+                else
+                {
+                    listNombres.ItemsSource = mItemsConsulta;
+                }
+            }
+        }
+        private void tbFiltrar_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter || e.Key == Key.Return || e.Key == Key.Down)
+            {
+                if (listNombres.Items.Count > 0)
+                {
+                    //listNombres.UpdateLayout();
+                    //var ind = listNombres.SelectedIndex;
+                    var ind = 0;
+                    //if (ind >= 0)
+                    //{
+                    //    listNombres.ScrollIntoView(listConsultas.Items[ind]);
+                    //}
+                    var item = (ListViewItem)listNombres.ItemContainerGenerator.ContainerFromIndex(ind);
+                    //consola("hola " + listConsultas.SelectedIndex);
+                    if (item != null)
+                    {
+                        item.Focus();
+                        listNombres.SelectedIndex = ind;
+                        //consola("chau: " + item.ToString());
+                    }
+                }
+                e.Handled = true;
+            }
+        }
+
+        private void btnPagar_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter || e.Key == Key.Return)
+            {
+                pagarPendiente();
+                e.Handled = true;
+            }
+            if (e.Key == Key.Escape)
+            {
+                listPendientes.Focus();
+            }
+        }
+        private void btnPagar_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            pagarPendiente();
+            e.Handled = true;
+        }
+        private void pagarPendiente()
+        {
+            myInputBoxShow(true, "Importe: ($)", "pagarPendiente");
+        }
+
+        private void cargarImporteAPendiente(string importe)
+        {
+            bool error = false;
+            string nro = labId.Content.ToString().Trim();
+            string nombre = labNombre.Content.ToString();
+
+            importe = importe.ToString().Replace(".", ",");
+            float fImporte = zfun.toFloat(importe);
+
+            ///si el nroPendiente no esta vacio, asentar en BD
+            if (nro != "")
+            {
+                /// 1.1) Datos registro: 'codigo'='-99', 'descripcion'='Pago', 'subtotal'= importe del pago.
+                string archivoDB = "pendientes.db";
+                string tabla = "pendientes";
+                string nombreCampoNro = "pendientenro";
+                string parametros = "";
+
+                long nroProceso = zfun.toLong(nro);
+                string fecha = zfun.getFechaNow();
+                long codigo = -99;
+                string descripcion = "Pago";
+                long cantidad = 1;
+                float precio = fImporte * -1;
+                string precioStr = precio.ToString().Replace(",", ".");
+                float subtotal = precio;
+                string subtotalStr = precioStr;
+
+                string direccion = "";
+                string telefono = "";
+
+                /// 1.2) ejecutar comando SQL
+                parametros = "(" + nombreCampoNro + ", fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono) VALUES" +
+                    "(" + nroProceso + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precioStr + "," + subtotalStr + ",'" + direccion + "','" + telefono + "')";
+                zdb.InsertDB(archivoDB, tabla, parametros);
+
+                ///actualizar modelo de datos
+                ActualizarListConsultasDesdeDB();
+            }
+            else
+            {
+                error = true;
+            }
+
+            ///error
+            if (error)
+            {
+                ///mensaje error
+                MessageBox.Show("Posiblemente se deba a que la cuenta no fue correctamente seleccionada.", "Error al intentar asentar el pago", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                ///mensaje todo OK
+                string mensaje = "Se acreditó $ " + fImporte.ToString("0.00") +
+                    " a la cuenta de \n" + nombre + ".\n(Nro de Pendiente: " + nro + ")";
+                MessageBox.Show(mensaje, "Pendientes", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
+        }
+
+        /// Input Box (myInputBox)
+        public void myInputBoxShow(bool mostrar, string titulo = "", string operacion = "")
+        {
+            if (mostrar)
+            {
+                myInputBox_Titulo.Text = titulo;
+                myInputBox_Titulo.Tag = operacion.ToString();
+                myInputBox.Visibility = Visibility.Visible;
+                sbMyInputBox_Show.Begin();
+                //myInputBox_Texto.Focus();
+
+            }
+            else
+            {
+                myInputBox_Texto.Text = "";
+                myInputBox_Titulo.Text = "";
+                operacion = myInputBox_Titulo.Tag.ToString();
+                ///darle el foco a cierto objeto, dependiendo de la operacion
+                if (operacion== "pagarPendiente")
+                {
+                    btnPagar.Focus();
+                }
+                myInputBox.Visibility = Visibility.Collapsed;
+                myInputBox_Titulo.Tag = "";
+            }
+        }
+        private void myInputBox_Ok_Click(object sender, RoutedEventArgs e)
+        {
+            string operacion = "";
+            if (myInputBox_Titulo.Tag != null)
+                operacion = myInputBox_Titulo.Tag.ToString();
+
+            ///operacion 'cargarImporte'
+            if (operacion == "pagarPendiente")
+            {
+                cargarImporteAPendiente(myInputBox_Texto.Text);
+            }
+
+            myInputBoxShow(false);
+        }
+        private void myInputBox_Cancelar_Click(object sender, RoutedEventArgs e)
+        {
+            myInputBoxShow(false);
+            e.Handled = true;
+        }
+        private void myInputBox_Botones_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Left || e.Key == Key.Right)
+            {
+                var boton = sender as Button;
+                string nombre = boton.Name;
+                if (nombre == myInputBox_Ok.Name)
+                {
+                    myInputBox_Cancelar.Focus();
+                }
+                else
+                {
+                    myInputBox_Ok.Focus();
+                }
+                e.Handled = true;
+            }
+            if (e.Key == Key.Up)
+            {
+                myInputBox_Texto.Focus();
+                e.Handled = true;
+            }
+            if (e.Key == Key.Down)
+            {
+                e.Handled = true;
+            }
+
+
+        }
+        private void myInputBox_Texto_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter || e.Key == Key.Return)
+            {
+                ///si no esta vacio, ir al boton OK
+                if (myInputBox_Texto.Text != "")
+                {
+                    myInputBox_Ok.Focus();
+                }
+                e.Handled = true;
+            }
+            if (e.Key == Key.Escape)
+            {
+                myInputBoxShow(false);
+                e.Handled = true;
+            }
+        }
+
+        /// gotFocus (MOSTRAR AYUDA)
+        private void tbFiltrar_GotFocus(object sender, RoutedEventArgs e)
+        {
+            MainWindow.ayuda2(zAyuda.consultas_tbFiltrar);
+        }
+        private void listConsultas_GotFocus(object sender, RoutedEventArgs e)
+        {
+            MainWindow.ayuda2();
+        }
+        private void listNombres_GotFocus(object sender, RoutedEventArgs e)
+        {
+            MainWindow.ayuda2(zAyuda.consultas_listNombres);
+        }
+        private void listPendientes_GotFocus(object sender, RoutedEventArgs e)
+        {
+            MainWindow.ayuda2(zAyuda.consultas_listPendientes);
+        }
+        private void btnPagar_GotFocus(object sender, RoutedEventArgs e)
+        {
+            MainWindow.ayuda2(zAyuda.consultas_btnPagar);
         }
     }
 }

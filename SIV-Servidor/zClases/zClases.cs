@@ -84,6 +84,9 @@ namespace SIV_Servidor
         public string cuit { get; set; }
 
         public float total { get; set; }
+
+        /// 'saldo' se utiliza solo en la consulta de 'pendientes'
+        public float saldo { get; set; }
     }
     public class itemListDetalles
     ///se usa en la BD remitos, facturas y pendientes, para el listDetalle
@@ -103,5 +106,8 @@ namespace SIV_Servidor
         public long cantidad { get; set; }
         public float precio { get; set; }
         public float subtotal { get; set; }
+
+        ///utilizo para diferenciar los articulos de los pagos
+        public int color { get; set; }  
     }
 }

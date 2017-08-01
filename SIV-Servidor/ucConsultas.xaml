@@ -14,7 +14,16 @@
                 <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="1"/>-->
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
-
+        <Storyboard x:Key="sbMyInputBox_Show">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="myInputBox">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <!--<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="labelAyuda2">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>-->
+        </Storyboard>
     </UserControl.Resources>
     <Grid>
         <Grid x:Name="gridConsultasMain" Background="{DynamicResource colorfondo}" Width="970" Height="530">
@@ -76,7 +85,7 @@
 
             </TabControl>
             <Label x:Name="labIdTexto" Content="ID" HorizontalAlignment="Left" Margin="99,317,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" FontWeight="Bold" Width="108" Padding="0" VerticalContentAlignment="Center" Height="22" HorizontalContentAlignment="Right"/>
-            <ListView x:Name="listDetalles"  Height="178" VerticalAlignment="Top" Width="680" Background="{DynamicResource colorfondo2}" HorizontalAlignment="Left" Foreground="{DynamicResource textoclaro}"  BorderThickness="0"  
+            <ListView x:Name="listDetalles"  Height="178" VerticalAlignment="Top" Width="681" Background="{DynamicResource colorfondo2}" HorizontalAlignment="Left" Foreground="{DynamicResource textoclaro}"  BorderThickness="0"  
                 BorderBrush="{x:Null}" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" Margin="279,317,0,0" IsHitTestVisible="True"
                   >
 
@@ -168,24 +177,25 @@
                     <Style TargetType="{x:Type ListViewItem}">
                         <!--<Setter Property="BorderThickness" Value="2" />-->
                         <Style.Triggers>
-                            <!--<DataTrigger Binding="{Binding color}" Value="0">
-                                <Setter Property="Background" Value="White" />
+                            <DataTrigger Binding="{Binding color}" Value="0">
+                                <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
+                                <!--<Setter Property="Background" Value="White" />
                                 <Setter Property="BorderBrush" Value="White" />
                                 <Setter Property="BorderThickness" Value="0" />
-                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="Margin" Value="0" />-->
                             </DataTrigger>
                             <DataTrigger Binding="{Binding color}" Value="1">
-                                <Setter Property="Background" Value="{StaticResource textoclaro}" />
+                                <Setter Property="Foreground" Value="{StaticResource infocable2}" />
+                                <!--<Setter Property="Background" Value="{StaticResource textoclaro}" />
                                 <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
-                                -->
-                            <!--
-                                        <Setter Property="CornerRadius" Value="0"/>
-                                        <Setter TargetName="Border" Property="BorderThickness" Value="4,4,4,4" />
-                                        -->
-                            <!--
                                 <Setter Property="BorderThickness" Value="0" />
-                                <Setter Property="Margin" Value="0" />
-                            </DataTrigger>-->
+                                <Setter Property="Margin" Value="0" />-->
+
+                            </DataTrigger>
+                            <!--
+                                <Setter Property="CornerRadius" Value="0"/>
+                                <Setter TargetName="Border" Property="BorderThickness" Value="4,4,4,4" />
+                            -->
                             <!--<MultiTrigger>
                                 <MultiTrigger.Conditions>
                                     <Condition Property="IsSelected" Value="true" />
@@ -274,9 +284,9 @@
             <Label x:Name="labNombre" Content="labNombre" HorizontalAlignment="Left" Margin="15,369,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="255" Height="22" Background="{DynamicResource colorfondo2}" Padding="5,0" VerticalContentAlignment="Center" FontWeight="Bold"/>
             <Label x:Name="labTotal" Content="labTotal" HorizontalAlignment="Left" Margin="849,494,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="81" FontWeight="Bold" HorizontalContentAlignment="Right"/>
             <Label x:Name="labId" Content="labId" HorizontalAlignment="Left" Margin="211,317,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="59" FontWeight="Bold" Background="{DynamicResource colorfondo2}" HorizontalContentAlignment="Center" Height="22" VerticalContentAlignment="Center" Padding="0"/>
-            <Grid HorizontalAlignment="Left" Height="242" Margin="17,44,0,0" VerticalAlignment="Top" Width="942" Background="{DynamicResource colorfondo2}">
-                <ListView x:Name="listConsultas"  Height="205" VerticalAlignment="Top" Width="583" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
-                    BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" Margin="10,10,0,0" SelectionChanged="listConsultas_SelectionChanged"
+            <Grid x:Name="gridRemitosyfacturas" HorizontalAlignment="Left" Height="242" Margin="15,44,0,0" VerticalAlignment="Top" Width="945" Background="{DynamicResource colorfondo2}">
+                <ListView x:Name="listConsultas"  Height="222" VerticalAlignment="Top" Width="530" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
+                    BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" Margin="10,10,0,0" SelectionChanged="listConsultasYlistPendientes_SelectionChanged" GotFocus="listConsultas_GotFocus"
                   >
 
                     <ListView.Resources>
@@ -337,7 +347,7 @@
                             <GridViewColumn Header="Nro ID" Width="70"   DisplayMemberBinding="{Binding nro}"  />
                             <!--<GridViewColumn Header="color" Width="0"   DisplayMemberBinding="{Binding color}"   />-->
                             <GridViewColumn Header="Fecha" Width="95"   DisplayMemberBinding="{Binding fecha}"  />
-                            <GridViewColumn Header="Nombre" Width="300"   DisplayMemberBinding="{Binding nombre}"  />
+                            <GridViewColumn Header="Nombre" Width="250"   DisplayMemberBinding="{Binding nombre}"  />
                             <GridViewColumn Header="Total" Width="90"   >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -351,6 +361,155 @@
 
                 </ListView>
             </Grid>
+            <Grid  x:Name="gridPendientes" HorizontalAlignment="Left" Height="242" Margin="992,44,-961,0" VerticalAlignment="Top" Width="945" Background="{DynamicResource colorfondo2}">
+                <ListView x:Name="listPendientes"  Height="203" VerticalAlignment="Top" Width="369" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
+                    BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" Margin="330,28,0,0" SelectionChanged="listConsultasYlistPendientes_SelectionChanged" PreviewKeyDown="listPendientes_PreviewKeyDown" GotFocus="listPendientes_GotFocus"
+                  >
+
+                    <ListView.Resources>
+
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <Style.Triggers>
+                                <!--<DataTrigger Binding="{Binding color}" Value="0">
+                                <Setter Property="Background" Value="White" />
+                                <Setter Property="BorderBrush" Value="White" />
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="Margin" Value="0" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding color}" Value="1">
+                                <Setter Property="Background" Value="{StaticResource textoclaro}" />
+                                <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
+                                -->
+                                <!--
+                                        <Setter Property="CornerRadius" Value="0"/>
+                                        <Setter TargetName="Border" Property="BorderThickness" Value="4,4,4,4" />
+                                        -->
+                                <!--
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="Margin" Value="0" />
+                            </DataTrigger>-->
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true" />
+                                        <Condition Property="Selector.IsSelectionActive" Value="true" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+                                    <Setter Property="Background" Value="{StaticResource confoco}" />
+                                    <Setter Property="BorderBrush" Value="{StaticResource confoco}" />
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true" />
+                                        <Condition Property="Selector.IsSelectionActive" Value="false" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+                                    <Setter Property="Background" Value="{StaticResource confoco2}" />
+                                    <Setter Property="BorderBrush" Value="{StaticResource confoco2}" />
+                                </MultiTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.View>
+                        <GridView >
+                            <GridViewColumn Header="Nro Pend." Width="70"   DisplayMemberBinding="{Binding nro}"  />
+                            <!--<GridViewColumn Header="color" Width="0"   DisplayMemberBinding="{Binding color}"   />-->
+                            <GridViewColumn Header="Fecha" Width="95"   DisplayMemberBinding="{Binding fecha}"  />
+                            <GridViewColumn Header="Monto" Width="90"   >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <!--<TextBlock Text="{Binding total}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" FontWeight="Bold"  />-->
+                                        <TextBlock Text="{Binding total, StringFormat=$ \{0:F\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Saldo" Width="90"   >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <!--<TextBlock Text="{Binding total}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" FontWeight="Bold"  />-->
+                                        <TextBlock Text="{Binding saldo, StringFormat=$ \{0:F\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                        </GridView>
+                    </ListView.View>
+
+                </ListView>
+                <ListView x:Name="listNombres"  Height="169" VerticalAlignment="Top" Width="306" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
+                    BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" Margin="10,63,0,0" SelectionChanged="listNombres_SelectionChanged" PreviewKeyDown="listNombres_PreviewKeyDown" GotFocus="listNombres_GotFocus"
+                    >
+
+                    <ListView.Resources>
+                        <Style x:Key="styleOcultarHeader" TargetType="{x:Type GridViewColumnHeader}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </Style>
+                        <Style TargetType="{x:Type ListViewItem}">
+
+                            <Style.Triggers>
+                                <!--<DataTrigger Binding="{Binding color}" Value="0">
+                                <Setter Property="Background" Value="White" />
+                                <Setter Property="BorderBrush" Value="White" />
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="Margin" Value="0" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding color}" Value="1">
+                                <Setter Property="Background" Value="{StaticResource textoclaro}" />
+                                <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
+                                -->
+                                <!--
+                                        <Setter Property="CornerRadius" Value="0"/>
+                                        <Setter TargetName="Border" Property="BorderThickness" Value="4,4,4,4" />
+                                        -->
+                                <!--
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="Margin" Value="0" />
+                            </DataTrigger>-->
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true" />
+                                        <Condition Property="Selector.IsSelectionActive" Value="true" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+                                    <Setter Property="Background" Value="{StaticResource confoco}" />
+                                    <Setter Property="BorderBrush" Value="{StaticResource confoco}" />
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true" />
+                                        <Condition Property="Selector.IsSelectionActive" Value="false" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+                                    <Setter Property="Background" Value="{StaticResource confoco2}" />
+                                    <Setter Property="BorderBrush" Value="{StaticResource confoco2}" />
+                                </MultiTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.Resources>
+                    <!--
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name}"></TextBlock>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListView.GroupStyle>-->
+                    <ListView.View>
+                        <GridView ColumnHeaderContainerStyle="{StaticResource styleOcultarHeader}">
+                            <GridViewColumn Header="Nro ID" Width="0"   DisplayMemberBinding="{Binding id}"  />
+                            <GridViewColumn Header="Nombre" Width="300"   DisplayMemberBinding="{Binding nombre}"  />
+                        </GridView>
+                    </ListView.View>
+
+                </ListView>
+                <TextBox x:Name="tbFiltrar" Height="30" Margin="10,28,629,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="" VerticalContentAlignment="Center" Style="{DynamicResource StyleTextboxUpperConPlaceholder}" TextChanged="tbFiltrar_TextChanged" PreviewKeyDown="tbFiltrar_PreviewKeyDown" GotFocus="tbFiltrar_GotFocus"/>
+
+                <Label x:Name="label_Copy5" Content="Clientes" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Height="26" Width="44"/>
+                <Button x:Name="btnPagar" Content="ASENTAR PAGO" Margin="728,201,36,0" Style="{DynamicResource BotonMenu}" Height="30" VerticalAlignment="Top" PreviewKeyDown="btnPagar_PreviewKeyDown" PreviewMouseLeftButtonDown="btnPagar_PreviewMouseLeftButtonDown" GotFocus="btnPagar_GotFocus"/>
+                <Label x:Name="label_Copy6" Content="Cuentas Pendientes" HorizontalAlignment="Left" Margin="330,10,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Height="26" Width="198"/>
+                <Button x:Name="btnImprimir" Content="IMPRIMIR COPIA" Margin="728,155,36,0" Style="{DynamicResource BotonMenu}" Height="30" VerticalAlignment="Top" IsEnabled="False"/>
+            </Grid>
             <Label x:Name="label_Copy2" Content="Dirección" HorizontalAlignment="Left" Margin="15,404,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="77" Padding="0" Height="15"/>
             <Label x:Name="labDireccion" Content="labDireccion" HorizontalAlignment="Left" Margin="15,421,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" FontWeight="Bold" Width="255" Height="22" Background="{DynamicResource colorfondo2}" Padding="5,0" VerticalContentAlignment="Center"/>
             <Label x:Name="label_Copy3" Content="Teléfono" HorizontalAlignment="Left" Margin="15,456,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="77" Padding="0" Height="15"/>
@@ -359,5 +518,46 @@
             <Label x:Name="labCuit" Content="labCuit" HorizontalAlignment="Left" Margin="160,473,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" FontWeight="Bold" Width="110" Height="22" Background="{DynamicResource colorfondo2}" Padding="5,0" VerticalContentAlignment="Center"/>
             <Label x:Name="labFecha" Content="labFecha" HorizontalAlignment="Left" Margin="15,317,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="77" FontWeight="Bold" Background="{DynamicResource colorfondo2}" HorizontalContentAlignment="Center" Height="22" VerticalContentAlignment="Center" Padding="0"/>
         </Grid>
+        
+        <!--myInputBox  COMIENZO-->
+        <!-- It's important that this is in the end of the XAML as it needs to be on top of everything else! -->
+        <Grid x:Name="myInputBox" Visibility="Collapsed">
+            <Grid Background="Black" Opacity="0.7"/>
+            <Border
+            MinWidth="250"
+            Background="{DynamicResource colorfondo3}" 
+            BorderBrush="{DynamicResource textoclaro}" 
+            BorderThickness="1" 
+            CornerRadius="10,10,10,10" 
+            VerticalAlignment="Center" Margin="0,0,0,0"  HorizontalAlignment="Center">
+                <StackPanel Margin="10">
+                    <TextBlock Margin="0" x:Name="myInputBox_Titulo"  Text="Titulo" Foreground="{DynamicResource textoclaro}"  FontSize="13" FontWeight="Bold" />
+                    <!--<PasswordBox MinWidth="150" x:Name="InputTextBox" Margin="0" FontSize="14" Width="197" KeyDown="MyInputBox_KeyDown"/>-->
+                    <TextBox MinWidth="150" x:Name="myInputBox_Texto" Margin="0,5,0,0" FontSize="13" FontWeight="Bold" Style="{DynamicResource StyleTextbox}"
+                             PreviewKeyDown="myInputBox_Texto_PreviewKeyDown"
+                                 />
+                    <!--KeyDown="MyInputBox_KeyDown"-->
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0" Height="23" >
+                        <Button x:Name="myInputBox_Cancelar"  Content="Cancelar"  Margin="10,0,0,0" Width="70"
+                                  Style="{DynamicResource BotonMenu}"
+                                Click="myInputBox_Cancelar_Click"
+                                PreviewKeyDown="myInputBox_Botones_PreviewKeyDown"
+                                />
+                        <Button x:Name="myInputBox_Ok"  Content="OK" Margin="10,0,0,0" Width="70"
+                                 Style="{DynamicResource BotonMenu}"
+                                Click="myInputBox_Ok_Click"
+                                PreviewKeyDown="myInputBox_Botones_PreviewKeyDown"
+                                />
+
+                        <!--Click="YesButton_Click"-->
+                        <!--<Button x:Name="NoButton" Margin="5" Content="No" Background="{x:Null}" Click="NoButton_Click" />-->
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+        </Grid>
+        <Label x:Name="label_Copy7" Content="Detalles" HorizontalAlignment="Left" Margin="279,300,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Height="26" Width="198"/>
+        <!--myInputBox  FIN-->
     </Grid>
 </UserControl>

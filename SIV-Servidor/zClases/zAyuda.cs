@@ -10,7 +10,7 @@ namespace SIV_Servidor
     {
         ///Textos de ayuda
 
-        /// AYUDA CONTROL VENTAS
+        /// AYUDA CONTROL INICIO
 
         public static string descripcion1 = "" +
             "<TEXTO> listar artículos o crear uno NUEVO \n" +
@@ -62,7 +62,7 @@ namespace SIV_Servidor
         public static string tipArticuloNuevo = "Artículo Nuevo";
         public static string tipAgregarArticulo = "<ENTER> Agregar artículo a Base de Datos";
 
-        /// AYUDA CONTROL CAJA
+        /// AYUDA CONTROL IMPRESIONES
         public static string listCaja1 = "" +
             "<ENTER> Seleccionar Venta \n";
 
@@ -91,7 +91,7 @@ namespace SIV_Servidor
 
         public static string tbNombreEnGridClientesCrearNuevo1 = "" +
             "<ENTER> Para crear un Cliente Nuevo \n" +
-            "" ;
+            "";
         public static string tbNombreEnGridClientesCrearNuevo2 = "" +
             "<ESC> Resetear datos del cliente  \n" +
             "";
@@ -103,5 +103,19 @@ namespace SIV_Servidor
         public static string tipAgregarNuevoCliente = "<ENTER> Agregar cliente";
         /// 
 
+        /// AYUDA CONTROL CONSULTAS
+        public static string consultas_tbFiltrar = "" +
+            "<ENTER> Ir a la Lista de Clientes \n" +
+            "<ESC> Borrar Filtro";
+
+        public static string consultas_listNombres = "" +
+            "<ENTER> Ir a la lista de 'Cuentas Pendientes'\n" +
+            "<ESC> Volver al cuadro 'Filtrar'";
+        public static string consultas_listPendientes = "" +
+            "<ENTER> Ir al boton 'Asentar Pago' \n" +
+            "<ESC> Volver";
+        public static string consultas_btnPagar = "" +
+            "<ENTER> Asentar un pago para la cuenta seleccionada \n" +
+            "<ESC> Volver";
     }
 }

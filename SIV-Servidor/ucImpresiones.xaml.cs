@@ -247,7 +247,7 @@ namespace SIV_Servidor
         {
             SQLiteConnection conexion;
             //conexion = new SQLiteConnection("Data Source=clientes.db;Version=3;New=False;Compress=True;");
-            conexion = new SQLiteConnection("Data Source=pendientes.db;Version=3;New=False;Compress=True;");
+            conexion = new SQLiteConnection("Data Source=clientes.db;Version=3;New=False;Compress=True;");
             conexion.Open();
 
             string consulta = "select * from clientes";
@@ -310,8 +310,8 @@ namespace SIV_Servidor
         private void insertarItemClienteEnDB(itemCliente item)
         {
             ///parametros
-            //string archivo = "clientes.db";
-            string archivo = "pendientes.db";
+            string archivo = "clientes.db";
+            //string archivo = "pendientes.db";
             string tabla = "clientes";
             //int idMax = -1;
 
@@ -474,6 +474,8 @@ namespace SIV_Servidor
             return respuesta;
         }
 
+
+        ///ASENTAR PROCESOS
         private void AsentarProceso()
         {
 
@@ -513,7 +515,7 @@ namespace SIV_Servidor
 
             ///variables:
             //string archivoDB = "|123456";
-            string archivoDB = "pendientes.db";
+            string archivoDB = "clientes.db";
             string tabla = "clientes";
 
             string index = tbIdCliente.Text.ToString();
@@ -573,13 +575,20 @@ namespace SIV_Servidor
             ///REMITO
             if (proceso == "remito")
             {
-                AsentarProcesoRemito();
+                //AsentarProcesoRemito();
+                asentarRegistrosEnDB(proceso, "remitos.db", "remitos", "remitonro");
             }
 
             ///FACTURA
             if (proceso == "factura")
             {
-                AsentarProcesoFactura();
+                //AsentarProcesoFactura();
+                asentarRegistrosEnDB(proceso, "facturas.db", "facturas", "facturanro");
+            }
+            ///PENDIENTE
+            if (proceso == "pendiente")
+            {
+                asentarRegistrosEnDB(proceso, "pendientes.db", "pendientes", "pendientenro");
             }
 
 
@@ -590,113 +599,46 @@ namespace SIV_Servidor
             tbNombre.Focus();
             MostrarBotones();
         }
-
-        private void AsentarProcesoRemito()
+        private void asentarRegistrosEnDB(string proceso, string archivoDB, string tabla, string nombreCampoNro)
         {
-            //consola("Asentar proceso REMITO");
             /// 0) definir variables
 
             /// 0.1) variables archivo
-            string archivoDB = "remitos.db";
-            string tabla = "remitos";
+            //string archivoDB = "remitos.db";
+            //string tabla = "remitos";
             string parametros = "";
 
-            /// 0.2) variables venta
-            int remitonro = zdb.valorMaxDB(archivoDB, tabla, "remitonro");
-            if (remitonro > -1)
+            long nroProceso = -2;
+            if (proceso == "remito")
             {
-                remitonro++;
+                nroProceso = zdb.valorMaxDB(archivoDB, tabla, "remitonro");
+                if (nroProceso > -1)
+                {
+                    nroProceso++;
+                }
             }
-            string fecha = "";
-            long codigo = -1;
-            string descripcion = "";
-            long cantidad = 0;
-            float precio = 0;
-            string precioStr = "0";
-            float subtotal = 0;
-            string subtotalStr;
-            string direccion = "";
-            string telefono = "";
-
-
-            /// 1) cargar el primer registro con los datos del cliente
-
-            /// 1.1) Datos del primer registro: 'codigo'='zcliente', 'descripcion'=nombre del cliente, 'subtotal'= total de la factura.
-            //fecha = "DATETIME('NOW')";
-            fecha = zfun.getFechaNow();
-            codigo = -100;
-            descripcion = tbNombre.Text.Trim();
-            subtotal = toFloat(tbTotal.Text.Replace("$", ""));
-            subtotalStr = subtotal.ToString().Replace(",", ".");
-            direccion = tbDireccion.Text.Trim();
-            telefono = tbTelefono.Text.Trim();
-
-            /// 1.2) ejecutar comando SQL
-            //parametros = "(nombre, direccion, telefono, cuit) VALUES(?,?,?,?)";
-            //parametros = "(remitonro, fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono) VALUES" +
-            //    "(" + remitonro + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precioStr + "," + subtotalStr + ",'" + direccion + "','" + telefono + "')";
-            parametros = "(remitonro, fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono) VALUES" +
-                "(" + remitonro + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precioStr + "," + subtotalStr + ",'" + direccion + "','" + telefono + "')";
-
-            zdb.InsertDB(archivoDB, tabla, parametros);
-
-
-            /// 2) el resto de los registros son los mismos de la listImpresion, pero compartiendo el nro de remito
-
-            /// 2.1) procesar cada articulo de la listImpresion
-            direccion = "";
-            telefono = "";
-            //fecha = 0;
-            foreach (var itemventa in listImpresion.Items)
+            if (proceso == "factura")
             {
-                var item = itemventa as itemCaja;
-
-                ///setear variables:
-                codigo = 0;
-                descripcion = "";
-                cantidad = 0;
-                precio = 0;
-                subtotal = 0;
-
-                codigo = item.codigo;
-                descripcion = item.descripcion;
-                cantidad = item.cantidad;
-                precio = toFloat(item.precio.ToString());
-                precioStr = precio.ToString().Replace(",", ".");
-                subtotal = item.subtotal;
-                subtotalStr = subtotal.ToString().Replace(",", ".");
-                fecha = "DATETIME('" + item.fecha + "')";
-
-
-                ///comando sql para agregar el registro
-                parametros = "(remitonro, fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono) VALUES" +
-                    "(" + remitonro + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precioStr + "," + subtotalStr + ",'" + direccion + "','" + telefono + "')";
-
-                zdb.InsertDB(archivoDB, tabla, parametros);
+                nroProceso = zfun.toLong(tbFacturaNro.Text);
+            }
+            if (proceso == "pendiente")
+            {
+                nroProceso = zdb.valorMaxDB(archivoDB, tabla, "pendientenro");
+                if (nroProceso > -1)
+                {
+                    nroProceso++;
+                }
             }
 
-        }
-        private void AsentarProcesoFactura()
-        {
-
-
-            /// 0) definir variables
-
-            /// 0.1) variables archivo
-            string archivoDB = "facturas.db";
-            string tabla = "facturas";
-            string parametros = "";
+            if ((nroProceso == -2) || (nroProceso == -1))
+            {
+                MessageBox.Show("No se asignó correctamente la variable 'nroProceso'. El proceso se canceló.", "error");
+                return;
+            }
 
             /// 0.2) variables venta
-            //int nro = zdb.valorMaxDB(archivoDB, tabla, "remitonro");
-            //long nro = facturaNro;
-            long nro = zfun.toLong(tbFacturaNro.Text);
-
-            //if (nro > -1)
-            //{
-            //    nro++;
-            //}
             string fecha = "";
+
             long codigo = -1;
             string descripcion = "";
             long cantidad = 0;
@@ -708,10 +650,10 @@ namespace SIV_Servidor
             string telefono = "";
             string cuit = "";
 
+            /// 1) cargar el primer registro con los datos del cliente y del proceso
 
-            /// 1) cargar el primer registro con los datos del cliente
-
-            /// 1.1) Datos del primer registro: 'codigo'='zcliente', 'descripcion'=nombre del cliente, 'subtotal'= total de la factura.
+            /// 1.1) Datos del primer registro: 'codigo'='-100', 'descripcion'=nombre del cliente, 'subtotal'= total de la factura.
+            //fecha = "DATETIME('NOW')";
             fecha = zfun.getFechaNow();
             codigo = -100;
             descripcion = tbNombre.Text.Trim();
@@ -722,9 +664,21 @@ namespace SIV_Servidor
             cuit = tbCuit.Text.Trim();
 
             /// 1.2) ejecutar comando SQL
-            //parametros = "(nombre, direccion, telefono, cuit) VALUES(?,?,?,?)";
-            parametros = "(facturanro, fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono, cuit) VALUES" +
-                "(" + nro + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precioStr + "," + subtotalStr + ",'" + direccion + "','" + telefono + "','" + cuit + "')";
+            if (proceso == "remito")
+            {
+                parametros = "(" + nombreCampoNro + ", fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono) VALUES" +
+                    "(" + nroProceso + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precioStr + "," + subtotalStr + ",'" + direccion + "','" + telefono + "')";
+            }
+            if (proceso == "factura")
+            {
+                parametros = "(" + nombreCampoNro + ", fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono, cuit) VALUES" +
+                    "(" + nroProceso + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precioStr + "," + subtotalStr + ",'" + direccion + "','" + telefono + "','" + cuit + "')";
+            }
+            if (proceso == "pendiente")
+            {
+                parametros = "(" + nombreCampoNro + ", fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono) VALUES" +
+                    "(" + nroProceso + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precioStr + "," + subtotalStr + ",'" + direccion + "','" + telefono + "')";
+            }
 
             zdb.InsertDB(archivoDB, tabla, parametros);
 
@@ -735,7 +689,7 @@ namespace SIV_Servidor
             direccion = "";
             telefono = "";
             cuit = "";
-            //fecha = 0;
+
             foreach (var itemventa in listImpresion.Items)
             {
                 var item = itemventa as itemCaja;
@@ -750,25 +704,54 @@ namespace SIV_Servidor
                 codigo = item.codigo;
                 descripcion = item.descripcion;
                 cantidad = item.cantidad;
-                //precio = item.precio;
                 precio = toFloat(item.precio.ToString());
                 precioStr = precio.ToString().Replace(",", ".");
                 subtotal = item.subtotal;
                 subtotalStr = subtotal.ToString().Replace(",", ".");
                 fecha = "DATETIME('" + item.fecha + "')";
 
-                //consola("desc:" + item.descripcion.ToString());
 
-                ///comando sql para agregar el registro
-                parametros = "(facturanro, fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono, cuit) VALUES" +
-                    "(" + nro + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precioStr + "," + subtotalStr + ",'" + direccion + "','" + telefono + "','" + cuit + "')";
+                ///comando sql para agregar el registro del articulo
+                if (proceso == "remito")
+                {
+                    parametros = "(" + nombreCampoNro + ", fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono) VALUES" +
+                        "(" + nroProceso + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precioStr + "," + subtotalStr + ",'" + direccion + "','" + telefono + "')";
+                }
+                if (proceso == "factura")
+                {
+                    parametros = "(" + nombreCampoNro + ", fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono, cuit) VALUES" +
+                        "(" + nroProceso + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precioStr + "," + subtotalStr + ",'" + direccion + "','" + telefono + "','" + cuit + "')";
+                }
+                if (proceso == "pendiente")
+                {
+                    parametros = "(" + nombreCampoNro + ", fecha, codigo, descripcion, cantidad, precio, subtotal, direccion, telefono) VALUES" +
+                        "(" + nroProceso + "," + fecha + ",'" + codigo + "','" + descripcion + "'," + cantidad + "," + precioStr + "," + subtotalStr + ",'" + direccion + "','" + telefono + "')";
+                }
 
                 zdb.InsertDB(archivoDB, tabla, parametros);
             }
 
-            ///grabar el nuevo nro de factura
-            zdb.grabarConfig("nroFactura", nro.ToString());
+            ///PROCESOS POSTERIORES
+            
+            ///actualizar datos a mostrar
+            if (proceso == "remito" )
+            {
+                //ucConsultas.actualizarListConsultas = true;
+            }
+            if (proceso == "factura")
+            {
+                ///grabar el nuevo nro de factura
+                zdb.grabarConfig("nroFactura", nroProceso.ToString());
+            }
+            if (proceso == "pendiente")
+            {
+
+            }
+
         }
+
+
+        ///IMPRIMIR
         private void imprimir(string proceso)
         {
 

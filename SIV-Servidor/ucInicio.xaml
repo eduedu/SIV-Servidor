@@ -35,7 +35,7 @@
         </Storyboard>
     </UserControl.Resources>
     <Grid Background="{DynamicResource colorfondo}">
-        <ListView x:Name="listFiltro"    Height="224" Margin="-638,251,0,0" VerticalAlignment="Top" Width="660" Background="{DynamicResource textoclaro}" KeyDown="listFiltro_KeyDown" HorizontalAlignment="Left" Panel.ZIndex="1" IsTabStop="True" Foreground="Black" GotFocus="listFiltro_GotFocus" LostFocus="listFiltro_LostFocus" Style="{DynamicResource listFiltroStyle1}" IsVisibleChanged="listFiltro_IsVisibleChanged" >
+        <ListView x:Name="listFiltro"    Height="224" Margin="-736,122,0,0" VerticalAlignment="Top" Width="660" Background="{DynamicResource textoclaro}" KeyDown="listFiltro_KeyDown" HorizontalAlignment="Left" Panel.ZIndex="1" IsTabStop="True" Foreground="Black" GotFocus="listFiltro_GotFocus" LostFocus="listFiltro_LostFocus" Style="{DynamicResource listFiltroStyle1}" IsVisibleChanged="listFiltro_IsVisibleChanged" >
 
             <ListView.View>
                 <GridView>
@@ -61,10 +61,10 @@
 
         </ListView>
 
-        <Rectangle HorizontalAlignment="Left" Height="304" Margin="10,138.5,0,0" Stroke="{DynamicResource detalles}" VerticalAlignment="Top" Width="780"/>
+        <Rectangle HorizontalAlignment="Left" Height="304" Margin="10,138.5,0,0" Stroke="{DynamicResource detalles}" VerticalAlignment="Top" Width="780" Fill="{DynamicResource colorfondo2}"/>
         <Rectangle HorizontalAlignment="Left" Height="84" Margin="10,26.5,0,0" Stroke="{DynamicResource detalles}" VerticalAlignment="Top" Width="780"/>
         <!--<TextBox x:Name="tbCodigo" HorizontalAlignment="Left" Height="30" Margin="22.017,53.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" Background="{DynamicResource colorfondo}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" Focusable="False" IsTabStop="False" IsHitTestVisible="False" RenderTransformOrigin="0.5,0.5" BorderBrush="{DynamicResource textoclaro}" Foreground="{DynamicResource textoclaro}" HorizontalContentAlignment="Right"/>-->
-        <TextBox x:Name="tbCodigo" HorizontalAlignment="Left" Height="30" Margin="22.017,53.5,0,0" VerticalAlignment="Top" Width="105" RenderTransformOrigin="0.5,0.5" Style="{DynamicResource tbNoEditableNuevo}" Text="123" />
+        <TextBox x:Name="tbCodigo" HorizontalAlignment="Left" Height="30" Margin="22.017,53.5,0,0" VerticalAlignment="Top" Width="105" RenderTransformOrigin="0.5,0.5" Style="{DynamicResource StyleTBNoEditable}" Text="123" />
         <TextBox x:Name="tbDescripcion" HorizontalAlignment="Left" Height="30" Margin="132.017,53.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="350" Background="{DynamicResource sinfoco}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" TextChanged="tbDescripcion_TextChanged" PreviewKeyDown="tbDescripcion_PreviewKeyDown">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
@@ -92,7 +92,7 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type TabItem}">
 
-                                <Border x:Name="Border" BorderThickness="1,1,1,0" BorderBrush="Gainsboro" CornerRadius="4,4,0,0" Margin="0,0,2,0">
+                                <Border x:Name="Border" BorderThickness="1,1,1,0" BorderBrush="{x:Null}" CornerRadius="4,4,0,0" Margin="0,0,2,0">
                                     <ContentPresenter x:Name="ContentSite"
                                         VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
@@ -102,6 +102,7 @@
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter TargetName="Border" Property="Background" Value="{StaticResource confoco2}" />
+                                        <Setter Property="Foreground" Value="{StaticResource confoco2}" />
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="False">
                                         <Setter TargetName="Border" Property="Background" Value="{StaticResource sinfoco}" />
@@ -110,9 +111,10 @@
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
+                    
                 </Style>
             </TabControl.Resources>
-            <TabItem Header="Ctrl+1" GotFocus="TabItem_GotFocus" Foreground="{DynamicResource textoobscuro}" Padding="1,2"/>
+            <TabItem Header="Ctrl+1" GotFocus="TabItem_GotFocus" Foreground="{DynamicResource textoobscuro}" Padding="1,2" />
             <TabItem Header="Ctrl+2" GotFocus="TabItem_GotFocus" Foreground="{DynamicResource textoobscuro}" Padding="1,2"/>
             <TabItem Header="Ctrl+3" GotFocus="TabItem_GotFocus" Foreground="{DynamicResource textoobscuro}" Padding="1,2"/>
             <TabItem Header="Ctrl+4" GotFocus="TabItem_GotFocus" Foreground="{DynamicResource textoobscuro}" Padding="1,2"/>

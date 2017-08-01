@@ -38,7 +38,7 @@ namespace SIV_Servidor
         bool seEditoDescripcionDesdeElPrograma = false;
         int mPestana;   //pestana venta activa
 
-        Style tbNoEditable = Application.Current.FindResource("StyleTBNoEditableFondo2") as Style;
+        Style tbNoEditable = Application.Current.FindResource("StyleTBNoEditable") as Style;
         Style tbNoEditableNuevo = Application.Current.FindResource("StyleTbNoEditableNuevo2") as Style;
 
         /// animaciones

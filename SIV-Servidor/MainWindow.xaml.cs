@@ -355,13 +355,13 @@ namespace SIV_Servidor
                 {
                     //consola(selected.ToString());
 
-                    ///pestana VENTAS
+                    ///pestana INICIO
                     if (selected == 0)
                     {
                         ///FOCO en tbDescripcion
                         ucInicio.tbDescripcion.Focus();
                     }
-                    ///pestana CAJA
+                    ///pestana IMPRESIONES
                     if (selected == 1)
                     {
                         //FOCO en listCaja
@@ -400,6 +400,24 @@ namespace SIV_Servidor
                             }
                         }
                     }
+                    ///pestana CONSULTAS
+                    if (selected == 2)
+                    {
+                        if (ucConsultas.mTipoDeConsulta == "pendientes")
+                        {
+                            ///si esta visible el myInputBox (para cargar un pago), darle el foco
+                            ///sino, darle foco al filtro de nombres
+                            if (ucConsultas.myInputBox.Visibility==Visibility.Visible)
+                            {
+                                ucConsultas.myInputBox_Texto.Focus();
+                            }
+                            else
+                            {
+                                ucConsultas.tbFiltrar.Focus();
+                            }
+                        }
+                    }
+
 
                 };
 
@@ -448,7 +466,29 @@ namespace SIV_Servidor
             zfun.consola(texto);
         }
 
+        ///EXPANDER
+        private void expanderOpciones_LostFocus(object sender, RoutedEventArgs e)
+        {
+            //consola("chau");
+            expanderOpciones.IsExpanded = false;
+        }
 
+        private void expanderOpciones_Expanded(object sender, RoutedEventArgs e)
+        {
+            var control = sender as Expander;
+            bool expanded = control.IsExpanded;
+            //consola(expanded.ToString());
+            if (expanded)
+            {
+                gridCortinaNegra.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                gridCortinaNegra.Visibility = Visibility.Hidden;
+
+            }
+            consola(gridCortinaNegra.IsVisible.ToString());
+        }
 
         ///-------------------------------------------------------------------------------------------
 
