@@ -76,10 +76,10 @@ namespace SIV_Servidor
             ///FUNCIONES DE INICIO
             seleccionarPestana(0);
             cargarListaDeArticulos();
-            calcularTotal();
             resetTb();
+            calcularTotal();
             //tbDescripcion.Focus();
-
+            tbDescripcion.Focus();
         }
 
         //------------------------------------------------------------------------------------------
@@ -94,6 +94,7 @@ namespace SIV_Servidor
         }
         public void resetTb()
         {
+            tbPagaCon.Text = "";
             tbCodigo.Tag = "";
             tbCodigo.Text = "";
             tbDescripcion.Text = "";
@@ -534,6 +535,7 @@ namespace SIV_Servidor
                 tempItem.descripcion = registro["descripcion"].ToString();
                 tempItem.cantidad = zfun.toLong(registro["cantidad"].ToString());
                 //tempItem.precio = registro["precio"].ToString();
+                //tempItem.precio = toFloat(registro["precio"].ToString());
                 tempItem.precio = toFloat(registro["precio"].ToString());
                 tempItem.subtotal = zfun.toFloat(registro["subtotal"].ToString());
                 tempItem.costo = zfun.toFloat(registro["costo"].ToString());
@@ -548,6 +550,9 @@ namespace SIV_Servidor
             ///asignar datos al list
             //listVenta.ItemsSource = null;
             //listVenta.ItemsSource = mItemsListVenta;
+
+            ///Actualizar el label 'total'
+            calcularTotal();
 
         }
         private void resetBDventas()
@@ -648,8 +653,18 @@ namespace SIV_Servidor
             var textBox = sender as TextBox;
             textBox.Background = App.Current.Resources["confoco"] as SolidColorBrush;
 
+            ///tbPagaCon
+            if (textBox.Name == "tbPagaCon")
+            {
+                ayuda("<ESC> Cancelar");
+            }
+            ///tbCantidad
+            else if (textBox.Name == "tbCantidad")
+            {
+                ayuda("<ESC> Cancelar");
+            }
             ///tbPRECIO
-            if (textBox.Name == "tbPrecio")
+            else if (textBox.Name == "tbPrecio")
             {
                 ///si es un articulo nuevo (se hizo enter desde tbDescripcion y no desde listFiltro ni se cargo un nro de codigo)
                 if (EsArticuloNuevo())
@@ -1280,9 +1295,18 @@ namespace SIV_Servidor
         }
         private void tbPagaCon_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string total = tbTotal.Text.Replace("$", "");
-            float vuelto = toFloat(tbPagaCon.Text) - toFloat(total);
-            tbVuelto.Text = vuelto.ToString();
+            if (tbPagaCon.Text.ToString().Trim() != "")
+            {
+                string total = tbTotal.Text.Replace("$", "");
+                float fTotal = toFloat(total);
+                float fPagaCon = toFloat(tbPagaCon.Text);
+                float fVuelto = fPagaCon - fTotal;
+                tbVuelto.Text = fVuelto.ToString();
+            }
+            else
+            {
+                tbVuelto.Text = "";
+            }
 
         }
         private void tbPagaCon_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -1290,6 +1314,11 @@ namespace SIV_Servidor
             if (e.Key == Key.Enter)
             {
                 btnAsentar.Focus();
+            }
+            if (e.Key == Key.Up || e.Key == Key.Escape)
+            {
+                resetTb();
+                //tbDescripcion.Focus();
             }
         }
 

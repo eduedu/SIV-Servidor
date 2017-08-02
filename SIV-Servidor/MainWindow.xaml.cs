@@ -272,29 +272,55 @@ namespace SIV_Servidor
             }
             if (e.Key == Key.F3)
             {
-                tabMain.SelectedIndex = 2;
-                e.Handled = true;
-            }
-
-            if (tabMain.SelectedIndex == 2)
-            {
-                if (e.Key == Key.F5)
+                ///si NO esta seleccionada la pestaña 'consultas', seleccionarla
+                if (tabMain.SelectedIndex != 2)
                 {
-                    ucConsultas.tabConsultas.SelectedIndex = 0;
+                    tabMain.SelectedIndex = 2;
                     e.Handled = true;
 
                 }
-                if (e.Key == Key.F6)
+                ///si no, si esta seleccionada la pestaña consultas, alternar entre los 3 tipos de consultas
+                else
                 {
-                    ucConsultas.tabConsultas.SelectedIndex = 1;
-                    e.Handled = true;
-                }
-                if (e.Key == Key.F7)
-                {
-                    ucConsultas.tabConsultas.SelectedIndex = 2;
-                    e.Handled = true;
+                    if (ucConsultas.tabConsultas.SelectedIndex == 0)
+                    {
+                    
+                        ucConsultas.tabConsultas.SelectedIndex = 1;
+                        e.Handled = true;
+                    }
+                    else if (ucConsultas.tabConsultas.SelectedIndex == 1)
+                    {
+                        ucConsultas.tabConsultas.SelectedIndex = 2;
+                        e.Handled = true;
+                    }
+                    else if (ucConsultas.tabConsultas.SelectedIndex == 2)
+                    {
+                        ucConsultas.tabConsultas.SelectedIndex = 0;
+                        e.Handled = true;
+                    }
+
                 }
             }
+
+            //if (tabMain.SelectedIndex == 2)
+            //{
+            //    if (e.Key == Key.F5)
+            //    {
+            //        ucConsultas.tabConsultas.SelectedIndex = 0;
+            //        e.Handled = true;
+
+            //    }
+            //    if (e.Key == Key.F6)
+            //    {
+            //        ucConsultas.tabConsultas.SelectedIndex = 1;
+            //        e.Handled = true;
+            //    }
+            //    if (e.Key == Key.F7)
+            //    {
+            //        ucConsultas.tabConsultas.SelectedIndex = 2;
+            //        e.Handled = true;
+            //    }
+            //}
 
             if (e.Key == Key.Tab)
             {
@@ -407,7 +433,7 @@ namespace SIV_Servidor
                         {
                             ///si esta visible el myInputBox (para cargar un pago), darle el foco
                             ///sino, darle foco al filtro de nombres
-                            if (ucConsultas.myInputBox.Visibility==Visibility.Visible)
+                            if (ucConsultas.myInputBox.Visibility == Visibility.Visible)
                             {
                                 ucConsultas.myInputBox_Texto.Focus();
                             }

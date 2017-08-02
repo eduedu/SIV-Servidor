@@ -1508,7 +1508,7 @@ namespace SIV_Servidor
         private void btnImprimir_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             AsentarProceso();
-            //e.Handled = true;
+            e.Handled = true;
 
         }
 

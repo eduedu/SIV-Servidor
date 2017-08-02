@@ -149,7 +149,7 @@
             <local:ucConsultas x:Name="ucConsultas" Margin="2000,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
             <local:ucImpresiones x:Name="ucImpresiones" Margin="1000,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
             <local:ucInicio x:Name="ucInicio" Margin="0,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
-        
+
             <!--cortinaNegra -->
             <!--<Grid x:Name="gridCortinaNegra" Visibility="Hidden" Focusable="True"  >
                 <ContentControl Template="{DynamicResource cortinaNegra}"/>
@@ -172,6 +172,7 @@
             </StackPanel>
 
         </Expander>
+        <Rectangle Fill="{DynamicResource colorfondo}" HorizontalAlignment="Left" Margin="516,0,0,0" Width="4" Height="35" VerticalAlignment="Bottom"/>
 
 
     </Grid>

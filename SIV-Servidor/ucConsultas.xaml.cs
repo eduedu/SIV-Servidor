@@ -335,6 +335,7 @@ namespace SIV_Servidor
                         tempItem.precio = zfun.toFloat(registro["precio"].ToString());
                         tempItem.subtotal = zfun.toFloat(registro["subtotal"].ToString());
 
+
                         ///color
                         tempItem.color = 0;
                         if (codigo == -99)
@@ -399,7 +400,8 @@ namespace SIV_Servidor
                 if (selected == 0)
                 {
                     mTipoDeConsulta = "pendientes";
-                    labIdTexto.Content = "Nro de Pendiente";
+                    labIdTexto.Content = "Nro de Pend.";
+                    labTotalTexto.Content = "Saldo:";
                     gridPendientes.Visibility = Visibility.Visible;
                     gridRemitosyfacturas.Visibility = Visibility.Hidden;
                 }
@@ -407,6 +409,7 @@ namespace SIV_Servidor
                 {
                     mTipoDeConsulta = "remitos";
                     labIdTexto.Content = "Nro de Remito";
+                    labTotalTexto.Content = "Total:";
                     gridPendientes.Visibility = Visibility.Hidden;
                     gridRemitosyfacturas.Visibility = Visibility.Visible;
                 }
@@ -414,6 +417,7 @@ namespace SIV_Servidor
                 {
                     mTipoDeConsulta = "facturas";
                     labIdTexto.Content = "Nro de Factura";
+                    labTotalTexto.Content = "Total:";
                     gridPendientes.Visibility = Visibility.Hidden;
                     gridRemitosyfacturas.Visibility = Visibility.Visible;
                 }
@@ -445,6 +449,8 @@ namespace SIV_Servidor
                 //{
                 ActualizarListConsultasDesdeDB();
                 //}
+
+                //ayuda(zAyuda.consultas_f3Alternar);
 
             }
             /// si es factura o remito, foco en listConsultas. Sino, en el tbFiltrar
@@ -764,7 +770,7 @@ namespace SIV_Servidor
                 myInputBox_Titulo.Text = "";
                 operacion = myInputBox_Titulo.Tag.ToString();
                 ///darle el foco a cierto objeto, dependiendo de la operacion
-                if (operacion== "pagarPendiente")
+                if (operacion == "pagarPendiente")
                 {
                     btnPagar.Focus();
                 }
@@ -840,11 +846,12 @@ namespace SIV_Servidor
         /// gotFocus (MOSTRAR AYUDA)
         private void tbFiltrar_GotFocus(object sender, RoutedEventArgs e)
         {
-            MainWindow.ayuda2(zAyuda.consultas_tbFiltrar);
+            MainWindow.ayuda2(zAyuda.consultas_tbFiltrar,zAyuda.consultas_f3Alternar);
         }
         private void listConsultas_GotFocus(object sender, RoutedEventArgs e)
         {
-            MainWindow.ayuda2();
+            //MainWindow.ayuda2();
+            ayuda(zAyuda.consultas_f3Alternar);
         }
         private void listNombres_GotFocus(object sender, RoutedEventArgs e)
         {

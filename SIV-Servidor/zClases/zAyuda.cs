@@ -64,7 +64,7 @@ namespace SIV_Servidor
 
         /// AYUDA CONTROL IMPRESIONES
         public static string listCaja1 = "" +
-            "<ENTER> Seleccionar Venta \n";
+            "<ENTER> Para imprimir una FACTURA, REMITO o cargar como PENDIENTE \n";
 
         public static string bontonMenu1a = "" +
             "<FLECHA ARRIBA/ABAJO> Moverse entre las opciones \n" +
@@ -117,5 +117,7 @@ namespace SIV_Servidor
         public static string consultas_btnPagar = "" +
             "<ENTER> Asentar un pago para la cuenta seleccionada \n" +
             "<ESC> Volver";
+        public static string consultas_f3Alternar = "" +
+            "<F3> Alternar entre las pestañas Pendientes/Remitos/Facturas \n";
     }
 }
