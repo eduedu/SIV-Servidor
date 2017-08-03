@@ -122,6 +122,7 @@ namespace SIV_Servidor
             gridDatosDelCliente.Visibility = Visibility.Hidden;
             ActualiarCajaDesdeDB();
             cargarListaDeClientes();
+            resetTB();
         }
 
         //------------------------------------------------------------------------------------------
@@ -429,6 +430,7 @@ namespace SIV_Servidor
                 //mBotones[selected].Background = App.Current.Resources["sinfoco"] as SolidColorBrush;
                 //mBotones[selected].Style = null;
                 mBotones[selected].Style = styleBoton;
+                //mBotones[selected].BorderThickness = new Thickness(0);
 
                 ///animacion en sí
                 aniAnchoBtn.From = mBotones[selected].Margin;
@@ -456,6 +458,10 @@ namespace SIV_Servidor
             tbEntrega.Text = "";
 
             tbNombre.Style = StyleTextboxUpper;
+            tbTelefono.Style = StyleTbNoEditable;
+            tbDireccion.Style = StyleTbNoEditable;
+            tbCuit.Style= StyleTbNoEditable;
+            tbEntrega.Style = StyleTbNoEditable;
 
             tipClienteNuevo();
         }
@@ -478,6 +484,14 @@ namespace SIV_Servidor
         ///ASENTAR PROCESOS
         private void AsentarProceso()
         {
+
+            ///si el tbNombre esta vacio, ignorar
+            if (tbNombre.Text.Trim() == "")
+            {
+                tbNombre.Focus();
+                return;
+            }
+
 
             ///si es un cliente nuevo, agregar a la BD
             if (tbIdCliente.Text == "Nuevo")
@@ -994,9 +1008,17 @@ namespace SIV_Servidor
         }
         private void ActivarBotonMenu(Button boton = null)
         {
+            ///CANCELAR si es uno de los botones que todavia no tienen funcion
+            if(boton.Name == "btnTarjeta" || boton.Name == "btnListaDeControl")
+            {
+                return;
+            }
+
             int selected = 0;
             foreach (Button item in mBotones)
             {
+                //mBotones[selected].BorderThickness = new Thickness(10,10,10,10); 
+                
                 //string tmpTexto = item.Name;
                 if (item.Name == boton.Name)
                 {
@@ -1011,6 +1033,7 @@ namespace SIV_Servidor
 
                     mBotones[selected].BeginAnimation(Button.MarginProperty, aniAnchoBtn);
                     mBotones[selected].IsEnabled = false;
+
                 }
                 //consola(tmpTexto);
                 selected++;
@@ -1255,6 +1278,11 @@ namespace SIV_Servidor
                     listFiltroOcultar();
                 }
 
+                tbTelefono.Style = StyleTextbox;
+                tbDireccion.Style = StyleTextboxUpper;
+                tbCuit.Style = StyleTextbox;
+                tbEntrega.Style = StyleTextbox;
+
 
             }
             else
@@ -1264,6 +1292,12 @@ namespace SIV_Servidor
                 tip();
                 /////ocultar control si el text esta vacio
                 listFiltroOcultar();
+
+                tbTelefono.Style = StyleTbNoEditable;
+                tbDireccion.Style = StyleTbNoEditable;
+                tbCuit.Style = StyleTbNoEditable;
+                tbEntrega.Style = StyleTbNoEditable;
+
             }
         }
         private void tbNombre_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -1280,6 +1314,14 @@ namespace SIV_Servidor
                     //{
                     //    tbPagaCon.Focus();
                     //}
+                    string proceso = btnImprimir.Tag.ToString();
+                    if(proceso=="remito" || proceso == "factura")
+                    {
+                        tbTelefono.Focus();
+                        seEditoDescripcionDesdeElPrograma = true;
+                        tbNombre.Text = "Consumidor Final";
+                        //listFiltroOcultar();
+                    }
                     e.Handled = true;
                     return;
                 }
@@ -1475,11 +1517,11 @@ namespace SIV_Servidor
                 tbTelefono.Tag = telefono;
                 tbCuit.Tag = cuit;
 
-                tbIdCliente.Text = id;
-                tbNombre.Text = nombre;
-                tbDireccion.Text = direccion;
-                tbTelefono.Text = telefono;
-                tbCuit.Text = cuit;
+                //tbIdCliente.Text = id;
+                //tbNombre.Text = nombre;
+                //tbDireccion.Text = direccion;
+                //tbTelefono.Text = telefono;
+                //tbCuit.Text = cuit;
 
                 tbTelefono.Focus();
                 tbNombre.Style = StyleTBNoEditableFondo2Left;

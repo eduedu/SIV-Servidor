@@ -668,6 +668,10 @@ namespace SIV_Servidor
                 }
                 e.Handled = true;
             }
+            if (e.Key == Key.Escape)
+            {
+                tbFiltrar.Text = "";
+            }
         }
 
         private void btnPagar_PreviewKeyDown(object sender, KeyEventArgs e)

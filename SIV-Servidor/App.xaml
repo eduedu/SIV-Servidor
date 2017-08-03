@@ -230,9 +230,9 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Border Name="border" 
-                            BorderThickness="0"
+                            BorderThickness="1"
                             Padding="0,0" 
-                            BorderBrush="DarkGray" 
+                            BorderBrush="{StaticResource textoclaro}" 
                             CornerRadius="3" 
                             Background="{TemplateBinding Background}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -265,7 +265,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Border Name="border" 
-                            BorderThickness="1"
+                            BorderThickness="0"
                             Padding="0,0" 
                             BorderBrush="DarkGray" 
                             CornerRadius="3" 
@@ -290,10 +290,20 @@
             <Setter Property="SnapsToDevicePixels" Value="True" />
         </Style>
 
+        <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        
         <!--Estilo TEXT BOXES-->
         <Style TargetType="TextBox" x:Key="StyleTextbox" >
             <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
             <Setter Property="Background" Value="{StaticResource sinfoco}" />
+            <Setter Property="BorderThickness" Value="0"/>
             <!--<Setter Property="FocusVisualStyle" Value="{x:Null}"/>-->
             <!--<Setter Property="Template" >
                 <Setter.Value>
@@ -341,20 +351,46 @@
 
         </Style>
 
-
-        <Style TargetType="TextBox" x:Key="StyleTextboxUpper" >
-            <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
-            <Setter Property="Background" Value="{StaticResource sinfoco}" />
+        <!--TEXTBOXE UPPER -->
+        <Style TargetType="TextBox" BasedOn="{StaticResource StyleTextbox}" x:Key="StyleTextboxUpper" >
+            <!--<Setter Property="Foreground" Value="{StaticResource textoobscuro}" />-->
+            <!--<Setter Property="Background" Value="{StaticResource sinfoco}" />-->
+            
             <Style.Triggers>
-                <Trigger Property="IsFocused" Value="true">
+                <!--<Trigger Property="IsFocused" Value="true">
                     <Setter Property="Background" Value="{StaticResource confoco}" />
-                </Trigger>
+                </Trigger>-->
                 <DataTrigger Binding="{Binding Text.Length, RelativeSource={RelativeSource Self}}" Value="0">
                     <Setter Property="CharacterCasing" Value="Upper"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
 
+        <!--LABEL NO EDITABLES - MOSTRAR DATOS-->
+        <Style TargetType="Label" x:Key="StyleLabelMostrarDatos" >
+            <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
+            <Setter Property="Background" Value="{StaticResource colorfondo2}" />
+            <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
+            <Setter Property="BorderThickness" Value="1,1,1,1" />
+            <Setter Property="Padding" Value="5, 0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+
+        <!--/////////////////////////////////////////////////////////////////////////-->
+        <!--/////////////////////////////////////////////////////////////////////////-->
+        <!--TEXTBOXES CAJA-->
+        <Style TargetType="TextBox" BasedOn="{StaticResource StyleTextbox}" x:Key="styleTBCaja">
+
+            <Setter Property="BorderThickness" Value="0"/>
+            <!--<Setter Property="OverridesDefaultStyle" Value="true"/>-->
+        </Style>
+        
+        <!--/////////////////////////////////////////////////////////////////////////-->
+        <!--/////////////////////////////////////////////////////////////////////////-->
+        <!--OTROS TEXTBOXES -->
+        
         <Style TargetType="TextBox" x:Key="StyleTextboxUpperConPlaceholder" >
 
             <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
@@ -408,7 +444,7 @@
             <Setter Property="IsHitTestVisible" Value="False" />
         </Style>
         <Style TargetType="TextBox" x:Key="StyleTBNoEditableFondo2">
-            <Setter Property="Background" Value="{StaticResource colorfondo}" />
+            <Setter Property="Background" Value="{StaticResource colorfondo2}" />
             <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
             <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
             <Setter Property="TextWrapping" Value="Wrap" />
@@ -419,7 +455,7 @@
             <Setter Property="IsHitTestVisible" Value="False" />
         </Style>
         <Style TargetType="TextBox" x:Key="StyleTBNoEditableFondo2Left">
-            <Setter Property="Background" Value="{StaticResource colorfondo3}" />
+            <Setter Property="Background" Value="{StaticResource colorfondo2}" />
             <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
             <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
             <Setter Property="TextWrapping" Value="Wrap" />
@@ -443,11 +479,11 @@
         <Style TargetType="TextBox" x:Key="StyleTbNoEditableNuevo2" >
             <Setter Property="Background" Value="{StaticResource infocable3}" />
             <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
-            <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
-            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="BorderBrush" Value="{StaticResource infocable2}" />
+            <!--<Setter Property="TextWrapping" Value="Wrap" />-->
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
+            <!--<Setter Property="HorizontalAlignment" Value="Center" />-->
             <Setter Property="Focusable" Value="False" />
             <Setter Property="IsTabStop" Value="False" />
             <Setter Property="IsHitTestVisible" Value="False" />
@@ -480,12 +516,14 @@
                     </Grid.ColumnDefinitions>
                     <ContentPresenter x:Name="HeaderContent"
                                       Grid.Column="0"
-                                      Margin="4,0,8,0"
+                                      Margin="4,0,4,0"
+                                      VerticalAlignment="Center"
                                       ContentSource="Content"/>
                     <Rectangle Fill="Transparent"
                                Grid.ColumnSpan="2"/>
                     <Ellipse Name="Circle"
                          Grid.Column="1"
+                         Margin="0,0,5,0"
                          Stroke="{DynamicResource textoclaro}"
                          Width="20"
                          Height="20"
@@ -494,6 +532,7 @@
                          />
                     <Path x:Name="Arrow"
                       Grid.Column="1"
+                      Margin="0,0,5,0"
                       Data="M 1,1.5 L 4.5,5 8,1.5"
                       Stroke="{DynamicResource textoclaro}"
                       StrokeThickness="2"
@@ -623,6 +662,7 @@
                               OverridesDefaultStyle="True"
                               HorizontalContentAlignment="Right"
                               HorizontalAlignment="Right"
+                              
                               Cursor="Hand"
                               Padding="10,0">
                 </ToggleButton>
@@ -633,6 +673,7 @@
                               VerticalContentAlignment="Bottom"
                               Background="{DynamicResource colorfondo2}"
                               Padding="0"
+                              
                               BorderBrush="Aqua"
                               BorderThickness="20"
                               >
@@ -747,5 +788,114 @@
                 </Trigger>-->
             </ControlTemplate.Triggers>
         </ControlTemplate>
+
+        <!--/////////////////////////////////////////////////////////////////////////-->
+        <!--/////////////////////////////////////////////////////////////////////////-->
+        <!--/////////////////////////////////////////////////////////////////////////-->
+        <!--/////////////////////////////////////////////////////////////////////////-->
+
+
+        <!-- BOTON EXPANDER CAJA -->
+        <ControlTemplate x:Key="BotonExpanderCaja" TargetType="{x:Type ToggleButton}">
+            <Border x:Name="ExpanderButtonBorder"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Padding="{TemplateBinding Padding}"
+                    Cursor="Hand"
+                              
+                              
+                    >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter x:Name="HeaderContent"
+                                      Grid.Column="0"
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Right"
+                                      Margin="0,0,4,0"
+                                      ContentSource="Content"/>
+                    <Rectangle Fill="Transparent"
+                               Grid.ColumnSpan="2"/>
+                    <Ellipse Name="Circle"
+                         Grid.Column="1"
+                         Stroke="{DynamicResource textoclaro}"
+                         Width="20"
+                         Height="20"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         />
+                    <Path x:Name="Arrow"
+                      Grid.Column="1"
+                      Data="M 1,1.5 L 4.5,5 8,1.5"
+                      Stroke="{DynamicResource textoclaro}"
+                      StrokeThickness="2"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      RenderTransformOrigin="0.5,0.5"
+                      
+                      >
+                        <Path.RenderTransform>
+                            <RotateTransform Angle="90"/>
+                        </Path.RenderTransform>
+                    </Path>
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <!-- Animate arrow when toggled-->
+                <Trigger Property="IsChecked"
+                         Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="Arrow"
+                                                 Storyboard.TargetProperty="(Path.RenderTransform).(RotateTransform.Angle)"
+                                                 To="270"
+                                                 Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="Arrow"
+                                                 Storyboard.TargetProperty="(Path.RenderTransform).(RotateTransform.Angle)"
+                                                 To="90"
+                                                 Duration="0:0:0.15"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+
+                <!-- MouseOver, Pressed behaviours-->
+                <!--<Trigger Property="IsMouseOver"
+                                 Value="true">
+                    <Setter Property="Stroke"
+                                    Value="{DynamicResource azul}"
+                                    TargetName="Circle"/>
+                    <Setter Property="Stroke"
+                                    Value="{DynamicResource azul}"
+                                    TargetName="Arrow"/>
+                </Trigger>-->
+                <Trigger Property="IsPressed"
+                                 Value="true">
+                    <!--<Setter Property="Stroke"
+                                    Value="{DynamicResource celeste}"
+                                    TargetName="Circle"/>
+                    <Setter Property="Stroke"
+                                    Value="{DynamicResource celeste}"
+                                    TargetName="Arrow"/>
+                    <Setter Property="StrokeThickness"
+                                    Value="1.5"
+                                    TargetName="Circle"/>-->
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+
+
+
     </Application.Resources>
 </Application>

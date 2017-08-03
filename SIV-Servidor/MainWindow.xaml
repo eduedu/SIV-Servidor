@@ -147,8 +147,8 @@
                 </TransformGroup>
             </Grid.RenderTransform>
             <local:ucConsultas x:Name="ucConsultas" Margin="2000,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
-            <local:ucImpresiones x:Name="ucImpresiones" Margin="1000,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
             <local:ucInicio x:Name="ucInicio" Margin="0,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
+            <local:ucImpresiones x:Name="ucImpresiones" Margin="1000,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
 
             <!--cortinaNegra -->
             <!--<Grid x:Name="gridCortinaNegra" Visibility="Hidden" Focusable="True"  >
@@ -161,7 +161,7 @@
 
         </Grid>
         <Label x:Name="labelAyuda2" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{x:Null}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="470" BorderBrush="{DynamicResource infocable}" Padding="5,0" Margin="520,0,0,0"/>
-        <Expander x:Name="expanderOpciones" Header=" OPCIONES" HorizontalAlignment="Right"   Margin="0,21,2,0" VerticalAlignment="Top" FontWeight="Bold" 
+        <Expander x:Name="expanderOpciones" Header=" OPCIONES" HorizontalAlignment="Right"   Margin="0,19,0,0" VerticalAlignment="Top" FontWeight="Bold" 
                   Foreground="{DynamicResource textoclaro}"  Template="{StaticResource RevealExpanderTemp}" LostFocus="expanderOpciones_LostFocus" Expanded="expanderOpciones_Expanded" Collapsed="expanderOpciones_Expanded">
             <!--<Grid Background="#FFE5E5E5" Margin="-79,0,8,0" Height="178"/>-->
             <StackPanel Margin="0,7,0,0"  >

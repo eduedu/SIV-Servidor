@@ -138,7 +138,7 @@
                                             <Setter Property="MinHeight" Value="20"/>
                                         </Trigger>
                                         <Trigger Property="IsEnabled" Value="false">
-                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                            <!--<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>-->
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -508,16 +508,17 @@
             <Label x:Name="labTotalTexto" Content="Total:" HorizontalAlignment="Left" Margin="799,499,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="49" HorizontalContentAlignment="Right"/>
             <Label x:Name="labTotal" Content="labTotal" HorizontalAlignment="Left" Margin="849,499,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="81" FontWeight="Bold" HorizontalContentAlignment="Right"/>
             <Label x:Name="label_Copy2" Content="Dirección" HorizontalAlignment="Left" Margin="19,407,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="77" Padding="0" Height="15"/>
-            <Label x:Name="labDireccion" Content="labDireccion" HorizontalAlignment="Left" Margin="19,424,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" FontWeight="Bold" Width="243" Height="22" Background="{DynamicResource colorfondo}" Padding="5,0" VerticalContentAlignment="Center"/>
             <Label x:Name="label_Copy3" Content="Teléfono" HorizontalAlignment="Left" Margin="19,456,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="77" Padding="0" Height="15"/>
-            <Label x:Name="labTelefono" Content="labTelefono" HorizontalAlignment="Left" Margin="19,473,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" FontWeight="Bold" Width="123" Height="22" Background="{DynamicResource colorfondo}" Padding="5,0" VerticalContentAlignment="Center"/>
             <Label x:Name="label_Copy4" Content="CUIT" HorizontalAlignment="Left" Margin="164,456,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="77" Padding="0" Height="15"/>
-            <Label x:Name="labCuit" Content="labCuit" HorizontalAlignment="Left" Margin="164,473,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" FontWeight="Bold" Width="98" Height="22" Background="{DynamicResource colorfondo}" Padding="5,0" VerticalContentAlignment="Center"/>
-            <Label x:Name="labFecha" Content="labFecha" HorizontalAlignment="Left" Margin="19,321,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="77" FontWeight="Bold" Background="{DynamicResource colorfondo}" HorizontalContentAlignment="Center" Height="22" VerticalContentAlignment="Center" Padding="0"/>
             <Label x:Name="label_Copy" Content="Nombre" HorizontalAlignment="Left" Margin="19,356,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="77" Padding="0" Height="15"/>
-            <Label x:Name="labId" Content="labId" HorizontalAlignment="Left" Margin="203,321,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="59" FontWeight="Bold" Background="{DynamicResource colorfondo}" HorizontalContentAlignment="Center" Height="22" VerticalContentAlignment="Center" Padding="0"/>
-            <Label x:Name="labNombre" Content="labNombre" HorizontalAlignment="Left" Margin="19,373,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="243" Height="22" Background="{DynamicResource colorfondo}" Padding="5,0" VerticalContentAlignment="Center" FontWeight="Bold"/>
-            <Label x:Name="labIdTexto" Content="ID" HorizontalAlignment="Left" Margin="103,321,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" FontWeight="Bold" Width="96" Padding="0" VerticalContentAlignment="Center" Height="22" HorizontalContentAlignment="Right"/>
+            <Label x:Name="labIdTexto" Content="ID" HorizontalAlignment="Left" Margin="103,321,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"  Width="96" Padding="0" VerticalContentAlignment="Center" Height="22" HorizontalContentAlignment="Right"/>
+            
+            <Label x:Name="labFecha" Content="labFecha" HorizontalAlignment="Left" Margin="19,321,0,0" VerticalAlignment="Top" Width="77" HorizontalContentAlignment="Center" Height="22"  Style="{DynamicResource StyleLabelMostrarDatos}" />
+            <Label x:Name="labId" Content="labId" HorizontalAlignment="Left" Margin="203,321,0,0" VerticalAlignment="Top" Width="59" HorizontalContentAlignment="Center" Height="22" Style="{DynamicResource StyleLabelMostrarDatos}"/>
+            <Label x:Name="labNombre" Content="labNombre" HorizontalAlignment="Left" Margin="19,373,0,0" VerticalAlignment="Top"  Width="243" Height="22" Padding="5,0" Style="{DynamicResource StyleLabelMostrarDatos}" />
+            <Label x:Name="labDireccion" Content="labDireccion" HorizontalAlignment="Left" Margin="19,424,0,0" VerticalAlignment="Top"  Width="243" Height="22"  Style="{DynamicResource StyleLabelMostrarDatos}" />
+            <Label x:Name="labTelefono" Content="labTelefono" HorizontalAlignment="Left" Margin="19,473,0,0" VerticalAlignment="Top"  Width="123" Height="22" Style="{DynamicResource StyleLabelMostrarDatos}" />
+            <Label x:Name="labCuit" Content="labCuit" HorizontalAlignment="Left" Margin="164,473,0,0" VerticalAlignment="Top"   Width="98" Height="22" Style="{DynamicResource StyleLabelMostrarDatos}"  />
         </Grid>
 
         <!--myInputBox  COMIENZO-->

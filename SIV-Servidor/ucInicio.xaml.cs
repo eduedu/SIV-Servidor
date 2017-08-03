@@ -80,6 +80,7 @@ namespace SIV_Servidor
             calcularTotal();
             //tbDescripcion.Focus();
             tbDescripcion.Focus();
+            btnCaja.Tag = "0";
         }
 
         //------------------------------------------------------------------------------------------
@@ -1341,5 +1342,63 @@ namespace SIV_Servidor
             zfun.consola(texto);
         }
 
+
+        ///CAJA
+        public void btnCaja_Click(object sender, RoutedEventArgs e)
+        {
+            toggleCaja();
+            e.Handled = true;
+        }
+        public void toggleCaja()
+        {
+            int direccionAnimacion = 0;
+            ///mostrar gridCaja
+            if (btnCaja.Tag.ToString() == "0")
+            {
+                direccionAnimacion = -1;
+                btnCaja.Tag = "1";
+            }
+            ///ocultar gridCaja
+            else
+            {
+                direccionAnimacion = 1;
+                btnCaja.Tag = "0";
+            }
+
+            ///ANIMACION 
+            ///easing
+            CircleEase easing = new CircleEase();  // or whatever easing class you want
+            easing.EasingMode = EasingMode.EaseInOut;
+            DoubleAnimation scrollQueue = new DoubleAnimation();
+            scrollQueue.By = -1;   //este valor invente yo
+            scrollQueue.EasingFunction = easing;
+            //scrollQueue.Duration = new Duration(TimeSpan.FromSeconds(0.25));
+            //gridVentas.BeginAnimation(Grid.MarginProperty, scrollQueue);
+
+            ///animacion en sí
+            ThicknessAnimation ta = new ThicknessAnimation();
+            ta.From = gridCaja.Margin;
+            double inicio = ta.From.Value.Left;
+            double offsetX = gridCaja.Width;
+            double offsetAjuste= 0;
+            double offsetTotal = inicio + ((offsetX + offsetAjuste) * direccionAnimacion);
+            ta.To = new Thickness(offsetTotal, ta.From.Value.Top, ta.From.Value.Right, ta.From.Value.Bottom);
+            ta.Duration = new Duration(TimeSpan.FromSeconds((double)App.Current.Resources["TiempoAnimacion"]));
+            ta.EasingFunction = easing;
+            ta.Completed += (s, e2) =>
+            {
+                if (direccionAnimacion == -1)
+                {
+                    tbCaja01.Focus();
+                } else
+                {
+                    tbDescripcion.Focus();
+                }
+
+            };
+            //dont need to use story board but if you want pause,stop etc use story board
+            gridCaja.BeginAnimation(Grid.MarginProperty, ta);
+
+        }
     }
 }

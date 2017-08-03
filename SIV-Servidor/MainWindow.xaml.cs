@@ -57,7 +57,7 @@ namespace SIV_Servidor
         //public static ObservableCollection<itemCaja> mArticulosCaja = new ObservableCollection<itemCaja>();
         Storyboard sbAyuda;
         public double gridXTo { get; set; }
-        public double gridXFrom { get; set; }
+        //public double gridXFrom { get; set; }
         public static int mPestanaMain { get; set; }
         double mAnchoPantalla;
 
@@ -101,7 +101,7 @@ namespace SIV_Servidor
 
             mAnchoPantalla = SistemaVentas.Width;
             gridXTo = -500;
-            gridXFrom = 0;
+            //gridXFrom = 0;
 
 
             ///animacion
@@ -301,6 +301,18 @@ namespace SIV_Servidor
 
                 }
             }
+            if(e.Key == Key.F5)
+            {
+                if (ucInicio.btnCaja.IsChecked==true)
+                {
+                    ucInicio.btnCaja.IsChecked = false;
+                } else
+                {
+                    ucInicio.btnCaja.IsChecked = true;
+                }
+                ucInicio.toggleCaja();
+                e.Handled = true;
+            }
 
             //if (tabMain.SelectedIndex == 2)
             //{
@@ -357,7 +369,7 @@ namespace SIV_Servidor
                 //consola(e.Source.ToString());
 
                 /// animacion
-                gridXFrom = gridMain.RenderTransform.Value.OffsetX;
+                //gridXFrom = gridMain.RenderTransform.Value.OffsetX;
                 gridXTo = (double)(mAnchoPantalla * selected * -1);
                 //consola("from:" + gridXFrom);
                 //consola("to:" + gridXTo);
