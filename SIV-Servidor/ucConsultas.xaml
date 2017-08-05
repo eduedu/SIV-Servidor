@@ -84,8 +84,8 @@
                 </TabItem>
 
             </TabControl>
-            <ListView x:Name="listDetalles"  Height="183" VerticalAlignment="Top" Width="681" Background="{DynamicResource colorfondo2}" HorizontalAlignment="Left" Foreground="{DynamicResource textoclaro}"  BorderThickness="0"  
-                BorderBrush="{x:Null}" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" Margin="279,317,0,0" IsHitTestVisible="True"
+            <ListView x:Name="listDetalles"  Height="196" VerticalAlignment="Top" Width="676" Background="{DynamicResource colorfondo2}" HorizontalAlignment="Left" Foreground="{DynamicResource textoclaro}"  BorderThickness="0"  
+                BorderBrush="{x:Null}" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" Margin="284,307,0,0" IsHitTestVisible="True"
                   >
 
                 <ListView.Resources>
@@ -108,12 +108,12 @@
                                         <Border x:Name="HeaderBorder" BorderBrush="{StaticResource textoclaro}" BorderThickness="0,0,0,1" Background="{TemplateBinding Background}">
                                             <Grid>
                                                 <Grid.RowDefinitions>
-                                                    <RowDefinition MaxHeight="7"/>
+                                                    <RowDefinition MaxHeight="8"/>
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
                                                 <Rectangle x:Name="UpperHighlight" Fill="#FFE3F7FF" Visibility="Collapsed"/>
                                                 <Border Padding="{TemplateBinding Padding}" Grid.RowSpan="2">
-                                                    <ContentPresenter x:Name="HeaderContent" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="0,0,0,1" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                    <ContentPresenter x:Name="HeaderContent" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="0,8,0,1" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                                                 </Border>
                                             </Grid>
                                         </Border>
@@ -278,8 +278,8 @@
                 </ListView.View>
 
             </ListView>
-            <Grid x:Name="gridRemitosyfacturas" HorizontalAlignment="Left" Height="242" Margin="15,44,0,0" VerticalAlignment="Top" Width="945" Background="{DynamicResource colorfondo2}">
-                <ListView x:Name="listConsultas"  Height="222" VerticalAlignment="Top" Width="530" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
+            <Grid x:Name="gridRemitosyfacturas" HorizontalAlignment="Left" Height="233" Margin="15,44,0,0" VerticalAlignment="Top" Width="945" Background="{DynamicResource colorfondo2}">
+                <ListView x:Name="listConsultas"  Height="212" VerticalAlignment="Top" Width="530" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
                     BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" Margin="10,10,0,0" SelectionChanged="listConsultasYlistPendientes_SelectionChanged" GotFocus="listConsultas_GotFocus"
                   >
 
@@ -287,24 +287,6 @@
                         <Style TargetType="{x:Type ListViewItem}">
 
                             <Style.Triggers>
-                                <!--<DataTrigger Binding="{Binding color}" Value="0">
-                                <Setter Property="Background" Value="White" />
-                                <Setter Property="BorderBrush" Value="White" />
-                                <Setter Property="BorderThickness" Value="0" />
-                                <Setter Property="Margin" Value="0" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding color}" Value="1">
-                                <Setter Property="Background" Value="{StaticResource textoclaro}" />
-                                <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
-                                -->
-                                <!--
-                                        <Setter Property="CornerRadius" Value="0"/>
-                                        <Setter TargetName="Border" Property="BorderThickness" Value="4,4,4,4" />
-                                        -->
-                                <!--
-                                <Setter Property="BorderThickness" Value="0" />
-                                <Setter Property="Margin" Value="0" />
-                            </DataTrigger>-->
                                 <MultiTrigger>
                                     <MultiTrigger.Conditions>
                                         <Condition Property="IsSelected" Value="true" />
@@ -326,16 +308,6 @@
                             </Style.Triggers>
                         </Style>
                     </ListView.Resources>
-                    <!--
-            <ListView.GroupStyle>
-                <GroupStyle>
-                    <GroupStyle.HeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name}"></TextBlock>
-                        </DataTemplate>
-                    </GroupStyle.HeaderTemplate>
-                </GroupStyle>
-            </ListView.GroupStyle>-->
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Nro ID" Width="70"   DisplayMemberBinding="{Binding nro}"  />
@@ -345,7 +317,6 @@
                             <GridViewColumn Header="Total" Width="90"   >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <!--<TextBlock Text="{Binding total}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" FontWeight="Bold"  />-->
                                         <TextBlock Text="{Binding total, StringFormat=$ \{0:F\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -355,8 +326,8 @@
 
                 </ListView>
             </Grid>
-            <Grid  x:Name="gridPendientes" HorizontalAlignment="Left" Height="242" Margin="992,44,-961,0" VerticalAlignment="Top" Width="945" Background="{DynamicResource colorfondo2}">
-                <ListView x:Name="listPendientes"  Height="203" VerticalAlignment="Top" Width="369" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
+            <Grid  x:Name="gridPendientes" HorizontalAlignment="Left" Height="233" Margin="992,44,-967,0" VerticalAlignment="Top" Width="945" Background="{DynamicResource colorfondo2}">
+                <ListView x:Name="listPendientes"  Height="195" VerticalAlignment="Top" Width="369" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
                     BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" Margin="330,28,0,0" SelectionChanged="listConsultasYlistPendientes_SelectionChanged" PreviewKeyDown="listPendientes_PreviewKeyDown" GotFocus="listPendientes_GotFocus"
                   >
 
@@ -364,25 +335,7 @@
 
                         <Style TargetType="{x:Type ListViewItem}">
                             <Style.Triggers>
-                                <!--<DataTrigger Binding="{Binding color}" Value="0">
-                                <Setter Property="Background" Value="White" />
-                                <Setter Property="BorderBrush" Value="White" />
-                                <Setter Property="BorderThickness" Value="0" />
-                                <Setter Property="Margin" Value="0" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding color}" Value="1">
-                                <Setter Property="Background" Value="{StaticResource textoclaro}" />
-                                <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
-                                -->
-                                <!--
-                                        <Setter Property="CornerRadius" Value="0"/>
-                                        <Setter TargetName="Border" Property="BorderThickness" Value="4,4,4,4" />
-                                        -->
-                                <!--
-                                <Setter Property="BorderThickness" Value="0" />
-                                <Setter Property="Margin" Value="0" />
-                            </DataTrigger>-->
-                                <MultiTrigger>
+                                  <MultiTrigger>
                                     <MultiTrigger.Conditions>
                                         <Condition Property="IsSelected" Value="true" />
                                         <Condition Property="Selector.IsSelectionActive" Value="true" />
@@ -429,7 +382,7 @@
                     </ListView.View>
 
                 </ListView>
-                <ListView x:Name="listNombres"  Height="169" VerticalAlignment="Top" Width="306" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
+                <ListView x:Name="listNombres"  Height="160" VerticalAlignment="Top" Width="306" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
                     BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" Margin="10,63,0,0" SelectionChanged="listNombres_SelectionChanged" PreviewKeyDown="listNombres_PreviewKeyDown" GotFocus="listNombres_GotFocus"
                     >
 
@@ -500,25 +453,28 @@
                 <TextBox x:Name="tbFiltrar" Height="30" Margin="10,28,629,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="" VerticalContentAlignment="Center" Style="{DynamicResource StyleTextboxUpperConPlaceholder}" TextChanged="tbFiltrar_TextChanged" PreviewKeyDown="tbFiltrar_PreviewKeyDown" GotFocus="tbFiltrar_GotFocus"/>
 
                 <Label x:Name="label_Copy5" Content="Clientes" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Height="26" Width="44" FontWeight="Bold"/>
-                <Button x:Name="btnPagar" Content="ASENTAR PAGO" Margin="728,201,36,0" Style="{DynamicResource BotonMenu}" Height="30" VerticalAlignment="Top" PreviewKeyDown="btnPagar_PreviewKeyDown" PreviewMouseLeftButtonDown="btnPagar_PreviewMouseLeftButtonDown" GotFocus="btnPagar_GotFocus"/>
+                <Button x:Name="btnPagar" Content="ASENTAR PAGO" Margin="728,193,36,0" Style="{DynamicResource BotonMenu}" Height="30" VerticalAlignment="Top" PreviewKeyDown="btnPagar_PreviewKeyDown" PreviewMouseLeftButtonDown="btnPagar_PreviewMouseLeftButtonDown" GotFocus="btnPagar_GotFocus"/>
                 <Label x:Name="label_Copy6" Content="Cuentas Pendientes" HorizontalAlignment="Left" Margin="330,10,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Height="26" Width="198" FontWeight="Bold"/>
                 <Button x:Name="btnImprimir" Content="IMPRIMIR COPIA" Margin="728,155,36,0" Style="{DynamicResource BotonMenu}" Height="30" VerticalAlignment="Top" IsEnabled="False"/>
             </Grid>
-            <Rectangle Fill="{DynamicResource colorfondo2}" HorizontalAlignment="Left" Height="183" Margin="15,317,0,0" VerticalAlignment="Top" Width="264"/>
-            <Label x:Name="labTotalTexto" Content="Total:" HorizontalAlignment="Left" Margin="799,499,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="49" HorizontalContentAlignment="Right"/>
-            <Label x:Name="labTotal" Content="labTotal" HorizontalAlignment="Left" Margin="849,499,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="81" FontWeight="Bold" HorizontalContentAlignment="Right"/>
-            <Label x:Name="label_Copy2" Content="Dirección" HorizontalAlignment="Left" Margin="19,407,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="77" Padding="0" Height="15"/>
-            <Label x:Name="label_Copy3" Content="Teléfono" HorizontalAlignment="Left" Margin="19,456,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="77" Padding="0" Height="15"/>
-            <Label x:Name="label_Copy4" Content="CUIT" HorizontalAlignment="Left" Margin="164,456,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="77" Padding="0" Height="15"/>
-            <Label x:Name="label_Copy" Content="Nombre" HorizontalAlignment="Left" Margin="19,356,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="77" Padding="0" Height="15"/>
-            <Label x:Name="labIdTexto" Content="ID" HorizontalAlignment="Left" Margin="103,321,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"  Width="96" Padding="0" VerticalContentAlignment="Center" Height="22" HorizontalContentAlignment="Right"/>
-            
-            <Label x:Name="labFecha" Content="labFecha" HorizontalAlignment="Left" Margin="19,321,0,0" VerticalAlignment="Top" Width="77" HorizontalContentAlignment="Center" Height="22"  Style="{DynamicResource StyleLabelMostrarDatos}" />
-            <Label x:Name="labId" Content="labId" HorizontalAlignment="Left" Margin="203,321,0,0" VerticalAlignment="Top" Width="59" HorizontalContentAlignment="Center" Height="22" Style="{DynamicResource StyleLabelMostrarDatos}"/>
-            <Label x:Name="labNombre" Content="labNombre" HorizontalAlignment="Left" Margin="19,373,0,0" VerticalAlignment="Top"  Width="243" Height="22" Padding="5,0" Style="{DynamicResource StyleLabelMostrarDatos}" />
-            <Label x:Name="labDireccion" Content="labDireccion" HorizontalAlignment="Left" Margin="19,424,0,0" VerticalAlignment="Top"  Width="243" Height="22"  Style="{DynamicResource StyleLabelMostrarDatos}" />
-            <Label x:Name="labTelefono" Content="labTelefono" HorizontalAlignment="Left" Margin="19,473,0,0" VerticalAlignment="Top"  Width="123" Height="22" Style="{DynamicResource StyleLabelMostrarDatos}" />
-            <Label x:Name="labCuit" Content="labCuit" HorizontalAlignment="Left" Margin="164,473,0,0" VerticalAlignment="Top"   Width="98" Height="22" Style="{DynamicResource StyleLabelMostrarDatos}"  />
+            <Grid Margin="15,307,691,30">
+                <Rectangle Fill="{DynamicResource colorfondo2}" HorizontalAlignment="Left" Height="196" VerticalAlignment="Top" Width="264" Margin="0,0,0,-3"/>
+                <Label x:Name="label_Copy2" Content="Dirección" HorizontalAlignment="Left" Margin="4,129,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="243" Padding="0" Height="15" FontSize="10" HorizontalContentAlignment="Center"/>
+                <Label x:Name="label_Copy3" Content="Teléfono" HorizontalAlignment="Left" Margin="4,178,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="123" Padding="0" Height="15" FontSize="10" HorizontalContentAlignment="Center"/>
+                <Label x:Name="label_Copy4" Content="CUIT" HorizontalAlignment="Left" Margin="149,178,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="98" Padding="0" Height="15" FontSize="10" HorizontalContentAlignment="Center"/>
+                <Label x:Name="label_Copy" Content="Nombre" HorizontalAlignment="Left" Margin="4,78,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="243" Padding="0" Height="15" FontSize="10" HorizontalContentAlignment="Center"/>
+                <Label x:Name="labIdTexto" Content="ID" HorizontalAlignment="Left" Margin="149,26,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}"  Width="98" Padding="0" Height="16" FontSize="10" HorizontalContentAlignment="Center"/>
+
+                <Label x:Name="labFecha" Content="labFecha" HorizontalAlignment="Left" Margin="4,4,0,0" VerticalAlignment="Top" Width="77" HorizontalContentAlignment="Center" Height="22"  Style="{DynamicResource StyleLabelMostrarDatos}" />
+                <Label x:Name="labId" Content="labId" HorizontalAlignment="Left" Margin="149,4,0,0" VerticalAlignment="Top" Width="98" HorizontalContentAlignment="Center" Height="22" Style="{DynamicResource StyleLabelMostrarDatos}"/>
+                <Label x:Name="labNombre" Content="labNombre" HorizontalAlignment="Left" Margin="4,56,0,0" VerticalAlignment="Top"  Width="243" Height="22" Padding="5,0" Style="{DynamicResource StyleLabelMostrarDatos}" />
+                <Label x:Name="labDireccion" Content="labDireccion" HorizontalAlignment="Left" Margin="4,107,0,0" VerticalAlignment="Top"  Width="243" Height="22"  Style="{DynamicResource StyleLabelMostrarDatos}" />
+                <Label x:Name="labTelefono" Content="labTelefono" HorizontalAlignment="Left" Margin="4,156,0,0" VerticalAlignment="Top"  Width="123" Height="22" Style="{DynamicResource StyleLabelMostrarDatos}" />
+                <Label x:Name="labCuit" Content="labCuit" HorizontalAlignment="Left" Margin="149,156,0,0" VerticalAlignment="Top"   Width="98" Height="22" Style="{DynamicResource StyleLabelMostrarDatos}"  />
+                <Label x:Name="label_Copy1" Content="Fecha" HorizontalAlignment="Left" Margin="4,26,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="77" Padding="0" Height="15" FontSize="10" HorizontalContentAlignment="Center"/>
+            </Grid>
+            <Label x:Name="labTotalTexto" Content="Total:" HorizontalAlignment="Left" Margin="803,499,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="49" HorizontalContentAlignment="Right"/>
+            <Label x:Name="labTotal" Content="labTotal" HorizontalAlignment="Left" Margin="853,499,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Width="81" FontWeight="Bold" HorizontalContentAlignment="Right"/>
         </Grid>
 
         <!--myInputBox  COMIENZO-->
@@ -559,7 +515,7 @@
                 </StackPanel>
             </Border>
         </Grid>
-        <Label x:Name="label_Copy7" Content="Detalles de la Venta" HorizontalAlignment="Left" Margin="15,301,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Height="26" Width="198" FontWeight="Bold"/>
+        <Label x:Name="label_Copy7" Content="Detalles de la Venta" HorizontalAlignment="Left" Margin="15,289,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Height="26" Width="198" FontWeight="Bold"/>
         <!--myInputBox  FIN-->
     </Grid>
 </UserControl>

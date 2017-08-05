@@ -301,7 +301,13 @@ namespace SIV_Servidor
 
                 }
             }
-            if(e.Key == Key.F5)
+            if (e.Key == Key.F4)
+            {
+                tabMain.SelectedIndex = 3;
+                e.Handled = true;
+            }
+
+            if (e.Key == Key.F5)
             {
                 if (ucInicio.btnCaja.IsChecked==true)
                 {
@@ -455,6 +461,12 @@ namespace SIV_Servidor
                             }
                         }
                     }
+                    ///pestana GASTOS
+                    if (selected == 3)
+                    {
+                        ucGastos.tbDescripcion.Focus();
+                        ayuda("");
+                    }
 
 
                 };
@@ -481,6 +493,11 @@ namespace SIV_Servidor
                 if (selected == 2)
                 {
                     tbPestanaConsultas.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
+                }
+                tbPestanaGastos.Foreground = App.Current.Resources["textoclaro"] as SolidColorBrush;
+                if (selected == 3)
+                {
+                    tbPestanaGastos.Foreground = App.Current.Resources["confoco2"] as SolidColorBrush;
                 }
 
                 ///Index Pestana MAIN seleecionada

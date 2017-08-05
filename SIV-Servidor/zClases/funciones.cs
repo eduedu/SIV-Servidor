@@ -16,6 +16,15 @@ namespace SIV_Servidor
             Console.WriteLine(texto);
             //labelAyuda.Content = texto;
         }
+        public static int toInt(string cadena)
+        {
+            //i++;
+            //consola(i.ToString());
+            int resultado = 0;
+            int.TryParse(cadena, out resultado);
+            return resultado;
+        }
+
         public static long toLong(string cadena)
         {
             //i++;

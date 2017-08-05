@@ -35,7 +35,7 @@
         </Storyboard>
     </UserControl.Resources>
     <Grid Background="{DynamicResource colorfondo}">
-        <ListView x:Name="listFiltro"    Height="224" Margin="-736,122,0,0" VerticalAlignment="Top" Width="660" Background="{DynamicResource textoclaro}" KeyDown="listFiltro_KeyDown" HorizontalAlignment="Left" Panel.ZIndex="1" IsTabStop="True" Foreground="Black" GotFocus="listFiltro_GotFocus" LostFocus="listFiltro_LostFocus" Style="{DynamicResource listFiltroStyle1}" IsVisibleChanged="listFiltro_IsVisibleChanged" >
+        <ListView x:Name="listFiltro"    Height="224" Margin="-703,153,0,0" VerticalAlignment="Top" Width="660" Background="{DynamicResource textoclaro}" KeyDown="listFiltro_KeyDown" HorizontalAlignment="Left" Panel.ZIndex="1" IsTabStop="True" Foreground="{DynamicResource textoobscuro}" GotFocus="listFiltro_GotFocus" LostFocus="listFiltro_LostFocus" Style="{DynamicResource listFiltroStyle1}" IsVisibleChanged="listFiltro_IsVisibleChanged" BorderBrush="{DynamicResource textoclaro}" >
 
             <ListView.View>
                 <GridView>
@@ -61,15 +61,16 @@
 
         </ListView>
 
-        <Rectangle HorizontalAlignment="Left" Height="366" Margin="10,138,0,0" VerticalAlignment="Top" Width="780" Fill="{DynamicResource colorfondo2}"/>
-        <Rectangle HorizontalAlignment="Left" Height="84" Margin="10,26.5,0,0" VerticalAlignment="Top" Width="780" Fill="{DynamicResource colorfondo2}"/>
-        <!--<TextBox x:Name="tbCodigo" HorizontalAlignment="Left" Height="30" Margin="22.017,53.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" Background="{DynamicResource colorfondo}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" Focusable="False" IsTabStop="False" IsHitTestVisible="False" RenderTransformOrigin="0.5,0.5" BorderBrush="{DynamicResource textoclaro}" Foreground="{DynamicResource textoclaro}" HorizontalContentAlignment="Right"/>-->
-        <TextBox x:Name="tbCodigo" HorizontalAlignment="Left" Height="30" Margin="22.017,53.5,0,0" VerticalAlignment="Top" Width="105" RenderTransformOrigin="0.5,0.5" Style="{DynamicResource StyleTBNoEditable}" Text="123" BorderBrush="{DynamicResource textoclaro}" HorizontalContentAlignment="Center"/>
-        <!--<TextBox x:Name="tbDescripcion" HorizontalAlignment="Left" Height="30" Margin="132.017,53.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="350" Background="{DynamicResource sinfoco}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" TextChanged="tbDescripcion_TextChanged" PreviewKeyDown="tbDescripcion_PreviewKeyDown" BorderBrush="{x:Null}">-->
-        <TextBox x:Name="tbDescripcion" HorizontalAlignment="Left" Height="30" Margin="132.017,53.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="350"  ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" TextChanged="tbDescripcion_TextChanged" PreviewKeyDown="tbDescripcion_PreviewKeyDown" Style="{DynamicResource StyleTextboxUpper}">
-            <!--<TextBox.Style>
+        <Rectangle HorizontalAlignment="Left" Height="373" Margin="10,143,0,0" VerticalAlignment="Top" Width="780" Fill="{DynamicResource colorfondo2}"/>
+        <Grid x:Name="gridArticulo" Margin="10,33,180,420">
+            <Rectangle HorizontalAlignment="Left" Height="83" VerticalAlignment="Top" Width="780" Fill="{DynamicResource colorfondo2}" Margin="0,0,0,-6"/>
+            <TextBox x:Name="tbCodigo" HorizontalAlignment="Left" Height="30" Margin="12,28,0,0" VerticalAlignment="Top" Width="105" RenderTransformOrigin="0.5,0.5" Style="{DynamicResource StyleTBNoEditable}" Text="123" BorderBrush="{DynamicResource textoclaro}" HorizontalContentAlignment="Center"/>
+            <TextBox x:Name="tbDescripcion" HorizontalAlignment="Left" Height="30" Margin="122,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="350"  ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" TextChanged="tbDescripcion_TextChanged" PreviewKeyDown="tbDescripcion_PreviewKeyDown" Style="{DynamicResource StyleTextboxUpper}">
+                <!--<TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
-                    --><!--<Setter Property="CharacterCasing" Value="Lower"/>--><!--
+                    -->
+                <!--<Setter Property="CharacterCasing" Value="Lower"/>-->
+                <!--
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Text.Length, RelativeSource={RelativeSource Self}}" Value="0">
                             <Setter Property="CharacterCasing" Value="Upper"/>
@@ -77,24 +78,29 @@
                     </Style.Triggers>
                 </Style>
             </TextBox.Style>-->
-        </TextBox>
+            </TextBox>
+            <TextBox x:Name="tbSubtotal" HorizontalAlignment="Left" Height="30" Margin="647,28,0,0"  VerticalAlignment="Top" Width="105" Style="{DynamicResource StyleTBNoEditable}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" HorizontalContentAlignment="Right" />
+            <TextBox x:Name="tbPrecio"  HorizontalAlignment="Left" Height="30" Margin="562,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80"  ToolTip="" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewKeyDown="tbPrecio_PreviewKeyDown" TextChanged="tbPrecio_TextChanged" TextOptions.TextFormattingMode="Display" PreviewTextInput="tbPrecio_PreviewTextInput" Style="{StaticResource StyleTextbox}"/>
+            <TextBox x:Name="tbCantidad" HorizontalAlignment="Left" Height="30" Margin="477,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" ToolTip="" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewKeyDown="tbCantidad_PreviewKeyDown" TextChanged="tbCantidad_TextChanged" Style="{StaticResource StyleTextbox}"/>
+            <Label x:Name="label_Copy" Content="Código" HorizontalAlignment="Left" Margin="13,4,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
+            <Label x:Name="label_Copy1" Content="Descripción" HorizontalAlignment="Left" Margin="122,4,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
+            <Label x:Name="label_Copy2" Content="Cantidad" HorizontalAlignment="Left" Margin="477,4,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
+            <Label x:Name="label_Copy3" Content="Precio $" HorizontalAlignment="Left" Margin="562,4,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
+            <Label x:Name="label_Copy4" Content="Sub-total $" HorizontalAlignment="Left" Margin="647,4,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
+            <Label x:Name="labelTip2" Content="labelTip2" HorizontalAlignment="Left" Margin="200,62,0,0" VerticalAlignment="Top" Background="{DynamicResource infocable3}" IsHitTestVisible="False" Padding="2,0" Foreground="{DynamicResource textoobscuro}"/>
+            <Label x:Name="labelTip" Content="labelTip" HorizontalAlignment="Left" Margin="122,60,0,0" VerticalAlignment="Top" Background="{DynamicResource infocable3}" IsHitTestVisible="False" Padding="2,0" Foreground="{DynamicResource textoobscuro}" Panel.ZIndex="2"/>
+        </Grid>
+        <!--<TextBox x:Name="tbCodigo" HorizontalAlignment="Left" Height="30" Margin="22.017,53.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" Background="{DynamicResource colorfondo}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" Focusable="False" IsTabStop="False" IsHitTestVisible="False" RenderTransformOrigin="0.5,0.5" BorderBrush="{DynamicResource textoclaro}" Foreground="{DynamicResource textoclaro}" HorizontalContentAlignment="Right"/>-->
+        <!--<TextBox x:Name="tbDescripcion" HorizontalAlignment="Left" Height="30" Margin="132.017,53.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="350" Background="{DynamicResource sinfoco}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" TextChanged="tbDescripcion_TextChanged" PreviewKeyDown="tbDescripcion_PreviewKeyDown" BorderBrush="{x:Null}">-->
         <!--<TextBox x:Name="tbSubtotal" HorizontalAlignment="Left" Height="30" Margin="657.017,53.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105" Background="{DynamicResource colorfondo}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" Focusable="False" IsHitTestVisible="False" IsTabStop="False" HorizontalContentAlignment="Right" BorderBrush="{DynamicResource textoclaro}" Foreground="{DynamicResource textoclaro}"/>-->
-        <TextBox x:Name="tbSubtotal" HorizontalAlignment="Left" Height="30" Margin="657.017,53.5,0,0"  VerticalAlignment="Top" Width="105" Style="{DynamicResource StyleTBNoEditable}" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" HorizontalContentAlignment="Right" />
-        <TextBox x:Name="tbPrecio"  HorizontalAlignment="Left" Height="30" Margin="572.017,53.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80"  ToolTip="" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewKeyDown="tbPrecio_PreviewKeyDown" TextChanged="tbPrecio_TextChanged" TextOptions.TextFormattingMode="Display" PreviewTextInput="tbPrecio_PreviewTextInput" Style="{StaticResource StyleTextbox}"/>
-        <TextBox x:Name="tbCantidad" HorizontalAlignment="Left" Height="30" Margin="487.017,53.5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" ToolTip="" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewKeyDown="tbCantidad_PreviewKeyDown" TextChanged="tbCantidad_TextChanged" Style="{StaticResource StyleTextbox}"/>
-        <Label x:Name="label_Copy" Content="Código" HorizontalAlignment="Left" Margin="22.965,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
-        <Label x:Name="label_Copy1" Content="Descripción" HorizontalAlignment="Left" Margin="131.965,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
-        <Label x:Name="label_Copy2" Content="Cantidad" HorizontalAlignment="Left" Margin="486.965,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
-        <Label x:Name="label_Copy3" Content="Precio $" HorizontalAlignment="Left" Margin="571.965,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
-        <Label x:Name="label_Copy4" Content="Sub-total $" HorizontalAlignment="Left" Margin="656.965,29.5,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
-        <TabControl x:Name="tabVentas" HorizontalAlignment="Left" Margin="22,162,0,332" Width="446" SelectionChanged="tabVentas_SelectionChanged" Focusable="False" Background="{x:Null}" BorderBrush="{x:Null}" Cursor="Hand">
+        <TabControl x:Name="tabVentas" HorizontalAlignment="Left" Margin="18,153,0,341" Width="759" SelectionChanged="tabVentas_SelectionChanged" Focusable="False" Background="{x:Null}" BorderBrush="{x:Null}" Cursor="Hand" Padding="0" HorizontalContentAlignment="Left">
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type TabItem}">
 
-                                <Border x:Name="Border" BorderThickness="1,1,1,0" BorderBrush="{x:Null}" CornerRadius="4,4,0,0" Margin="0,0,2,0">
+                                <Border x:Name="Border" BorderThickness="0,0,2,0" BorderBrush="{x:Null}" CornerRadius="4,4,0,0" Margin="0,0,0,0">
                                     <ContentPresenter x:Name="ContentSite"
                                         VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
@@ -122,7 +128,7 @@
             <TabItem Header="Ctrl+4" GotFocus="TabItem_GotFocus" Foreground="{DynamicResource textoobscuro}" Padding="1,2"/>
             <TabItem Header="Ctrl+5" GotFocus="TabItem_GotFocus" Foreground="{DynamicResource textoobscuro}" Padding="1,2"/>
         </TabControl>
-        <ListView x:Name="listVenta"    Height="251" Margin="20,198,0,0" VerticalAlignment="Top" Width="760" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black" KeyDown="listVenta_KeyDown" GotFocus="listVenta_GotFocus"  >
+        <ListView x:Name="listVenta"    Height="277" Margin="20,188,0,0" VerticalAlignment="Top" Width="760" Background="{DynamicResource colorfondo3}" HorizontalAlignment="Left" Foreground="{DynamicResource textoclaro}" KeyDown="listVenta_KeyDown" GotFocus="listVenta_GotFocus" BorderBrush="{x:Null}"  >
             <ListView.View>
                 <GridView>
                     <!--<GridViewColumn Header="id" Width="30"   DisplayMemberBinding="{Binding id}"  />-->
@@ -158,29 +164,113 @@
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
+            <!--ESTILO DE LOS ITEMS-->
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Template" Value="{DynamicResource ListViewItemPersonalizado}" />
+                </Style>
+            </ListView.ItemContainerStyle>
         </ListView>
-        <Rectangle HorizontalAlignment="Left" Height="108" Margin="790,396,0,0" VerticalAlignment="Top" Width="180" Fill="{DynamicResource colorfondo2}"/>
+        <Rectangle HorizontalAlignment="Left" Height="102" Margin="790,414,0,0" VerticalAlignment="Top" Width="180" Fill="{DynamicResource colorfondo2}"/>
 
-        <TextBox x:Name="tbTotal" HorizontalAlignment="Left" Height="30" Margin="656,461,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="105"  ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" HorizontalContentAlignment="Right" FontWeight="Bold" Style="{DynamicResource StyleTBNoEditable}"/>
-        <Label x:Name="label_Copy6" Content="TOTAL" HorizontalAlignment="Left" Margin="610,461,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" FontWeight="Bold"/>
-        <Label x:Name="label_Copy7" Content="Ventas" HorizontalAlignment="Left" Margin="10,116,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Background="{x:Null}" FontWeight="Bold"/>
-        <TextBox x:Name="tbPagaCon" HorizontalAlignment="Left" Margin="795,418,0,0" TextWrapping="Wrap" Width="80" ToolTip="" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" TextChanged="tbPagaCon_TextChanged" PreviewKeyDown="tbPagaCon_PreviewKeyDown" Height="29" VerticalAlignment="Top" Style="{StaticResource StyleTextbox}"/>
-        <Label x:Name="label_Copy8" Content="Paga con" HorizontalAlignment="Left" Margin="795,396,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
-        <TextBox x:Name="tbVuelto" HorizontalAlignment="Left" Margin="880,417,0,0" TextWrapping="Wrap" Width="80" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewKeyDown="tbCantidad_PreviewKeyDown" TextChanged="tbCantidad_TextChanged" Focusable="False" IsHitTestVisible="False" IsTabStop="False" Height="30" VerticalAlignment="Top" Style="{DynamicResource StyleTBNoEditable}"/>
-        <Label x:Name="label_Copy9" Content="Vuelto" HorizontalAlignment="Left" Margin="880,396,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
-        <Button x:Name="btnAsentar" Background="{DynamicResource boton}" Style="{DynamicResource BotonMenu}" Width="165" Margin="795,461,0,0" HorizontalAlignment="Left" GotFocus="Button_GotFocus" LostFocus="Button_LostFocus" PreviewKeyDown="btnAsentar_PreviewKeyDown" PreviewMouseLeftButtonUp="btnAsentar_PreviewMouseLeftButtonUp" Height="30" VerticalAlignment="Top" Cursor="Hand" BorderBrush="{x:Null}">
+        <TextBox x:Name="tbTotal" HorizontalAlignment="Left" Height="30" Margin="653,479,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100"  ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" HorizontalContentAlignment="Right" FontWeight="Bold" Style="{DynamicResource StyleTBNoEditable}" Text="111" Padding="0,0,2,0"/>
+        <Label x:Name="label_Copy6" Content="TOTAL" HorizontalAlignment="Left" Margin="607,479,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" FontWeight="Bold" Height="30" VerticalContentAlignment="Center"/>
+        <Label x:Name="label_Copy7" Content="Ventas" HorizontalAlignment="Left" Margin="10,121,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Background="{x:Null}" FontWeight="Bold"/>
+        <TextBox x:Name="tbPagaCon" HorizontalAlignment="Left" Margin="795,436,0,0" TextWrapping="Wrap" Width="80" ToolTip="" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" TextChanged="tbPagaCon_TextChanged" PreviewKeyDown="tbPagaCon_PreviewKeyDown" Height="29" VerticalAlignment="Top" Style="{StaticResource StyleTextbox}"/>
+        <Label x:Name="label_Copy8" Content="Paga con" HorizontalAlignment="Left" Margin="795,414,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
+        <TextBox x:Name="tbVuelto" HorizontalAlignment="Left" Margin="880,435,0,0" TextWrapping="Wrap" Width="80" ToolTip="filtro" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewKeyDown="tbCantidad_PreviewKeyDown" TextChanged="tbCantidad_TextChanged" Focusable="False" IsHitTestVisible="False" IsTabStop="False" Height="30" VerticalAlignment="Top" Style="{DynamicResource StyleTBNoEditable}"/>
+        <Label x:Name="label_Copy9" Content="Vuelto" HorizontalAlignment="Left" Margin="880,414,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5"/>
+        <Button x:Name="btnAsentar" Background="{DynamicResource boton}" Style="{DynamicResource BotonMenu}" Width="165" Margin="795,479,0,0" HorizontalAlignment="Left" GotFocus="Button_GotFocus" LostFocus="Button_LostFocus" PreviewKeyDown="btnAsentar_PreviewKeyDown" PreviewMouseLeftButtonUp="btnAsentar_PreviewMouseLeftButtonUp" Height="30" VerticalAlignment="Top" Cursor="Hand" BorderBrush="{x:Null}">
             <StackPanel Orientation='Horizontal'  Margin="0" >
                 <TextBlock Text="Asentar"  VerticalAlignment="Center" Foreground="{DynamicResource textoobscuro}" />
                 <Image Height="20" Margin="10,0,0,0" Source="imagenes/save.png" />
             </StackPanel>
         </Button>
-        <Label x:Name="labelTip2" Content="labelTip2" HorizontalAlignment="Left" Margin="210,88,0,0" VerticalAlignment="Top" Background="{DynamicResource infocable3}" IsHitTestVisible="False" Padding="2,0" Foreground="{DynamicResource textoobscuro}"/>
-        <Label x:Name="label_Copy5" Content="Artículo" HorizontalAlignment="Left" Margin="11,4,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Background="{x:Null}" FontWeight="Bold"/>
-        <Label x:Name="labelTip" Content="labelTip" HorizontalAlignment="Left" Margin="132.017,85.5,0,0" VerticalAlignment="Top" Background="{DynamicResource infocable3}" IsHitTestVisible="False" Padding="2,0" Foreground="{DynamicResource textoobscuro}" Panel.ZIndex="2"/>
-        <Grid x:Name="gridCaja"  HorizontalAlignment="Left" Height="307" Margin="970,37,-160,0" VerticalAlignment="Top" Width="160">
-            <Border BorderBrush="{DynamicResource colorfondo2}" BorderThickness="1" Margin="23,0,-24,0" CornerRadius="20,0,0,20" Background="{DynamicResource colorfondo2}">
-                <TextBox x:Name="tbCaja01" HorizontalAlignment="Left" Height="32" Margin="14,29,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="71" Style="{DynamicResource styleTBCaja}"/>
-            </Border>
+        <Label x:Name="label_Copy5" Content="Artículo" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Background="{x:Null}" FontWeight="Bold"/>
+        <Grid x:Name="gridCaja"  HorizontalAlignment="Left" Height="372" Margin="971,33,-178,0" VerticalAlignment="Top" Width="177">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="35"/>
+                <ColumnDefinition Width="25"/>
+                <ColumnDefinition Width="48"/>
+                <ColumnDefinition Width="25"/>
+                <ColumnDefinition Width="22*"/>
+                <ColumnDefinition Width="0*"/>
+            </Grid.ColumnDefinitions>
+
+            <!--FONDO GRIS -->
+            <Border BorderBrush="{DynamicResource colorfondo2}" BorderThickness="1" Margin="23,0,-24,0" CornerRadius="10,0,0,10" Background="{DynamicResource colorfondo2}" Grid.ColumnSpan="6"/>
+
+            <!-- TOP -->
+            <TextBox x:Name="txtTotalCaja" Margin="0,7,0,0" Grid.Column="1" Grid.ColumnSpan="3" Text="899" Style="{DynamicResource styleTBCaja}"  VerticalAlignment="Top" Background="{DynamicResource bordo}" Foreground="{DynamicResource textoclaro}" FontWeight="Bold" />
+            <Label x:Name="labTotalCaja" Content="SOBRA" Margin="5,7,0,0" Grid.Column="4" Grid.ColumnSpan="2" Style="{DynamicResource styleLabelCaja}" VerticalAlignment="Top"/>
+
+            <!--BOTONES RESTAR-->
+            <StackPanel Grid.Column="1" Style="{DynamicResource StyleStackPanelCaja}">
+                <Button x:Name="btnCaja12r"  Content="" Style="{DynamicResource styleBtnCaja}" Background="{x:Null}" />
+                <Button x:Name="btnCaja01r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FF83BB85" />
+                <Button x:Name="btnCaja02r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FF9CA3D1" />
+                <Button x:Name="btnCaja03r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FFD1A3C1" />
+                <Button x:Name="btnCaja04r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FF7E7E7E" />
+                <Button x:Name="btnCaja05r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FFC17D70" />
+                <Button x:Name="btnCaja06r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FF9B7777" />
+                <Button x:Name="btnCaja07r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FF93C783" />
+                <Button x:Name="btnCaja08r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FFA0BDE6" />
+                <Button x:Name="btnCaja09r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FFA0BDE6" />
+                <Button x:Name="btnCaja10r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FFC3B281" />
+                <Button x:Name="btnCaja11r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FFC3B281" Margin="0,4,0,1" />
+                <Button x:Name="btnCaja13r"  Margin="0,4,0,0"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="{DynamicResource colorfondo}" Foreground="{DynamicResource textoclaro}" />
+
+            </StackPanel>
+            <!--TEXTBOXES-->
+            <StackPanel Grid.Column="2" Style="{DynamicResource StyleStackPanelCaja}">
+                <TextBox x:Name="tbCaja12"  Text="99" Style="{DynamicResource styleTBCaja}" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" IsHitTestVisible="False" Focusable="False" IsTabStop="False" />
+                <TextBox x:Name="tbCaja01"  Text="899" Style="{DynamicResource styleTBCaja}" />
+                <TextBox x:Name="tbCaja02"  Text="99" Style="{DynamicResource styleTBCaja}" />
+                <TextBox x:Name="tbCaja03"  Text="99" Style="{DynamicResource styleTBCaja}" />
+                <TextBox x:Name="tbCaja04"  Text="99" Style="{DynamicResource styleTBCaja}" />
+                <TextBox x:Name="tbCaja05"  Text="99" Style="{DynamicResource styleTBCaja}" />
+                <TextBox x:Name="tbCaja06"  Text="99" Style="{DynamicResource styleTBCaja}" />
+                <TextBox x:Name="tbCaja07"  Text="99" Style="{DynamicResource styleTBCaja}" />
+                <TextBox x:Name="tbCaja08"  Text="99" Style="{DynamicResource styleTBCaja}" />
+                <TextBox x:Name="tbCaja09"  Text="99" Style="{DynamicResource styleTBCaja}" />
+                <TextBox x:Name="tbCaja10"  Text="99" Style="{DynamicResource styleTBCaja}" />
+                <TextBox x:Name="tbCaja11"  Text="99" Style="{DynamicResource styleTBCaja}" Margin="0,4,0,1" Background="#FFA6A6B6" Foreground="Black" />
+                <TextBox x:Name="tbCaja13"  Margin="0,4,0,0" Text="98889.9" Style="{DynamicResource styleTBCaja}" Background="#FFA6A6B6" Foreground="Black" />
+
+            </StackPanel>
+            <!--BOTONES SUMAR-->
+            <StackPanel Grid.Column="3" Style="{DynamicResource StyleStackPanelCaja}">
+                <Button x:Name="btnCaja12s"  Content="" Style="{DynamicResource styleBtnCaja}" Background="{x:Null}" />
+                <Button x:Name="btnCaja01s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FF83BB85" />
+                <Button x:Name="btnCaja02s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FF9CA3D1" />
+                <Button x:Name="btnCaja03s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FFD1A3C1" />
+                <Button x:Name="btnCaja04s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FF7E7E7E" />
+                <Button x:Name="btnCaja05s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FFC17D70" />
+                <Button x:Name="btnCaja06s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FF9B7777" />
+                <Button x:Name="btnCaja07s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FF93C783" />
+                <Button x:Name="btnCaja08s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FFA0BDE6" />
+                <Button x:Name="btnCaja09s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FFA0BDE6" />
+                <Button x:Name="btnCaja10s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FFC3B281" />
+                <Button x:Name="btnCaja11s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FFC3B281" Margin="0,4,0,1" />
+                <Button x:Name="btnCaja13s"  Content="+" Margin="0,4,0,0"  Style="{DynamicResource styleBtnCaja}" Background="{DynamicResource colorfondo}" Foreground="{DynamicResource textoclaro}" />
+            </StackPanel>
+            <!--LABELS-->
+            <StackPanel Grid.Column="4" Style="{DynamicResource StyleStackPanelCaja}">
+                <Label Content="" Style="{DynamicResource styleLabelCaja}"/>
+                <Label Content="500" Style="{DynamicResource styleLabelCaja}"/>
+                <Label Content="200" Style="{DynamicResource styleLabelCaja}"/>
+                <Label Content="100" Style="{DynamicResource styleLabelCaja}"/>
+                <Label Content="50" Style="{DynamicResource styleLabelCaja}"/>
+                <Label Content="20" Style="{DynamicResource styleLabelCaja}"/>
+                <Label Content="10" Style="{DynamicResource styleLabelCaja}"/>
+                <Label Content="5" Style="{DynamicResource styleLabelCaja}"/>
+                <Label Content="2" Style="{DynamicResource styleLabelCaja}"/>
+                <Label Content="2x10" Style="{DynamicResource styleLabelCaja}"/>
+                <Label Content="m" Style="{DynamicResource styleLabelCaja}"/>
+                <Label Content="mR" Style="{DynamicResource styleLabelCaja}" Margin="5,4,0,1"/>
+                <Label Content="CG" Margin="5,4,0,0"  Style="{DynamicResource styleLabelCaja}"/>
+
+            </StackPanel>
         </Grid>
         <ToggleButton x:Name="btnCaja" Template="{DynamicResource BotonExpanderCaja}" Content="F5-CAJA" HorizontalAlignment="Right" Height="24" VerticalAlignment="Top" Width="102" Click="btnCaja_Click" Background="{x:Null}" HorizontalContentAlignment="Left" Padding="5,1,1,1" Margin="0,9,0,0" BorderBrush="{x:Null}" BorderThickness="0" FontWeight="Bold" Foreground="{DynamicResource textoclaro}"/>
     </Grid>

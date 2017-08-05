@@ -110,4 +110,16 @@ namespace SIV_Servidor
         ///utilizo para diferenciar los articulos de los pagos
         public int color { get; set; }  
     }
+
+    public class itemGastos
+    ///se usa en la BD gastos y en el listGastos
+    {
+        public long id { get; set; }
+        public string fecha { get; set; }
+        public string descripcion { get; set; }
+        public long cantidad { get; set; }
+        public float monto { get; set; }
+        public float total { get; set; }
+
+    }
 }

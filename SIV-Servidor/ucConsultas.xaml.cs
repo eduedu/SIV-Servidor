@@ -85,6 +85,7 @@ namespace SIV_Servidor
             mItemsDetalle.Clear();
 
             habilitarBotones(false);
+            listPendientes.ItemsSource = null;
         }
         private void habilitarBotones(bool habilitar)
         {

@@ -129,29 +129,72 @@
                 <ColumnDefinition Width="22*"/>
                 <ColumnDefinition Width="3*"/>-->
             </Grid.ColumnDefinitions>
-            <ListView x:Name="listCaja"  Height="407" VerticalAlignment="Top" Width="940" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
-            BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" GotFocus="listCaja_GotFocus" Margin="10,38,0,0" KeyDown="listCaja_KeyDown" IsHitTestVisible="True"
+            <ListView x:Name="listCaja" Height="416" VerticalAlignment="Top" Width="940" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
+            BorderBrush="{x:Null}" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" GotFocus="listCaja_GotFocus" Margin="10,32,0,0" KeyDown="listCaja_KeyDown" IsHitTestVisible="True"
                   >
-
-                <ListView.Resources>
-                    <Style TargetType="{x:Type ListViewItem}">
-
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Nro Venta" Width="70"   DisplayMemberBinding="{Binding idventamostrar}"  />
+                        <GridViewColumn Header="idventa" Width="0"   DisplayMemberBinding="{Binding idventa}"   />
+                        <GridViewColumn Header="color" Width="0"   DisplayMemberBinding="{Binding color}"   />
+                        <GridViewColumn Header="Fecha" Width="95"   DisplayMemberBinding="{Binding fechaMostrar}"  />
+                        <GridViewColumn Header="Código" Width="80">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding codigo}" Width="80" TextAlignment="Right" HorizontalAlignment="Right"   />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Descripción" Width="350" DisplayMemberBinding="{Binding descripcion}"  />
+                        <GridViewColumn Header="Cant." Width="50"   >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding cantidad}" Width="50" TextAlignment="Right" HorizontalAlignment="Right"   />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Precio" Width="70"   >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding precio, StringFormat=$ \{0:F\}}" Width="70" TextAlignment="Right" HorizontalAlignment="Right" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Sub-total" Width="90"   >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding subtotal, StringFormat=$ \{0:F\}}" Width="90" TextAlignment="Right" HorizontalAlignment="Right"    />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Total" Width="90"   >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding totalmostrar}" Width="90" TextAlignment="Right" HorizontalAlignment="Right" FontWeight="Bold"  />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+                <!--ESTILO DE LOS ITEMS-->
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Template" Value="{DynamicResource ListViewItemPersonalizado}" />
+                        <Setter Property="Margin" Value="-5, 0" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        
+                        <!--TRIGGERS PARA ESTE CONTROL ESPECIFICO-->
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding color}" Value="0">
-                                <Setter Property="Background" Value="White" />
-                                <Setter Property="BorderBrush" Value="White" />
-                                <Setter Property="BorderThickness" Value="0" />
-                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="Background" Value="{StaticResource colorfondo3}" />
+                                <Setter Property="BorderBrush" Value="{StaticResource colorfondo3}" />
+                                <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding color}" Value="1">
-                                <Setter Property="Background" Value="{StaticResource textoclaro}" />
-                                <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
-                                <!--
-                                        <Setter Property="CornerRadius" Value="0"/>
-                                        <Setter TargetName="Border" Property="BorderThickness" Value="4,4,4,4" />
-                                        -->
-                                <Setter Property="BorderThickness" Value="0" />
-                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="Background" Value="{StaticResource colorfondo4}" />
+                                <!--<Setter Property="Background" Value="{StaticResource textoclaro}" />-->
+                                <Setter Property="BorderBrush" Value="{StaticResource colorfondo4}" />
+                                <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
                             </DataTrigger>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
@@ -162,63 +205,17 @@
                                 <Setter Property="Background" Value="{StaticResource confoco}" />
                                 <Setter Property="BorderBrush" Value="{StaticResource confoco}" />
                             </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="true" />
+                                </MultiTrigger.Conditions>
+                                <!--<Setter Property="Foreground" Value="{StaticResource textoobscuro}" />-->
+                                <!--<Setter Property="Background" Value="{StaticResource infocable3}" />-->
+                                <Setter Property="BorderBrush" Value="{StaticResource confoco}" />
+                            </MultiTrigger>
                         </Style.Triggers>
                     </Style>
-                </ListView.Resources>
-                <!--
-            <ListView.GroupStyle>
-                <GroupStyle>
-                    <GroupStyle.HeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name}"></TextBlock>
-                        </DataTemplate>
-                    </GroupStyle.HeaderTemplate>
-                </GroupStyle>
-            </ListView.GroupStyle>-->
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Nro Venta" Width="70"   DisplayMemberBinding="{Binding idventamostrar}"  />
-                        <GridViewColumn Header="idventa" Width="0"   DisplayMemberBinding="{Binding idventa}"   />
-                        <GridViewColumn Header="color" Width="0"   DisplayMemberBinding="{Binding color}"   />
-                        <GridViewColumn Header="Fecha" Width="95"   DisplayMemberBinding="{Binding fechaMostrar}"  />
-                        <GridViewColumn Header="Código" Width="100"   DisplayMemberBinding="{Binding codigo}"  />
-                        <GridViewColumn Header="Descripción" Width="350" DisplayMemberBinding="{Binding descripcion}"  />
-                        <GridViewColumn Header="Cant." Width="50"   >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding cantidad}" Width="80" TextAlignment="Right" HorizontalAlignment="Right"   />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Precio" Width="70"   >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <!--<TextBlock Text="{Binding precio, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />-->
-                                    <TextBlock Text="{Binding precio, StringFormat=$ \{0:F\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Sub-total" Width="90"   >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <!--<TextBlock Text="{Binding subtotal, StringFormat=$ \{0:c\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"    />-->
-                                    <TextBlock Text="{Binding subtotal, StringFormat=$ \{0:F\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"    />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Total" Width="90"   >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <!--
-                                            <TextBlock Text="{Binding total, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"  FontWeight="Bold"  />
-                                            <TextBlock Text="{Binding total,  StringFormat=s{0:c}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"  FontWeight="Bold"  />
-                                            -->
-                                    <TextBlock Text="{Binding totalmostrar}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" FontWeight="Bold"  />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
+                </ListView.ItemContainerStyle>
 
             </ListView>
             <Grid x:Name="gridPanelInferior" HorizontalAlignment="Left" Height="203" Margin="984,267,0,0" VerticalAlignment="Top" Width="941" Background="{DynamicResource colorfondo2}" Grid.ColumnSpan="2">
@@ -327,93 +324,42 @@
             <ListView x:Name="listImpresion"  Height="205" VerticalAlignment="Top" Width="691" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
                 BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" Margin="0,30,0,0" KeyDown="listCaja_KeyDown" Grid.Column="1" IsHitTestVisible="True"
                   >
-
-                <ListView.Resources>
-                    <Style TargetType="{x:Type ListViewItem}">
-
-                        <!--<Style.Triggers>
-                            <DataTrigger Binding="{Binding color}" Value="0">
-                                <Setter Property="Background" Value="White" />
-                                <Setter Property="BorderBrush" Value="White" />
-                                <Setter Property="BorderThickness" Value="0" />
-                                <Setter Property="Margin" Value="0" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding color}" Value="1">
-                                <Setter Property="Background" Value="{StaticResource textoclaro}" />
-                                <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
-                                -->
-                        <!--
-                                        <Setter Property="CornerRadius" Value="0"/>
-                                        <Setter TargetName="Border" Property="BorderThickness" Value="4,4,4,4" />
-                                        -->
-                        <!--
-                                <Setter Property="BorderThickness" Value="0" />
-                                <Setter Property="Margin" Value="0" />
-                            </DataTrigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsSelected" Value="true" />
-                                    <Condition Property="Selector.IsSelectionActive" Value="true" />
-                                </MultiTrigger.Conditions>
-                                <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
-                                <Setter Property="Background" Value="{StaticResource confoco}" />
-                                <Setter Property="BorderBrush" Value="{StaticResource confoco}" />
-                            </MultiTrigger>
-                        </Style.Triggers>-->
-                    </Style>
-                </ListView.Resources>
-                <!--
-            <ListView.GroupStyle>
-                <GroupStyle>
-                    <GroupStyle.HeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name}"></TextBlock>
-                        </DataTemplate>
-                    </GroupStyle.HeaderTemplate>
-                </GroupStyle>
-            </ListView.GroupStyle>-->
                 <ListView.View>
                     <GridView>
                         <!--<GridViewColumn Header="Nro Venta" Width="70"   DisplayMemberBinding="{Binding idventamostrar}"  />-->
                         <!--<GridViewColumn Header="idventa" Width="0"   DisplayMemberBinding="{Binding idventa}"   />-->
                         <!--<GridViewColumn Header="color" Width="0"   DisplayMemberBinding="{Binding color}"   />-->
                         <!--<GridViewColumn Header="Fecha" Width="90"   DisplayMemberBinding="{Binding fecha}"  />-->
-                        <GridViewColumn Header="Código" Width="100"   DisplayMemberBinding="{Binding codigo}"  />
+                        <GridViewColumn Header="Código" Width="100"    >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding codigo}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"   />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
                         <GridViewColumn Header="Descripción" Width="350" DisplayMemberBinding="{Binding descripcion}"  />
                         <GridViewColumn Header="Cant." Width="50"   >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding cantidad}" Width="80" TextAlignment="Right" HorizontalAlignment="Right"   />
+                                    <TextBlock Text="{Binding cantidad}" Width="50" TextAlignment="Right" HorizontalAlignment="Right"   />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn Header="Precio" Width="70"   >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding precio, StringFormat=$ \{0:F\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />
+                                    <TextBlock Text="{Binding precio, StringFormat=$ \{0:F\}}" Width="70" TextAlignment="Right" HorizontalAlignment="Right" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn Header="Sub-total" Width="90"   >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding subtotal, StringFormat=$ \{0:F\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"    />
+                                    <TextBlock Text="{Binding subtotal, StringFormat=$ \{0:F\}}" Width="90" TextAlignment="Right" HorizontalAlignment="Right"    />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <!--<GridViewColumn Header="Total" Width="90"   >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    -->
-                        <!--
-                                            <TextBlock Text="{Binding total, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"  FontWeight="Bold"  />
-                                            <TextBlock Text="{Binding total,  StringFormat=s{0:c}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"  FontWeight="Bold"  />
-                                            -->
-                        <!--
-                                    <TextBlock Text="{Binding total}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" FontWeight="Bold"  />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>-->
                     </GridView>
                 </ListView.View>
 
@@ -425,7 +371,7 @@
             <TextBox x:Name="tbIdVenta" Margin="627,0,0,0" TextWrapping="Wrap" Background="{DynamicResource colorfondo2}" ToolTip="filtro" VerticalContentAlignment="Center" Focusable="False" IsHitTestVisible="False" IsTabStop="False" Height="30" VerticalAlignment="Top" BorderBrush="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" Grid.Column="1" HorizontalAlignment="Left" Width="64" FontWeight="Bold" Text="tbIdVenta"/>
             <Label x:Name="label_Copy9" Content="Nro de Venta" HorizontalAlignment="Left" Margin="532,0,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,5,5,5" Height="30" Width="95" HorizontalContentAlignment="Right" Grid.Column="1" VerticalContentAlignment="Center"/>
             <Rectangle Grid.ColumnSpan="2" Fill="{DynamicResource textoclaro}" HorizontalAlignment="Left" Height="4" Margin="984,261,0,0" Stroke="{DynamicResource textoclaro}" VerticalAlignment="Top" Width="936"/>
-            <Label x:Name="label_Copy6" Content="Seleccionar Venta" HorizontalAlignment="Left" Margin="11,16,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" FontWeight="Bold" Width="541"/>
+            <Label x:Name="label_Copy6" Content="Seleccionar Venta" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" FontWeight="Bold" Width="541" Padding="0,5,5,5"/>
 
             <!--<TextBox Text="{Binding gridXFrom}"  HorizontalAlignment="Left" Height="60" Margin="164,398,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="256"/>-->
         </Grid>

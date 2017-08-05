@@ -111,7 +111,7 @@
             <TabItem x:Name="tabItem1" FocusVisualStyle="{x:Null}"  Background="{DynamicResource colorfondo}" >
                 <TabItem.Header>
                     <Grid  Width="120" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
-                        <TextBlock x:Name="tbPestanaCaja" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F2-"/><Run Text="IMPRESIONES"/></TextBlock>
+                        <TextBlock x:Name="tbPestanaCaja" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F2-"/><Run Text="IMPR"/><Run Text="IMIR"/></TextBlock>
                     </Grid>
                 </TabItem.Header>
                 <!--<Grid x:Name="gridCaja" Margin="0" RenderTransformOrigin="0.5,0.5"/>-->
@@ -126,7 +126,16 @@
                 </TabItem.Header>
                 <Grid />
             </TabItem>
-            <Menu Height="100" Width="100"/>
+            <TabItem x:Name="tabItem3" FocusVisualStyle="{x:Null}"  Background="{DynamicResource colorfondo}" >
+                <TabItem.Header>
+                    <Grid  Width="120" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
+                        <!--<TextBlock x:Name="tbPestanaOpciones" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F3-OPCIONES"/></TextBlock>-->
+                        <TextBlock x:Name="tbPestanaGastos" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F4-GASTOS"/></TextBlock>
+                    </Grid>
+                </TabItem.Header>
+                <Grid />
+            </TabItem>
+            <!--<Menu Height="100" Width="100"/>-->
 
             <!--<Path Data="" Stretch="Fill"/>
             <Path Data="" Stretch="Fill"/>
@@ -136,7 +145,7 @@
         </TabControl>
         <Label x:Name="labelAyuda" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{x:Null}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="460" BorderBrush="{DynamicResource infocable}" Padding="5,0" Margin="60,0,0,0"/>
         <Label x:Name="label_Copy10" Content="Ayuda" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="{DynamicResource textoclaro}" Background="{DynamicResource colorfondo}" FontWeight="Bold" Height="35" Width="60" HorizontalContentAlignment="Center" BorderBrush="{DynamicResource colorfondo}" Padding="5,0,5,5"/>
-        <Grid x:Name="gridMain" Background="{DynamicResource colorfondo}" Margin="0,50,-2214,35" Cursor="" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Stretch" Width="Auto">
+        <Grid x:Name="gridMain" Background="{DynamicResource colorfondo}" Margin="0,50,-3048,35" Cursor="" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Stretch" Width="Auto">
             <Grid.RenderTransform>
                 <TransformGroup>
 
@@ -149,6 +158,7 @@
             <local:ucConsultas x:Name="ucConsultas" Margin="2000,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
             <local:ucInicio x:Name="ucInicio" Margin="0,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
             <local:ucImpresiones x:Name="ucImpresiones" Margin="1000,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
+            <local:ucGastos x:Name="ucGastos" Margin="3000,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
 
             <!--cortinaNegra -->
             <!--<Grid x:Name="gridCortinaNegra" Visibility="Hidden" Focusable="True"  >

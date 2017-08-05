@@ -11,6 +11,7 @@
 
         <!--COLORES-->
         <SolidColorBrush x:Key="confoco"   Color="#FFFFF572"/>
+        
         <SolidColorBrush x:Key="confoco2"   Color="#FFA2E87C"/>
         <!--<SolidColorBrush x:Key="confoco2"   Color="#FF0092CC"/>-->
         <SolidColorBrush x:Key="infocable" Color="#FFA2E87C"/>
@@ -22,6 +23,7 @@
         <SolidColorBrush x:Key="colorfondo" Color="#FF202027"/>
         <SolidColorBrush x:Key="colorfondo2" Color="#FF303039"/>
         <SolidColorBrush x:Key="colorfondo3" Color="#FF404047"/>
+        <SolidColorBrush x:Key="colorfondo4" Color="#FF54545D"/>
         <SolidColorBrush x:Key="boton" Color="#FFf0f0f0"/>
         <SolidColorBrush x:Key="detalles" Color="#FF707080"/>
         <SolidColorBrush x:Key="textoclaro" Color="#FFd0d0e0"/>
@@ -29,8 +31,8 @@
         
         <SolidColorBrush x:Key="celeste" Color="#FF0092CC"/>
         <SolidColorBrush x:Key="azul" Color="#FF087099"/>
-        <SolidColorBrush x:Key="rojo" Color="#FF222222"/>
-        <SolidColorBrush x:Key="bordo" Color="#FF222222"/>
+        <SolidColorBrush x:Key="rojo" Color="#FFFF3333"/>
+        <SolidColorBrush x:Key="bordo" Color="#FFAA3333"/>
 
 
         <SolidColorBrush x:Key="ListBorder" Color="#828790"/>
@@ -87,6 +89,10 @@
                     <Setter Property="BorderBrush" Value="{StaticResource confoco}" />
                 </MultiTrigger>
 
+            </Style.Triggers>
+
+        </Style>
+
                 <!--<Trigger Property="IsSelected" Value="true" >
                     <Setter Property="Background" Value="#FFB4FFB4" />
                 </Trigger>-->
@@ -99,57 +105,108 @@
                         <Setter Property="Background" Value="#FFFFFF78" />
                     </MultiTrigger.Setters>
                 </MultiTrigger>-->
-            </Style.Triggers>
+        
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 
-        </Style>
-
-        <!--LISTVIEW STYLE-->
-        <ControlTemplate x:Key="ListViewItemStyleParaListFiltro" TargetType="{x:Type ListViewItem}">
+        <!--LISTVIEW ITEM STYLE PERSONALIZADO -  PARA QUE NO SALGA EL SOMBREADO MOLESTO-->
+        <ControlTemplate x:Key="ListViewItemPersonalizado" TargetType="{x:Type ListViewItem}">
             <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="2" SnapsToDevicePixels="True">
                 <Border x:Name="InnerBorder" BorderThickness="1" CornerRadius="1">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition MaxHeight="11"/>
+                            <!--<RowDefinition MaxHeight="11"/>-->
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Rectangle x:Name="UpperHighlight" Fill="#75FFFFFF" Visibility="Collapsed"/>
+                        <!--<Rectangle x:Name="UpperHighlight" Fill="#75FFFFFF" Visibility="Collapsed"/>-->
+                        <Rectangle x:Name="UpperHighlight" Visibility="Collapsed"/>
+
                         <GridViewRowPresenter Columns="{TemplateBinding GridView.ColumnCollection}" Content="{TemplateBinding Content}" Grid.RowSpan="2" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Grid>
                 </Border>
             </Border>
             <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background">
-                        <Setter.Value>
-                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
-                                <GradientStop Color="#FFF1FBFF" Offset="0"/>
-                                <GradientStop Color="#FFD5F1FE" Offset="1"/>
-                            </LinearGradientBrush>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="BorderBrush" Value="#FFCCF0FF"/>
+                <!--<Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="Visibility" TargetName="UpperHighlight" Value="Visible"/>
-                </Trigger>
+                </Trigger>-->
                 <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background">
-                        <Setter.Value>
-                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
-                                <GradientStop Color="#FFD9F4FF" Offset="0"/>
-                                <GradientStop Color="#FF9BDDFB" Offset="1"/>
-                            </LinearGradientBrush>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="BorderBrush" Value="#FF98DDFB"/>
-                    <Setter Property="BorderBrush" TargetName="InnerBorder" Value="#80FFFFFF"/>
-                    <Setter Property="Visibility" TargetName="UpperHighlight" Value="Visible"/>
-                    <Setter Property="Fill" TargetName="UpperHighlight" Value="#40FFFFFF"/>
+                    <Setter Property="Background" Value="{DynamicResource confoco}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource textoobscuro}"/>
+                    <Setter Property="Fill" TargetName="UpperHighlight" Value="{DynamicResource confoco}"/>
                 </Trigger>
                 <MultiTrigger>
                     <MultiTrigger.Conditions>
                         <Condition Property="IsSelected" Value="True"/>
                         <Condition Property="Selector.IsSelectionActive" Value="False"/>
                     </MultiTrigger.Conditions>
-                    <Setter Property="Background">
+                    <Setter Property="Background" Value="{DynamicResource confoco2}"/>
+                </MultiTrigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsSelected" Value="True"/>
+                        <Condition Property="IsMouseOver" Value="True"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" Value="{DynamicResource confoco}"/>
+                </MultiTrigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <!--/////////////////////////////////////////-->
+        <!--LISTVIEW ITEM STYLE  -->
+        <ControlTemplate x:Key="ListViewItemStyleParaListFiltro" TargetType="{x:Type ListViewItem}">
+            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="0" SnapsToDevicePixels="True">
+                <Border x:Name="InnerBorder" BorderThickness="0" CornerRadius="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <!--<RowDefinition MaxHeight="11"/>-->
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <!--<Rectangle x:Name="UpperHighlight" Fill="#75FFFFFF" Visibility="Collapsed"/>-->
+                        <Rectangle x:Name="UpperHighlight" Visibility="Collapsed"/>
+
+                        <GridViewRowPresenter Columns="{TemplateBinding GridView.ColumnCollection}" Content="{TemplateBinding Content}" Grid.RowSpan="2" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Grid>
+                </Border>
+                
+            </Border>
+            
+            <ControlTemplate.Triggers>
+                
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Transparent">
+                        <!--<Setter.Value>
+                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                <GradientStop Color="#FFF1FBFF" Offset="0"/>
+                                <GradientStop Color="#FFD5F1FE" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Setter.Value>-->
+                    </Setter>
+                    <!--<Setter Property="BorderBrush" Value="#FFCCF0FF"/>-->
+                    <Setter Property="Visibility" TargetName="UpperHighlight" Value="Visible"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource confoco}">
+                        <!--<Setter.Value>
+                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                <GradientStop Color="#FFD9F4FF" Offset="0"/>
+                                <GradientStop Color="#FF9BDDFB" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Setter.Value>-->
+                    </Setter>
+                    <Setter Property="Foreground" Value="{DynamicResource textoobscuro}"/>
+                    <!--<Setter Property="BorderBrush" Value="#FF98DDFB"/>
+                    <Setter Property="BorderBrush" TargetName="InnerBorder" Value="#80FFFFFF"/>
+                    <Setter Property="Visibility" TargetName="UpperHighlight" Value="Visible"/>-->
+                    <Setter Property="Fill" TargetName="UpperHighlight" Value="{DynamicResource confoco}"/>
+                </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsSelected" Value="True"/>
+                        <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" Value="{DynamicResource confoco2}"/>
+                    <!--<Setter Property="Background">
                         <Setter.Value>
                             <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                                 <GradientStop Color="#FFEEEDED" Offset="0"/>
@@ -157,26 +214,26 @@
                             </LinearGradientBrush>
                         </Setter.Value>
                     </Setter>
-                    <Setter Property="BorderBrush" Value="#FFCFCFCF"/>
+                    <Setter Property="BorderBrush" Value="#FFCFCFCF"/>-->
                 </MultiTrigger>
                 <MultiTrigger>
                     <MultiTrigger.Conditions>
                         <Condition Property="IsSelected" Value="True"/>
                         <Condition Property="IsMouseOver" Value="True"/>
                     </MultiTrigger.Conditions>
-                    <Setter Property="Background">
-                        <Setter.Value>
+                    <Setter Property="Background" Value="{DynamicResource confoco}">
+                        <!--<Setter.Value>
                             <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                                 <GradientStop Color="#FFEAF9FF" Offset="0"/>
                                 <GradientStop Color="#FFC9EDFD" Offset="1"/>
                             </LinearGradientBrush>
-                        </Setter.Value>
+                        </Setter.Value>-->
                     </Setter>
-                    <Setter Property="BorderBrush" Value="#FF98DDFB"/>
+                    <!--<Setter Property="BorderBrush" Value="#FF98DDFB"/>-->
                 </MultiTrigger>
-                <Trigger Property="IsEnabled" Value="False">
+                <!--<Trigger Property="IsEnabled" Value="False">
                     <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                </Trigger>
+                </Trigger>-->
             </ControlTemplate.Triggers>
         </ControlTemplate>
 
@@ -366,26 +423,25 @@
             </Style.Triggers>
         </Style>
 
+
+
+
+        <!--/////////////////////////////////////////////////////////////////////////-->
+        <!--/////////////////////////////////////////////////////////////////////////-->
+        <!--/////////////////////////////////////////////////////////////////////////-->
+        <!--/////////////////////////////////////////////////////////////////////////-->
+
         <!--LABEL NO EDITABLES - MOSTRAR DATOS-->
         <Style TargetType="Label" x:Key="StyleLabelMostrarDatos" >
             <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
             <Setter Property="Background" Value="{StaticResource colorfondo2}" />
-            <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
-            <Setter Property="BorderThickness" Value="1,1,1,1" />
+            <Setter Property="BorderBrush" Value="{StaticResource detalles}" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
             <Setter Property="Padding" Value="5, 0"/>
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
 
-
-        <!--/////////////////////////////////////////////////////////////////////////-->
-        <!--/////////////////////////////////////////////////////////////////////////-->
-        <!--TEXTBOXES CAJA-->
-        <Style TargetType="TextBox" BasedOn="{StaticResource StyleTextbox}" x:Key="styleTBCaja">
-
-            <Setter Property="BorderThickness" Value="0"/>
-            <!--<Setter Property="OverridesDefaultStyle" Value="true"/>-->
-        </Style>
         
         <!--/////////////////////////////////////////////////////////////////////////-->
         <!--/////////////////////////////////////////////////////////////////////////-->
@@ -894,7 +950,83 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
 
+        <!--/////////////////////////////////////////////////////////////////////////-->
+        <!--/////////////////////////////////////////////////////////////////////////-->
+        <!--/////////////////////////////////////////////////////////////////////////-->
+        <!--/////////////////////////////////////////////////////////////////////////-->
+        <!--/////////////////////////////////////////////////////////////////////////-->
+        <!--/////////////////////////////////////////////////////////////////////////-->
+        
+        <!--STYLES CAJA-->
+        
+        <!--CONSTANTES CAJA-->
+        <sys:Double x:Key="AltoElementosCaja">24</sys:Double>
+        <!--<sys:Double x:Key="stackPanelCajaTop">10</sys:Double>-->
 
+        <!--STACK PANELS -->
+        <Style TargetType="StackPanel"  x:Key="StyleStackPanelCaja">
+            <Setter Property="Margin" Value="0,32,0,0"/>
+        </Style>
+        <!--TEXTBOXES -->
+        <Style TargetType="TextBox" BasedOn="{StaticResource StyleTextbox}" x:Key="styleTBCaja">
+            <Setter Property="Height" Value="{DynamicResource AltoElementosCaja}"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0,0,0,1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            
+        </Style>
+
+        <!--BOTONES -->
+        <Style TargetType="Button"  x:Key="styleBtnCaja">
+            <!--<Setter Property="OverridesDefaultStyle" Value="true"/>-->
+            <Setter Property="Height" Value="{DynamicResource AltoElementosCaja}"/>
+            <Setter Property="Foreground" Value="{DynamicResource textoobscuro}"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0,0,0,1"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <!--<Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid Background="{TemplateBinding Background}">
+                            <ContentPresenter />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>-->
+            <Style.Triggers>
+                <!--<MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsSelected" Value="true" />
+                        <Condition Property="Selector.IsSelectionActive" Value="true" />
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+                    <Setter Property="Background" Value="{StaticResource  confoco}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource confoco}" />
+                </MultiTrigger>-->
+
+                <Trigger Property="IsMouseOver" Value="true" >
+                    <!--<Setter Property="Background" Value="{}" />-->
+                </Trigger>
+                
+            </Style.Triggers>
+            
+        </Style>
+
+        <!--LABELS -->
+        <Style TargetType="Label"  x:Key="styleLabelCaja">
+            <Setter Property="Height" Value="{DynamicResource AltoElementosCaja}"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="5,0,0,1"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Foreground" Value="{DynamicResource textoclaro}"/>
+            <!--<Setter Property="OverridesDefaultStyle" Value="true"/>-->
+        </Style>
 
 
     </Application.Resources>

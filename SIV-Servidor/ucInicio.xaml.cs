@@ -61,7 +61,7 @@ namespace SIV_Servidor
             ayuda();
             tip();
             listFiltro.Visibility = Visibility.Hidden;
-            listFiltro.Margin = new Thickness(tbCodigo.Margin.Left + 2, tbDescripcion.Margin.Top + tbDescripcion.Height + 0 + 2, 0, 0);
+            listFiltro.Margin = new Thickness(gridArticulo.Margin.Left + tbCodigo.Margin.Left + 2, gridArticulo.Margin.Top + tbDescripcion.Margin.Top + tbDescripcion.Height + 0 + 2, 0, 0);
 
             ///animaciones
             sbListVentas = this.FindResource("sbListVentas") as Storyboard;
@@ -1107,8 +1107,6 @@ namespace SIV_Servidor
         {
             //consola("textchanged");
             tbPrecio.Text = tbPrecio.Text.Replace('.', ',');
-
-
             tbPrecio.CaretIndex = tbPrecio.Text.Length;   //poner el cursor al final
 
             var textBox = sender as TextBox;
@@ -1380,7 +1378,9 @@ namespace SIV_Servidor
             ta.From = gridCaja.Margin;
             double inicio = ta.From.Value.Left;
             double offsetX = gridCaja.Width;
-            double offsetAjuste= 0;
+            //double offsetAjuste= -60;
+            double offsetAjuste = 0;
+
             double offsetTotal = inicio + ((offsetX + offsetAjuste) * direccionAnimacion);
             ta.To = new Thickness(offsetTotal, ta.From.Value.Top, ta.From.Value.Right, ta.From.Value.Bottom);
             ta.Duration = new Duration(TimeSpan.FromSeconds((double)App.Current.Resources["TiempoAnimacion"]));
@@ -1390,7 +1390,8 @@ namespace SIV_Servidor
                 if (direccionAnimacion == -1)
                 {
                     tbCaja01.Focus();
-                } else
+                }
+                else
                 {
                     tbDescripcion.Focus();
                 }

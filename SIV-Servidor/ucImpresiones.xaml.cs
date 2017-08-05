@@ -225,7 +225,7 @@ namespace SIV_Servidor
                     if (registro["idventa"].ToString() != tmpSiguienteId)
                     {
                         //tempArticulo.totalmostrar = "$" + tmpTotal.ToString("0.00");
-                        tempArticulo.totalmostrar = "" + tmpTotal.ToString("0.00");
+                        tempArticulo.totalmostrar = "$ " + tmpTotal.ToString("0.00");
                     }
                 }
                 else
@@ -291,7 +291,7 @@ namespace SIV_Servidor
             ///asignar datos al list
             listFiltroClientes.ItemsSource = mTotalClientes;
 
-            consola("clientes: " + listFiltroClientes.Items.Count.ToString());
+            //consola("clientes: " + listFiltroClientes.Items.Count.ToString());
 
         }
         private void filtroClientes(string filtro = "")
@@ -973,14 +973,65 @@ namespace SIV_Servidor
             {
                 if (boton.Name == "btnRemito")
                 {
+                    btnListaDeControl.Focus();
                     e.Handled = true;
                     return;
                 }
+                else if (boton.Name == "btnPendiente")
+                {
+                    btnRemito.Focus();
+                    e.Handled = true;
+                    return;
+                }
+                else if (boton.Name == "btnFactura")
+                {
+                    btnPendiente.Focus();
+                    e.Handled = true;
+                    return;
+                }
+                else if (boton.Name == "btnTarjeta")
+                {
+                    btnFactura.Focus();
+                    e.Handled = true;
+                    return;
+                }
+                else if (boton.Name == "btnListaDeControl")
+                {
+                    btnTarjeta.Focus();
+                    e.Handled = true;
+                    return;
+                }
+
             }
             else if (e.Key == Key.Down)
             {
-                if (boton.Name == "btnListaDeControl")
+                if (boton.Name == "btnRemito")
                 {
+                    btnPendiente.Focus();
+                    e.Handled = true;
+                    return;
+                }
+                else if (boton.Name == "btnPendiente")
+                {
+                    btnFactura.Focus();
+                    e.Handled = true;
+                    return;
+                }
+                else if (boton.Name == "btnFactura")
+                {
+                    btnTarjeta.Focus();
+                    e.Handled = true;
+                    return;
+                }
+                else if (boton.Name == "btnTarjeta")
+                {
+                    btnListaDeControl.Focus();
+                    e.Handled = true;
+                    return;
+                }
+                else if (boton.Name == "btnListaDeControl")
+                {
+                    btnRemito.Focus();
                     e.Handled = true;
                     return;
                 }
