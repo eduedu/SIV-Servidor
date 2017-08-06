@@ -62,6 +62,10 @@ namespace SIV_Servidor
         public static string tipArticuloNuevo = "Artículo Nuevo";
         public static string tipAgregarArticulo = "<ENTER> Agregar artículo a Base de Datos";
 
+        public static string inicio_tbCaja = "" +
+            "<F5>  Ocultar Caja \n" +
+            "<ESC> Ir a 'Artículo'";
+
         /// AYUDA CONTROL IMPRESIONES
         public static string listCaja1 = "" +
             "<ENTER> Para imprimir una FACTURA, REMITO o cargar como PENDIENTE \n";
@@ -105,8 +109,14 @@ namespace SIV_Servidor
 
         /// AYUDA CONTROL CONSULTAS
         public static string consultas_tbFiltrar = "" +
-            "<ENTER> Ir a la Lista de Clientes \n" +
+            "<F3> Alternar entre las pestañas Pendientes/Remitos/Facturas \n" +
+            "<ENTER> Ir a la Lista de Clientes \n";
+            
+        public static string consultas_tbFiltrar2 = "" +
             "<ESC> Borrar Filtro";
+
+        public static string consultas_listConsultas = "" +
+            "< F3 > Alternar entre las pestañas Pendientes/Remitos/Facturas";
 
         public static string consultas_listNombres = "" +
             "<ENTER> Ir a la lista de 'Cuentas Pendientes'\n" +
@@ -117,8 +127,6 @@ namespace SIV_Servidor
         public static string consultas_btnPagar = "" +
             "<ENTER> Asentar un pago para la cuenta seleccionada \n" +
             "<ESC> Volver";
-        public static string consultas_f3Alternar = "" +
-            "<F3> Alternar entre las pestañas Pendientes/Remitos/Facturas \n";
 
         /// AYUDA CONTROL MONTOS
         public static string gastos_tbDescripcion = "" +

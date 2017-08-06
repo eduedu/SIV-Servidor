@@ -32,36 +32,18 @@ namespace SIV_Servidor
 {
     public partial class MainWindow : Window
     {
-        ///ver qué tanto lio seria hacer el binding de datos (masque nada para aprender)
-        ///pero en todo caso, podria intentar armar funciones de actuaqlizacion,
-        ///o una mezcla de tecnicoas
-        ///Pero lo más importante es terminar esa parte rápido.
 
         ///Shortcuts
+
         //Navigate Forward/Backward Ctrl+–/Ctrl+Shift+–
-        //Peek Definition Alt+F12
-        //Comment Code Block Ctrl+K+C/Ctrl+K+U
-
-        ///varios:
-        //animacion correr hacia los costados
-        //listArticulos alineada con los textboxes
-        //ctrl+1 seleccionar pestaña
-
-        //FOCO en control al cambiar pestaña
-        //color de seleccion sin gradiente????
-        //editar template del listVenta (hacer copia)
-
 
         ///Variables Globales
+
         //public static List<itemCaja> mArticulosCaja = new List<itemCaja>();
         //public static ObservableCollection<itemCaja> mArticulosCaja = new ObservableCollection<itemCaja>();
         Storyboard sbAyuda;
-        public double gridXTo { get; set; }
         //public double gridXFrom { get; set; }
-        public static int mPestanaMain { get; set; }
         double mAnchoPantalla;
-
-
 
         ///controles static
         public static Label statAyuda1;
@@ -70,13 +52,20 @@ namespace SIV_Servidor
         public static ucImpresiones statucImpresiones;
         public static ucInicio statucInicio;
         public static ucConsultas statUcConsultas;
+        public static ProgressBar statPBar;
 
+        ///propiedades
+        public double gridXTo { get; set; }
+        public static int mPestanaMain { get; set; }
+
+        ///se usa para las propiedades get/set
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        ///LOADED
         private void SistemaVentas_Loaded(object sender, RoutedEventArgs e)
         {
             /// referencia a los controles static
@@ -88,6 +77,7 @@ namespace SIV_Servidor
             statucInicio.tbDescripcion.Focus();
             statUcConsultas = ucConsultas;
             //CargarDBCaja();
+            statPBar = pBar;
         }
 
 
@@ -108,6 +98,7 @@ namespace SIV_Servidor
             sbAyuda = this.FindResource("sbAyuda") as Storyboard;
 
             ///SETEAR CONTROLES
+            pBar.Visibility = Visibility.Hidden;
             ayuda();
 
 
@@ -216,8 +207,6 @@ namespace SIV_Servidor
             Console.WriteLine("Total Messages Received: {0}", MiOSC.sMessagesReceivedCount);
         }
 
-
-
         ///FUNCIONES GENERALES
         public void ayuda(string texto = "", string texto2 = "")
         {
@@ -309,18 +298,54 @@ namespace SIV_Servidor
 
             if (e.Key == Key.F5)
             {
+                ///si esta seleccionada la pestana 'inicio'
                 if (tabMain.SelectedIndex == 0)
                 {
-
+                    ///si btnCaja esta 'presionado'
                     if (ucInicio.btnCaja.IsChecked == true)
                     {
-                        ucInicio.btnCaja.IsChecked = false;
+                        bool focoEnCaja = false;
+                        if (ucInicio.tbCaja01.IsFocused == true)
+                            focoEnCaja = true;
+                        if (ucInicio.tbCaja02.IsFocused == true)
+                            focoEnCaja = true;
+                        if (ucInicio.tbCaja03.IsFocused == true)
+                            focoEnCaja = true;
+                        if (ucInicio.tbCaja04.IsFocused == true)
+                            focoEnCaja = true;
+                        if (ucInicio.tbCaja05.IsFocused == true)
+                            focoEnCaja = true;
+                        if (ucInicio.tbCaja06.IsFocused == true)
+                            focoEnCaja = true;
+                        if (ucInicio.tbCaja07.IsFocused == true)
+                            focoEnCaja = true;
+                        if (ucInicio.tbCaja08.IsFocused == true)
+                            focoEnCaja = true;
+                        if (ucInicio.tbCaja09.IsFocused == true)
+                            focoEnCaja = true;
+                        if (ucInicio.tbCaja10.IsFocused == true)
+                            focoEnCaja = true;
+                        if (ucInicio.tbCaja11.IsFocused == true)
+                            focoEnCaja = true;
+                        if (ucInicio.tbCaja12.IsFocused == true)
+                            focoEnCaja = true;
+
+                        ///si el foco esta en alguno de los tbCaja
+                        if (focoEnCaja)
+                        {
+                            ucInicio.MostrarCaja(false);
+
+                            //ucInicio.tbDescripcion.Focus();
+                        }
+                        else
+                        {
+                            ucInicio.tbCaja06.Focus();
+                        }
                     }
                     else
                     {
-                        ucInicio.btnCaja.IsChecked = true;
+                        ucInicio.MostrarCaja(true);
                     }
-                    ucInicio.toggleCaja();
                     e.Handled = true;
                 }
             }
@@ -532,7 +557,6 @@ namespace SIV_Servidor
             //consola("chau");
             expanderOpciones.IsExpanded = false;
         }
-
         private void expanderOpciones_Expanded(object sender, RoutedEventArgs e)
         {
             var control = sender as Expander;
@@ -548,6 +572,21 @@ namespace SIV_Servidor
 
             }
             consola(gridCortinaNegra.IsVisible.ToString());
+        }
+
+
+        ///PROGRESS BAR
+        public static void mostrarPBar(bool mostrar)
+        {
+            if (mostrar)
+            {
+                statPBar.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                statPBar.Visibility = Visibility.Hidden;
+            }
+
         }
 
         ///-------------------------------------------------------------------------------------------

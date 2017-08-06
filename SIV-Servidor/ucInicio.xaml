@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SIV_Servidor"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" Width="970" Height="530">
+             d:DesignHeight="300" d:DesignWidth="300" Width="970" Height="530" >
     <UserControl.Resources>
         <Storyboard x:Key="sbListVentas">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="listVenta">
@@ -201,8 +201,8 @@
             <Border BorderBrush="{DynamicResource colorfondo2}" BorderThickness="1" Margin="23,0,-24,0" CornerRadius="10,0,0,10" Background="{DynamicResource colorfondo2}" Grid.ColumnSpan="6"/>
 
             <!-- TOP -->
-            <TextBox x:Name="txtTotalCaja" Margin="0,7,0,0" Grid.Column="1" Grid.ColumnSpan="3" Text="899" Style="{DynamicResource styleTBCaja}"  VerticalAlignment="Top" Background="{DynamicResource bordo}" Foreground="{DynamicResource textoclaro}" FontWeight="Bold" Focusable="False" IsHitTestVisible="False" IsTabStop="False" />
-            <Label x:Name="labTotalCaja" Content="SOBRA" Margin="5,7,0,0" Grid.Column="4" Grid.ColumnSpan="2" Style="{DynamicResource styleLabelCaja}" VerticalAlignment="Top"/>
+            <TextBox x:Name="tbBalanceCaja" Margin="0,7,0,0" Grid.Column="1" Grid.ColumnSpan="3" Text="889" Style="{DynamicResource styleTBCaja}"  VerticalAlignment="Top" Background="{DynamicResource verde}" Foreground="{DynamicResource textoclaro}" FontWeight="Bold" Focusable="False" IsHitTestVisible="False" IsTabStop="False" />
+            <Label x:Name="labBalanceCaja" Content="SOBRA" Margin="5,7,0,0" Grid.Column="4" Grid.ColumnSpan="2" Style="{DynamicResource styleLabelCaja}" VerticalAlignment="Top"/>
 
             <!--BOTONES RESTAR-->
             <StackPanel Grid.Column="1" Style="{DynamicResource StyleStackPanelCaja}">
@@ -223,7 +223,7 @@
             </StackPanel>
             <!--TEXTBOXES-->
             <StackPanel Grid.Column="2" Style="{DynamicResource StyleStackPanelCaja}">
-                <TextBox x:Name="tbCajaTotal"  Text="0" Style="{DynamicResource styleTBCaja}" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" IsHitTestVisible="False" Focusable="False" IsTabStop="False" />
+                <TextBox x:Name="tbTotalDineroEnCaja"  Text="0" Style="{DynamicResource styleTBCaja}" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" IsHitTestVisible="False" Focusable="False" IsTabStop="False" />
                 <TextBox x:Name="tbCaja01"  Text="0" Style="{DynamicResource styleTBCaja}" PreviewKeyDown="tbCajaXX_PreviewKeyDown" GotFocus="tbCajaXX_GotFocus" TextChanged="tbCajaXX_TextChanged" LostFocus="tbCajaXX_LostFocus" />
                 <TextBox x:Name="tbCaja02"  Text="0" Style="{DynamicResource styleTBCaja}" PreviewKeyDown="tbCajaXX_PreviewKeyDown" GotFocus="tbCajaXX_GotFocus" TextChanged="tbCajaXX_TextChanged" LostFocus="tbCajaXX_LostFocus" />
                 <TextBox x:Name="tbCaja03"  Text="0" Style="{DynamicResource styleTBCaja}" PreviewKeyDown="tbCajaXX_PreviewKeyDown" GotFocus="tbCajaXX_GotFocus" TextChanged="tbCajaXX_TextChanged" LostFocus="tbCajaXX_LostFocus" />
@@ -262,13 +262,13 @@
                 <Label Content="100" Style="{DynamicResource styleLabelCaja}"/>
                 <Label Content="50" Style="{DynamicResource styleLabelCaja}"/>
                 <Label Content="20" Style="{DynamicResource styleLabelCaja}"/>
-                <Label Content="10" Style="{DynamicResource styleLabelCaja}"/>
+                <Label Content="10" Style="{DynamicResource styleLabelCaja}" Foreground="{DynamicResource confoco}"/>
                 <Label Content="5" Style="{DynamicResource styleLabelCaja}"/>
                 <Label Content="2" Style="{DynamicResource styleLabelCaja}"/>
                 <Label Content="2x10" Style="{DynamicResource styleLabelCaja}"/>
                 <Label Content="m" Style="{DynamicResource styleLabelCaja}"/>
-                <Label Content="mR" Style="{DynamicResource styleLabelCaja}" Margin="5,4,0,1"/>
-                <Label Content="CG" Margin="5,4,0,0"  Style="{DynamicResource styleLabelCaja}"/>
+                <Label Content="mRes" Style="{DynamicResource styleLabelCaja}" Margin="5,4,0,1"/>
+                <Label Content="CGr" Margin="5,4,0,0"  Style="{DynamicResource styleLabelCaja}"/>
 
             </StackPanel>
         </Grid>

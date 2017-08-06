@@ -18,6 +18,8 @@ using System.Data.SQLite;
 using System.Collections.ObjectModel;
 using System.Windows.Media.Animation;
 using System.Globalization;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace SIV_Servidor
 {
@@ -131,118 +133,129 @@ namespace SIV_Servidor
         ///Funciones DB
         public static void ActualiarCajaDesdeDB()
         {
-            SQLiteConnection conexion;
-            conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
-            conexion.Open();
-
-            //string consulta = "select * from caja ORDER BY id DESC";
-            string consulta = "select id, idventa, datetime(fecha), codigo, descripcion, cantidad, precio, costo from caja ORDER BY id DESC";
-
-            /// Adaptador de datos, DataSet y tabla
-            SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
-            DataSet dataSet = new DataSet();
-            DataTable dataTable = new DataTable();
-            dataSet.Reset();
-            db.Fill(dataSet);
-            dataTable = dataSet.Tables[0];
-            //dataGrid.DataSource = dt;
-            //dataGrid.DataContext = dt.DefaultView;  //esto anda
-
-            //gridFiltro.ItemsSource = dataTable.DefaultView;
-            //listFiltroClientes.ItemsSource = dataTable.DefaultView;
-
-            ///borrar todos los elementos de mArticulos
-            if (mArticulosCaja != null)
-            {
-                mArticulosCaja.Clear();
-            }
-
-            ///Loop por todos los registros de la tabla
-            int idventaMostrar = -1;
-            float tmpTotal = 0;
-            int index = 0;
-            foreach (DataRow registro in dataTable.Rows)
+            new Thread(new ThreadStart(delegate
             {
 
-                long cantidad = zfun.toLong(registro["cantidad"].ToString());
-                float precio = zfun.toFloat(registro["precio"].ToString());
+                SQLiteConnection conexion;
+                conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
+                conexion.Open();
 
-                float tmpSubtotal = cantidad * precio;
+                //string consulta = "select * from caja ORDER BY id DESC";
+                string consulta = "select id, idventa, datetime(fecha), codigo, descripcion, cantidad, precio, costo from caja ORDER BY id DESC";
 
-                //consola(registro["precio"].ToString());
+                /// Adaptador de datos, DataSet y tabla
+                SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
+                DataSet dataSet = new DataSet();
+                DataTable dataTable = new DataTable();
+                dataSet.Reset();
+                db.Fill(dataSet);
+                dataTable = dataSet.Tables[0];
+                //dataGrid.DataSource = dt;
+                //dataGrid.DataContext = dt.DefaultView;  //esto anda
 
-                int tmpidventa = 0;
-                int.TryParse(registro["idventa"].ToString(), out tmpidventa);
+                //gridFiltro.ItemsSource = dataTable.DefaultView;
+                //listFiltroClientes.ItemsSource = dataTable.DefaultView;
 
-
-                itemCaja tempArticulo = new itemCaja();
-                if (tmpidventa != idventaMostrar)
+                ///borrar todos los elementos de mArticulos
+                if (mArticulosCaja != null)
                 {
-                    idventaMostrar = tmpidventa;
-                    tempArticulo.idventamostrar = idventaMostrar.ToString();
-                    tmpTotal = tmpSubtotal;
-                }
-                else
-                {
-                    tempArticulo.idventamostrar = "";
-                    tmpTotal = tmpTotal + tmpSubtotal;
-                }
-                if ((tmpidventa % 2) == 0)
-                {
-                    tempArticulo.color = 0;
-                }
-                else
-                {
-                    tempArticulo.color = 1;
-                }
-                tempArticulo.idventa = tmpidventa;
-                tempArticulo.codigo = zfun.toLong(registro["codigo"].ToString());
-                tempArticulo.descripcion = registro["descripcion"].ToString();
-
-                //tempArticulo.cantidad = cantidad.ToString();
-                tempArticulo.cantidad = cantidad;
-                //tempArticulo.precio = precio.ToString("0.00");
-                tempArticulo.costo = zfun.toFloat(registro["costo"].ToString());
-
-                //tempArticulo.subtotal = tmpSubtotal.ToString("0.00");
-                tempArticulo.subtotal = zfun.toFloat(tmpSubtotal.ToString("0.00"));
-
-                //tempArticulo.cantidad = (long)cantidad;
-                tempArticulo.precio = precio;
-                //tempArticulo.costo = zfun.toFloat( registro["costo"].ToString());
-                //tempArticulo.subtotal =zfun.toFloat(tmpSubtotal.ToString("0.00"));
-
-                ///formato fecha
-                tempArticulo.fecha = registro[2].ToString();
-                tempArticulo.fechaMostrar = zfun.toFechaMostrar(registro[2].ToString());
-
-
-                tempArticulo.totalmostrar = "";
-                if (dataTable.Rows.Count != index + 1)
-                {
-                    String tmpSiguienteId = dataTable.Rows[index + 1]["idventa"].ToString();
-                    //consola(registro["idventa"].ToString() + "-" + tmpSiguienteId);
-                    if (registro["idventa"].ToString() != tmpSiguienteId)
+                    Application.Current.Dispatcher.BeginInvoke((Action)(() =>
                     {
-                        //tempArticulo.totalmostrar = "$" + tmpTotal.ToString("0.00");
-                        tempArticulo.totalmostrar = "$ " + tmpTotal.ToString("0.00");
-                    }
+                        mArticulosCaja.Clear();
+                    }), DispatcherPriority.Normal, null);
                 }
-                else
+
+                ///Loop por todos los registros de la tabla
+                int idventaMostrar = -1;
+                float tmpTotal = 0;
+                int index = 0;
+                foreach (DataRow registro in dataTable.Rows)
                 {
-                    tempArticulo.totalmostrar = tmpTotal.ToString();
+
+                    long cantidad = zfun.toLong(registro["cantidad"].ToString());
+                    float precio = zfun.toFloat(registro["precio"].ToString());
+
+                    float tmpSubtotal = cantidad * precio;
+
+                    //consola(registro["precio"].ToString());
+
+                    int tmpidventa = 0;
+                    int.TryParse(registro["idventa"].ToString(), out tmpidventa);
+
+
+                    itemCaja tempArticulo = new itemCaja();
+                    if (tmpidventa != idventaMostrar)
+                    {
+                        idventaMostrar = tmpidventa;
+                        tempArticulo.idventamostrar = idventaMostrar.ToString();
+                        tmpTotal = tmpSubtotal;
+                    }
+                    else
+                    {
+                        tempArticulo.idventamostrar = "";
+                        tmpTotal = tmpTotal + tmpSubtotal;
+                    }
+                    if ((tmpidventa % 2) == 0)
+                    {
+                        tempArticulo.color = 0;
+                    }
+                    else
+                    {
+                        tempArticulo.color = 1;
+                    }
+                    tempArticulo.idventa = tmpidventa;
+                    tempArticulo.codigo = zfun.toLong(registro["codigo"].ToString());
+                    tempArticulo.descripcion = registro["descripcion"].ToString();
+
+                    //tempArticulo.cantidad = cantidad.ToString();
+                    tempArticulo.cantidad = cantidad;
+                    //tempArticulo.precio = precio.ToString("0.00");
+                    tempArticulo.costo = zfun.toFloat(registro["costo"].ToString());
+
+                    //tempArticulo.subtotal = tmpSubtotal.ToString("0.00");
+                    tempArticulo.subtotal = zfun.toFloat(tmpSubtotal.ToString("0.00"));
+
+                    //tempArticulo.cantidad = (long)cantidad;
+                    tempArticulo.precio = precio;
+                    //tempArticulo.costo = zfun.toFloat( registro["costo"].ToString());
+                    //tempArticulo.subtotal =zfun.toFloat(tmpSubtotal.ToString("0.00"));
+
+                    ///formato fecha
+                    tempArticulo.fecha = registro[2].ToString();
+                    tempArticulo.fechaMostrar = zfun.toFechaMostrar(registro[2].ToString());
+
+
+                    tempArticulo.totalmostrar = "";
+                    if (dataTable.Rows.Count != index + 1)
+                    {
+                        String tmpSiguienteId = dataTable.Rows[index + 1]["idventa"].ToString();
+                        //consola(registro["idventa"].ToString() + "-" + tmpSiguienteId);
+                        if (registro["idventa"].ToString() != tmpSiguienteId)
+                        {
+                            //tempArticulo.totalmostrar = "$" + tmpTotal.ToString("0.00");
+                            tempArticulo.totalmostrar = "$ " + tmpTotal.ToString("0.00");
+                        }
+                    }
+                    else
+                    {
+                        tempArticulo.totalmostrar = tmpTotal.ToString();
+                    }
+                    Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+                    {
+                        mArticulosCaja.Add(tempArticulo);
+                    }), DispatcherPriority.Normal, null);
+
+                    index++;
                 }
-                mArticulosCaja.Add(tempArticulo);
-                index++;
-            }
 
 
-            ///asigno la lista al control listCaja
-            //listCaja.ItemsSource = mArticulosCaja;
-            //mArticulosCaja.Reverse();
+                ///asigno la lista al control listCaja
+                //listCaja.ItemsSource = mArticulosCaja;
+                //mArticulosCaja.Reverse();
 
-            ///cerrar conexion
-            conexion.Close();
+                ///cerrar conexion
+                conexion.Close();
+            })).Start();
         }
         private void cargarListaDeClientes()
         {
@@ -460,7 +473,7 @@ namespace SIV_Servidor
             tbNombre.Style = StyleTextboxUpper;
             tbTelefono.Style = StyleTbNoEditable;
             tbDireccion.Style = StyleTbNoEditable;
-            tbCuit.Style= StyleTbNoEditable;
+            tbCuit.Style = StyleTbNoEditable;
             tbEntrega.Style = StyleTbNoEditable;
 
             tipClienteNuevo();
@@ -615,6 +628,7 @@ namespace SIV_Servidor
         }
         private void asentarRegistrosEnDB(string proceso, string archivoDB, string tabla, string nombreCampoNro)
         {
+
             /// 0) definir variables
 
             /// 0.1) variables archivo
@@ -746,9 +760,9 @@ namespace SIV_Servidor
             }
 
             ///PROCESOS POSTERIORES
-            
+
             ///actualizar datos a mostrar
-            if (proceso == "remito" )
+            if (proceso == "remito")
             {
                 //ucConsultas.actualizarListConsultas = true;
             }
@@ -759,16 +773,39 @@ namespace SIV_Servidor
             }
             if (proceso == "pendiente")
             {
+                ///agregar si hizo una 'entrega'
+                string importe = tbEntrega.Text.Trim();
+                if (tbEntrega.Text != "")
+                {
+                    string nroPendiente = nroProceso.ToString().Trim();
+                    string nombre = "EsEntregaNoPago";
+                    MainWindow.statUcConsultas.cargarImporteAPendiente(nroPendiente, nombre, importe);
+                }
 
+
+                ///agregar al registro de 'totalSalidas' en datos.db
+                string monto = tbTotal.Text.ToString().Replace("$", "").Trim();
+                zdb.sumarAtotalSalidasBD(monto);
+                ///actualizar balance
+                MainWindow.statucInicio.calcularTotalBalance();
+            }
+
+            ///volver a la pestaña anterior y poner el foco en listCaja
+            tabCaja.SelectedIndex = 0;
+            if (listCaja.SelectedIndex == -1)
+            {
+                listCaja.SelectedIndex = 0;
+            }
+            var itemList = listCaja.ItemContainerGenerator.ContainerFromIndex(listCaja.SelectedIndex) as ListBoxItem;
+            if (itemList != null)
+            {
+                itemList.Focus();
             }
 
         }
-
-
-        ///IMPRIMIR
         private void imprimir(string proceso)
         {
-
+            ///variables
         }
 
         ///extensiones
@@ -1060,7 +1097,7 @@ namespace SIV_Servidor
         private void ActivarBotonMenu(Button boton = null)
         {
             ///CANCELAR si es uno de los botones que todavia no tienen funcion
-            if(boton.Name == "btnTarjeta" || boton.Name == "btnListaDeControl")
+            if (boton.Name == "btnTarjeta" || boton.Name == "btnListaDeControl")
             {
                 return;
             }
@@ -1069,7 +1106,7 @@ namespace SIV_Servidor
             foreach (Button item in mBotones)
             {
                 //mBotones[selected].BorderThickness = new Thickness(10,10,10,10); 
-                
+
                 //string tmpTexto = item.Name;
                 if (item.Name == boton.Name)
                 {
@@ -1344,10 +1381,10 @@ namespace SIV_Servidor
                 /////ocultar control si el text esta vacio
                 listFiltroOcultar();
 
-                tbTelefono.Style = StyleTbNoEditable;
-                tbDireccion.Style = StyleTbNoEditable;
-                tbCuit.Style = StyleTbNoEditable;
-                tbEntrega.Style = StyleTbNoEditable;
+                //tbTelefono.Style = StyleTbNoEditable;
+                //tbDireccion.Style = StyleTbNoEditable;
+                //tbCuit.Style = StyleTbNoEditable;
+                //tbEntrega.Style = StyleTbNoEditable;
 
             }
         }
@@ -1366,7 +1403,7 @@ namespace SIV_Servidor
                     //    tbPagaCon.Focus();
                     //}
                     string proceso = btnImprimir.Tag.ToString();
-                    if(proceso=="remito" || proceso == "factura")
+                    if (proceso == "remito" || proceso == "factura")
                     {
                         tbTelefono.Focus();
                         seEditoDescripcionDesdeElPrograma = true;
@@ -1553,6 +1590,7 @@ namespace SIV_Servidor
             else if (e.Key == Key.Enter)
             {
 
+
                 //string codigo = ((item.codigo == "" || item.codigo == null) ? "" : item.codigo.ToString());
                 string id = item.id.ToString();
                 string nombre = item.nombre.ToString();
@@ -1568,16 +1606,18 @@ namespace SIV_Servidor
                 tbTelefono.Tag = telefono;
                 tbCuit.Tag = cuit;
 
-                //tbIdCliente.Text = id;
-                //tbNombre.Text = nombre;
-                //tbDireccion.Text = direccion;
-                //tbTelefono.Text = telefono;
-                //tbCuit.Text = cuit;
+                tbIdCliente.Text = id;
+                tbNombre.Text = nombre;
+                tbDireccion.Text = direccion;
+                tbTelefono.Text = telefono;
+                tbCuit.Text = cuit;
 
                 tbTelefono.Focus();
                 tbNombre.Style = StyleTBNoEditableFondo2Left;
 
                 listFiltroOcultar();
+
+                //e.Handled = true;
             }
             else if (e.Key == Key.Escape)
             {

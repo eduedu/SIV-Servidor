@@ -383,7 +383,7 @@
 
                 </ListView>
                 <ListView x:Name="listNombres"  Height="160" VerticalAlignment="Top" Width="306" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
-                    BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" Margin="10,63,0,0" SelectionChanged="listNombres_SelectionChanged" PreviewKeyDown="listNombres_PreviewKeyDown" GotFocus="listNombres_GotFocus"
+                    BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" Margin="10,63,0,0" SelectionChanged="listNombres_SelectionChanged" PreviewKeyDown="listNombres_PreviewKeyDown" GotFocus="listNombres_GotFocus" MouseLeftButtonDown="listNombres_MouseLeftButtonDown"
                     >
 
                     <ListView.Resources>

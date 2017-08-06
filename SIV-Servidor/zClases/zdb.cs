@@ -9,6 +9,9 @@ using System.Data.SQLite; //Utilizamos la DLL
 using System.Data;
 using System.Globalization;
 using System.Windows.Media.Animation;
+using System.Threading;
+using System.Windows.Threading;
+using System.Windows;
 
 namespace SIV_Servidor
 {
@@ -123,7 +126,13 @@ namespace SIV_Servidor
             {
                 ///modificar el valor del registro
                 comando = "UPDATE  " + tabla + " SET " + campo + "='" + valor + "' WHERE parametro='" + parametro + "'";
-                ejecutarComandoSql(archivoDB, comando);
+                //new Thread(new ThreadStart(delegate
+                //{
+                    ejecutarComandoSql(archivoDB, comando);
+                    //Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+                    //{
+                    //}), DispatcherPriority.Normal, null);
+                //})).Start();
 
             }
 
@@ -199,6 +208,44 @@ namespace SIV_Servidor
 
             ///Cerrar conexion
             conexion.Close();
+        }
+
+        ///entradas y salidas
+        //public static void sumarAtotalEntradasBD(string monto)
+        //{
+        //    editarEntradasSalidas(monto, true);
+        //}
+        //public static void sumarAtotalSalidasBD(string monto)
+        //{
+        //    editarEntradasSalidas(monto, false);
+        //}
+        //public static void editarEntradasSalidas(string monto, bool entradas)
+        //{
+        //    string nombreValor = "totalEntradas";
+        //    ///al final decidi usar el mismo registro en datos.db para alojar tanto entradas, como salidas
+        //    //if (entradas)
+        //    //{
+        //    //    nombreValor = "totalEntradas";
+        //    //} else
+        //    //{
+        //    //    nombreValor = "totalSalidas";
+        //    //}
+
+        //    monto = monto.Replace("$", "").Trim();
+        //    float fMonto = zfun.toFloat(monto);
+        //    float montoAnterior = zfun.toFloat(zdb.leerConfig(nombreValor));
+        //    float nuevoMonto = montoAnterior + fMonto;
+        //    zdb.grabarConfig(nombreValor, nuevoMonto.ToString());
+        //}
+        public static void balanceCajaDB(string monto)
+        {
+            string nombreValor = "balanceCaja";
+
+            monto = monto.Replace("$", "").Trim();
+            float fMonto = zfun.toFloat(monto);
+            float montoAnterior = zfun.toFloat(zdb.leerConfig(nombreValor));
+            float nuevoMonto = montoAnterior + fMonto;
+            zdb.grabarConfig(nombreValor, nuevoMonto.ToString());
         }
     }
 }

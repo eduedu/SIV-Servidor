@@ -28,6 +28,8 @@ namespace SIV_Servidor
         public static ObservableCollection<itemListDetalles> mItemsDetalle =
             new ObservableCollection<itemListDetalles>();   //Lista los items en listDetalles
 
+
+
         public static bool actualizarListConsultas = true;
 
         public string mTipoDeConsulta = "pendientes";
@@ -85,7 +87,7 @@ namespace SIV_Servidor
             mItemsDetalle.Clear();
 
             habilitarBotones(false);
-            listPendientes.ItemsSource = null;
+            //listPendientes.ItemsSource = null;
         }
         private void habilitarBotones(bool habilitar)
         {
@@ -518,15 +520,24 @@ namespace SIV_Servidor
                 labTelefono.Content = item.telefono;
                 labCuit.Content = item.cuit;
 
-                labTotal.Content = "$ " + item.total.ToString("0.00");
 
-                ActualizarListDetallesDesdeDB();
-
+                ///si es 'pendientes' 
                 if (mTipoDeConsulta == "pendientes")
                 {
+                    ///mostrar 'saldo' en lugar de 'total'
+                    labTotal.Content = "$ " + item.saldo.ToString("0.00");
+
                     ///habilitar botones de imprimir y de pagar
                     habilitarBotones(true);
                 }
+                else
+                {
+                    labTotal.Content = "$ " + item.total.ToString("0.00");
+
+                }
+
+
+                ActualizarListDetallesDesdeDB();
             }
             else
             {
@@ -538,29 +549,37 @@ namespace SIV_Servidor
         {
             if (mTipoDeConsulta == "pendientes")
             {
-                var list = listNombres;
-
-                if (list.SelectedIndex > -1)
-                {
-                    var selected = list.SelectedItem;
-                    var fila = selected as itemListConsultas;
-
-                    //var textBox = sender as TextBox;
-                    //string filtro = textBox.Text.Trim();
-                    string filtro = fila.nombre.ToString();
-
-                    var pendientesFiltrados = from registro in mItemsConsulta
-                                              where registro.nombre.ToLower().Equals(filtro.ToLower())
-                                              orderby registro.nombre
-                                              select registro;
-
-                    listPendientes.ItemsSource = pendientesFiltrados;
-                }
-                else
-                {
-                    listPendientes.ItemsSource = null;
-                }
+                filtrarPendientesDesdeListNombres();
             }
+        }
+        private void filtrarPendientesDesdeListNombres()
+        {
+            var list = listNombres as ListBox;
+
+            if (list.SelectedIndex > -1)
+            {
+                var selected = list.SelectedItem;
+                var fila = selected as itemListConsultas;
+
+                //var textBox = sender as TextBox;
+                //string filtro = textBox.Text.Trim();
+                string filtro = fila.nombre.ToString();
+
+                var pendientesFiltrados = from registro in mItemsConsulta
+                                          where registro.nombre.ToLower().Equals(filtro.ToLower())
+                                          orderby registro.nombre
+                                          select registro;
+
+                listPendientes.ItemsSource = pendientesFiltrados;
+            }
+            else
+            {
+                listPendientes.ItemsSource = null;
+            }
+        }
+        private void listNombres_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            filtrarPendientesDesdeListNombres();
         }
         private void listNombres_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -697,17 +716,18 @@ namespace SIV_Servidor
             myInputBoxShow(true, "Importe: ($)", "pagarPendiente");
         }
 
-        private void cargarImporteAPendiente(string importe)
+        public void cargarImporteAPendiente(string nroPendiente, string nombre, string importe)
         {
             bool error = false;
-            string nro = labId.Content.ToString().Trim();
-            string nombre = labNombre.Content.ToString();
+            //string nro = labId.Content.ToString().Trim();
+            //string nombre = labNombre.Content.ToString();
 
             importe = importe.ToString().Replace(".", ",");
             float fImporte = zfun.toFloat(importe);
+            string descripcion = "";
 
             ///si el nroPendiente no esta vacio, asentar en BD
-            if (nro != "")
+            if (nroPendiente != "")
             {
                 /// 1.1) Datos registro: 'codigo'='-99', 'descripcion'='Pago', 'subtotal'= importe del pago.
                 string archivoDB = "pendientes.db";
@@ -715,14 +735,20 @@ namespace SIV_Servidor
                 string nombreCampoNro = "pendientenro";
                 string parametros = "";
 
-                long nroProceso = zfun.toLong(nro);
+                long nroProceso = zfun.toLong(nroPendiente);
                 string fecha = zfun.getFechaNow();
                 long codigo = -99;
-                string descripcion = "Pago";
+                descripcion = "Pago";
+                ///si es 'entrega', no 'pago'
+                if (nombre == "EsEntregaNoPago")
+                {
+                    descripcion = "Entrega";
+                }
+
                 long cantidad = 1;
-                float precio = fImporte * -1;
-                string precioStr = precio.ToString().Replace(",", ".");
-                float subtotal = precio;
+                float fImporteRestar = fImporte * -1;
+                string precioStr = fImporteRestar.ToString().Replace(",", ".");
+                float subtotal = fImporteRestar;
                 string subtotalStr = precioStr;
 
                 string direccion = "";
@@ -735,25 +761,33 @@ namespace SIV_Servidor
 
                 ///actualizar modelo de datos
                 ActualizarListConsultasDesdeDB();
+
+                ///totalBalance
+                zdb.sumarAtotalEntradasBD(fImporte.ToString());
+                MainWindow.statucInicio.calcularTotalBalance();
             }
             else
             {
                 error = true;
             }
 
-            ///error
-            if (error)
+            ///si es una entrega, no un pago, no se muestran mensajes
+            if (descripcion != "Entrega")
             {
-                ///mensaje error
-                MessageBox.Show("Posiblemente se deba a que la cuenta no fue correctamente seleccionada.", "Error al intentar asentar el pago", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            else
-            {
-                ///mensaje todo OK
-                string mensaje = "Se acreditó $ " + fImporte.ToString("0.00") +
-                    " a la cuenta de \n" + nombre + ".\n(Nro de Pendiente: " + nro + ")";
-                MessageBox.Show(mensaje, "Pendientes", MessageBoxButton.OK, MessageBoxImage.Information);
+                ///error
+                if (error)
+                {
+                    ///mensaje error
+                    MessageBox.Show("Posiblemente se deba a que la cuenta no fue correctamente seleccionada.", "Error al intentar asentar el pago", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    ///mensaje todo OK
+                    string mensaje = "Se acreditó $ " + fImporte.ToString("0.00") +
+                        " a la cuenta de \n" + nombre + ".\n(Nro de Pendiente: " + nroPendiente + ")";
+                    MessageBox.Show(mensaje, "Pendientes", MessageBoxButton.OK, MessageBoxImage.Information);
 
+                }
             }
         }
 
@@ -792,7 +826,10 @@ namespace SIV_Servidor
             ///operacion 'cargarImporte'
             if (operacion == "pagarPendiente")
             {
-                cargarImporteAPendiente(myInputBox_Texto.Text);
+                string nroPendiente = labId.Content.ToString().Trim();
+                string nombre = labNombre.Content.ToString();
+                string importe = myInputBox_Texto.Text;
+                cargarImporteAPendiente(nroPendiente, nombre, importe);
             }
 
             myInputBoxShow(false);
@@ -851,12 +888,12 @@ namespace SIV_Servidor
         /// gotFocus (MOSTRAR AYUDA)
         private void tbFiltrar_GotFocus(object sender, RoutedEventArgs e)
         {
-            MainWindow.ayuda2(zAyuda.consultas_tbFiltrar,zAyuda.consultas_f3Alternar);
+            MainWindow.ayuda2(zAyuda.consultas_tbFiltrar, zAyuda.consultas_tbFiltrar2);
         }
         private void listConsultas_GotFocus(object sender, RoutedEventArgs e)
         {
             //MainWindow.ayuda2();
-            ayuda(zAyuda.consultas_f3Alternar);
+            ayuda(zAyuda.consultas_listConsultas);
         }
         private void listNombres_GotFocus(object sender, RoutedEventArgs e)
         {
@@ -870,5 +907,6 @@ namespace SIV_Servidor
         {
             MainWindow.ayuda2(zAyuda.consultas_btnPagar);
         }
+
     }
 }

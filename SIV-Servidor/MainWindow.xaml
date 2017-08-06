@@ -183,6 +183,7 @@
 
         </Expander>
         <Rectangle Fill="{DynamicResource colorfondo}" HorizontalAlignment="Left" Margin="516,0,0,0" Width="4" Height="35" VerticalAlignment="Bottom"/>
+        <ProgressBar x:Name="pBar" Margin="795,0,0,11" Height="13" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="165" Background="{DynamicResource colorfondo}" IsIndeterminate="True" Maximum="10" SmallChange="5" BorderBrush="{DynamicResource colorfondo4}" Foreground="{DynamicResource infocable3}"/>
 
 
     </Grid>

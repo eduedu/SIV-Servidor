@@ -33,6 +33,7 @@
         <SolidColorBrush x:Key="azul" Color="#FF087099"/>
         <SolidColorBrush x:Key="rojo" Color="#FFFF3333"/>
         <SolidColorBrush x:Key="bordo" Color="#FFAA3333"/>
+        <SolidColorBrush x:Key="verde" Color="#FF3A973A"/>
 
 
         <SolidColorBrush x:Key="ListBorder" Color="#828790"/>

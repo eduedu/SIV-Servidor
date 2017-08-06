@@ -19,12 +19,17 @@ using System.Data;
 using System.Globalization;
 using System.Windows.Media.Animation;
 using System.Collections.ObjectModel;
+using System.Threading;
+using System.Windows.Threading;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace SIV_Servidor
 {
 
     public partial class ucInicio : UserControl
     {
+
         ///Variables Globales
         public ObservableCollection<itemArticulo>
             mTotalArticulos = new ObservableCollection<itemArticulo>();     //Listado de articulos a la venta filtrados
@@ -37,6 +42,7 @@ namespace SIV_Servidor
         bool mBuscarArticuloPorCodigo = false;  //al apretar enter end escripcion, si empieza por un numero, busca el articulo
         bool seEditoDescripcionDesdeElPrograma = false;
         int mPestana;   //pestana venta activa
+
 
         Style tbNoEditable = Application.Current.FindResource("StyleTBNoEditable") as Style;
         Style tbNoEditableNuevo = Application.Current.FindResource("StyleTbNoEditableNuevo2") as Style;
@@ -63,6 +69,9 @@ namespace SIV_Servidor
             listFiltro.Visibility = Visibility.Hidden;
             listFiltro.Margin = new Thickness(gridArticulo.Margin.Left + tbCodigo.Margin.Left + 2, gridArticulo.Margin.Top + tbDescripcion.Margin.Top + tbDescripcion.Height + 0 + 2, 0, 0);
 
+            ///propiedades
+            tbBalanceCaja.DataContext = this;
+
             ///animaciones
             sbListVentas = this.FindResource("sbListVentas") as Storyboard;
             sbListFiltroMostrar = this.FindResource("sbListFiltroMostrar") as Storyboard;
@@ -80,14 +89,13 @@ namespace SIV_Servidor
             calcularTotal();
             //tbDescripcion.Focus();
             tbDescripcion.Focus();
-            btnCaja.Tag = "0";
 
             ///leer config 
             leerValoresCajaEnDB();
-            string mostrarCaja = zdb.leerConfig("mostrarCaja");
-            if (mostrarCaja == "1")
+            string mostrarCajaConfig = zdb.leerConfig("mostrarCaja");
+            if (mostrarCajaConfig == "1")
             {
-                toggleCaja();
+                MostrarCaja(true);
             }
         }
 
@@ -330,6 +338,136 @@ namespace SIV_Servidor
             }
             return resultado;
         }
+
+        private void insertarItemArticuloEnDB(itemArticulo item)
+        {
+            string archivo = "articulos.db";
+            string tabla = "articulos";
+
+            ///abrir conexion DB
+            SQLiteConnection conexion;
+            conexion = new SQLiteConnection("Data Source=" + archivo + ";Version=3;New=False;Compress=True;");
+            conexion.Open();
+
+            ///comando SQL a ejecutar
+            SQLiteCommand insertSQL;
+            insertSQL = new SQLiteCommand("INSERT INTO " + tabla + " (proveedor, codigopro, codigo, descripcion, precio, costo, fechacreacion) VALUES (?,?,?,?,?,?,DATETIME('NOW'))", conexion);
+
+            insertSQL.Parameters.AddWithValue("proveedor", item.proveedor.ToString());
+            insertSQL.Parameters.AddWithValue("codigopro", item.codigopro.ToString());
+            insertSQL.Parameters.AddWithValue("codigo", item.codigo);
+            insertSQL.Parameters.AddWithValue("descripcion", item.descripcion);
+            insertSQL.Parameters.AddWithValue("precio", item.precio);
+            insertSQL.Parameters.AddWithValue("costo", item.costo);
+
+            ///ejecutar comando SQL
+            try
+            {
+                insertSQL.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            ///Cerrar conexion
+            conexion.Close();
+
+        }
+
+        private void asentarVenta()
+        {
+            ///ejecutar si la lista no está vacía
+            if (listVenta.Items.Count > 0)
+            {
+                ///mostrar pbar y abrir nuevo thread
+                MainWindow.mostrarPBar(true);
+                new Thread(new ThreadStart(delegate
+                {
+                    ///obtener idVentaMax
+                    int idVentaMax = obtenerIdVentaMax();
+
+                    ///recorrer la lista (listVenta) e ir asentando fila por fila
+                    foreach (itemVenta item in listVenta.Items)
+                    {
+                        //insertarItemVentaEnDB(item, "caja", conexion, idVentaMax);
+                        insertarItemVentaEnDB(item, "caja", idVentaMax);
+                    }
+
+                    ///actualizar datos en pestana impresiones
+                    ucImpresiones.ActualiarCajaDesdeDB();
+
+                    ///actualizar view desde el main thread
+                    Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+                    {
+                        ///sumar total a 'balanceCajaDB';
+                        zdb.balanceCajaDB(tbTotal.Text);
+                        calcularTotalBalance();
+
+
+                        ///resetear list y recalcular valores
+                        resetListVenta();
+                        calcularTotal();
+                        resetTb();
+
+                        MainWindow.mostrarPBar(false);
+                    }), DispatcherPriority.Normal, null);
+                })).Start();
+
+            }
+            else
+            {
+                consola("No hay articulos en la lista.");
+                tbDescripcion.Focus();
+            }
+
+        }
+        private void insertarItemVentaEnDB(itemVenta item, string tabla, int idMax = -1)
+        {
+            ///abrir conexion DB
+            SQLiteConnection conexion;
+            conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
+            conexion.Open();
+
+            SQLiteCommand insertSQL;
+            if (idMax == -1)
+            {
+                ///asentar en tabla temporal, sin IDVENTA y sin FECHA, pero con SUBTOTAL
+                insertSQL = new SQLiteCommand("INSERT INTO " + tabla + " (codigo, descripcion, cantidad, precio, subtotal, costo) VALUES (?,?,?,?,?,?)", conexion);
+            }
+            else
+            {
+                ///asentar en tabla "caja", con IDVENTA
+                //string fecha = "DATETIME('NOW')";
+                string fecha = zfun.getFechaNow();
+                insertSQL = new SQLiteCommand("INSERT INTO " + tabla + " (idventa, fecha, codigo, descripcion, cantidad, precio, costo) VALUES (?," + fecha + ",?,?,?,?,?)", conexion);
+                insertSQL.Parameters.AddWithValue("idventa", idMax.ToString());
+            }
+
+            //insertSQL.Parameters.AddWithValue("fecha", "DATETIME('NOW')");
+            insertSQL.Parameters.AddWithValue("codigo", item.codigo);
+            insertSQL.Parameters.AddWithValue("descripcion", item.descripcion);
+            insertSQL.Parameters.AddWithValue("cantidad", item.cantidad);
+            insertSQL.Parameters.AddWithValue("precio", item.precio);
+            if (idMax == -1)
+            {
+                insertSQL.Parameters.AddWithValue("subtotal", item.subtotal);
+            }
+            insertSQL.Parameters.AddWithValue("costo", item.costo);
+            try
+            {
+                insertSQL.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            ///Cerrar conexion
+            conexion.Close();
+
+        }
+
         private void agregarItemALista()
         {
             ///definir variables y obtener valores de los textbox
@@ -391,116 +529,6 @@ namespace SIV_Servidor
             calcularTotal();
 
             tbDescripcion.Focus();
-        }
-        private void insertarItemVentaEnDB(itemVenta item, string tabla, int idMax = -1)
-        {
-            ///abrir conexion DB
-            SQLiteConnection conexion;
-            conexion = new SQLiteConnection("Data Source=caja.db;Version=3;New=False;Compress=True;");
-            conexion.Open();
-
-            SQLiteCommand insertSQL;
-            if (idMax == -1)
-            {
-                ///asentar en tabla temporal, sin IDVENTA y sin FECHA, pero con SUBTOTAL
-                insertSQL = new SQLiteCommand("INSERT INTO " + tabla + " (codigo, descripcion, cantidad, precio, subtotal, costo) VALUES (?,?,?,?,?,?)", conexion);
-            }
-            else
-            {
-                ///asentar en tabla "caja", con IDVENTA
-                //string fecha = "DATETIME('NOW')";
-                string fecha = zfun.getFechaNow();
-                insertSQL = new SQLiteCommand("INSERT INTO " + tabla + " (idventa, fecha, codigo, descripcion, cantidad, precio, costo) VALUES (?," + fecha + ",?,?,?,?,?)", conexion);
-                insertSQL.Parameters.AddWithValue("idventa", idMax.ToString());
-            }
-
-            //insertSQL.Parameters.AddWithValue("fecha", "DATETIME('NOW')");
-            insertSQL.Parameters.AddWithValue("codigo", item.codigo);
-            insertSQL.Parameters.AddWithValue("descripcion", item.descripcion);
-            insertSQL.Parameters.AddWithValue("cantidad", item.cantidad);
-            insertSQL.Parameters.AddWithValue("precio", item.precio);
-            if (idMax == -1)
-            {
-                insertSQL.Parameters.AddWithValue("subtotal", item.subtotal);
-            }
-            insertSQL.Parameters.AddWithValue("costo", item.costo);
-            try
-            {
-                insertSQL.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-
-            ///Cerrar conexion
-            conexion.Close();
-
-        }
-        private void insertarItemArticuloEnDB(itemArticulo item)
-        {
-            string archivo = "articulos.db";
-            string tabla = "articulos";
-
-            ///abrir conexion DB
-            SQLiteConnection conexion;
-            conexion = new SQLiteConnection("Data Source=" + archivo + ";Version=3;New=False;Compress=True;");
-            conexion.Open();
-
-            ///comando SQL a ejecutar
-            SQLiteCommand insertSQL;
-            insertSQL = new SQLiteCommand("INSERT INTO " + tabla + " (proveedor, codigopro, codigo, descripcion, precio, costo, fechacreacion) VALUES (?,?,?,?,?,?,DATETIME('NOW'))", conexion);
-
-            insertSQL.Parameters.AddWithValue("proveedor", item.proveedor.ToString());
-            insertSQL.Parameters.AddWithValue("codigopro", item.codigopro.ToString());
-            insertSQL.Parameters.AddWithValue("codigo", item.codigo);
-            insertSQL.Parameters.AddWithValue("descripcion", item.descripcion);
-            insertSQL.Parameters.AddWithValue("precio", item.precio);
-            insertSQL.Parameters.AddWithValue("costo", item.costo);
-
-            ///ejecutar comando SQL
-            try
-            {
-                insertSQL.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-
-            ///Cerrar conexion
-            conexion.Close();
-
-        }
-        private void asentarVenta()
-        {
-            ///ejecutar si la lista no está vacía
-            if (listVenta.Items.Count > 0)
-            {
-                ///obtener idVentaMax
-                int idVentaMax = obtenerIdVentaMax();
-
-                ///recorrer la lista (listVenta) e ir asentando fila por fila
-                foreach (itemVenta item in listVenta.Items)
-                {
-                    //insertarItemVentaEnDB(item, "caja", conexion, idVentaMax);
-                    insertarItemVentaEnDB(item, "caja", idVentaMax);
-                }
-
-                ucImpresiones.ActualiarCajaDesdeDB();
-
-                ///resetear list y recalcular valores
-                resetListVenta();
-                calcularTotal();
-                resetTb();
-
-            }
-            else
-            {
-                consola("No hay articulos en la lista.");
-                tbDescripcion.Focus();
-            }
-
         }
         private void mostrarListVentaX()
         {
@@ -564,6 +592,22 @@ namespace SIV_Servidor
             calcularTotal();
 
         }
+        private void resetListVenta()
+        {
+            ///Borrar items de la base de datos
+            resetBDventas();
+
+
+            ///borrar itemsVenta
+            if (mItemsListVenta != null)
+            {
+                mItemsListVenta.Clear();
+
+            }
+
+            ///des-asignar listVenta a datos
+            //listVenta.ItemsSource = null;
+        }
         private void resetBDventas()
         {
             ///tabla (actual), se borrara el contenido
@@ -590,22 +634,7 @@ namespace SIV_Servidor
             conexion.Close();
 
         }
-        private void resetListVenta()
-        {
-            ///Borrar items de la base de datos
-            resetBDventas();
 
-
-            ///borrar itemsVenta
-            if (mItemsListVenta != null)
-            {
-                mItemsListVenta.Clear();
-
-            }
-
-            ///des-asignar listVenta a datos
-            //listVenta.ItemsSource = null;
-        }
         private void buscarArticuloPorCodigo()
         {
             string codigoTemp = tbDescripcion.Text.Trim();
@@ -651,7 +680,6 @@ namespace SIV_Servidor
 
 
         }
-
 
 
 
@@ -1351,25 +1379,33 @@ namespace SIV_Servidor
         ///CAJA
         public void btnCaja_Click(object sender, RoutedEventArgs e)
         {
-            toggleCaja();
+            if (btnCaja.IsChecked == true)
+            {
+                MostrarCaja(true);
+            }
+            else
+            {
+                MostrarCaja(false);
+            }
+
             e.Handled = true;
         }
-        public void toggleCaja()
+        public void MostrarCaja(bool mostrar)
         {
             int direccionAnimacion = 0;
             ///mostrar gridCaja
-            if (btnCaja.Tag.ToString() == "0")
+            if (mostrar)
             {
                 direccionAnimacion = -1;
-                btnCaja.Tag = "1";
+                btnCaja.IsChecked = true;
             }
             ///ocultar gridCaja
             else
             {
                 direccionAnimacion = 1;
-                btnCaja.Tag = "0";
+                btnCaja.IsChecked = false;
             }
-            zdb.grabarConfig("mostrarCaja", btnCaja.Tag.ToString());
+            zdb.grabarConfig("mostrarCaja", (mostrar) ? "1" : "0");
 
             ///ANIMACION 
             ///easing
@@ -1391,13 +1427,14 @@ namespace SIV_Servidor
 
             double offsetTotal = inicio + ((offsetX + offsetAjuste) * direccionAnimacion);
             ta.To = new Thickness(offsetTotal, ta.From.Value.Top, ta.From.Value.Right, ta.From.Value.Bottom);
-            ta.Duration = new Duration(TimeSpan.FromSeconds((double)App.Current.Resources["TiempoAnimacion"]));
+            //ta.Duration = new Duration(TimeSpan.FromSeconds((double)App.Current.Resources["TiempoAnimacion"]));
+            ta.Duration = new Duration(TimeSpan.FromSeconds(0.2));
             ta.EasingFunction = easing;
             ta.Completed += (s, e2) =>
             {
                 if (direccionAnimacion == -1)
                 {
-                    tbCaja01.Focus();
+                    tbCaja06.Focus();
                 }
                 else
                 {
@@ -1433,7 +1470,10 @@ namespace SIV_Servidor
             else
             {
                 nuevoValor = valor - 1;
+                if (nuevoValor < 0)
+                    nuevoValor = 0;
             }
+
 
             ///actualizar el tb
             tb.Text = nuevoValor.ToString();
@@ -1450,11 +1490,11 @@ namespace SIV_Servidor
             int tbIndex = zfun.toInt(tbName.Substring(tbName.Length - 2, 2));
 
             ///FLECHA ARRIBA O ABAJO
-            if (e.Key == Key.Up || e.Key == Key.Down)
+            if (e.Key == Key.Up || e.Key == Key.Down || e.Key == Key.Enter)
             {
                 ///definir control siguiente
                 int next = 0;
-                if (e.Key == Key.Down)
+                if (e.Key == Key.Down || e.Key == Key.Enter)
                 {
                     next = tbIndex + 1;
                     if (next == 11)
@@ -1484,6 +1524,8 @@ namespace SIV_Servidor
                     nuevoValor = valor + 1;
                 if (e.Key == Key.Left)
                     nuevoValor = valor - 1;
+                if (nuevoValor < 0)
+                    nuevoValor = 0;
                 tb.Text = nuevoValor.ToString();
                 tb.CaretIndex = tb.Text.Length;   //poner el cursor al final
                 e.Handled = true;
@@ -1493,6 +1535,11 @@ namespace SIV_Servidor
 
             }
 
+            if (e.Key == Key.Escape)
+            {
+                tbDescripcion.Focus();
+                //MostrarCaja(false);
+            }
 
             ///teclas no numericas
             if (esDecimal(e.Key) == false)
@@ -1503,7 +1550,25 @@ namespace SIV_Servidor
         }
         private void tbCajaXX_GotFocus(object sender, RoutedEventArgs e)
         {
+            var tb = sender as TextBox;
+            tb.Tag = tb.Text;
+            ayuda(zAyuda.inicio_tbCaja);
 
+        }
+        private void tbCajaXX_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var tb = sender as TextBox;
+
+            ///si hubo una modificacion desde q se tomo el foco, guardar
+            if (tb.Text != tb.Tag.ToString())
+            {
+                tb.Text = tb.Text.Replace('.', ',');
+                tb.Text = zfun.toFloat(tb.Text).ToString();
+
+                int index = zfun.toInt(tb.Name.Substring(tb.Name.Length - 2, 2));
+                guardarValorEnCajaDB(index);
+                //calcularTotalDineroEnCaja
+            }
         }
         private void tbCajaXX_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -1512,16 +1577,9 @@ namespace SIV_Servidor
             //tb.Text = zfun.toFloat(tb.Text).ToString();
             tb.CaretIndex = tb.Text.Length;   //poner el cursor al final
 
-            calcularTotalCaja();
+            calcularTotalDineroEnCaja();
         }
-        private void tbCajaXX_LostFocus(object sender, RoutedEventArgs e)
-        {
-            var tb = sender as TextBox;
-            tb.Text = tb.Text.Replace('.', ',');
-            tb.Text = zfun.toFloat(tb.Text).ToString();
-        }
-
-        private void calcularTotalCaja()
+        private void calcularTotalDineroEnCaja()
         {
             ///array con los valores de los billetes
             int[] billete = { 0, 500, 200, 100, 50, 20, 10, 5, 2, 10, 1, 1, 1000 };
@@ -1550,14 +1608,61 @@ namespace SIV_Servidor
             }
 
             ///actualizar total
-            tbCajaTotal.Text = acumulador.ToString();
+            tbTotalDineroEnCaja.Text = acumulador.ToString();
 
             ///en el TAG de tbCajaTotal guardo tb el valor de cajaGrande
             tbName = "tbCaja12";
             tb = (TextBox)this.FindName(tbName);
+            tbTotalDineroEnCaja.Tag = "0";
+            //statTbTotalDineroEnCaja.Tag = "0";
             if (tb != null)
             {
-                tbCajaTotal.Tag = acumulador + (zfun.toFloat(tb.Text) * billete[12]);
+                tbTotalDineroEnCaja.Tag = (acumulador + (zfun.toFloat(tb.Text) * billete[12])).ToString();
+            }
+
+            ///totalBalance
+            calcularTotalBalance();
+
+        }
+        public void calcularTotalBalance()
+        {
+            //new Thread(new ThreadStart(delegate
+            //{
+            //    Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+            //    {
+            //    }), DispatcherPriority.Normal, null);
+            //})).Start();
+
+            ///definir variables y asignar valores
+            float totalEntradas = zfun.toFloat(zdb.leerConfig("totalEntradas"));
+            //float totalSalidas = zfun.toFloat(zdb.leerConfig("totalSalidas"));
+            //float totalDineroEnCaja = zfun.toFloat(tbTotalDineroEnCaja.Tag.ToString());
+            float totalDineroEnCaja = zfun.toFloat(tbTotalDineroEnCaja.Tag.ToString());
+
+
+            ///realizar calculo
+            //float totalBalance = totalEntradas - totalSalidas - totalDineroEnCaja;
+            float totalBalance = totalEntradas - totalDineroEnCaja;
+
+            ///actualizar vista
+            tbBalanceCaja.Text = totalBalance.ToString();
+            ///sobra
+            if (totalBalance < 0)
+            {
+                tbBalanceCaja.Background = App.Current.Resources["bordo"] as SolidColorBrush;
+                labBalanceCaja.Content = "SOBRA";
+            }
+            ///falta
+            else if (totalBalance > 0)
+            {
+                tbBalanceCaja.Background = App.Current.Resources["bordo"] as SolidColorBrush;
+                labBalanceCaja.Content = "FALTA";
+            }
+            ///en cero!
+            else
+            {
+                tbBalanceCaja.Background = App.Current.Resources["verde"] as SolidColorBrush;
+                labBalanceCaja.Content = "OK";
             }
 
         }
@@ -1569,7 +1674,7 @@ namespace SIV_Servidor
             string tabla = "datos";
 
             ///variables TB
-            float valorTb = 0;
+            //float valorTb = 0;
             string tbName;
             TextBox tb;
 
@@ -1616,92 +1721,48 @@ namespace SIV_Servidor
 
             ///cierro base de datos
             conexion.Close();
-
-
         }
         private void guardarValorEnCajaDB(int index)
         {
-            ///recorrer todos los TB e ir grabando en DB
-            float valorTb = 0;
-            string tbName;
-            TextBox tb;
-            for (int i = 1; i < 13; i++)
-            {
-                ///seleccionar TB
-                tbName = ("00" + (i).ToString());
-                tbName = tbName.Substring(tbName.Length - 2, 2);
-                tbName = "tbCaja" + tbName.Trim();
-                tb = (TextBox)this.FindName(tbName);
-
-                ///capturar valor
-                if (tb != null)
-                {
-                    valorTb = (zfun.toFloat(tb.Text));
-                    zdb.grabarConfig(tbName, valorTb.ToString());
-                }
-            }
-        }
-        private void guardarValoresCajaEnDB()
-        {
-            ///cambie la forma de grabar: en lugar de guardar uno por uno los valores (y abrir y cerrar conexion a bd)
-            ///los guardo a todos de una
-
-            ///definir variables DB
-            string archivoDb = "datos.db";
-            string tabla = "datos";
-
             ///variables TB
             float valorTb = 0;
             string tbName;
             TextBox tb;
 
-            ///variables SQL
-            string campo = "valor";
-            string valorTbStr = "";
-            string comando = "";
-            string parametro = "";
+            ///seleccionar TB
+            tbName = ("00" + (index).ToString());
+            tbName = tbName.Substring(tbName.Length - 2, 2);
+            tbName = "tbCaja" + tbName.Trim();
+            tb = (TextBox)this.FindName(tbName);
 
-            ///abrir conexion DB
-            SQLiteConnection conexion;
-            conexion = new SQLiteConnection("Data Source=" + archivoDb + ";Version=3;New=False;Compress=True;");
-            conexion.Open();
-
-
-            ///definir comando
-            SQLiteCommand comandoSQL;
-
-
-            for (int i = 1; i < 13; i++)
+            ///capturar valor y guardar en DB y EN EL TAG DEL TB
+            if (tb != null)
             {
-                ///seleccionar TB
-                tbName = ("00" + (i).ToString());
-                tbName = tbName.Substring(tbName.Length - 2, 2);
-                tbName = "tbCaja" + tbName.Trim();
-                tb = (TextBox)this.FindName(tbName);
+                valorTb = (zfun.toFloat(tb.Text));
 
-                ///capturar valor y ejecutar comando SQL
-                if (tb != null)
+                new Thread(new ThreadStart(delegate
                 {
-                    valorTb = zfun.toFloat(tb.Text);
-                    valorTbStr = valorTb.ToString();
-                    parametro = tbName;
-                    comando = "UPDATE  " + tabla + " SET " + campo + "='" + valorTbStr + "' WHERE parametro='" + parametro + "'";
-                    comandoSQL = new SQLiteCommand(comando, conexion);
+                    ///guardar valor en DB
+                    zdb.grabarConfig(tbName, valorTb.ToString());
+                    Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+                    {
+                        ///guardar valor en TAG
+                        tb.Tag = tb.Text;
+                        //consola("guardar:" + tb.Text);
+                    }), DispatcherPriority.Normal, null);
+                })).Start();
 
-                    ///ejecutar comando
-                    try
-                    {
-                        comandoSQL.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.Message);
-                    }
-                }
+
+                //new Thread(new ThreadStart(delegate
+                //{
+                //    Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+                //    {
+                //    }), DispatcherPriority.Normal, null);
+                //})).Start();
             }
-
-            ///Cerrar conexion
-            conexion.Close();
         }
+
+
+
     }
 }
