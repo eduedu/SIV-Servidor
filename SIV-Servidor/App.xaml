@@ -11,7 +11,7 @@
 
         <!--COLORES-->
         <SolidColorBrush x:Key="confoco"   Color="#FFFFF572"/>
-        
+
         <SolidColorBrush x:Key="confoco2"   Color="#FFA2E87C"/>
         <!--<SolidColorBrush x:Key="confoco2"   Color="#FF0092CC"/>-->
         <SolidColorBrush x:Key="infocable" Color="#FFA2E87C"/>
@@ -28,7 +28,7 @@
         <SolidColorBrush x:Key="detalles" Color="#FF707080"/>
         <SolidColorBrush x:Key="textoclaro" Color="#FFd0d0e0"/>
         <SolidColorBrush x:Key="textoobscuro" Color="#FF222222"/>
-        
+
         <SolidColorBrush x:Key="celeste" Color="#FF0092CC"/>
         <SolidColorBrush x:Key="azul" Color="#FF087099"/>
         <SolidColorBrush x:Key="rojo" Color="#FFFF3333"/>
@@ -93,10 +93,10 @@
 
         </Style>
 
-                <!--<Trigger Property="IsSelected" Value="true" >
+        <!--<Trigger Property="IsSelected" Value="true" >
                     <Setter Property="Background" Value="#FFB4FFB4" />
                 </Trigger>-->
-                <!--<MultiTrigger>
+        <!--<MultiTrigger>
                     <MultiTrigger.Conditions>
                         <Condition Property="IsSelected" Value="True" />
                         <Condition Property="IsFocused" Value="True" />
@@ -105,7 +105,7 @@
                         <Setter Property="Background" Value="#FFFFFF78" />
                     </MultiTrigger.Setters>
                 </MultiTrigger>-->
-        
+
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 
@@ -168,11 +168,11 @@
                         <GridViewRowPresenter Columns="{TemplateBinding GridView.ColumnCollection}" Content="{TemplateBinding Content}" Grid.RowSpan="2" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Grid>
                 </Border>
-                
+
             </Border>
-            
+
             <ControlTemplate.Triggers>
-                
+
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="Transparent">
                         <!--<Setter.Value>
@@ -242,7 +242,7 @@
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
         <!--  BOTONESSSSS  -->
-        
+
         <!--Estilo botones en MENU OPCIONES-->
         <Style TargetType="Button" x:Key="BotonOpciones" >
             <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
@@ -311,7 +311,7 @@
             </Setter>
             <Setter Property="SnapsToDevicePixels" Value="True" />
         </Style>
-        
+
 
         <!--Estilo BOTON MENU SELECTED-->
         <Style TargetType="Button" x:Key="BotonMenuSelected" >
@@ -355,7 +355,7 @@
         <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
         <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
         <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
-        
+
         <!--Estilo TEXT BOXES-->
         <Style TargetType="TextBox" x:Key="StyleTextbox" >
             <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
@@ -412,7 +412,7 @@
         <Style TargetType="TextBox" BasedOn="{StaticResource StyleTextbox}" x:Key="StyleTextboxUpper" >
             <!--<Setter Property="Foreground" Value="{StaticResource textoobscuro}" />-->
             <!--<Setter Property="Background" Value="{StaticResource sinfoco}" />-->
-            
+
             <Style.Triggers>
                 <!--<Trigger Property="IsFocused" Value="true">
                     <Setter Property="Background" Value="{StaticResource confoco}" />
@@ -442,11 +442,11 @@
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
 
-        
+
         <!--/////////////////////////////////////////////////////////////////////////-->
         <!--/////////////////////////////////////////////////////////////////////////-->
         <!--OTROS TEXTBOXES -->
-        
+
         <Style TargetType="TextBox" x:Key="StyleTextboxUpperConPlaceholder" >
 
             <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
@@ -555,8 +555,8 @@
         <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
         <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
         <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
-        
-        
+
+
         <!-- Animated Expander Button's Template-->
         <ControlTemplate x:Key="AnimatedExpanderButtonTemp" TargetType="{x:Type ToggleButton}">
             <Border x:Name="ExpanderButtonBorder"
@@ -756,7 +756,7 @@
                                                  Duration="0:0:0.3"/>
 
                             </Storyboard>
-                            
+
                         </BeginStoryboard>
                     </Trigger.EnterActions>
                     <Trigger.ExitActions>
@@ -772,8 +772,8 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-        
-        
+
+
         <!-- expander CORTINA NEGRA cortinaNegra-->
         <ControlTemplate x:Key="cortinaNegra" TargetType="{x:Type Button}" >
             <Grid x:Name="cortina" Background="Black" ></Grid>
@@ -789,7 +789,7 @@
                                 <DoubleAnimationUsingKeyFrames 
                                     Storyboard.TargetProperty="(UIElement.Opacity)" 
                                     Storyboard.TargetName="cortina">
-                                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
                                     <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.4"/>
                                 </DoubleAnimationUsingKeyFrames>
                             </Storyboard>
@@ -816,14 +816,18 @@
                     <Trigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard>
-                                --><!--<DoubleAnimation Storyboard.TargetName="cortina"
+                                -->
+                <!--<DoubleAnimation Storyboard.TargetName="cortina"
                                                  Storyboard.TargetProperty="(UIElement.Opacity)"
                                                  To="0.5"
-                                                 Duration="0:0:1.3"/>--><!--
+                                                 Duration="0:0:1.3"/>-->
+                <!--
                                 <DoubleAnimationUsingKeyFrames 
                                     Storyboard.TargetProperty="(UIElement.Opacity)" 
                                     Storyboard.TargetName="cortina">
-                                    --><!--<EasingDoubleKeyFrame KeyTime="0" Value="0.6"/>--><!--
+                                    -->
+                <!--<EasingDoubleKeyFrame KeyTime="0" Value="0.6"/>-->
+                <!--
                                     <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.0"/>
                                 </DoubleAnimationUsingKeyFrames>
                             </Storyboard>
@@ -956,9 +960,9 @@
         <!--/////////////////////////////////////////////////////////////////////////-->
         <!--/////////////////////////////////////////////////////////////////////////-->
         <!--/////////////////////////////////////////////////////////////////////////-->
-        
+
         <!--STYLES CAJA-->
-        
+
         <!--CONSTANTES CAJA-->
         <sys:Double x:Key="AltoElementosCaja">24</sys:Double>
         <!--<sys:Double x:Key="stackPanelCajaTop">10</sys:Double>-->
@@ -974,12 +978,20 @@
             <Setter Property="Margin" Value="0,0,0,1"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            
+        </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource StyleTextbox}" x:Key="styleTBCaja2">
+            <Setter Property="Height" Value="{DynamicResource AltoElementosCaja}"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0,0,0,1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,4,0,0" />
+            <Setter Property="Background" Value="#FFA6A6B6" />
+            <Setter Property ="Foreground" Value="Black" />
         </Style>
 
         <!--BOTONES -->
         <Style TargetType="Button"  x:Key="styleBtnCaja">
-            <!--<Setter Property="OverridesDefaultStyle" Value="true"/>-->
             <Setter Property="Height" Value="{DynamicResource AltoElementosCaja}"/>
             <Setter Property="Foreground" Value="{DynamicResource textoobscuro}"/>
             <Setter Property="Padding" Value="0"/>
@@ -987,41 +999,16 @@
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <!--<Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid Background="{TemplateBinding Background}">
-                            <ContentPresenter />
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>-->
-            <Style.Triggers>
-                <!--<MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="IsSelected" Value="true" />
-                        <Condition Property="Selector.IsSelectionActive" Value="true" />
-                    </MultiTrigger.Conditions>
-                    <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
-                    <Setter Property="Background" Value="{StaticResource  confoco}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource confoco}" />
-                </MultiTrigger>-->
-
-                <Trigger Property="IsMouseOver" Value="true" >
-                    <!--<Setter Property="Background" Value="{}" />-->
-                </Trigger>
-                
-            </Style.Triggers>
-            
         </Style>
+
 
         <!--LABELS -->
         <Style TargetType="Label"  x:Key="styleLabelCaja">
             <Setter Property="Height" Value="{DynamicResource AltoElementosCaja}"/>
             <Setter Property="Padding" Value="0"/>
-            <Setter Property="Margin" Value="5,0,0,1"/>
+            <Setter Property="FontSize" Value="10px"/>
+            <Setter Property="Margin" Value="3,0,0,1"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="Foreground" Value="{DynamicResource textoclaro}"/>

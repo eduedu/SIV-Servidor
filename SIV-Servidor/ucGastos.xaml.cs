@@ -32,8 +32,11 @@ namespace SIV_Servidor
         {
             InitializeComponent();
 
-            ///FUNCIONES DE INICIO
+
+            ///INICIO Y ASIGNACIONES
             resetTextos();
+            listGastos.ItemsSource = mItemsGastos;
+            cargarListaGastos();
         }
 
         ///extensiones
@@ -62,30 +65,108 @@ namespace SIV_Servidor
         private void resetTextos()
         {
             tbDescripcion.Text = "";
-            tbCantidad.Text = "";
             tbMonto.Text = "";
-            tbTotal.Text = "";
             tbFiltrar.Text = "";
             tbDescripcion.Focus();
         }
-        private void calcularSubtotal()
+
+        ///FUNCIONES DB
+        private void asentarGasto()
         {
-            tbCantidad.Text = tbCantidad.Text.Replace('.', ',');
-            //tbPrecio.Text = tbPrecio.Text.Replace('.', ',');
+            ///declaracion variables a usar
+            string fecha;
+            string descripcion;
+            float monto;
+            string montoStr;
 
-            //string resultado = "";
-            int cantidad = toInt(tbCantidad.Text);
-            float monto = toFloat(tbMonto.Text.Replace("$", ""));
+            ///asignacion y pre-asignacion
+            fecha = zfun.getFechaNow();
+            descripcion = tbDescripcion.Text.ToString().Trim();
+            monto = toFloat(tbMonto.Text.Replace("$", ""));
+            montoStr = monto.ToString().Replace(",", ".");
 
-            float total = cantidad * monto;
-            //resultado = total.ToString();
-            //consola(resultado);
-            tbTotal.Text = "";
-            tbTotal.Text = "$ " + total.ToString("0.00");
-            //consola("$ " + total.ToString("0.00"));
+            ///conexion SQL y ejecucion de comando
+            string archivo = "gastos.db";
+            string tabla = "gastos";
+            string parametros;
+            parametros = "(fecha, descripcion, monto) VALUES" +
+                   "(" + fecha + ",'" + descripcion + "'," + montoStr + ")";
+            zdb.InsertDB(archivo, tabla, parametros);
+
+            ///fin
+            cargarListaGastos();
+            resetTextos();
+        }
+        private void cargarListaGastos()
+        {
+            SQLiteConnection conexion;
+            conexion = new SQLiteConnection("Data Source=gastos.db;Version=3;New=False;Compress=True;");
+            conexion.Open();
+
+            string consulta = "select id, datetime(fecha), descripcion, monto from gastos";
+
+            /// Adaptador de datos, DataSet y tabla
+            SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
+            DataSet dataSet = new DataSet();
+            DataTable dataTable = new DataTable();
+            dataSet.Reset();
+            db.Fill(dataSet);
+            dataTable = dataSet.Tables[0];
+
+            ///borrar todos los elementos de mTotalArticulos
+            if (mItemsGastos != null)
+            {
+                mItemsGastos.Clear();
+            }
+
+            ///Loop por todos los registros de la tabla
+            foreach (DataRow registro in dataTable.Rows)
+            {
+
+                itemGastos tempItem = new itemGastos();
+                tempItem.id = (long)registro["id"];
+                tempItem.fecha = zfun.toFechaMostrar(registro[1].ToString());
+                tempItem.descripcion = registro["descripcion"].ToString();
+                tempItem.monto = zfun.toFloat(registro["monto"].ToString());
+
+                mItemsGastos.Add(tempItem);
+            }
+
+
+            ///cerrar conexion
+            conexion.Close();
+
+            ///ordenar lista (coleccion)
+            mItemsGastos = new ObservableCollection<itemGastos>(mItemsGastos.OrderByDescending(i => i.fecha));
+            listGastos.ItemsSource = mItemsGastos;
+            //mItemsGastos.Reverse();
+
+            ///asignar datos al list
+            //listGastos.ItemsSource = mItemsGastos;
+
+
+
         }
 
         ///CONTROLES
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            var tb = sender as TextBox;
+            string tbName = tb.Name.ToString();
+
+            if (tbName == "tbMonto")
+            {
+                ayuda(zAyuda.gastos_tbMonto);
+            }
+            if (tbName == "tbDescripcion")
+            {
+                ayuda(zAyuda.gastos_tbDescripcion);
+            }
+            if (tbName == "tbFiltrar")
+            {
+                ayuda(zAyuda.gastos_tbFiltrar, zAyuda.gastos_tbFiltrar2);
+            }
+        }
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             var tb = sender as TextBox;
@@ -94,20 +175,56 @@ namespace SIV_Servidor
 
 
             ///ENTER
-            if (e.Key == Key.Enter && tbText != "")
+            if (e.Key == Key.Enter || e.Key == Key.Return)
             {
                 switch (tbName)
                 {
                     case "tbDescripcion":
-                        tbCantidad.Text = "1";
-                        tbCantidad.SelectAll();
-                        tbCantidad.Focus();
+                        if (tbText != "")
+                        {
+                            tbMonto.Focus();
+                        }
+                        else
+                        {
+                            tbFiltrar.Focus();
+                        }
                         break;
-                    case "tbCantidad":
-                        tbMonto.Focus();
+
+                    case "tbMonto":
+                        if (tbText != "")
+                        {
+                            asentarGasto();
+                        }
+                        break;
+
+                    case "tbFiltrar":
+                        if (listGastos.Items.Count > -1)
+                        {
+                            listGastos.SelectedIndex = 0;
+                            var item = listGastos.ItemContainerGenerator.ContainerFromIndex(listGastos.SelectedIndex) as ListBoxItem;
+                            if (item != null)
+                            {
+                                item.Focus();
+                            }
+                        }
+                        break;
+
+                }
+            }
+
+            ///ESCAPE
+            if (e.Key == Key.Escape)
+            {
+                switch (tbName)
+                {
+                    case "tbDescripcion":
+                        resetTextos();
                         break;
                     case "tbMonto":
-                        asentarGasto();
+                        resetTextos();
+                        break;
+                    case "tbFiltrar":
+                        resetTextos();
                         break;
 
                 }
@@ -123,94 +240,47 @@ namespace SIV_Servidor
                 }
             }
         }
+
         private void tbMonto_TextChanged(object sender, TextChangedEventArgs e)
         {
             tbMonto.Text = tbMonto.Text.Replace('.', ',');
             tbMonto.CaretIndex = tbMonto.Text.Length;   //poner el cursor al final
 
-            calcularSubtotal();
+        }
+        private void tbFiltrar_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string filtro = tbFiltrar.Text.ToString().Trim();
+            var itemsFiltrados = from registro in mItemsGastos
+                                 where registro.descripcion.ToLower().Contains(filtro.ToLower())
+                                 orderby registro.fecha descending
+                                 select registro;
+
+            listGastos.ItemsSource = itemsFiltrados;
         }
 
-        ///FUNCIONES DB
-        private void asentarGasto()
+        private void listGastos_GotFocus(object sender, RoutedEventArgs e)
         {
-            ///declaracion variables a usar
-            string fecha;
-            string descripcion;
-            int cantidad;
-            float monto;
-            string montoStr;
-            float total;
-            string totalStr;
-
-            ///asignacion y pre-asignacion
-            fecha = zfun.getFechaNow();
-            descripcion = tbDescripcion.Text.ToString().Trim();
-            cantidad = toInt(tbCantidad.Text);
-            monto = toFloat(tbMonto.Text.Replace("$", ""));
-            montoStr = monto.ToString().Replace(",", ".");
-            total = toFloat(tbTotal.Text.Replace("$", ""));
-            totalStr = total.ToString().Replace(",", ".");
-
-            ///conexion SQL y ejecucion de comando
-            string archivo = "gastos.db";
-            string tabla = "gastos";
-            string parametros;
-            parametros = "(fecha, descripcion, cantidad, monto, total) VALUES" +
-                   "(" + fecha + ",'" + descripcion + "'," + cantidad + "," + montoStr + "," + totalStr + ")";
-            zdb.InsertDB(archivo, tabla, parametros);
-
-            ///fin
-            resetTextos();
+            ayuda(zAyuda.gastos_listGastos);
         }
-        private void cargarListaDeClientes()
+        private void listGastos_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            SQLiteConnection conexion;
-            conexion = new SQLiteConnection("Data Source=gastos.db;Version=3;New=False;Compress=True;");
-            conexion.Open();
-
-            string consulta = "select * from gastos";
-
-            /// Adaptador de datos, DataSet y tabla
-            SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
-            DataSet dataSet = new DataSet();
-            DataTable dataTable = new DataTable();
-            dataSet.Reset();
-            db.Fill(dataSet);
-            dataTable = dataSet.Tables[0];
-
-            ///borrar todos los elementos de mTotalArticulos
-            if (mItemsGastos!= null)
+            var list = sender as ListView;
+            var item = list.SelectedItem as itemGastos;
+            if (e.Key == Key.Escape)
             {
-                mItemsGastos.Clear();
+                tbDescripcion.Focus();
             }
-
-            /////Loop por todos los registros de la tabla
-            //foreach (DataRow registro in dataTable.Rows)
-            //{
-
-            //    itemGastos tempItem = new itemGastos();
-            //    tempItem.id = (long)registro["id"];
-            //    tempItem.descripcion= registro["nombre"].ToString();
-            //    tempItem.cantidad = registro["direccion"].ToString();
-            //    tempItem.monto = registro["telefono"].ToString();
-            //    tempItem.total = registro["cuit"].ToString();
-
-            //    mItemsGastos.Add(tempArticulo);
-            //}
-
-
-            /////cerrar conexion
-            //conexion.Close();
-
-            /////ordenar lista (coleccion)
-            ////mTotalClientes = new ObservableCollection<itemCliente>(mTotalClientes.OrderBy(i => i));
-
-            /////asignar datos al list
-            //listFiltroClientes.ItemsSource = mTotalClientes;
-
-            
-
+            if (e.Key == Key.Delete)
+            {
+                string archivo = "gastos.db";
+                string tabla = "gastos";
+                long id = item.id;
+                zdb.EliminarRegistroDB(archivo, tabla, id);
+                cargarListaGastos();
+                tbDescripcion.Focus();
+                //consola("Borrar: " + item.id.ToString() + "-" + item.descripcion);
+            }
         }
+
     }
 }

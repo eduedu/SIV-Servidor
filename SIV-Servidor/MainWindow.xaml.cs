@@ -284,7 +284,7 @@ namespace SIV_Servidor
                 {
                     if (ucConsultas.tabConsultas.SelectedIndex == 0)
                     {
-                    
+
                         ucConsultas.tabConsultas.SelectedIndex = 1;
                         e.Handled = true;
                     }
@@ -309,15 +309,20 @@ namespace SIV_Servidor
 
             if (e.Key == Key.F5)
             {
-                if (ucInicio.btnCaja.IsChecked==true)
+                if (tabMain.SelectedIndex == 0)
                 {
-                    ucInicio.btnCaja.IsChecked = false;
-                } else
-                {
-                    ucInicio.btnCaja.IsChecked = true;
+
+                    if (ucInicio.btnCaja.IsChecked == true)
+                    {
+                        ucInicio.btnCaja.IsChecked = false;
+                    }
+                    else
+                    {
+                        ucInicio.btnCaja.IsChecked = true;
+                    }
+                    ucInicio.toggleCaja();
+                    e.Handled = true;
                 }
-                ucInicio.toggleCaja();
-                e.Handled = true;
             }
 
             //if (tabMain.SelectedIndex == 2)
@@ -465,7 +470,7 @@ namespace SIV_Servidor
                     if (selected == 3)
                     {
                         ucGastos.tbDescripcion.Focus();
-                        ayuda("");
+                        //ayuda("");
                     }
 
 

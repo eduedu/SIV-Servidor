@@ -116,10 +116,9 @@ namespace SIV_Servidor
     {
         public long id { get; set; }
         public string fecha { get; set; }
+        public string fechaMostrar { get; set; }
         public string descripcion { get; set; }
-        public long cantidad { get; set; }
         public float monto { get; set; }
-        public float total { get; set; }
-
+        
     }
 }

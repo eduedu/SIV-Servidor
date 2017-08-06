@@ -101,11 +101,11 @@ namespace SIV_Servidor
 
         public static void grabarConfig(string parametro, string valor)
         {
-            /// Trabaja con CONFIGURACION.DB; guarda "valor" en el registro cuyo campo parametro sea igual a "parametro"
+            /// Trabaja con DATOS.DB; guarda "valor" en el registro cuyo campo parametro sea igual a "parametro"
 
             ///definir variables
-            string archivoDB = "configuracion.db";
-            string tabla = "configuracion";
+            string archivoDB = "datos.db";
+            string tabla = "datos";
             string campo = "valor";
             string valorAnterior = "";
             string comando = "";
@@ -131,12 +131,12 @@ namespace SIV_Servidor
 
         public static string leerConfig(string parametro)
         {
-            /// Trabaja con CONFIGURACION.DB: Devuelve el valor del parametro guardado con anterioridad. Si no existe, devuelve la cadena "registroInexistente".
+            /// Trabaja con DATOS.DB: Devuelve el valor del parametro guardado con anterioridad. Si no existe, devuelve la cadena "registroInexistente".
 
             ///definir parametros y variables
             string valor = "registroInexistente";
-            string archivoDB = "configuracion.db";
-            string tabla = "configuracion";
+            string archivoDB = "datos.db";
+            string tabla = "datos";
 
             ///abrir conexion DB
             SQLiteConnection conexion;

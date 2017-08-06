@@ -201,58 +201,58 @@
             <Border BorderBrush="{DynamicResource colorfondo2}" BorderThickness="1" Margin="23,0,-24,0" CornerRadius="10,0,0,10" Background="{DynamicResource colorfondo2}" Grid.ColumnSpan="6"/>
 
             <!-- TOP -->
-            <TextBox x:Name="txtTotalCaja" Margin="0,7,0,0" Grid.Column="1" Grid.ColumnSpan="3" Text="899" Style="{DynamicResource styleTBCaja}"  VerticalAlignment="Top" Background="{DynamicResource bordo}" Foreground="{DynamicResource textoclaro}" FontWeight="Bold" />
+            <TextBox x:Name="txtTotalCaja" Margin="0,7,0,0" Grid.Column="1" Grid.ColumnSpan="3" Text="899" Style="{DynamicResource styleTBCaja}"  VerticalAlignment="Top" Background="{DynamicResource bordo}" Foreground="{DynamicResource textoclaro}" FontWeight="Bold" Focusable="False" IsHitTestVisible="False" IsTabStop="False" />
             <Label x:Name="labTotalCaja" Content="SOBRA" Margin="5,7,0,0" Grid.Column="4" Grid.ColumnSpan="2" Style="{DynamicResource styleLabelCaja}" VerticalAlignment="Top"/>
 
             <!--BOTONES RESTAR-->
             <StackPanel Grid.Column="1" Style="{DynamicResource StyleStackPanelCaja}">
-                <Button x:Name="btnCaja12r"  Content="" Style="{DynamicResource styleBtnCaja}" Background="{x:Null}" />
-                <Button x:Name="btnCaja01r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FF83BB85" />
-                <Button x:Name="btnCaja02r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FF9CA3D1" />
-                <Button x:Name="btnCaja03r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FFD1A3C1" />
-                <Button x:Name="btnCaja04r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FF7E7E7E" />
-                <Button x:Name="btnCaja05r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FFC17D70" />
-                <Button x:Name="btnCaja06r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FF9B7777" />
-                <Button x:Name="btnCaja07r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FF93C783" />
-                <Button x:Name="btnCaja08r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FFA0BDE6" />
-                <Button x:Name="btnCaja09r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FFA0BDE6" />
-                <Button x:Name="btnCaja10r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FFC3B281" />
-                <Button x:Name="btnCaja11r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FFC3B281" Margin="0,4,0,1" />
-                <Button x:Name="btnCaja13r"  Margin="0,4,0,0"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="{DynamicResource colorfondo}" Foreground="{DynamicResource textoclaro}" />
+                <Button x:Name="btnCaja13r"  Content="" Style="{DynamicResource styleBtnCaja}" Background="{x:Null}" />
+                <Button x:Name="btnCaja01r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FF83BB85"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja02r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FF9CA3D1"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja03r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FFD1A3C1"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja04r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FF7E7E7E"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja05r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FFC17D70"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja06r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FF9B7777"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja07r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FF93C783"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja08r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FFA0BDE6"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja09r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FFA0BDE6"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja10r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FFC3B281"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja11r"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="#FFC3B281" Margin="0,4,0,0"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja12r"  Margin="0,4,0,0"  Content="-" Style="{DynamicResource styleBtnCaja}" Background="{DynamicResource colorfondo}" Foreground="{DynamicResource textoclaro}" Click="btnCajaXXx_Click"/>
 
             </StackPanel>
             <!--TEXTBOXES-->
             <StackPanel Grid.Column="2" Style="{DynamicResource StyleStackPanelCaja}">
-                <TextBox x:Name="tbCaja12"  Text="99" Style="{DynamicResource styleTBCaja}" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" IsHitTestVisible="False" Focusable="False" IsTabStop="False" />
-                <TextBox x:Name="tbCaja01"  Text="899" Style="{DynamicResource styleTBCaja}" />
-                <TextBox x:Name="tbCaja02"  Text="99" Style="{DynamicResource styleTBCaja}" />
-                <TextBox x:Name="tbCaja03"  Text="99" Style="{DynamicResource styleTBCaja}" />
-                <TextBox x:Name="tbCaja04"  Text="99" Style="{DynamicResource styleTBCaja}" />
-                <TextBox x:Name="tbCaja05"  Text="99" Style="{DynamicResource styleTBCaja}" />
-                <TextBox x:Name="tbCaja06"  Text="99" Style="{DynamicResource styleTBCaja}" />
-                <TextBox x:Name="tbCaja07"  Text="99" Style="{DynamicResource styleTBCaja}" />
-                <TextBox x:Name="tbCaja08"  Text="99" Style="{DynamicResource styleTBCaja}" />
-                <TextBox x:Name="tbCaja09"  Text="99" Style="{DynamicResource styleTBCaja}" />
-                <TextBox x:Name="tbCaja10"  Text="99" Style="{DynamicResource styleTBCaja}" />
-                <TextBox x:Name="tbCaja11"  Text="99" Style="{DynamicResource styleTBCaja}" Margin="0,4,0,1" Background="#FFA6A6B6" Foreground="Black" />
-                <TextBox x:Name="tbCaja13"  Margin="0,4,0,0" Text="98889.9" Style="{DynamicResource styleTBCaja}" Background="#FFA6A6B6" Foreground="Black" />
+                <TextBox x:Name="tbCajaTotal"  Text="0" Style="{DynamicResource styleTBCaja}" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" IsHitTestVisible="False" Focusable="False" IsTabStop="False" />
+                <TextBox x:Name="tbCaja01"  Text="0" Style="{DynamicResource styleTBCaja}" PreviewKeyDown="tbCajaXX_PreviewKeyDown" GotFocus="tbCajaXX_GotFocus" TextChanged="tbCajaXX_TextChanged" LostFocus="tbCajaXX_LostFocus" />
+                <TextBox x:Name="tbCaja02"  Text="0" Style="{DynamicResource styleTBCaja}" PreviewKeyDown="tbCajaXX_PreviewKeyDown" GotFocus="tbCajaXX_GotFocus" TextChanged="tbCajaXX_TextChanged" LostFocus="tbCajaXX_LostFocus" />
+                <TextBox x:Name="tbCaja03"  Text="0" Style="{DynamicResource styleTBCaja}" PreviewKeyDown="tbCajaXX_PreviewKeyDown" GotFocus="tbCajaXX_GotFocus" TextChanged="tbCajaXX_TextChanged" LostFocus="tbCajaXX_LostFocus" />
+                <TextBox x:Name="tbCaja04"  Text="0" Style="{DynamicResource styleTBCaja}" PreviewKeyDown="tbCajaXX_PreviewKeyDown" GotFocus="tbCajaXX_GotFocus" TextChanged="tbCajaXX_TextChanged"  LostFocus="tbCajaXX_LostFocus" />
+                <TextBox x:Name="tbCaja05"  Text="0" Style="{DynamicResource styleTBCaja}" PreviewKeyDown="tbCajaXX_PreviewKeyDown" GotFocus="tbCajaXX_GotFocus" TextChanged="tbCajaXX_TextChanged"  LostFocus="tbCajaXX_LostFocus" />
+                <TextBox x:Name="tbCaja06"  Text="0" Style="{DynamicResource styleTBCaja}" PreviewKeyDown="tbCajaXX_PreviewKeyDown" GotFocus="tbCajaXX_GotFocus" TextChanged="tbCajaXX_TextChanged" LostFocus="tbCajaXX_LostFocus"  />
+                <TextBox x:Name="tbCaja07"  Text="0" Style="{DynamicResource styleTBCaja}" PreviewKeyDown="tbCajaXX_PreviewKeyDown" GotFocus="tbCajaXX_GotFocus" TextChanged="tbCajaXX_TextChanged"  LostFocus="tbCajaXX_LostFocus" />
+                <TextBox x:Name="tbCaja08"  Text="0" Style="{DynamicResource styleTBCaja}" PreviewKeyDown="tbCajaXX_PreviewKeyDown" GotFocus="tbCajaXX_GotFocus" TextChanged="tbCajaXX_TextChanged" LostFocus="tbCajaXX_LostFocus"  />
+                <TextBox x:Name="tbCaja09"  Text="0" Style="{DynamicResource styleTBCaja}" PreviewKeyDown="tbCajaXX_PreviewKeyDown" GotFocus="tbCajaXX_GotFocus" TextChanged="tbCajaXX_TextChanged" LostFocus="tbCajaXX_LostFocus"  />
+                <TextBox x:Name="tbCaja10"  Text="0" Style="{DynamicResource styleTBCaja}" PreviewKeyDown="tbCajaXX_PreviewKeyDown" GotFocus="tbCajaXX_GotFocus" TextChanged="tbCajaXX_TextChanged"  LostFocus="tbCajaXX_LostFocus" />
+                <TextBox x:Name="tbCaja11"  Text="0" Style="{DynamicResource styleTBCaja2}" PreviewKeyDown="tbCajaXX_PreviewKeyDown" GotFocus="tbCajaXX_GotFocus" TextChanged="tbCajaXX_TextChanged"  LostFocus="tbCajaXX_LostFocus"  />
+                <TextBox x:Name="tbCaja12"  Text="0" Style="{DynamicResource styleTBCaja2}" PreviewKeyDown="tbCajaXX_PreviewKeyDown" GotFocus="tbCajaXX_GotFocus" TextChanged="tbCajaXX_TextChanged" LostFocus="tbCajaXX_LostFocus" />
 
             </StackPanel>
             <!--BOTONES SUMAR-->
             <StackPanel Grid.Column="3" Style="{DynamicResource StyleStackPanelCaja}">
-                <Button x:Name="btnCaja12s"  Content="" Style="{DynamicResource styleBtnCaja}" Background="{x:Null}" />
-                <Button x:Name="btnCaja01s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FF83BB85" />
-                <Button x:Name="btnCaja02s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FF9CA3D1" />
-                <Button x:Name="btnCaja03s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FFD1A3C1" />
-                <Button x:Name="btnCaja04s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FF7E7E7E" />
-                <Button x:Name="btnCaja05s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FFC17D70" />
-                <Button x:Name="btnCaja06s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FF9B7777" />
-                <Button x:Name="btnCaja07s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FF93C783" />
-                <Button x:Name="btnCaja08s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FFA0BDE6" />
-                <Button x:Name="btnCaja09s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FFA0BDE6" />
-                <Button x:Name="btnCaja10s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FFC3B281" />
-                <Button x:Name="btnCaja11s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FFC3B281" Margin="0,4,0,1" />
-                <Button x:Name="btnCaja13s"  Content="+" Margin="0,4,0,0"  Style="{DynamicResource styleBtnCaja}" Background="{DynamicResource colorfondo}" Foreground="{DynamicResource textoclaro}" />
+                <Button x:Name="btnCaja13s"  Content="" Style="{DynamicResource styleBtnCaja}" Background="{x:Null}" />
+                <Button x:Name="btnCaja01s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FF83BB85" Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja02s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FF9CA3D1" Click="btnCajaXXx_Click"  />
+                <Button x:Name="btnCaja03s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FFD1A3C1"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja04s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FF7E7E7E"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja05s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FFC17D70"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja06s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FF9B7777"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja07s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FF93C783"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja08s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FFA0BDE6"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja09s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FFA0BDE6"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja10s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FFC3B281"  Click="btnCajaXXx_Click" />
+                <Button x:Name="btnCaja11s"  Content="+" Style="{DynamicResource styleBtnCaja}" Background="#FFC3B281"  Click="btnCajaXXx_Click" Margin="0,4,0,0" />
+                <Button x:Name="btnCaja12s"  Content="+" Margin="0,4,0,0"  Style="{DynamicResource styleBtnCaja}" Background="{DynamicResource colorfondo}" Foreground="{DynamicResource textoclaro}"  Click="btnCajaXXx_Click" />
             </StackPanel>
             <!--LABELS-->
             <StackPanel Grid.Column="4" Style="{DynamicResource StyleStackPanelCaja}">

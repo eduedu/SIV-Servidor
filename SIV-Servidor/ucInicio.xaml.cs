@@ -81,6 +81,14 @@ namespace SIV_Servidor
             //tbDescripcion.Focus();
             tbDescripcion.Focus();
             btnCaja.Tag = "0";
+
+            ///leer config 
+            leerValoresCajaEnDB();
+            string mostrarCaja = zdb.leerConfig("mostrarCaja");
+            if (mostrarCaja == "1")
+            {
+                toggleCaja();
+            }
         }
 
         //------------------------------------------------------------------------------------------
@@ -753,7 +761,6 @@ namespace SIV_Servidor
             boton.Background = App.Current.Resources["boton"] as SolidColorBrush;
         }
 
-
         private void tabVentas_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var tab = sender as TabControl;
@@ -1362,6 +1369,7 @@ namespace SIV_Servidor
                 direccionAnimacion = 1;
                 btnCaja.Tag = "0";
             }
+            zdb.grabarConfig("mostrarCaja", btnCaja.Tag.ToString());
 
             ///ANIMACION 
             ///easing
@@ -1400,6 +1408,300 @@ namespace SIV_Servidor
             //dont need to use story board but if you want pause,stop etc use story board
             gridCaja.BeginAnimation(Grid.MarginProperty, ta);
 
+        }
+        private void btnCajaXXx_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+
+            ///sacar del btn.Name el nro de indice y si es suma o resta
+            int btnIndex = zfun.toInt(btn.Name.Substring(btn.Name.Length - 3, 2));
+            bool sumar = (btn.Name.Substring(btn.Name.Length - 1, 1) == "s") ? true : false;
+
+            ///armar el nombre del textbox
+            string tbName = ("00" + (btnIndex).ToString());
+            tbName = tbName.Substring(tbName.Length - 2, 2);
+            tbName = "tbCaja" + tbName.Trim();
+            TextBox tb = (TextBox)this.FindName(tbName);
+
+            ///calcular el nuevo valor 
+            float valor = zfun.toFloat(tb.Text);
+            float nuevoValor = 0;
+            if (sumar)
+            {
+                nuevoValor = valor + 1;
+            }
+            else
+            {
+                nuevoValor = valor - 1;
+            }
+
+            ///actualizar el tb
+            tb.Text = nuevoValor.ToString();
+            tb.CaretIndex = tb.Text.Length;   //poner el cursor al final
+
+            ///guardar valores en db
+            guardarValorEnCajaDB(btnIndex);
+        }
+        private void tbCajaXX_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            ///control
+            var tb = sender as TextBox;
+            string tbName = tb.Name;
+            int tbIndex = zfun.toInt(tbName.Substring(tbName.Length - 2, 2));
+
+            ///FLECHA ARRIBA O ABAJO
+            if (e.Key == Key.Up || e.Key == Key.Down)
+            {
+                ///definir control siguiente
+                int next = 0;
+                if (e.Key == Key.Down)
+                {
+                    next = tbIndex + 1;
+                    if (next == 11)
+                        next = 1;
+                }
+                else if (e.Key == Key.Up)
+                {
+                    next = tbIndex - 1;
+                    if (next == 0)
+                        next = 10;
+                }
+                string tbNextName = ("00" + (next).ToString());
+                tbNextName = tbNextName.Substring(tbNextName.Length - 2, 2);
+                tbNextName = "tbCaja" + tbNextName.Trim();
+                TextBox tbNext = (TextBox)this.FindName(tbNextName);
+
+                tbNext.CaretIndex = tbNext.Text.Length;   //poner el cursor al final
+                tbNext.Focus();
+            }
+
+            ///FLECHA IZQ O DER
+            if (e.Key == Key.Left || e.Key == Key.Right)
+            {
+                float valor = zfun.toFloat(tb.Text);
+                float nuevoValor = 0;
+                if (e.Key == Key.Right)
+                    nuevoValor = valor + 1;
+                if (e.Key == Key.Left)
+                    nuevoValor = valor - 1;
+                tb.Text = nuevoValor.ToString();
+                tb.CaretIndex = tb.Text.Length;   //poner el cursor al final
+                e.Handled = true;
+
+                ///guardar valores en db
+                guardarValorEnCajaDB(tbIndex);
+
+            }
+
+
+            ///teclas no numericas
+            if (esDecimal(e.Key) == false)
+            {
+                e.Handled = true;
+                return;
+            }
+        }
+        private void tbCajaXX_GotFocus(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void tbCajaXX_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var tb = sender as TextBox;
+            tb.Text = tb.Text.Replace('.', ',');
+            //tb.Text = zfun.toFloat(tb.Text).ToString();
+            tb.CaretIndex = tb.Text.Length;   //poner el cursor al final
+
+            calcularTotalCaja();
+        }
+        private void tbCajaXX_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var tb = sender as TextBox;
+            tb.Text = tb.Text.Replace('.', ',');
+            tb.Text = zfun.toFloat(tb.Text).ToString();
+        }
+
+        private void calcularTotalCaja()
+        {
+            ///array con los valores de los billetes
+            int[] billete = { 0, 500, 200, 100, 50, 20, 10, 5, 2, 10, 1, 1, 1000 };
+
+            ///recorrer todos los TB e ir sumando en acumulador
+            float valorTb = 0;
+            float acumulador = 0;
+            string tbName;
+            TextBox tb;
+            for (int i = 1; i < 12; i++)
+            {
+                ///seleccionar TB
+                tbName = ("00" + (i).ToString());
+                tbName = tbName.Substring(tbName.Length - 2, 2);
+                tbName = "tbCaja" + tbName.Trim();
+                tb = (TextBox)this.FindName(tbName);
+
+                ///capturar valor
+                if (tb != null)
+                {
+                    valorTb = (zfun.toFloat(tb.Text) * billete[i]);
+                }
+
+                ///acumular resultado
+                acumulador = acumulador + valorTb;
+            }
+
+            ///actualizar total
+            tbCajaTotal.Text = acumulador.ToString();
+
+            ///en el TAG de tbCajaTotal guardo tb el valor de cajaGrande
+            tbName = "tbCaja12";
+            tb = (TextBox)this.FindName(tbName);
+            if (tb != null)
+            {
+                tbCajaTotal.Tag = acumulador + (zfun.toFloat(tb.Text) * billete[12]);
+            }
+
+        }
+        private void leerValoresCajaEnDB()
+        {
+            ///definir parametros y variables
+            string valor = "registroInexistente";
+            string archivoDB = "datos.db";
+            string tabla = "datos";
+
+            ///variables TB
+            float valorTb = 0;
+            string tbName;
+            TextBox tb;
+
+            ///abrir conexion DB
+            SQLiteConnection conexion;
+            conexion = new SQLiteConnection("Data Source=" + archivoDB + ";Version=3;New=False;Compress=True;");
+            conexion.Open();
+
+
+            ///recorro todos los registros que almacenan los datos para los tbCajaXX
+            for (int i = 1; i < 13; i++)
+            {
+                ///seleccionar TB
+                tbName = ("00" + (i).ToString());
+                tbName = tbName.Substring(tbName.Length - 2, 2);
+                tbName = "tbCaja" + tbName.Trim();
+                tb = (TextBox)this.FindName(tbName);
+
+                if (tb != null)
+                {
+                    ///realizar CONSULTA
+                    string consulta = "SELECT * FROM " + tabla + " WHERE parametro='" + tbName + "'";
+
+                    /// Adaptador de datos, DataSet y tabla
+                    SQLiteDataAdapter db = new SQLiteDataAdapter(consulta, conexion);
+                    DataSet dataSet = new DataSet();
+                    DataTable dataTable = new DataTable();
+                    dataSet.Reset();
+                    db.Fill(dataSet);
+                    dataTable = dataSet.Tables[0];
+
+                    ///si existe el registro, poner el valor en el tbCajaXX(i)
+                    if (dataTable.Rows.Count > 0)
+                    {
+                        valor = dataTable.Rows[0].ItemArray.GetValue(2).ToString();
+                    }
+                    else
+                    {
+                        valor = "0";
+                    }
+                    tb.Text = valor;
+                }
+            }
+
+            ///cierro base de datos
+            conexion.Close();
+
+
+        }
+        private void guardarValorEnCajaDB(int index)
+        {
+            ///recorrer todos los TB e ir grabando en DB
+            float valorTb = 0;
+            string tbName;
+            TextBox tb;
+            for (int i = 1; i < 13; i++)
+            {
+                ///seleccionar TB
+                tbName = ("00" + (i).ToString());
+                tbName = tbName.Substring(tbName.Length - 2, 2);
+                tbName = "tbCaja" + tbName.Trim();
+                tb = (TextBox)this.FindName(tbName);
+
+                ///capturar valor
+                if (tb != null)
+                {
+                    valorTb = (zfun.toFloat(tb.Text));
+                    zdb.grabarConfig(tbName, valorTb.ToString());
+                }
+            }
+        }
+        private void guardarValoresCajaEnDB()
+        {
+            ///cambie la forma de grabar: en lugar de guardar uno por uno los valores (y abrir y cerrar conexion a bd)
+            ///los guardo a todos de una
+
+            ///definir variables DB
+            string archivoDb = "datos.db";
+            string tabla = "datos";
+
+            ///variables TB
+            float valorTb = 0;
+            string tbName;
+            TextBox tb;
+
+            ///variables SQL
+            string campo = "valor";
+            string valorTbStr = "";
+            string comando = "";
+            string parametro = "";
+
+            ///abrir conexion DB
+            SQLiteConnection conexion;
+            conexion = new SQLiteConnection("Data Source=" + archivoDb + ";Version=3;New=False;Compress=True;");
+            conexion.Open();
+
+
+            ///definir comando
+            SQLiteCommand comandoSQL;
+
+
+            for (int i = 1; i < 13; i++)
+            {
+                ///seleccionar TB
+                tbName = ("00" + (i).ToString());
+                tbName = tbName.Substring(tbName.Length - 2, 2);
+                tbName = "tbCaja" + tbName.Trim();
+                tb = (TextBox)this.FindName(tbName);
+
+                ///capturar valor y ejecutar comando SQL
+                if (tb != null)
+                {
+                    valorTb = zfun.toFloat(tb.Text);
+                    valorTbStr = valorTb.ToString();
+                    parametro = tbName;
+                    comando = "UPDATE  " + tabla + " SET " + campo + "='" + valorTbStr + "' WHERE parametro='" + parametro + "'";
+                    comandoSQL = new SQLiteCommand(comando, conexion);
+
+                    ///ejecutar comando
+                    try
+                    {
+                        comandoSQL.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception(ex.Message);
+                    }
+                }
+            }
+
+            ///Cerrar conexion
+            conexion.Close();
         }
     }
 }

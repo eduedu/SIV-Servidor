@@ -119,5 +119,25 @@ namespace SIV_Servidor
             "<ESC> Volver";
         public static string consultas_f3Alternar = "" +
             "<F3> Alternar entre las pestañas Pendientes/Remitos/Facturas \n";
+
+        /// AYUDA CONTROL MONTOS
+        public static string gastos_tbDescripcion = "" +
+            "<ENTER> Ir al control 'Filtrar'" +
+            "";
+        public static string gastos_tbMonto = "" +
+            "<ENTER> Asentar gasto \n" +
+            "<ESC> Cancelar";
+
+        public static string gastos_tbFiltrar = "" +
+            "Escriba un texto para filtrar lista 'Gastos'\n" +
+            "<ENTER> Ir a la lista 'Gastos'";
+        public static string gastos_tbFiltrar2 = "" +
+            "<ESC> Cancelar";
+
+        public static string gastos_listGastos = "" +
+            "<DELETE> Eliminar item seleccionado \n" +
+            "<ESC> Volver a 'Descripción'";
+
+
     }
 }

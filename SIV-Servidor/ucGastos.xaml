@@ -8,42 +8,24 @@
              d:DesignHeight="300" d:DesignWidth="300"  Width="970" Height="530">
     <Grid>
         <Grid Background="{DynamicResource colorfondo}">
-            <Grid Background="{DynamicResource colorfondo2}" Margin="40,32,139,0" Height="72" VerticalAlignment="Top">
-                <TextBox x:Name="tbDescripcion" HorizontalAlignment="Left" Height="30" Margin="110,25,0,0" TextWrapping="Wrap" Text="tbDescripcion" VerticalAlignment="Top" Width="300" VerticalContentAlignment="Center" Style="{DynamicResource StyleTextbox}" PreviewKeyDown="TextBox_PreviewKeyDown"/>
-                <TextBox x:Name="tbTotal" HorizontalAlignment="Left" Height="30" Margin="589,25,0,0" TextWrapping="Wrap" Text="tbTotal" VerticalAlignment="Top" Width="76" Style="{DynamicResource StyleTBNoEditable}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"/>
-                <TextBox x:Name="tbCantidad" HorizontalAlignment="Left" Height="30" Margin="415,25,0,0" TextWrapping="Wrap" Text="tbCantidad" VerticalAlignment="Top" Width="86" Style="{DynamicResource StyleTextbox}" VerticalContentAlignment="Center" PreviewKeyDown="TextBox_PreviewKeyDown" HorizontalContentAlignment="Right"/>
-                <TextBox x:Name="tbMonto" HorizontalAlignment="Left" Height="30" Margin="506,25,0,0" TextWrapping="Wrap" Text="tbMonto" VerticalAlignment="Top" Width="78" Style="{DynamicResource StyleTextbox}" VerticalContentAlignment="Center" PreviewKeyDown="TextBox_PreviewKeyDown" TextChanged="tbMonto_TextChanged" HorizontalContentAlignment="Right"/>
+            <Grid Background="{DynamicResource colorfondo2}" Margin="40,32,375,0" Height="72" VerticalAlignment="Top">
+                <TextBox x:Name="tbDescripcion" HorizontalAlignment="Left" Height="30" Margin="110,25,0,0" TextWrapping="Wrap" Text="tbDescripcion" VerticalAlignment="Top" Width="300" VerticalContentAlignment="Center" Style="{DynamicResource StyleTextboxUpper}" PreviewKeyDown="TextBox_PreviewKeyDown" GotFocus="TextBox_GotFocus"/>
+                <TextBox x:Name="tbMonto" HorizontalAlignment="Left" Height="30" Margin="421,25,0,0" TextWrapping="Wrap" Text="tbMonto" VerticalAlignment="Top" Width="78" Style="{DynamicResource StyleTextbox}" VerticalContentAlignment="Center" PreviewKeyDown="TextBox_PreviewKeyDown" TextChanged="tbMonto_TextChanged" HorizontalContentAlignment="Right" GotFocus="TextBox_GotFocus"/>
                 <Label x:Name="label_Copy1" Content="Descripción" HorizontalAlignment="Left" Margin="110,0,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,0,0,1" VerticalContentAlignment="Bottom" Height="25"/>
-                <Label x:Name="label_Copy2" Content="Cantidad" HorizontalAlignment="Left" Margin="415,0,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,0,0,1" VerticalContentAlignment="Bottom" Height="25"/>
-                <Label x:Name="label_Copy3" Content="Monto" HorizontalAlignment="Left" Margin="506,0,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,0,0,1" VerticalContentAlignment="Bottom" Height="25"/>
-                <Label x:Name="label_Copy4" Content="Total" HorizontalAlignment="Left" Margin="589,0,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,0,0,1" VerticalContentAlignment="Bottom" Height="25"/>
+                <Label x:Name="label_Copy3" Content="Monto $" HorizontalAlignment="Left" Margin="421,0,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,0,0,1" VerticalContentAlignment="Bottom" Height="25"/>
             </Grid>
-            <Grid Background="{DynamicResource colorfondo2}" Margin="40,141,139,0" Height="361" VerticalAlignment="Top">
-                <ListView x:Name="listGastos"    Height="302" Margin="10,49,0,0" VerticalAlignment="Top" Width="760" Background="{DynamicResource colorfondo3}" HorizontalAlignment="Left" Foreground="{DynamicResource textoclaro}" BorderBrush="{x:Null}"  >
+            <Grid Background="{DynamicResource colorfondo2}" Margin="40,177,375,0" Height="329" VerticalAlignment="Top">
+                <ListView x:Name="listGastos"    Height="309" Margin="10,10,19,0" VerticalAlignment="Top" Background="{DynamicResource colorfondo3}" Foreground="{DynamicResource textoclaro}" BorderBrush="{x:Null}" GotFocus="listGastos_GotFocus" PreviewKeyDown="listGastos_PreviewKeyDown"  >
                     <ListView.View>
                         <GridView>
                             <!--<GridViewColumn Header="id" Width="30"   DisplayMemberBinding="{Binding id}"  />-->
                             <!--<GridViewColumn Header="Código" Width="100"   DisplayMemberBinding="{Binding codigo}"  />-->
                             <GridViewColumn Header="Fecha" Width="95"   DisplayMemberBinding="{Binding fecha}"  />
                             <GridViewColumn Header="Descripción" Width="300" DisplayMemberBinding="{Binding descripcion}"  />
-                            <GridViewColumn Header="Cantidad" Width="90"   >
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding cantidad}" Width="80" TextAlignment="Right" HorizontalAlignment="Right"   />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
                             <GridViewColumn Header="Monto $" Width="90"   >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding precio, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Total $" Width="100"   >
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding subtotal, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right"  FontWeight="Bold"  />
+                                        <TextBlock Text="{Binding monto, StringFormat=\{0:C\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -56,9 +38,9 @@
                         </Style>
                     </ListView.ItemContainerStyle>
                 </ListView>
-                <TextBox x:Name="tbFiltrar" Height="30" Margin="108,19,0,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="" VerticalContentAlignment="Center" Style="{DynamicResource StyleTextboxUpperConPlaceholder}" Width="300" HorizontalAlignment="Left"/>
             </Grid>
-            <Label x:Name="label_Copy7" Content="Gastos" HorizontalAlignment="Left" Margin="40,115,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Height="26" Width="198" FontWeight="Bold" VerticalContentAlignment="Bottom"/>
+            <Label x:Name="label_Copy7" Content="Gastos" HorizontalAlignment="Left" Margin="40,151,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Height="26" Width="68" FontWeight="Bold" VerticalContentAlignment="Bottom"/>
+            <TextBox x:Name="tbFiltrar" Height="30" Margin="150,142,0,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="" VerticalContentAlignment="Center" Style="{DynamicResource StyleTextboxUpperConPlaceholder}" Width="300" HorizontalAlignment="Left" PreviewKeyDown="TextBox_PreviewKeyDown" TextChanged="tbFiltrar_TextChanged" GotFocus="TextBox_GotFocus"/>
         </Grid>
     </Grid>
 </UserControl>
