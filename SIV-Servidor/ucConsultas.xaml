@@ -328,14 +328,14 @@
             </Grid>
             <Grid  x:Name="gridPendientes" HorizontalAlignment="Left" Height="233" Margin="992,44,-967,0" VerticalAlignment="Top" Width="945" Background="{DynamicResource colorfondo2}">
                 <ListView x:Name="listPendientes"  Height="195" VerticalAlignment="Top" Width="369" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
-                    BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" Margin="330,28,0,0" SelectionChanged="listConsultasYlistPendientes_SelectionChanged" PreviewKeyDown="listPendientes_PreviewKeyDown" GotFocus="listPendientes_GotFocus"
+                    BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" Margin="394,28,0,0" SelectionChanged="listConsultasYlistPendientes_SelectionChanged" PreviewKeyDown="listPendientes_PreviewKeyDown" GotFocus="listPendientes_GotFocus"
                   >
 
                     <ListView.Resources>
 
                         <Style TargetType="{x:Type ListViewItem}">
                             <Style.Triggers>
-                                  <MultiTrigger>
+                                <MultiTrigger>
                                     <MultiTrigger.Conditions>
                                         <Condition Property="IsSelected" Value="true" />
                                         <Condition Property="Selector.IsSelectionActive" Value="true" />
@@ -373,7 +373,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <!--<TextBlock Text="{Binding total}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" FontWeight="Bold"  />-->
-                                        <TextBlock Text="{Binding saldo, StringFormat=$ \{0:F\}}" Width="100" TextAlignment="Right" HorizontalAlignment="Right" />
+                                        <TextBlock Text="{Binding saldo, StringFormat=$ \{0:F\}}" Width="90" TextAlignment="Right" HorizontalAlignment="Right" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -382,35 +382,17 @@
                     </ListView.View>
 
                 </ListView>
-                <ListView x:Name="listNombres"  Height="160" VerticalAlignment="Top" Width="306" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
+                <ListView x:Name="listNombres"  Height="160" VerticalAlignment="Top" Width="373" Background="{DynamicResource textoclaro}" HorizontalAlignment="Left" Foreground="Black"  BorderThickness="0"  
                     BorderBrush="White" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single" Margin="10,63,0,0" SelectionChanged="listNombres_SelectionChanged" PreviewKeyDown="listNombres_PreviewKeyDown" GotFocus="listNombres_GotFocus" MouseLeftButtonDown="listNombres_MouseLeftButtonDown"
                     >
 
                     <ListView.Resources>
                         <Style x:Key="styleOcultarHeader" TargetType="{x:Type GridViewColumnHeader}">
-                            <Setter Property="Visibility" Value="Collapsed" />
+                            <!--<Setter Property="Visibility" Value="Collapsed" />-->
                         </Style>
-                        <Style TargetType="{x:Type ListViewItem}">
 
+                        <Style TargetType="{x:Type ListViewItem}">
                             <Style.Triggers>
-                                <!--<DataTrigger Binding="{Binding color}" Value="0">
-                                <Setter Property="Background" Value="White" />
-                                <Setter Property="BorderBrush" Value="White" />
-                                <Setter Property="BorderThickness" Value="0" />
-                                <Setter Property="Margin" Value="0" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding color}" Value="1">
-                                <Setter Property="Background" Value="{StaticResource textoclaro}" />
-                                <Setter Property="BorderBrush" Value="{StaticResource textoclaro}" />
-                                -->
-                                <!--
-                                        <Setter Property="CornerRadius" Value="0"/>
-                                        <Setter TargetName="Border" Property="BorderThickness" Value="4,4,4,4" />
-                                        -->
-                                <!--
-                                <Setter Property="BorderThickness" Value="0" />
-                                <Setter Property="Margin" Value="0" />
-                            </DataTrigger>-->
                                 <MultiTrigger>
                                     <MultiTrigger.Conditions>
                                         <Condition Property="IsSelected" Value="true" />
@@ -432,30 +414,27 @@
                             </Style.Triggers>
                         </Style>
                     </ListView.Resources>
-                    <!--
-            <ListView.GroupStyle>
-                <GroupStyle>
-                    <GroupStyle.HeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name}"></TextBlock>
-                        </DataTemplate>
-                    </GroupStyle.HeaderTemplate>
-                </GroupStyle>
-            </ListView.GroupStyle>-->
                     <ListView.View>
                         <GridView ColumnHeaderContainerStyle="{StaticResource styleOcultarHeader}">
                             <GridViewColumn Header="Nro ID" Width="0"   DisplayMemberBinding="{Binding id}"  />
-                            <GridViewColumn Header="Nombre" Width="300"   DisplayMemberBinding="{Binding nombre}"  />
+                            <GridViewColumn Header="Nombre" Width="250"   DisplayMemberBinding="{Binding nombre}"  />
+                            <GridViewColumn Header="Saldo" Width="90"   >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding saldo, StringFormat=$ \{0:F\}}" Width="90" TextAlignment="Right" HorizontalAlignment="Right" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView>
                     </ListView.View>
 
                 </ListView>
-                <TextBox x:Name="tbFiltrar" Height="30" Margin="10,28,629,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="" VerticalContentAlignment="Center" Style="{DynamicResource StyleTextboxUpperConPlaceholder}" TextChanged="tbFiltrar_TextChanged" PreviewKeyDown="tbFiltrar_PreviewKeyDown" GotFocus="tbFiltrar_GotFocus"/>
+                <TextBox x:Name="tbFiltrar" Height="30" Margin="10,28,684,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="" VerticalContentAlignment="Center" Style="{DynamicResource StyleTextboxUpperConPlaceholder}" TextChanged="tbFiltrar_TextChanged" PreviewKeyDown="tbFiltrar_PreviewKeyDown" GotFocus="tbFiltrar_GotFocus"/>
 
                 <Label x:Name="label_Copy5" Content="Clientes" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Height="26" Width="44" FontWeight="Bold"/>
-                <Button x:Name="btnPagar" Content="ASENTAR PAGO" Margin="728,193,36,0" Style="{DynamicResource BotonMenu}" Height="30" VerticalAlignment="Top" PreviewKeyDown="btnPagar_PreviewKeyDown" PreviewMouseLeftButtonDown="btnPagar_PreviewMouseLeftButtonDown" GotFocus="btnPagar_GotFocus"/>
-                <Label x:Name="label_Copy6" Content="Cuentas Pendientes" HorizontalAlignment="Left" Margin="330,10,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Height="26" Width="198" FontWeight="Bold"/>
-                <Button x:Name="btnImprimir" Content="IMPRIMIR COPIA" Margin="728,155,36,0" Style="{DynamicResource BotonMenu}" Height="30" VerticalAlignment="Top" IsEnabled="False"/>
+                <Button x:Name="btnPagar" Content="ASENTAR PAGO" Margin="774,193,10,0" Style="{DynamicResource BotonMenu}" Height="30" VerticalAlignment="Top" PreviewKeyDown="btnPagar_PreviewKeyDown" PreviewMouseLeftButtonDown="btnPagar_PreviewMouseLeftButtonDown" GotFocus="btnPagar_GotFocus"/>
+                <Label x:Name="label_Copy6" Content="Cuentas Pendientes" HorizontalAlignment="Left" Margin="394,10,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Height="26" Width="198" FontWeight="Bold"/>
+                <Button x:Name="btnImprimir" Content="IMPRIMIR COPIA" Margin="774,155,10,0" Style="{DynamicResource BotonMenu}" Height="30" VerticalAlignment="Top" IsEnabled="False"/>
             </Grid>
             <Grid Margin="15,307,691,30">
                 <Rectangle Fill="{DynamicResource colorfondo2}" HorizontalAlignment="Left" Height="196" VerticalAlignment="Top" Width="264" Margin="0,0,0,-3"/>

@@ -65,10 +65,13 @@ namespace SIV_Servidor
         public static string inicio_tbCaja = "" +
             "<F5>  Ocultar Caja \n" +
             "<ESC> Ir a 'Artículo'";
+        public static string inicio_tbCajab = "" +
+            "<Flecha Derecha> / <Flecha Izquierda> Modificar valor  \n" +
+            "<Flecha Arriba> / <Flecha Abajo> Moverse entre los billetes ";
 
         /// AYUDA CONTROL IMPRESIONES
         public static string listCaja1 = "" +
-            "<ENTER> Para imprimir una FACTURA, REMITO o cargar como PENDIENTE \n";
+            "<ENTER> Para imprimir una Factura, Remito o cargar como Pendiente \n";
 
         public static string bontonMenu1a = "" +
             "<FLECHA ARRIBA/ABAJO> Moverse entre las opciones \n" +

@@ -124,6 +124,10 @@ namespace SIV_Servidor
             tipArticuloNuevo();
             tbDescripcion.Focus();
             //ayuda();
+
+            tbVueltoEnBilletes.Text = "";
+            tbPagoEnBilletes.Text = "";
+            tbPagaCon.Tag = "0";
         }
 
         private void tip(string texto = "", object sender = null)
@@ -1327,34 +1331,6 @@ namespace SIV_Servidor
                 }
             }
         }
-        private void tbPagaCon_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (tbPagaCon.Text.ToString().Trim() != "")
-            {
-                string total = tbTotal.Text.Replace("$", "");
-                float fTotal = toFloat(total);
-                float fPagaCon = toFloat(tbPagaCon.Text);
-                float fVuelto = fPagaCon - fTotal;
-                tbVuelto.Text = fVuelto.ToString();
-            }
-            else
-            {
-                tbVuelto.Text = "";
-            }
-
-        }
-        private void tbPagaCon_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                btnAsentar.Focus();
-            }
-            if (e.Key == Key.Up || e.Key == Key.Escape)
-            {
-                resetTb();
-                //tbDescripcion.Focus();
-            }
-        }
 
 
         ///extensiones
@@ -1552,7 +1528,7 @@ namespace SIV_Servidor
         {
             var tb = sender as TextBox;
             tb.Tag = tb.Text;
-            ayuda(zAyuda.inicio_tbCaja);
+            ayuda(zAyuda.inicio_tbCaja,zAyuda.inicio_tbCajab);
 
         }
         private void tbCajaXX_LostFocus(object sender, RoutedEventArgs e)
@@ -1634,7 +1610,7 @@ namespace SIV_Servidor
             //})).Start();
 
             ///definir variables y asignar valores
-            float totalEntradas = zfun.toFloat(zdb.leerConfig("totalEntradas"));
+            float balanceCajaEnDB = zfun.toFloat(zdb.leerConfig("balanceCaja"));
             //float totalSalidas = zfun.toFloat(zdb.leerConfig("totalSalidas"));
             //float totalDineroEnCaja = zfun.toFloat(tbTotalDineroEnCaja.Tag.ToString());
             float totalDineroEnCaja = zfun.toFloat(tbTotalDineroEnCaja.Tag.ToString());
@@ -1642,27 +1618,43 @@ namespace SIV_Servidor
 
             ///realizar calculo
             //float totalBalance = totalEntradas - totalSalidas - totalDineroEnCaja;
-            float totalBalance = totalEntradas - totalDineroEnCaja;
+            float totalBalance = balanceCajaEnDB - totalDineroEnCaja;
 
             ///actualizar vista
             tbBalanceCaja.Text = totalBalance.ToString();
             ///sobra
             if (totalBalance < 0)
             {
-                tbBalanceCaja.Background = App.Current.Resources["bordo"] as SolidColorBrush;
+                tbBalanceCaja.Background = App.Current.Resources["infocable3"] as SolidColorBrush;
                 labBalanceCaja.Content = "SOBRA";
             }
             ///falta
             else if (totalBalance > 0)
             {
-                tbBalanceCaja.Background = App.Current.Resources["bordo"] as SolidColorBrush;
+                tbBalanceCaja.Background = App.Current.Resources["infocable3"] as SolidColorBrush;
                 labBalanceCaja.Content = "FALTA";
             }
             ///en cero!
             else
             {
-                tbBalanceCaja.Background = App.Current.Resources["verde"] as SolidColorBrush;
+                tbBalanceCaja.Background = App.Current.Resources["confoco2"] as SolidColorBrush;
                 labBalanceCaja.Content = "OK";
+            }
+
+            ///actualizar 'tbBalanceCaja' en MainWindow
+            if (MainWindow.statBalanceCaja != null)
+            {
+                MainWindow.statBalanceCaja.Text = tbBalanceCaja.Text;
+                MainWindow.statBalanceCaja.Background = tbBalanceCaja.Background;
+                //string tempLabBalCaja = labBalanceCaja.Content.ToString().Substring(0, 1);
+                //if (tempLabBalCaja == "S" || tempLabBalCaja == "F")
+                //{
+                //    MainWindow.statLabBalanceCaja.Content = tempLabBalCaja;
+                //} else
+                //{
+                //    MainWindow.statLabBalanceCaja.Content = "";
+                //}
+                MainWindow.statLabBalanceCaja.Content = labBalanceCaja.Content;
             }
 
         }
@@ -1762,7 +1754,152 @@ namespace SIV_Servidor
             }
         }
 
+        ///vuelto/pagaCon
+        private void tbPagaCon_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (tbPagaCon.Text == "")
+                {
+                    btnAsentar.Focus();
+                }
+                else
+                {
+                    ///leer el monto anterior y sumar el nuevo billete
+                    if (tbPagaCon.Tag == null)
+                    {
+                        tbPagaCon.Tag = 0;
+                    }
+                    float montoAnterior = zfun.toFloat(tbPagaCon.Tag.ToString());
+                    float nuevoMonto = montoAnterior + zfun.toFloat(tbPagaCon.Text.ToString());
+                    tbPagaCon.Tag = nuevoMonto.ToString();
+                    consola(tbPagaCon.Tag.ToString());
 
+                    ///mostrar nuevo billete en la lista
+                    string nuevoBillete = tbPagaCon.Text.Trim();
+                    agregarBilleteTbPagoEnBilletes(nuevoBillete);
+                    tbPagaCon.Text = "";
+                    //e.Handled = true;
+                    mostrarVuelto();
+                }
+            }
+            if (e.Key == Key.Up || e.Key == Key.Escape)
+            {
+                resetTb();
+                //tbDescripcion.Focus();
+            }
+        }
+        private void agregarBilleteTbPagoEnBilletes(string strBillete)
+        {
+            string texto = "";
+            texto = tbPagoEnBilletes.Text + "\n +1 x $" + strBillete;
+            tbPagoEnBilletes.Text = texto;
+        }
+        private void mostrarVuelto()
+        {
+            string total = tbTotal.Text.Replace("$", "");
+            float fTotal = toFloat(total);
 
+            //float fPagaCon = toFloat(tbPagaCon.Text);
+            //float fVuelto = fPagaCon - fTotal;
+
+            ///el valor de billetes ingresados y calcular el vuelto
+            if (tbPagaCon.Tag == null)
+                tbPagaCon.Tag = "0";
+            float fPagaCon = toFloat(tbPagaCon.Tag.ToString());
+            float fVuelto = fPagaCon - fTotal;
+
+            ///si el vuelto es negativo, mostrar vacio
+            if (fVuelto < 0)
+            {
+                tbVuelto.Text = "";
+            }
+            else
+            {
+                tbVuelto.Text = fVuelto.ToString();
+                descomponerVueltoEnBilletes(fVuelto);
+            }
+        }
+        private void tbPagaCon_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //if (tbPagaCon.Text.ToString().Trim() != "")
+            //{
+            //    string total = tbTotal.Text.Replace("$", "");
+            //    float fTotal = toFloat(total);
+
+            //    //float fPagaCon = toFloat(tbPagaCon.Text);
+            //    //float fVuelto = fPagaCon - fTotal;
+
+            //    ///el valor de billetes ingresados y calcular el vuelto
+            //    if (tbPagaCon.Tag == null)
+            //        tbPagaCon.Tag = "0";
+            //    float fPagaCon = toFloat(tbPagaCon.Tag.ToString());
+            //    float fVuelto = fPagaCon-fTotal;
+
+            //    ///si el vuelto es negativo, mostrar vacio
+            //    if (fVuelto < 0)
+            //    {
+            //        tbVuelto.Text = "";
+            //    }
+            //    else
+            //    {
+            //        tbVuelto.Text = fVuelto.ToString();
+            //        descomponerVueltoEnBilletes(fVuelto);
+            //    }
+            //}
+            //else
+            //{
+            //    tbVuelto.Text = "";
+            //}
+
+        }
+        private void descomponerVueltoEnBilletes(float monto)
+        {
+            ///definir variables
+            double[] denominacion = { 500, 200, 100, 50, 20, 10, 5, 2 };
+            double[] cantidad = new double[9];
+
+            double resto = (double)monto;
+
+            for (int i = 0; i < denominacion.Length; i++)
+            {
+                ///si el resto es mayor a la denominacion del billete, procesar. Si no, no hacer nada.
+                if (resto >= denominacion[i])
+                {
+                    //consola("d:" + denominacion[i].ToString());
+
+                    ///dividir 'resto' por billete, quedarme con el int floor
+                    double tempCociente = Math.Floor(resto / denominacion[i]);
+                    //consola("c:" + tempCociente.ToString());
+
+                    ///cargar cociente a array 'cantidad'
+                    cantidad[i] = tempCociente;
+
+                    ///restar 'cociente' de 'resto
+                    resto = resto - (tempCociente * denominacion[i]);
+                }
+            }
+            cantidad[cantidad.Length-1] = resto;
+            tbVuelto.Tag = cantidad;
+
+            ///actualizar vista
+            tbVueltoEnBilletes.Text = "";
+            ///recorrer el array cantidad para ver cuantos billetes necesito
+            for (int i = 0; i < denominacion.Length; i++)
+            {
+                ///mostrar la cantidad si es que cantidad[i]!=0
+                if (cantidad[i] != 0)
+                {
+                    string tmpLinea = "-" + cantidad[i] + " x $" + denominacion[i];
+                    tbVueltoEnBilletes.Text += "\n" + tmpLinea;
+                }
+            }
+            tbVueltoEnBilletes.Text += "\n m: -" + resto.ToString();
+        }
+
+        private void tbBalanceCaja_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }

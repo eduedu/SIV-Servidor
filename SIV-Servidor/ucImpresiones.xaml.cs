@@ -783,9 +783,9 @@ namespace SIV_Servidor
                 }
 
 
-                ///agregar al registro de 'totalSalidas' en datos.db
+                ///agregar al registro de 'balanceCaja' en datos.db
                 string monto = tbTotal.Text.ToString().Replace("$", "").Trim();
-                zdb.sumarAtotalSalidasBD(monto);
+                zdb.balanceCajaDB(monto, true);
                 ///actualizar balance
                 MainWindow.statucInicio.calcularTotalBalance();
             }

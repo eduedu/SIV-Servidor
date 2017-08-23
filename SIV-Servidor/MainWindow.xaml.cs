@@ -52,6 +52,8 @@ namespace SIV_Servidor
         public static ucImpresiones statucImpresiones;
         public static ucInicio statucInicio;
         public static ucConsultas statUcConsultas;
+        public static TextBox statBalanceCaja;
+        public static Label statLabBalanceCaja;
         public static ProgressBar statPBar;
 
         ///propiedades
@@ -78,6 +80,24 @@ namespace SIV_Servidor
             statUcConsultas = ucConsultas;
             //CargarDBCaja();
             statPBar = pBar;
+            statBalanceCaja = tbBalanceCaja;
+            statLabBalanceCaja = labBalanceCaja;
+
+            ///actualizar 'tbBalanceCaja' en MainWindow desde ucInicio
+            if (tbBalanceCaja != null)
+            {
+                tbBalanceCaja.Text = statucInicio.tbBalanceCaja.Text;
+                tbBalanceCaja.Background = statucInicio.tbBalanceCaja.Background;
+                //string tempLabBalCaja = statucInicio.labBalanceCaja.Content.ToString().Substring(0, 1);
+                //if (tempLabBalCaja == "S" || tempLabBalCaja == "F")
+                //{
+                //    labBalanceCaja.Content = tempLabBalCaja;
+                //} else
+                //{
+                //    labBalanceCaja.Content = "";
+                //}
+                labBalanceCaja.Content = statucInicio.labBalanceCaja.Content;
+            }
         }
 
 
@@ -100,6 +120,7 @@ namespace SIV_Servidor
             ///SETEAR CONTROLES
             pBar.Visibility = Visibility.Hidden;
             ayuda();
+
 
 
             ///FUNCIONES DE INICIO
@@ -239,6 +260,19 @@ namespace SIV_Servidor
 
 
         ///CONTROLES
+        private void SistemaVentas_StateChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState == System.Windows.WindowState.Maximized)
+            {
+                consola("maximize");
+                consola("w:" + this.ActualWidth.ToString() + " h:" + this.ActualHeight.ToString());
+                consola("---------");
+            }
+        }
+        private void SistemaVentas_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            consola("w:" + this.Width.ToString() + " h:" + this.Height.ToString());
+        }
         private void SistemaVentas_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             //if (e.Key == Key.Escape)
@@ -588,6 +622,7 @@ namespace SIV_Servidor
             }
 
         }
+
 
         ///-------------------------------------------------------------------------------------------
 

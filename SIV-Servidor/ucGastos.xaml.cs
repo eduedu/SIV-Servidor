@@ -93,6 +93,13 @@ namespace SIV_Servidor
                    "(" + fecha + ",'" + descripcion + "'," + montoStr + ")";
             zdb.InsertDB(archivo, tabla, parametros);
 
+            ///agregar al registro de 'balanceCaja' en datos.db
+            //string monto = tbTotal.Text.ToString().Replace("$", "").Trim();
+            zdb.balanceCajaDB(montoStr, true);
+            ///actualizar balance
+            MainWindow.statucInicio.calcularTotalBalance();
+
+
             ///fin
             cargarListaGastos();
             resetTextos();
@@ -272,13 +279,41 @@ namespace SIV_Servidor
             }
             if (e.Key == Key.Delete)
             {
-                string archivo = "gastos.db";
-                string tabla = "gastos";
-                long id = item.id;
-                zdb.EliminarRegistroDB(archivo, tabla, id);
-                cargarListaGastos();
-                tbDescripcion.Focus();
-                //consola("Borrar: " + item.id.ToString() + "-" + item.descripcion);
+                string descripcion = item.descripcion;
+                float monto = item.monto;
+                string montoStr = monto.ToString();
+
+                ///preguntar si eliminar el item
+                bool eliminar = false;
+                string mensaje = "¿Eliminar '" + descripcion + "' ($ " + montoStr + ")?";
+                MessageBoxResult result = MessageBox.Show(mensaje, "Eliminar Registro", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                switch (result)
+                {
+                    case MessageBoxResult.OK:
+                        eliminar = true;
+                        break;
+                    case MessageBoxResult.Cancel:
+                        break;
+                }
+
+                if (eliminar)
+                {
+                    ///eliminar item de gastos.db
+                    string archivo = "gastos.db";
+                    string tabla = "gastos";
+                    long id = item.id;
+                    zdb.EliminarRegistroDB(archivo, tabla, id);
+
+                    ///sumar a balanceCaja
+                    zdb.balanceCajaDB(montoStr);
+                    ///actualizar balance
+                    MainWindow.statucInicio.calcularTotalBalance();
+
+                    ///actualizar vista
+                    cargarListaGastos();
+                    tbDescripcion.Focus();
+                    //consola("Borrar: " + item.id.ToString() + "-" + item.descripcion);
+                }
             }
         }
 

@@ -23,6 +23,8 @@ namespace SIV_Servidor
     public partial class ucConsultas : UserControl
     {
         ///Globales 
+        public static ObservableCollection<itemListConsultas> mItemsNombre =
+new ObservableCollection<itemListConsultas>();   //Lista los items en listConsultas
         public static ObservableCollection<itemListConsultas> mItemsConsulta =
             new ObservableCollection<itemListConsultas>();   //Lista los items en listConsultas
         public static ObservableCollection<itemListDetalles> mItemsDetalle =
@@ -63,7 +65,7 @@ namespace SIV_Servidor
             listDetalles.ItemsSource = mItemsDetalle;
 
             //listPendientes.ItemsSource = mItemsConsulta;
-            listNombres.ItemsSource = mItemsConsulta;
+            //listNombres.ItemsSource = mItemsNombre;
 
 
             gridPendientes.Margin = new Thickness(gridRemitosyfacturas.Margin.Left, gridRemitosyfacturas.Margin.Top, 0, 0);
@@ -179,6 +181,7 @@ namespace SIV_Servidor
             {
                 long codigo = (long)registro["codigo"];
 
+                ///si codigo=-100, es una nueva
                 if (codigo == -100)
                 {
                     itemListConsultas tempItem = new itemListConsultas();
@@ -228,31 +231,60 @@ namespace SIV_Servidor
             //listCaja.ItemsSource = mArticulosCaja;
             //mArticulosCaja.Reverse();
 
-            ///cerrar conexion
-            conexion.Close();
 
-            ///si es un pendiente, dar el foco al filtro, sino a la lista consulta
+            ///si es un pendiente
             if (mTipoDeConsulta == "pendientes")
             {
-                tbFiltrar.Focus();
-            }
-            else
-            {
-                ///seleccionar el primer item (o ninguno) de listConsultas
-                if (mItemsConsulta.Count > 0)
+                if (mItemsNombre != null)
                 {
-                    listConsultas.SelectedIndex = 0;
+                    mItemsNombre.Clear();
                 }
-                else
-                {
-                    listConsultas.SelectedIndex = -1;
 
-                }
+                ///crear la lista nombres, buscando en mListConsulta pero sin repetir nombres
+                var nombreSinRepetir = mItemsConsulta.GroupBy(x => x.nombre).Select(y => y.First());
+                //listNombres.ItemsSource = nombreSinRepetir;
+
+                ///añadir item y calcular el saldo de cada nombre
+                var nombresYsaldos = mItemsConsulta.GroupBy(l => l.nombre)
+                    .Select(lg =>
+                    new itemListConsultas
+                    {
+                        nombre = lg.Key,
+                        //registros = lg.Count(),
+                        saldo = lg.Sum(w => w.saldo)
+                    });
+                //listNombres.ItemsSource = nombresYsaldos;
+                mItemsNombre = new ObservableCollection<itemListConsultas>(nombresYsaldos);
+                listNombres.ItemsSource = mItemsNombre;
+
+
+                //foreach (itemListConsultas item in nombreSinRepetir)
+                //{
+                //    itemListConsultas tempItem = new itemListConsultas();
+                //    tempItem.id = item.id;
+                //    tempItem.nombre = item.nombre;
+                //    //tempItem.saldo = 10;
+
+                //    ///calcular el saldo consultando en la base de datos los pendientes con el mismo nombre
+                //    //object tmpSaldo;
+                //    //tmpSaldo = dataTable.Compute("Sum(subtotal)", "descripcion = '" + tempItem.nombre.ToString() + "' AND codigo<>-100");
+                //    //var result = mItemsConsulta.Where(x => x.nombre== "profit").Sum(x => x.col2 + x.col3 + x.col4 + x.col5);
+
+                //    //tempItem.saldo = zfun.toFloat(tmpSaldo.ToString());
+
+                //    var tmpSaldo = nombresYsaldos.Where(x => x.nombre == item.nombre);
+                //    item.saldo = toFloat(tmpSaldo.ToString());
+                //    mItemsNombre.Add(tempItem);
+                //}
+                //listNombres.ItemsSource = mItemsNombre;
+
+
+
+
+                //tbFiltrar.Focus();
             }
-
-            ActualizarListDetallesDesdeDB();
-            //actualizarListConsultas = false;
-
+            ///cerrar conexion
+            conexion.Close();
         }
         private void ActualizarListDetallesDesdeDB()
         {
@@ -372,6 +404,32 @@ namespace SIV_Servidor
             //{
             //    resetTextos();
             //}
+        }
+
+        private void filtrarPendientesDesdeListNombres()
+        {
+            var list = listNombres as ListBox;
+
+            if (list.SelectedIndex > -1)
+            {
+                var selected = list.SelectedItem;
+                var fila = selected as itemListConsultas;
+
+                //var textBox = sender as TextBox;
+                //string filtro = textBox.Text.Trim();
+                string filtro = fila.nombre.ToString();
+
+                var pendientesFiltrados = from registro in mItemsConsulta
+                                          where registro.nombre.ToLower().Equals(filtro.ToLower())
+                                          orderby registro.nombre
+                                          select registro;
+
+                listPendientes.ItemsSource = pendientesFiltrados;
+            }
+            else
+            {
+                listPendientes.ItemsSource = null;
+            }
         }
 
         ///extensiones
@@ -552,31 +610,6 @@ namespace SIV_Servidor
                 filtrarPendientesDesdeListNombres();
             }
         }
-        private void filtrarPendientesDesdeListNombres()
-        {
-            var list = listNombres as ListBox;
-
-            if (list.SelectedIndex > -1)
-            {
-                var selected = list.SelectedItem;
-                var fila = selected as itemListConsultas;
-
-                //var textBox = sender as TextBox;
-                //string filtro = textBox.Text.Trim();
-                string filtro = fila.nombre.ToString();
-
-                var pendientesFiltrados = from registro in mItemsConsulta
-                                          where registro.nombre.ToLower().Equals(filtro.ToLower())
-                                          orderby registro.nombre
-                                          select registro;
-
-                listPendientes.ItemsSource = pendientesFiltrados;
-            }
-            else
-            {
-                listPendientes.ItemsSource = null;
-            }
-        }
         private void listNombres_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             filtrarPendientesDesdeListNombres();
@@ -651,16 +684,19 @@ namespace SIV_Servidor
 
                 if (filtro != "")
                 {
-                    var nombresFiltrados = from registro in mItemsConsulta
+                    //var nombresFiltrados = from registro in mItemsConsulta
+                    //                       where registro.nombre.ToLower().Contains(filtro.ToLower())
+                    //                       orderby registro.nombre
+                    //                       select registro;
+                    var nombresFiltrados = from registro in mItemsNombre
                                            where registro.nombre.ToLower().Contains(filtro.ToLower())
                                            orderby registro.nombre
                                            select registro;
-
                     listNombres.ItemsSource = nombresFiltrados;
                 }
                 else
                 {
-                    listNombres.ItemsSource = mItemsConsulta;
+                    listNombres.ItemsSource = mItemsNombre;
                 }
             }
         }
@@ -762,8 +798,8 @@ namespace SIV_Servidor
                 ///actualizar modelo de datos
                 ActualizarListConsultasDesdeDB();
 
-                ///totalBalance
-                zdb.sumarAtotalEntradasBD(fImporte.ToString());
+                ///totalBalance, restar
+                zdb.balanceCajaDB(fImporte.ToString());
                 MainWindow.statucInicio.calcularTotalBalance();
             }
             else

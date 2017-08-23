@@ -237,12 +237,14 @@ namespace SIV_Servidor
         //    float nuevoMonto = montoAnterior + fMonto;
         //    zdb.grabarConfig(nombreValor, nuevoMonto.ToString());
         //}
-        public static void balanceCajaDB(string monto)
+        public static void balanceCajaDB(string monto, bool restar=false)
         {
             string nombreValor = "balanceCaja";
 
             monto = monto.Replace("$", "").Trim();
             float fMonto = zfun.toFloat(monto);
+            if (restar)
+                fMonto = fMonto * -1;
             float montoAnterior = zfun.toFloat(zdb.leerConfig(nombreValor));
             float nuevoMonto = montoAnterior + fMonto;
             zdb.grabarConfig(nombreValor, nuevoMonto.ToString());

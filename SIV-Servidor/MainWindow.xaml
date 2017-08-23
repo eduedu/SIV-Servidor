@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SIV_Servidor"
         xmlns:Properties="clr-namespace:SIV_Servidor.Properties" x:Name="SistemaVentas" x:Class="SIV_Servidor.MainWindow"
         mc:Ignorable="d"
-        Title="Sistema Ventas (Servidor)" Height="650" Width="1000" Background="{DynamicResource colorfondo2}" PreviewKeyDown="SistemaVentas_PreviewKeyDown" ResizeMode="NoResize" DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}" WindowStyle="ToolWindow" Loaded="SistemaVentas_Loaded">
+        Title="Sistema Ventas (Servidor)" Height="650" Width="1000" Background="{DynamicResource colorfondo2}" PreviewKeyDown="SistemaVentas_PreviewKeyDown" DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}" WindowStyle="ThreeDBorderWindow" Loaded="SistemaVentas_Loaded" SizeChanged="SistemaVentas_SizeChanged" SizeToContent="WidthAndHeight" StateChanged="SistemaVentas_StateChanged">
     <Window.Resources>
 
 
@@ -67,7 +67,7 @@
             <!--<BeginStoryboard Storyboard="{StaticResource sbSlideCaja}"/>-->
         </EventTrigger>
     </Window.Triggers>
-    <Grid>
+    <Grid x:Name="windowGrid" RenderTransformOrigin="0.5,0.5">
         <Label x:Name="Label1" x:FieldModifier="public" Content="Label" Margin="-580,170.05,0,0" VerticalAlignment="Top" Height="32" Background="{DynamicResource infocable3}" HorizontalAlignment="Left" Width="147" Foreground="{DynamicResource textoobscuro}" d:LayoutOverrides="VerticalAlignment"/>
         <TabControl x:Name="tabMain"  HorizontalAlignment="Left" Margin="10,10,0,40" Width="969"  Background="{x:Null}" BorderBrush="{x:Null}" SelectionChanged="tabMain_SelectionChanged" Focusable="False">
             <TabControl.Resources>
@@ -143,8 +143,8 @@
                 <Grid Background="#FFE5E5E5"/>
             </Expander>-->
         </TabControl>
-        <Label x:Name="labelAyuda" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{x:Null}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="460" BorderBrush="{DynamicResource infocable}" Padding="5,0" Margin="60,0,0,0"/>
-        <Label x:Name="label_Copy10" Content="Ayuda" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="{DynamicResource textoclaro}" Background="{DynamicResource colorfondo}" FontWeight="Bold" Height="35" Width="60" HorizontalContentAlignment="Center" BorderBrush="{DynamicResource colorfondo}" Padding="5,0,5,5"/>
+        <Label x:Name="labelAyuda" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{DynamicResource colorfondo3}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="417" BorderBrush="{DynamicResource infocable}" Padding="3,0,1,0" Margin="46,0,0,0"/>
+        <Label x:Name="label_Copy10" Content="Ayuda" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="{DynamicResource textoclaro}" Background="{DynamicResource colorfondo}" FontWeight="Bold" Height="35" Width="46" HorizontalContentAlignment="Right" BorderBrush="{DynamicResource colorfondo}" Padding="0,0,2,5"/>
         <Grid x:Name="gridMain" Background="{DynamicResource colorfondo}" Margin="0,50,-3048,35" Cursor="" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Stretch" Width="Auto">
             <Grid.RenderTransform>
                 <TransformGroup>
@@ -170,7 +170,7 @@
 
 
         </Grid>
-        <Label x:Name="labelAyuda2" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{x:Null}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="470" BorderBrush="{DynamicResource infocable}" Padding="5,0" Margin="520,0,0,0"/>
+        <Label x:Name="labelAyuda2" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{DynamicResource colorfondo3}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="426" BorderBrush="{DynamicResource infocable}" Padding="3,0,1,0" Margin="463,0,0,0"/>
         <Expander x:Name="expanderOpciones" Header=" OPCIONES" HorizontalAlignment="Right"   Margin="0,19,0,0" VerticalAlignment="Top" FontWeight="Bold" 
                   Foreground="{DynamicResource textoclaro}"  Template="{StaticResource RevealExpanderTemp}" LostFocus="expanderOpciones_LostFocus" Expanded="expanderOpciones_Expanded" Collapsed="expanderOpciones_Expanded">
             <!--<Grid Background="#FFE5E5E5" Margin="-79,0,8,0" Height="178"/>-->
@@ -182,8 +182,11 @@
             </StackPanel>
 
         </Expander>
-        <Rectangle Fill="{DynamicResource colorfondo}" HorizontalAlignment="Left" Margin="516,0,0,0" Width="4" Height="35" VerticalAlignment="Bottom"/>
-        <ProgressBar x:Name="pBar" Margin="795,0,0,11" Height="13" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="165" Background="{DynamicResource colorfondo}" IsIndeterminate="True" Maximum="10" SmallChange="5" BorderBrush="{DynamicResource colorfondo4}" Foreground="{DynamicResource infocable3}"/>
+        <Rectangle Fill="{DynamicResource colorfondo}" HorizontalAlignment="Left" Margin="459,0,0,0" Width="4" Height="35" VerticalAlignment="Bottom"/>
+        <Rectangle Fill="{DynamicResource colorfondo}" HorizontalAlignment="Left" Margin="889,0,0,0" Width="105" Height="35" VerticalAlignment="Bottom"/>
+        <Label x:Name="labBalanceCaja" Content="S" Margin="894,0,6,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Padding="0" Height="15" VerticalAlignment="Bottom" Foreground="{DynamicResource textoclaro}" FontSize="9"/>
+        <TextBox x:Name="tbBalanceCaja" BorderThickness="1" Margin="892,0,4,14" Text="889" Style="{DynamicResource styleTBCaja}"  VerticalAlignment="Bottom" Background="{DynamicResource confoco2}" Foreground="{DynamicResource textoobscuro}" Focusable="False" IsHitTestVisible="False" IsTabStop="False" BorderBrush="{DynamicResource colorfondo4}" Height="21" />
+        <ProgressBar x:Name="pBar" Margin="892,0,4,0" Height="35" VerticalAlignment="Bottom" Background="{DynamicResource colorfondo2}" IsIndeterminate="True" Maximum="10" SmallChange="5" BorderBrush="{DynamicResource colorfondo4}" Foreground="{DynamicResource confoco}"/>
 
 
     </Grid>

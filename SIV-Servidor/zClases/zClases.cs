@@ -70,7 +70,23 @@ namespace SIV_Servidor
         public string telefono { get; set; }
         public string cuit { get; set; }
 
+
     }
+    //public class itemListNombres
+    /////se usa con la BD pendientes, en el listNombres de ucConsultas
+    //{
+    //    public long id { get; set; }
+    //    //public long nro { get; set; }
+    //    //public string fecha { get; set; }
+    //    public string nombre { get; set; }
+    //    //public string direccion { get; set; }
+    //    //public string telefono { get; set; }
+    //    //public string cuit { get; set; }
+
+    //    //public float total { get; set; }
+    //    public float saldo { get; set; }
+    //}
+
     public class itemListConsultas
     ///se usa en la BD remitos, facturas y pendientes, para el listConsultas
     {
@@ -108,7 +124,7 @@ namespace SIV_Servidor
         public float subtotal { get; set; }
 
         ///utilizo para diferenciar los articulos de los pagos
-        public int color { get; set; }  
+        public int color { get; set; }
     }
 
     public class itemGastos
@@ -119,6 +135,6 @@ namespace SIV_Servidor
         public string fechaMostrar { get; set; }
         public string descripcion { get; set; }
         public float monto { get; set; }
-        
+
     }
 }
