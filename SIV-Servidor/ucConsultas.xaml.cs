@@ -24,7 +24,7 @@ namespace SIV_Servidor
     {
         ///Globales 
         public static ObservableCollection<itemListConsultas> mItemsNombre =
-new ObservableCollection<itemListConsultas>();   //Lista los items en listConsultas
+            new ObservableCollection<itemListConsultas>();   //Lista los items en listConsultas
         public static ObservableCollection<itemListConsultas> mItemsConsulta =
             new ObservableCollection<itemListConsultas>();   //Lista los items en listConsultas
         public static ObservableCollection<itemListDetalles> mItemsDetalle =
@@ -95,8 +95,8 @@ new ObservableCollection<itemListConsultas>();   //Lista los items en listConsul
         {
             if (habilitar)
             {
-                //btnImprimir.Opacity = 1.0;
-                //btnImprimir.IsEnabled = true;
+                btnImprimir.Opacity = 1.0;
+                btnImprimir.IsEnabled = true;
                 btnPagar.Opacity = 1.0;
                 btnPagar.IsEnabled = true;
             }
@@ -751,7 +751,6 @@ new ObservableCollection<itemListConsultas>();   //Lista los items en listConsul
         {
             myInputBoxShow(true, "Importe: ($)", "pagarPendiente");
         }
-
         public void cargarImporteAPendiente(string nroPendiente, string nombre, string importe)
         {
             bool error = false;
@@ -825,6 +824,36 @@ new ObservableCollection<itemListConsultas>();   //Lista los items en listConsul
 
                 }
             }
+        }
+
+        private void btnImprimir_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter || e.Key == Key.Return)
+            {
+                imprimirConsulta();
+                e.Handled = true;
+            }
+            if (e.Key == Key.Escape)
+            {
+                //listPendientes.Focus();
+            }
+        }
+        private void btnImprimir_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            imprimirConsulta();
+            e.Handled = true;
+
+        }
+
+        private void imprimirConsulta()
+        {
+            PrintDialog printDlg = new PrintDialog();
+            //printDlg.PrintVisual(MainWindow.statImprimirConsulta, "Grid Printing.");
+
+            uczImprimirConsulta imprimir = new uczImprimirConsulta();
+            imprimir.label1.Content = labId.Content;
+            imprimir.label2.Content = labNombre.Content;
+            printDlg.PrintVisual(imprimir, "test Imprimir");
         }
 
         /// Input Box (myInputBox)

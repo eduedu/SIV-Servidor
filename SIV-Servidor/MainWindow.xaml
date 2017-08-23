@@ -159,7 +159,7 @@
             <local:ucInicio x:Name="ucInicio" Margin="0,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
             <local:ucImpresiones x:Name="ucImpresiones" Margin="1000,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
             <local:ucGastos x:Name="ucGastos" Margin="3000,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
-
+            <!--<local:uczImprimirConsulta x:Name="uczImprimirConsulta" Margin="0,775,3640,-641" />-->
             <!--cortinaNegra -->
             <!--<Grid x:Name="gridCortinaNegra" Visibility="Hidden" Focusable="True"  >
                 <ContentControl Template="{DynamicResource cortinaNegra}"/>

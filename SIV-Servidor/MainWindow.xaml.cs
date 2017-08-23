@@ -55,6 +55,7 @@ namespace SIV_Servidor
         public static TextBox statBalanceCaja;
         public static Label statLabBalanceCaja;
         public static ProgressBar statPBar;
+        //public static uczImprimirConsulta statImprimirConsulta;
 
         ///propiedades
         public double gridXTo { get; set; }
@@ -82,6 +83,7 @@ namespace SIV_Servidor
             statPBar = pBar;
             statBalanceCaja = tbBalanceCaja;
             statLabBalanceCaja = labBalanceCaja;
+            //statImprimirConsulta = uczImprimirConsulta;
 
             ///actualizar 'tbBalanceCaja' en MainWindow desde ucInicio
             if (tbBalanceCaja != null)
