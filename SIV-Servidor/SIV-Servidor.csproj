@@ -122,6 +122,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="zImpresion\plantillaImpresionTipoRemitos.xaml.cs">
+      <DependentUpon>plantillaImpresionTipoRemitos.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -135,9 +138,6 @@
     </Compile>
     <Compile Include="ucGastos.xaml.cs">
       <DependentUpon>ucGastos.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="uczImprimirConsulta.xaml.cs">
-      <DependentUpon>uczImprimirConsulta.xaml</DependentUpon>
     </Compile>
     <Compile Include="zClases\funciones.cs" />
     <Compile Include="ucImpresiones.xaml.cs">
@@ -169,7 +169,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="uczImprimirConsulta.xaml">
+    <Page Include="zImpresion\plantillaImpresionTipoRemitos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
