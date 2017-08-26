@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SIV_Servidor.zImpresion"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+             d:DesignHeight="300" d:DesignWidth="300" Width="794" Height="1123">
+    <Grid Width="794" Height="1123"  Background="White">
             
     </Grid>
 </UserControl>
