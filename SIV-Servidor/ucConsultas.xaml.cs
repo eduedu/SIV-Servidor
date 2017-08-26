@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
+using System.Printing;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,6 +17,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
 
 namespace SIV_Servidor
 {
@@ -845,16 +847,6 @@ namespace SIV_Servidor
 
         }
 
-        private void imprimirConsulta()
-        {
-            PrintDialog printDlg = new PrintDialog();
-            //printDlg.PrintVisual(MainWindow.statImprimirConsulta, "Grid Printing.");
-
-            uczImprimirConsulta imprimir = new uczImprimirConsulta();
-            imprimir.label1.Content = labId.Content;
-            imprimir.label2.Content = labNombre.Content;
-            printDlg.PrintVisual(imprimir, "test Imprimir");
-        }
 
         /// Input Box (myInputBox)
         public void myInputBoxShow(bool mostrar, string titulo = "", string operacion = "")
@@ -973,5 +965,52 @@ namespace SIV_Servidor
             MainWindow.ayuda2(zAyuda.consultas_btnPagar);
         }
 
+        /// IMPRIMIR
+        private void imprimirConsulta()
+        {
+            PrintDialog pd = new PrintDialog();
+
+            ///cambios en la plantilla
+            uczImprimirConsulta imprimir = new uczImprimirConsulta();
+            imprimir.label1.Content = labId.Content;
+            imprimir.label2.Content = labNombre.Content;
+
+            ///mandar impresion
+            pd.PrintVisual(imprimir, "test Imprimir");
+            ///ver: si armo una impresion de la mitad del papel, me imprime bien arriba o deja margenes?
+
+            ///-------------------------
+
+            /////metodo fit to page:
+            ////Visual v = imprimir;
+            ////System.Windows.FrameworkElement e = v as System.Windows.FrameworkElement;
+            ////FrameworkElement e = imprimir as FrameworkElement;
+            //uczImprimirConsulta e = imprimir;
+
+            //Transform originalScale = e.LayoutTransform;
+
+            ////get selected printer capabilities
+            //PrintCapabilities capabilities = pd.PrintQueue.GetPrintCapabilities(pd.PrintTicket);
+
+            ////get scale of the print wrt to screen of WPF visual
+            //double scale = Math.Min(capabilities.PageImageableArea.ExtentWidth / e.ActualWidth, capabilities.PageImageableArea.ExtentHeight /
+            //               e.ActualHeight);
+
+            ////Transform the Visual to scale
+            //e.LayoutTransform = new ScaleTransform(scale, scale);
+
+            ////get the size of the printer page
+            //System.Windows.Size sz = new System.Windows.Size(capabilities.PageImageableArea.ExtentWidth, capabilities.PageImageableArea.ExtentHeight);
+
+            ////update the layout of the visual to the printer page size.
+            //e.Measure(sz);
+            //e.Arrange(new System.Windows.Rect(new System.Windows.Point(capabilities.PageImageableArea.OriginWidth, capabilities.PageImageableArea.OriginHeight), sz));
+
+            ////now print the visual to printer to fit on the one page.
+            //pd.PrintVisual(imprimir, "test impresion edu");
+
+            //////apply the original transform.
+            //e.LayoutTransform = originalScale;
+        }
     }
 }

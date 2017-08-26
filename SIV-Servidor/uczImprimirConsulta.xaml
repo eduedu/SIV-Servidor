@@ -5,17 +5,30 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SIV_Servidor"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" Width="400" Height="400">
-    <Grid Background="White" Width="400" Height="400">
-        <Label x:Name="label1" Content="Label" HorizontalAlignment="Left" Margin="35,41,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label2" Content="Label" HorizontalAlignment="Left" Margin="107,41,0,0" VerticalAlignment="Top"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="219,41,0,0" VerticalAlignment="Top"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="35,119,0,0" VerticalAlignment="Top"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="107,119,0,0" VerticalAlignment="Top"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="219,119,0,0" VerticalAlignment="Top"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="35,264,0,0" VerticalAlignment="Top"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="107,264,0,0" VerticalAlignment="Top"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="219,264,0,0" VerticalAlignment="Top"/>
+             d:DesignHeight="300" d:DesignWidth="300" Width="794" Height="1123">
+    <Grid x:Name="gridPagina" Background="White" Width="794" Height="1123">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Canvas  Background="#FFE4E4E4" MouseUp="Canvas_MouseUp" Grid.ColumnSpan="2" Grid.RowSpan="2">
+            <Rectangle Height="1103" Canvas.Left="10" Stroke="Black" Canvas.Top="10" Width="774" StrokeThickness="2"/>
+            <Label x:Name="label1" Content="Label" HorizontalAlignment="Left" Margin="40,40,0,0" VerticalAlignment="Top" BorderBrush="Black" BorderThickness="1" MouseDown="label1_MouseDown" MouseMove="label1_MouseMove" MouseUp="label1_MouseUp" Cursor="ScrollAll" Width="40" Height="30"/>
+            <Label x:Name="label2" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="1" BorderBrush="Black" Canvas.Left="265" Canvas.Top="40" />
+        </Canvas>
+        <Rectangle Canvas.Left="40" Stroke="Black" StrokeThickness="2" Canvas.Top="70" Margin="26,25,10,10"/>
+        <Rectangle Stroke="Black" StrokeThickness="2" Margin="11,25,25,10" Grid.Column="1"/>
+        <Rectangle Stroke="Black" StrokeThickness="2" Margin="26,10,10,24" Grid.Row="1"/>
+        <Rectangle Stroke="Black" StrokeThickness="2" Margin="11,10,25,24" Grid.Column="1" Grid.Row="1"/>
+        <!--<Label Content="Label" Grid.Column="1" HorizontalAlignment="Left" Margin="0" Grid.Row="1" VerticalAlignment="Top"/>-->
+        <Label Content="Label" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center"/>
+        <Label Content="Label" Grid.Column="1" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center"/>
+        <Label Content="Label" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Grid.Row="1"/>
+        <Label Content="Label" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center"/>
 
     </Grid>
 </UserControl>

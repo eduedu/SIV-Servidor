@@ -24,6 +24,15 @@ namespace SIV_Servidor
             int.TryParse(cadena, out resultado);
             return resultado;
         }
+        public static double toDouble(string cadena)
+        {
+            //i++;
+            //consola(i.ToString());
+            double resultado = 0;
+            cadena.Replace(",", ".");
+            double.TryParse(cadena, out resultado);
+            return resultado;
+        }
 
         public static long toLong(string cadena)
         {
