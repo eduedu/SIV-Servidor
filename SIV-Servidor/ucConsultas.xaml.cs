@@ -970,14 +970,13 @@ namespace SIV_Servidor
         {
             PrintDialog pd = new PrintDialog();
 
-            ///cambios en la plantilla
-            uczImprimirConsulta imprimir = new uczImprimirConsulta();
-            imprimir.label1.Content = labId.Content;
-            imprimir.label2.Content = labNombre.Content;
+            /////cambios en la plantilla
+            //uczImprimirConsulta imprimir = new uczImprimirConsulta();
+            //imprimir.label1.Content = labId.Content;
+            //imprimir.label2.Content = labNombre.Content;
 
-            ///mandar impresion
-            pd.PrintVisual(imprimir, "test Imprimir");
-            ///ver: si armo una impresion de la mitad del papel, me imprime bien arriba o deja margenes?
+            /////mandar impresion
+            //pd.PrintVisual(imprimir, "test Imprimir");
 
             ///-------------------------
 

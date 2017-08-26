@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace SIV_Servidor.zImpresion
 {
     /// <summary>
-    /// Interaction logic for plantillaImpresionTipoRemitos.xaml
+    /// Interaction logic for plantillaRemitosEnA4.xaml
     /// </summary>
-    public partial class plantillaImpresionTipoRemitos : UserControl
+    public partial class plantillaRemitosEnA4 : UserControl
     {
-        public plantillaImpresionTipoRemitos()
+        public plantillaRemitosEnA4()
         {
             InitializeComponent();
         }
