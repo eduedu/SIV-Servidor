@@ -759,12 +759,13 @@ namespace SIV_Servidor
                 zdb.InsertDB(archivoDB, tabla, parametros);
             }
 
-            ///PROCESOS POSTERIORES
+            ///PROCESOS POSTERIORES / IMPRIMIR 
 
             ///actualizar datos a mostrar
             if (proceso == "remito")
             {
                 //ucConsultas.actualizarListConsultas = true;
+                imprimir(proceso, nroProceso);
             }
             if (proceso == "factura")
             {
@@ -803,9 +804,47 @@ namespace SIV_Servidor
             }
 
         }
-        private void imprimir(string proceso)
+        private void imprimir(string proceso, long nroProceso)
         {
-            ///variables
+            ///imprimir remito
+            if (proceso == "remito")
+            {
+                ///crear control hoja y referencia a su plantilla
+                zImpresion.plantillaRemitosEnA4 hoja = new zImpresion.plantillaRemitosEnA4();
+                zImpresion.plantillaRemitos p = hoja.plantilla;
+
+                ///cargar datos de la venta
+                //p.tbFecha.Text = tbFecha.Text.ToString();
+                p.tbFecha.Text = tbFecha.Text.ToString().Substring(0, 8);
+                //p.tbNro.Text = tbIdVenta.Text.ToString();
+                p.tbNro.Text = nroProceso.ToString();
+                p.tbNombre.Text = tbNombre.Text.ToString();
+                p.tbTelefono.Text = tbTelefono.Text.ToString();
+                p.tbDireccion.Text = tbDireccion.Text.ToString();
+                p.tbCuit.Text = tbCuit.Text.ToString();
+                p.tbCantidad.Text = "";
+                p.tbDescripcion.Text = "";
+                p.tbPrecio.Text = "";
+                p.tbSubtotal.Text = "";
+                p.tbTotal.Text = tbTotal.Text.ToString();
+
+                ///cargar detalles recorriendo todos los elementos del listDetalles
+                //foreach (var itemList in listDetalles.Items)
+                for (int i = listImpresion.Items.Count - 1; i > -1; i--)
+                {
+                    //itemListDetalles item = itemList as itemListDetalles;
+                    itemCaja item = listImpresion.Items[i] as itemCaja;
+
+                    p.tbCantidad.Text += item.cantidad.ToString() + "\n";
+                    p.tbDescripcion.Text += item.descripcion.ToString().Trim() + "\n";
+                    p.tbPrecio.Text += "$ " + item.precio.ToString("0.00") + "\n";
+                    p.tbSubtotal.Text += "$ " + item.subtotal.ToString("0.00") + "\n";
+                }
+
+                ///mandar impresion
+                PrintDialog pd = new PrintDialog();
+                pd.PrintVisual(hoja, "test Imprimir");
+            }
         }
 
         ///extensiones

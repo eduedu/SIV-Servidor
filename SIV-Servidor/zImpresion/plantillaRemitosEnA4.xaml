@@ -15,7 +15,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <local:plantillaRemitos x:Name="ucPlantillaRemitos" Grid.RowSpan="2" Grid.ColumnSpan="2" RenderTransformOrigin="0.0,0.5" Margin="396,164,-164,165" Height="794" Width="562" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" >
+        <local:plantillaRemitos x:Name="plantilla" Grid.RowSpan="2" Grid.ColumnSpan="2" RenderTransformOrigin="0.0,0.5" Margin="396,164,-164,165" Height="794" Width="562" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" >
             <local:plantillaRemitos.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
