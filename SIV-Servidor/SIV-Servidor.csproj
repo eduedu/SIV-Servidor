@@ -125,8 +125,8 @@
     <Compile Include="zImpresion\plantillaRemitos.xaml.cs">
       <DependentUpon>plantillaRemitos.xaml</DependentUpon>
     </Compile>
-    <Compile Include="zImpresion\plantillaRemitosEnA4.xaml.cs">
-      <DependentUpon>plantillaRemitosEnA4.xaml</DependentUpon>
+    <Compile Include="zImpresion\impresionConPlantilla.xaml.cs">
+      <DependentUpon>impresionConPlantilla.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -176,7 +176,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="zImpresion\plantillaRemitosEnA4.xaml">
+    <Page Include="zImpresion\impresionConPlantilla.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -137,4 +137,22 @@ namespace SIV_Servidor
         public float monto { get; set; }
 
     }
+    public class plantillaImpresion
+    ///se usa en la BD gastos y en el listGastos
+    {
+        public string proceso { get; set; }
+        public string fecha { get; set; }
+        public string nro { get; set; }
+        public string nombre { get; set; }
+        public string telefono { get; set; }
+        public string direccion { get; set; }
+        public string cuit { get; set; }
+        public string cantidad { get; set; }
+        public string descripcion { get; set; }
+        public string precio { get; set; }
+        public string subtotal { get; set; }
+        public string total { get; set; }
+
+    }
+
 }

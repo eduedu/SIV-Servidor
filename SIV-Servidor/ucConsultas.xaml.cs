@@ -968,72 +968,41 @@ namespace SIV_Servidor
         /// IMPRIMIR
         private void imprimirConsulta()
         {
-            ///crear control hoja y referencia a su plantilla
-            zImpresion.plantillaRemitosEnA4 hoja = new zImpresion.plantillaRemitosEnA4();
-            zImpresion.plantillaRemitos p = hoja.plantilla;
+            /////crear control hoja y referencia a su plantilla
+            //zImpresion.impresionConPlantilla hoja = new zImpresion.impresionConPlantilla();
+            //zImpresion.plantillaRemitos p = hoja.plantilla;
 
-            ///cargar datos de la venta
-            p.tbFecha.Text = labFecha.Content.ToString();
-            p.tbNro.Text = labId.Content.ToString();
-            p.tbNombre.Text = labNombre.Content.ToString();
-            p.tbTelefono.Text = labTelefono.Content.ToString();
-            p.tbDireccion.Text = labDireccion.Content.ToString();
-            p.tbCuit.Text = labCuit.Content.ToString();
-            p.tbCantidad.Text = "";
-            p.tbDescripcion.Text = "";
-            p.tbPrecio.Text = "";
-            p.tbSubtotal.Text = "";
-            p.tbTotal.Text = labTotal.Content.ToString();
+            /////cargar datos de la venta
+            //p.tbFecha.Text = labFecha.Content.ToString();
+            //p.tbNro.Text = labId.Content.ToString();
+            //p.tbNombre.Text = labNombre.Content.ToString();
+            //p.tbTelefono.Text = labTelefono.Content.ToString();
+            //p.tbDireccion.Text = labDireccion.Content.ToString();
+            //p.tbCuit.Text = labCuit.Content.ToString();
+            //p.tbCantidad.Text = "";
+            //p.tbDescripcion.Text = "";
+            //p.tbPrecio.Text = "";
+            //p.tbSubtotal.Text = "";
+            //p.tbTotal.Text = labTotal.Content.ToString();
 
-            ///cargar detalles recorriendo todos los elementos del listDetalles
-            //foreach (var itemList in listDetalles.Items)
-            for (int i = listDetalles.Items.Count - 1; i > -1; i--)
-            {
-                //itemListDetalles item = itemList as itemListDetalles;
-                itemListDetalles item = listDetalles.Items[i] as itemListDetalles;
+            /////cargar detalles recorriendo todos los elementos del listDetalles
+            ////foreach (var itemList in listDetalles.Items)
+            //for (int i = listDetalles.Items.Count - 1; i > -1; i--)
+            //{
+            //    //itemListDetalles item = itemList as itemListDetalles;
+            //    itemListDetalles item = listDetalles.Items[i] as itemListDetalles;
 
-                p.tbCantidad.Text += item.cantidad.ToString() + "\n";
-                p.tbDescripcion.Text += item.descripcion.ToString().Trim() + "\n";
-                p.tbPrecio.Text += "$ " + item.precio.ToString("0.00") + "\n";
-                p.tbSubtotal.Text += "$ " + item.subtotal.ToString("0.00") + "\n";
-            }
+            //    p.tbCantidad.Text += item.cantidad.ToString() + "\n";
+            //    p.tbDescripcion.Text += item.descripcion.ToString().Trim() + "\n";
+            //    p.tbPrecio.Text += "$ " + item.precio.ToString("0.00") + "\n";
+            //    p.tbSubtotal.Text += "$ " + item.subtotal.ToString("0.00") + "\n";
+            //}
 
-            ///mandar impresion
-            PrintDialog pd = new PrintDialog();
-            pd.PrintVisual(hoja, "test Imprimir");
+            /////mandar impresion
+            //PrintDialog pd = new PrintDialog();
+            ////pd.PrintVisual(hoja, "Impresión de "+p.proceso);
 
-            ///-------------------------
-
-            /////metodo fit to page:
-            ////Visual v = imprimir;
-            ////System.Windows.FrameworkElement e = v as System.Windows.FrameworkElement;
-            ////FrameworkElement e = imprimir as FrameworkElement;
-            //uczImprimirConsulta e = imprimir;
-
-            //Transform originalScale = e.LayoutTransform;
-
-            ////get selected printer capabilities
-            //PrintCapabilities capabilities = pd.PrintQueue.GetPrintCapabilities(pd.PrintTicket);
-
-            ////get scale of the print wrt to screen of WPF visual
-            //double scale = Math.Min(capabilities.PageImageableArea.ExtentWidth / e.ActualWidth, capabilities.PageImageableArea.ExtentHeight /
-            //               e.ActualHeight);
-
-            ////Transform the Visual to scale
-            //e.LayoutTransform = new ScaleTransform(scale, scale);
-
-            ////get the size of the printer page
-            //System.Windows.Size sz = new System.Windows.Size(capabilities.PageImageableArea.ExtentWidth, capabilities.PageImageableArea.ExtentHeight);
-
-            ////update the layout of the visual to the printer page size.
-            //e.Measure(sz);
-            //e.Arrange(new System.Windows.Rect(new System.Windows.Point(capabilities.PageImageableArea.OriginWidth, capabilities.PageImageableArea.OriginHeight), sz));
-
-            ////now print the visual to printer to fit on the one page.
-            //pd.PrintVisual(imprimir, "test impresion edu");
-
-            //////apply the original transform.
-            //e.LayoutTransform = originalScale;
+ 
         }
     }
 }

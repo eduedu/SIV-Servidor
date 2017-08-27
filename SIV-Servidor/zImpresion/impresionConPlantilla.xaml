@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="SIV_Servidor.zImpresion.plantillaRemitosEnA4"
+﻿<UserControl x:Class="SIV_Servidor.zImpresion.impresionConPlantilla"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SIV_Servidor.zImpresion"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" Width="794" Height="1123">
+             d:DesignHeight="300" d:DesignWidth="300" Width="794" Height="1123" Loaded="UserControl_Loaded">
     <Grid Width="794" Height="1123"  >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -15,10 +15,10 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <local:plantillaRemitos x:Name="plantilla" Grid.RowSpan="2" Grid.ColumnSpan="2" RenderTransformOrigin="0.0,0.5" Margin="396,164,-164,165" Height="794" Width="562" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" >
+        <local:plantillaRemitos x:Name="remito" Grid.RowSpan="2" Grid.ColumnSpan="2" RenderTransformOrigin="0.0,0.5" Margin="396,164,-164,165" Height="794" Width="562" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" >
             <local:plantillaRemitos.RenderTransform>
                 <TransformGroup>
-                    <ScaleTransform/>
+                    <ScaleTransform ScaleX="0.99" ScaleY="0.99"/>
                     <SkewTransform/>
                     <RotateTransform Angle="-90"/>
                     <TranslateTransform/>

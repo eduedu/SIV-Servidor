@@ -75,7 +75,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="1" Style="{DynamicResource stTextoCentrado}">CUIT 20-10032732-6</TextBlock>
             <TextBlock Grid.Column="2" Style="{DynamicResource stTextoCentrado}">Gral. Roca 1180</TextBlock>
-            <TextBlock Grid.Column="3" Style="{DynamicResource stTextoCentrado}">Tel. 44-66269</TextBlock>
+            <TextBlock Grid.Column="3" Style="{DynamicResource stTextoCentrado}" >Tel. (0379) 4466269</TextBlock>
             <TextBlock Grid.Column="4" Style="{DynamicResource stTextoCentrado}">Corrientes (3400)</TextBlock>
         </Grid>
 

@@ -806,45 +806,42 @@ namespace SIV_Servidor
         }
         private void imprimir(string proceso, long nroProceso)
         {
-            ///imprimir remito
-            if (proceso == "remito")
+            ///crear plantilla de impresion 
+            plantillaImpresion p = new plantillaImpresion();
+
+            ///cargar datos (de la venta) que son indistintos para el tipo de proceso
+            p.proceso = proceso;
+            p.nro = nroProceso.ToString();
+            //p.tbFecha.Text = tbFecha.Text.ToString();
+            p.fecha = tbFecha.Text.ToString().Substring(0, 8);
+            //p.nro= nroProceso.ToString();
+            p.nombre = tbNombre.Text.ToString();
+            p.telefono = tbTelefono.Text.ToString();
+            p.direccion = tbDireccion.Text.ToString();
+            p.cuit = tbCuit.Text.ToString();
+            p.cantidad = "";
+            p.descripcion = "";
+            p.precio = "";
+            p.subtotal = "";
+            p.total = tbTotal.Text.ToString();
+
+            ///cargar detalles recorriendo todos los elementos del listDetalles
+            //foreach (var itemList in listDetalles.Items)
+            for (int i = listImpresion.Items.Count - 1; i > -1; i--)
             {
-                ///crear control hoja y referencia a su plantilla
-                zImpresion.plantillaRemitosEnA4 hoja = new zImpresion.plantillaRemitosEnA4();
-                zImpresion.plantillaRemitos p = hoja.plantilla;
+                //itemListDetalles item = itemList as itemListDetalles;
+                itemCaja item = listImpresion.Items[i] as itemCaja;
 
-                ///cargar datos de la venta
-                //p.tbFecha.Text = tbFecha.Text.ToString();
-                p.tbFecha.Text = tbFecha.Text.ToString().Substring(0, 8);
-                //p.tbNro.Text = tbIdVenta.Text.ToString();
-                p.tbNro.Text = nroProceso.ToString();
-                p.tbNombre.Text = tbNombre.Text.ToString();
-                p.tbTelefono.Text = tbTelefono.Text.ToString();
-                p.tbDireccion.Text = tbDireccion.Text.ToString();
-                p.tbCuit.Text = tbCuit.Text.ToString();
-                p.tbCantidad.Text = "";
-                p.tbDescripcion.Text = "";
-                p.tbPrecio.Text = "";
-                p.tbSubtotal.Text = "";
-                p.tbTotal.Text = tbTotal.Text.ToString();
-
-                ///cargar detalles recorriendo todos los elementos del listDetalles
-                //foreach (var itemList in listDetalles.Items)
-                for (int i = listImpresion.Items.Count - 1; i > -1; i--)
-                {
-                    //itemListDetalles item = itemList as itemListDetalles;
-                    itemCaja item = listImpresion.Items[i] as itemCaja;
-
-                    p.tbCantidad.Text += item.cantidad.ToString() + "\n";
-                    p.tbDescripcion.Text += item.descripcion.ToString().Trim() + "\n";
-                    p.tbPrecio.Text += "$ " + item.precio.ToString("0.00") + "\n";
-                    p.tbSubtotal.Text += "$ " + item.subtotal.ToString("0.00") + "\n";
-                }
-
-                ///mandar impresion
-                PrintDialog pd = new PrintDialog();
-                pd.PrintVisual(hoja, "test Imprimir");
+                p.cantidad += item.cantidad.ToString() + "\n";
+                p.descripcion += item.descripcion.ToString().Trim() + "\n";
+                p.precio += "$ " + item.precio.ToString("0.00") + "\n";
+                p.subtotal += "$ " + item.subtotal.ToString("0.00") + "\n";
             }
+
+
+            ///mandar todos los datos (plantilla) a 'impresionConPlantilla'
+            zImpresion.impresionConPlantilla imprimirPlantilla = new zImpresion.impresionConPlantilla();
+            imprimirPlantilla.imprimir(p);
         }
 
         ///extensiones
