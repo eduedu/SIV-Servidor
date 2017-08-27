@@ -39,8 +39,9 @@ namespace SIV_Servidor.zImpresion
         ///IMPRIMIR PLANTILLA
         public void imprimir(plantillaImpresion p)
         {
+
             ///cargar los datos del parámetro 'p' en los textbox del control 'plantilla'
-            if (p.proceso == "remito")
+            if (p.proceso == "remito" || p.proceso == "pendiente")
             {
                 remito.tbFecha.Text = p.fecha;
                 remito.tbNro.Text = p.nro;
@@ -53,6 +54,12 @@ namespace SIV_Servidor.zImpresion
                 remito.tbPrecio.Text = p.precio;
                 remito.tbSubtotal.Text = p.subtotal;
                 remito.tbTotal.Text = p.total;
+
+                ///casos particulares
+                if (p.proceso == "pendiente")
+                {
+                    remito.tbTotalTexto.Text = "TOTAL:\nPAGADO:\nSALDO:";
+                }
 
                 ///mandar impresion
                 PrintDialog pd = new PrintDialog();

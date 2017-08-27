@@ -838,10 +838,18 @@ namespace SIV_Servidor
                 p.subtotal += "$ " + item.subtotal.ToString("0.00") + "\n";
             }
 
+            ///casos particulares
+            if (proceso == "pendiente")
+            {
+                ///no se impriome pendientes desde aca, sino desde la pestaña 'consultas'
+                //p.total += "\n" + tbTotal.Text.ToString();
+                //p.total += "\n" + "$ 0.00";
+            }
 
             ///mandar todos los datos (plantilla) a 'impresionConPlantilla'
             zImpresion.impresionConPlantilla imprimirPlantilla = new zImpresion.impresionConPlantilla();
             imprimirPlantilla.imprimir(p);
+
         }
 
         ///extensiones
