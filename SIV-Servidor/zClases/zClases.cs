@@ -138,7 +138,7 @@ namespace SIV_Servidor
 
     }
     public class plantillaImpresion
-    ///se usa en la BD gastos y en el listGastos
+    ///se usa para pasar los datos de impresion
     {
         public string proceso { get; set; }
         public string fecha { get; set; }

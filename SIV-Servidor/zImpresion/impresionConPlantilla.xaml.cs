@@ -106,6 +106,8 @@ namespace SIV_Servidor.zImpresion
             //pd.PrintVisual(hoja, "Impresión de " + p.proceso);
 
             ///eliminar este control de memoria
+            //((Panel)this.Parent).Children.Remove(this);
+            
         }
 
     }

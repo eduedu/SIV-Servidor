@@ -37,6 +37,7 @@ namespace SIV_Servidor
         public static bool actualizarListConsultas = true;
 
         public string mTipoDeConsulta = "pendientes";
+        string mProceso = "pendiente";
         Storyboard sbListConsultas;
         Storyboard sbListDetalles;
 
@@ -463,6 +464,7 @@ namespace SIV_Servidor
                 if (selected == 0)
                 {
                     mTipoDeConsulta = "pendientes";
+                    mProceso = "pendiente";
                     labIdTexto.Content = "Nro de Pend.";
                     labTotalTexto.Content = "Saldo:";
                     gridPendientes.Visibility = Visibility.Visible;
@@ -471,6 +473,7 @@ namespace SIV_Servidor
                 if (selected == 1)
                 {
                     mTipoDeConsulta = "remitos";
+                    mProceso = "remito";
                     labIdTexto.Content = "Nro de Remito";
                     labTotalTexto.Content = "Total:";
                     gridPendientes.Visibility = Visibility.Hidden;
@@ -479,6 +482,7 @@ namespace SIV_Servidor
                 if (selected == 2)
                 {
                     mTipoDeConsulta = "facturas";
+                    mProceso = "factura";
                     labIdTexto.Content = "Nro de Factura";
                     labTotalTexto.Content = "Total:";
                     gridPendientes.Visibility = Visibility.Hidden;
@@ -968,41 +972,47 @@ namespace SIV_Servidor
         /// IMPRIMIR
         private void imprimirConsulta()
         {
-            /////crear control hoja y referencia a su plantilla
-            //zImpresion.impresionConPlantilla hoja = new zImpresion.impresionConPlantilla();
-            //zImpresion.plantillaRemitos p = hoja.plantilla;
+            ///crear plantilla de impresion 
+            plantillaImpresion p = new plantillaImpresion();
 
-            /////cargar datos de la venta
-            //p.tbFecha.Text = labFecha.Content.ToString();
-            //p.tbNro.Text = labId.Content.ToString();
-            //p.tbNombre.Text = labNombre.Content.ToString();
-            //p.tbTelefono.Text = labTelefono.Content.ToString();
-            //p.tbDireccion.Text = labDireccion.Content.ToString();
-            //p.tbCuit.Text = labCuit.Content.ToString();
-            //p.tbCantidad.Text = "";
-            //p.tbDescripcion.Text = "";
-            //p.tbPrecio.Text = "";
-            //p.tbSubtotal.Text = "";
-            //p.tbTotal.Text = labTotal.Content.ToString();
+            ///cargar datos (de la venta) que son indistintos para el tipo de proceso
+            p.proceso = mProceso;
+            p.fecha = labFecha.Content.ToString();
+            p.nro = labId.Content.ToString();
+            p.nombre = labNombre.Content.ToString();
+            p.telefono = labTelefono.Content.ToString();
+            p.direccion = labDireccion.Content.ToString();
+            p.cuit = labCuit.Content.ToString();
+            p.cantidad = "";
+            p.descripcion = "";
+            p.precio = "";
+            p.subtotal = "";
+            p.total = labTotal.Content.ToString();
 
-            /////cargar detalles recorriendo todos los elementos del listDetalles
-            ////foreach (var itemList in listDetalles.Items)
-            //for (int i = listDetalles.Items.Count - 1; i > -1; i--)
-            //{
-            //    //itemListDetalles item = itemList as itemListDetalles;
-            //    itemListDetalles item = listDetalles.Items[i] as itemListDetalles;
+            ///cargar detalles recorriendo todos los elementos del listDetalles
+            //foreach (var itemList in listDetalles.Items)
+            for (int i = listDetalles.Items.Count - 1; i > -1; i--)
+            {
+                //itemListDetalles item = itemList as itemListDetalles;
+                itemListDetalles item = listDetalles.Items[i] as itemListDetalles;
 
-            //    p.tbCantidad.Text += item.cantidad.ToString() + "\n";
-            //    p.tbDescripcion.Text += item.descripcion.ToString().Trim() + "\n";
-            //    p.tbPrecio.Text += "$ " + item.precio.ToString("0.00") + "\n";
-            //    p.tbSubtotal.Text += "$ " + item.subtotal.ToString("0.00") + "\n";
-            //}
+                p.cantidad += item.cantidad.ToString() + "\n";
+                p.descripcion += item.descripcion.ToString().Trim() + "\n";
+                p.precio += "$ " + item.precio.ToString("0.00") + "\n";
+                p.subtotal += "$ " + item.subtotal.ToString("0.00") + "\n";
+            }
 
-            /////mandar impresion
-            //PrintDialog pd = new PrintDialog();
-            ////pd.PrintVisual(hoja, "Impresión de "+p.proceso);
+            ///solo en pendientes
+            if (mProceso == "pendiente")
+            {
+                p.total += "\n" + labTotal.Content.ToString();
+                p.total += "\n" + "$ 0.00";
+            }
 
- 
+            ///mandar todos los datos (plantilla) a 'impresionConPlantilla'
+            zImpresion.impresionConPlantilla imprimirPlantilla = new zImpresion.impresionConPlantilla();
+            imprimirPlantilla.imprimir(p);
+
         }
     }
 }
