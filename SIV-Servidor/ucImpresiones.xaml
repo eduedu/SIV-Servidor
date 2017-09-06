@@ -182,7 +182,7 @@
                         <Setter Property="Template" Value="{DynamicResource ListViewItemPersonalizado}" />
                         <Setter Property="Margin" Value="-5, 0" />
                         <Setter Property="BorderThickness" Value="0" />
-                        
+
                         <!--TRIGGERS PARA ESTE CONTROL ESPECIFICO-->
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding color}" Value="0">
@@ -271,7 +271,7 @@
                         <Label x:Name="label_Copy5" Content="Teléfono" HorizontalAlignment="Left" Margin="0,20,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Grid.Column="3" Height="26" Width="71"/>
                         <Label x:Name="label_Copy8" Content="Código" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Height="26" Width="45"/>
                         <TextBox x:Name="tbIdCliente" Margin="20,38,10,0" TextWrapping="Wrap"  ToolTip="filtro"  VerticalContentAlignment="Center" Focusable="False" IsHitTestVisible="False" IsTabStop="False" Height="30" VerticalAlignment="Top" Style="{DynamicResource StyleTBNoEditableFondo2}" HorizontalContentAlignment="Center" BorderBrush="{x:Null}" />
-                        <Grid x:Name="gridBotonImprimir"  HorizontalAlignment="Left" Height="165" Margin="21,9,-190,0" VerticalAlignment="Top" Width="181" Grid.Column="4" RenderTransformOrigin="0.5,0.5">
+                        <Grid x:Name="gridBotonImprimir"  HorizontalAlignment="Left" Height="173" Margin="21,9,-190,0" VerticalAlignment="Top" Width="181" Grid.Column="4" RenderTransformOrigin="0.5,0.5">
                             <Grid.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -290,6 +290,14 @@
                             <TextBox x:Name="tbEntrega" Height="30" Margin="0,29,0,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Style="{DynamicResource StyleTextbox}" PreviewKeyDown="TextBox_PreviewKeyDown" GotFocus="TextBox_GotFocus" BorderBrush="{x:Null}"/>
                             <Label x:Name="labFacturaNro" Content="Factura Nro." HorizontalAlignment="Left" Margin="0,11,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,0,0,5" Height="26" Width="73" Grid.Column="2"/>
                             <Button x:Name="btnImprimir" Content="IMPRIMIR" Margin="0,92,0,0" Style="{DynamicResource BotonMenu}" Grid.ColumnSpan="3" Height="30" VerticalAlignment="Top" PreviewKeyDown="btnImprimir_PreviewKeyDown" PreviewMouseLeftButtonUp="btnImprimir_PreviewMouseLeftButtonUp" FontWeight="Bold"/>
+
+                <Label x:Name="labelAvisoImprimirPendiente"  Grid.ColumnSpan="3" Margin="0,122,0,0" VerticalAlignment="Center" Background="{DynamicResource infocable3}" IsHitTestVisible="False" Padding="0,0" Foreground="{DynamicResource textoobscuro}" Panel.ZIndex="3"  VerticalContentAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" >
+                    <Label.Content>
+                        <TextBlock TextWrapping="WrapWithOverflow" FontSize="11" Width="166" Height="47" TextAlignment="Center" >
+                                        Una vez asentado el PENDIENTE, puede imprimir el comprobante desde la pestaña CONSULTAS.
+                        </TextBlock>
+                    </Label.Content>
+                </Label>
                         </Grid>
                         <ListView x:Name="listFiltroClientes"    Height="115" Margin="40,212,0,-139" VerticalAlignment="Top" Width="303" Background="{DynamicResource textoclaro}" KeyDown="listFiltroClientes_KeyDown" HorizontalAlignment="Left" Panel.ZIndex="1" IsTabStop="True" Foreground="Black" Style="{DynamicResource listFiltroStyle1}" IsVisibleChanged="listFiltroClientes_IsVisibleChanged" Grid.Column="1" Grid.ColumnSpan="3" GotFocus="listFiltroClientes_GotFocus" >
                             <ListView.Resources>

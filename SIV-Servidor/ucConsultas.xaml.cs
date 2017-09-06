@@ -989,6 +989,11 @@ namespace SIV_Servidor
             p.subtotal = "";
             p.total = labTotal.Content.ToString();
 
+            ///solo para pendientes
+            float totalPen = 0;
+            float pagadoPen = 0;
+            float saldoPen = 0;
+
             ///cargar detalles recorriendo todos los elementos del listDetalles
             //foreach (var itemList in listDetalles.Items)
             for (int i = listDetalles.Items.Count - 1; i > -1; i--)
@@ -996,17 +1001,44 @@ namespace SIV_Servidor
                 //itemListDetalles item = itemList as itemListDetalles;
                 itemListDetalles item = listDetalles.Items[i] as itemListDetalles;
 
+                ///solo para pendientes
+                if (mProceso == "pendiente")
+                {
+                    ///calcular TOTAL y PAGADO; 
+                    if (item.descripcion == "Entrega" || item.descripcion == "Pago")
+                    {
+                        pagadoPen += item.subtotal;
+
+                        ///si es un pago, agregar la fecha en la descripcion
+                        if (item.descripcion == "Pago")
+                        {
+                            if (item.fecha.Length >= 8)
+                            {
+                                item.descripcion += " " + item.fecha.Substring(0, 8);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        totalPen += item.subtotal;
+                    }
+                }
+
                 p.cantidad += item.cantidad.ToString() + "\n";
                 p.descripcion += item.descripcion.ToString().Trim() + "\n";
                 p.precio += "$ " + item.precio.ToString("0.00") + "\n";
                 p.subtotal += "$ " + item.subtotal.ToString("0.00") + "\n";
             }
 
-            ///solo en pendientes
+            ///solo para pendientes
             if (mProceso == "pendiente")
             {
-                p.total += "\n" + labTotal.Content.ToString();
-                p.total += "\n" + "$ 0.00";
+                //p.total += "\n" + labTotal.Content.ToString();
+                //p.total += "\n" + "$ 0.00";
+                saldoPen = totalPen + pagadoPen;
+                p.total = "$ " + totalPen.ToString("0.00");
+                p.total += "\n$ " + pagadoPen.ToString("0.00");
+                p.total += "\n$ " + saldoPen.ToString("0.00");
             }
 
             ///mandar todos los datos (plantilla) a 'impresionConPlantilla'

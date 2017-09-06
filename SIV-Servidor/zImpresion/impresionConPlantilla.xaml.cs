@@ -56,9 +56,11 @@ namespace SIV_Servidor.zImpresion
                 remito.tbTotal.Text = p.total;
 
                 ///casos particulares
+                ///si es un 'pendiente'' 
                 if (p.proceso == "pendiente")
                 {
-                    remito.tbTotalTexto.Text = "TOTAL:\nPAGADO:\nSALDO:";
+                    ///los 3 renglones en la zona del TOTAL son UN MISMO TEXTBLOCK
+                    remito.tbTotalTexto.Text = "TOTAL COMPRA:\nPAGADO:\nSALDO:";
                 }
 
                 ///mandar impresion

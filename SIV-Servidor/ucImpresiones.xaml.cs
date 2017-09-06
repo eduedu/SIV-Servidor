@@ -1180,6 +1180,7 @@ namespace SIV_Servidor
             tbFacturaNro.Visibility = Visibility.Hidden;
             labCuit.Visibility = Visibility.Hidden;
             tbCuit.Visibility = Visibility.Hidden;
+            labelAvisoImprimirPendiente.Visibility = Visibility.Hidden;
             btnImprimir.Content = "IMPRIMIR";
 
             bool mostrarGridCliente = true;
@@ -1195,6 +1196,7 @@ namespace SIV_Servidor
             {
                 labEntrega.Visibility = Visibility.Visible;
                 tbEntrega.Visibility = Visibility.Visible;
+                labelAvisoImprimirPendiente.Visibility = Visibility.Visible;
                 btnImprimir.Content = "GUARDAR";
 
                 btnImprimir.Tag = "pendiente";
