@@ -626,42 +626,126 @@ namespace SIV_Servidor
         }
 
         /// BOTONES MENU
+
+        /// boton 'Ver Grilla'
         private void btnOpcionesVerGrillaDeImpresion_Click(object sender, RoutedEventArgs e)
         {
+            ///ayuda
+            ayuda(zAyuda.grillaImpresionFacturas);
 
             ///crear control 
             zImpresion.impresionFactura hojaFactura = new zImpresion.impresionFactura();
-            //HorizontalAlignment = "Left" HorizontalContentAlignment = "Left" VerticalContentAlignment = "Top" VerticalAlignment = "Top"
-            hojaFactura.HorizontalAlignment = HorizontalAlignment.Left;
-            hojaFactura.HorizontalContentAlignment = HorizontalAlignment.Left;
+
+            ///setear datos para mejor visualizacion
+            hojaFactura.tbCantidad.Text = "";
+            hojaFactura.tbDescripcion.Text = "";
+            hojaFactura.tbPrecio.Text = "";
+            hojaFactura.tbSubtotal.Text = "";
+            for (int i = 1; i < 11; i++)
+            {
+                hojaFactura.tbCantidad.Text += "  " + i.ToString() + "  \n";
+                hojaFactura.tbDescripcion.Text += "Articulo " + i.ToString() + "\n";
+                hojaFactura.tbPrecio.Text += "$ " + i.ToString() + ".00\n";
+                hojaFactura.tbSubtotal.Text += "$ " + (i * i).ToString() + ".00\n";
+            }
+
+            ///ubicacion del control
+            hojaFactura.HorizontalAlignment = HorizontalAlignment.Center;
+            hojaFactura.HorizontalContentAlignment = HorizontalAlignment.Center;
             hojaFactura.VerticalAlignment = VerticalAlignment.Center;
             hojaFactura.VerticalContentAlignment = VerticalAlignment.Center;
-            //Thickness pos = new Thickness(0, 0, 500, 500);
-            //hojaFactura.Margin = pos;
-            //hojaFactura.Height = 500;
-            //hojaFactura.Margin.Left = pos;
 
+            ///recortar la parte de abajo del control (hoja sobrante)
+            hojaFactura.Height = hojaFactura.Height * 0.55;
 
             ///redimensionar control
             ScaleTransform scale = new ScaleTransform();
-            scale.ScaleY = 0.45;
-            scale.ScaleX = 0.45;
-
+            scale.ScaleY = 0.80;
+            scale.ScaleX = 0.80;
             hojaFactura.LayoutTransform = scale;
 
-            ///agregar al grid
-            //windowGrid.Children.Add(hojaFactura);
-            gridMain.Children.Add(hojaFactura);
-            //gridCortinaNegra.Visibility = Visibility.Visible;
+
+            ///crear StackPanel y setear
+            StackPanel sp = new StackPanel();
+            sp.HorizontalAlignment = HorizontalAlignment.Center;
+            sp.VerticalAlignment = VerticalAlignment.Center;
+            sp.Orientation = Orientation.Horizontal;
+
+            ///crear botones (y su respectivo StackPanel), setear vistas 
+            StackPanel spBotones = new StackPanel();
+            //spBotones.Width = 100;
+            Button bImprimirPrueba = new Button();
+            Button bGuardar = new Button();
+            Button bCancelar = new Button();
+            bImprimirPrueba.Content = "Imprimir Prueba";
+            bGuardar.Content = "Guardar";
+            bCancelar.Content = "Cancelar";
+            Style styleBoton = Application.Current.FindResource("botonGrillaImpresionFactura") as Style;
+            bImprimirPrueba.Style = styleBoton;
+            bGuardar.Style = styleBoton;
+            bCancelar.Style = styleBoton;
+            spBotones.Children.Add(bImprimirPrueba);
+            spBotones.Children.Add(bGuardar);
+            spBotones.Children.Add(bCancelar);
+
+            ///agregar click handlers a los botones
+            bImprimirPrueba.Click += (o, s) =>
+            {
+                plantillaImpresion p = new plantillaImpresion();
+                p.proceso = "impresionDePrueba";
+                hojaFactura.imprimir(p);
+            };
+            bGuardar.Click += (o, s) =>
+            {
+                guardarPosiciones(hojaFactura.gridHoja);
+                gridCortinaNegra.Visibility = Visibility.Hidden;
+                gridMain.Children.Remove(sp);
+                ucInicio.tbDescripcion.Focus();
+            };
+            bCancelar.Click += (o, s) =>
+            {
+                gridCortinaNegra.Visibility = Visibility.Hidden;
+                gridMain.Children.Remove(sp);
+                ucInicio.tbDescripcion.Focus();
+            };
 
 
+            ///agregar elementos al StackPanel 
+            sp.Children.Add(hojaFactura);
+            sp.Children.Add(spBotones);
 
-            //hojaFactura.BringIntoView();
-            //Grid.SetColumn(hojaFactura, 0);
-            //Grid.SetRow(hojaFactura, 0);
+            ///mostrar 'cortina' de fondo
+            gridCortinaNegra.Visibility = Visibility.Visible;
 
+            ///agregar StackPanel al mainGrid (mostrar)
+            gridMain.Children.Add(sp);
+            hojaFactura.gridHoja.Focus();
+
+
+            //gridMain.Children.Add(hojaFactura);
         }
 
+        ///FUNCIONES
+        private void guardarPosiciones(Grid grid)
+        {
+            ///recorrer todos textblocks dentro del grid
+            foreach (var t in LogicalTreeHelper.GetChildren(grid))
+            {
+                if (t is TextBlock)
+                {
+                    TextBlock tb = t as TextBlock;
+                    string tbName = tb.Name.Trim();
+
+                    Thickness pos = new Thickness();
+                    pos = tb.Margin;
+
+                    string nombre = "impresionFactura-" + tbName;
+                    string valor = pos.Left.ToString() + "-" + pos.Top.ToString();
+                    zdb.grabarConfig(nombre, valor);
+                    //zfun.consola(nombre + " = " + valor);
+                }
+            }
+        }
         ///-------------------------------------------------------------------------------------------
 
 

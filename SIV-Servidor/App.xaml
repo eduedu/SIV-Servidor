@@ -244,6 +244,42 @@
         <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
         <!--  BOTONESSSSS  -->
 
+        <!--Estilo botones en GRILLA IMPRESION FACTURA-->
+        <Style TargetType="Button" x:Key="botonGrillaImpresionFactura" >
+            <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+            <Setter Property="Background" Value="{StaticResource sinfoco}" />
+            <!--<Setter Property="Padding" Value="10" />
+            <Setter Property="Margin" Value="0,0,0,5" />
+            <Setter Property="Cursor" Value="Hand" />-->
+            <Setter Property="Template" >
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Name="border" 
+                            BorderThickness="1"
+                            Padding="10" 
+                            Margin="0,0,0,5"
+                            BorderBrush="{StaticResource textoclaro}" 
+                            CornerRadius="1" 
+                            Cursor="Hand"
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+                                <Setter Property="Background" Value="{StaticResource confoco2}" />
+                            </Trigger>
+                            <Trigger Property="Button.IsFocused" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+                                <Setter Property="Background" Value="{StaticResource confoco}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+        </Style>
+
         <!--Estilo botones en MENU OPCIONES-->
         <Style TargetType="Button" x:Key="BotonOpciones" >
             <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
@@ -791,7 +827,7 @@
                                     Storyboard.TargetProperty="(UIElement.Opacity)" 
                                     Storyboard.TargetName="cortina">
                                     <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.4"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.7"/>
                                 </DoubleAnimationUsingKeyFrames>
                             </Storyboard>
                         </BeginStoryboard>

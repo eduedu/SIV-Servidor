@@ -143,9 +143,15 @@
                 <Grid Background="#FFE5E5E5"/>
             </Expander>-->
         </TabControl>
-        <Label x:Name="labelAyuda" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{DynamicResource colorfondo3}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="417" BorderBrush="{DynamicResource infocable}" Padding="3,0,1,0" Margin="46,0,0,0"/>
+        <Label x:Name="labelAyuda" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="417" BorderBrush="{DynamicResource infocable}" Padding="3,0,1,0" Margin="46,0,0,0"/>
         <Label x:Name="label_Copy10" Content="Ayuda" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="{DynamicResource textoclaro}" Background="{DynamicResource colorfondo}" FontWeight="Bold" Height="35" Width="46" HorizontalContentAlignment="Right" BorderBrush="{DynamicResource colorfondo}" Padding="0,0,2,5"/>
         <Grid x:Name="gridMain" Background="{DynamicResource colorfondo}" Margin="0,50,-3048,35" Cursor="" RenderTransformOrigin="0.5,0.5"  Width="Auto">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1000"/>
+                <ColumnDefinition Width="1000"/>
+                <ColumnDefinition Width="1000"/>
+                <ColumnDefinition Width="1000"/>
+            </Grid.ColumnDefinitions>
             <Grid.RenderTransform>
                 <TransformGroup>
 
@@ -155,21 +161,21 @@
                     <TranslateTransform/>
                 </TransformGroup>
             </Grid.RenderTransform>
-            <local:ucConsultas x:Name="ucConsultas" Margin="2000,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
+            <local:ucConsultas x:Name="ucConsultas" Margin="12,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" Grid.Column="2" />
             <local:ucInicio x:Name="ucInicio" Margin="0,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
-            <local:ucImpresiones x:Name="ucImpresiones" Margin="1000,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
-            <local:ucGastos x:Name="ucGastos" Margin="3000,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
+            <local:ucImpresiones x:Name="ucImpresiones" Margin="2,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" Grid.Column="1" Grid.ColumnSpan="1" />
+            <local:ucGastos x:Name="ucGastos" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" Grid.Column="3" />
             <!--<local:uczImprimirConsulta x:Name="uczImprimirConsulta" Margin="0,775,3640,-641" />-->
             <!--cortinaNegra -->
             <!--<Grid x:Name="gridCortinaNegra" Visibility="Hidden" Focusable="True"  >
                 <ContentControl Template="{DynamicResource cortinaNegra}"/>
             </Grid>-->
-            <Button x:Name="gridCortinaNegra" Visibility="Hidden" Template="{DynamicResource cortinaNegra}" BorderBrush="{x:Null}" Background="{x:Null}" />
+            <Button x:Name="gridCortinaNegra" Visibility="Hidden" Template="{DynamicResource cortinaNegra}" BorderBrush="{x:Null}" Background="{x:Null}" Grid.ColumnSpan="4" />
 
 
 
         </Grid>
-        <Label x:Name="labelAyuda2" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{DynamicResource colorfondo3}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="426" BorderBrush="{DynamicResource infocable}" Padding="3,0,1,0" Margin="463,0,0,0"/>
+        <Label x:Name="labelAyuda2" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="426" BorderBrush="{DynamicResource infocable}" Padding="3,0,1,0" Margin="463,0,0,0"/>
         <Expander x:Name="expanderOpciones" Header=" OPCIONES" HorizontalAlignment="Right"   Margin="0,19,0,0" VerticalAlignment="Top" FontWeight="Bold" 
                   Foreground="{DynamicResource textoclaro}"  Template="{StaticResource RevealExpanderTemp}" LostFocus="expanderOpciones_LostFocus" Expanded="expanderOpciones_Expanded" Collapsed="expanderOpciones_Expanded">
             <!--<Grid Background="#FFE5E5E5" Margin="-79,0,8,0" Height="178"/>-->

@@ -9,10 +9,11 @@
     <Grid>
         <Grid Background="{DynamicResource colorfondo}">
             <Grid Background="{DynamicResource colorfondo2}" Margin="40,32,375,0" Height="72" VerticalAlignment="Top">
-                <TextBox x:Name="tbDescripcion" HorizontalAlignment="Left" Height="30" Margin="110,25,0,0" TextWrapping="Wrap" Text="tbDescripcion" VerticalAlignment="Top" Width="300" VerticalContentAlignment="Center" Style="{DynamicResource StyleTextboxUpper}" PreviewKeyDown="TextBox_PreviewKeyDown" GotFocus="TextBox_GotFocus"/>
-                <TextBox x:Name="tbMonto" HorizontalAlignment="Left" Height="30" Margin="421,25,0,0" TextWrapping="Wrap" Text="tbMonto" VerticalAlignment="Top" Width="78" Style="{DynamicResource StyleTextbox}" VerticalContentAlignment="Center" PreviewKeyDown="TextBox_PreviewKeyDown" TextChanged="tbMonto_TextChanged" HorizontalContentAlignment="Right" GotFocus="TextBox_GotFocus"/>
-                <Label x:Name="label_Copy1" Content="Descripción" HorizontalAlignment="Left" Margin="110,0,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,0,0,1" VerticalContentAlignment="Bottom" Height="25"/>
-                <Label x:Name="label_Copy3" Content="Monto $" HorizontalAlignment="Left" Margin="421,0,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,0,0,1" VerticalContentAlignment="Bottom" Height="25"/>
+
+                <TextBox x:Name="tbDescripcion" HorizontalAlignment="Left" Height="30" Margin="85,25,0,0" TextWrapping="Wrap" Text="tbDescripcion" VerticalAlignment="Top" Width="300" VerticalContentAlignment="Center" Style="{DynamicResource StyleTextboxUpper}" PreviewKeyDown="TextBox_PreviewKeyDown" GotFocus="TextBox_GotFocus" Grid.Column="1"/>
+                <TextBox x:Name="tbMonto" HorizontalAlignment="Left" Height="30" Margin="396,25,0,0" TextWrapping="Wrap" Text="tbMonto" VerticalAlignment="Top" Width="78" Style="{DynamicResource StyleTextbox}" VerticalContentAlignment="Center" PreviewKeyDown="TextBox_PreviewKeyDown" TextChanged="tbMonto_TextChanged" HorizontalContentAlignment="Right" GotFocus="TextBox_GotFocus" Grid.Column="1"/>
+                <Label x:Name="label_Copy1" Content="Descripción" HorizontalAlignment="Left" Margin="85,0,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,0,0,1" VerticalContentAlignment="Bottom" Height="25" Grid.Column="1"/>
+                <Label x:Name="label_Copy3" Content="Monto $" HorizontalAlignment="Left" Margin="396,0,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0,0,0,1" VerticalContentAlignment="Bottom" Height="25" Grid.Column="1"/>
             </Grid>
             <Grid Background="{DynamicResource colorfondo2}" Margin="40,177,375,0" Height="329" VerticalAlignment="Top">
                 <ListView x:Name="listGastos"    Height="309" Margin="10,10,19,0" VerticalAlignment="Top" Background="{DynamicResource colorfondo3}" Foreground="{DynamicResource textoclaro}" BorderBrush="{x:Null}" GotFocus="listGastos_GotFocus" PreviewKeyDown="listGastos_PreviewKeyDown"  >
@@ -41,6 +42,7 @@
             </Grid>
             <Label x:Name="label_Copy7" Content="Gastos" HorizontalAlignment="Left" Margin="40,151,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Height="26" Width="68" FontWeight="Bold" VerticalContentAlignment="Bottom"/>
             <TextBox x:Name="tbFiltrar" Height="30" Margin="150,142,0,0" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="" VerticalContentAlignment="Center" Style="{DynamicResource StyleTextboxUpperConPlaceholder}" Width="300" HorizontalAlignment="Left" PreviewKeyDown="TextBox_PreviewKeyDown" TextChanged="tbFiltrar_TextChanged" GotFocus="TextBox_GotFocus"/>
+            <Label x:Name="label_Copy" Content="Nuevo" HorizontalAlignment="Left" Margin="40,6,0,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Padding="0" Height="26" Width="68" FontWeight="Bold" VerticalContentAlignment="Bottom"/>
         </Grid>
     </Grid>
 </UserControl>

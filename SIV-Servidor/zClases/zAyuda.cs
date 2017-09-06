@@ -149,6 +149,7 @@ namespace SIV_Servidor
             "<DELETE> Eliminar item seleccionado \n" +
             "<ESC> Volver a 'Descripción'";
 
-
+        ///AYUDA GRILLA DE IMPRESION DE FACTURAS
+        public static string grillaImpresionFacturas = "1) Seleccion un Texto \n2) Utilice las flechas del teclado para mover el texto";
     }
 }
