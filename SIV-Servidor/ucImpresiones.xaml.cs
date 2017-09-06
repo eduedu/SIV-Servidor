@@ -765,12 +765,17 @@ namespace SIV_Servidor
             if (proceso == "remito")
             {
                 //ucConsultas.actualizarListConsultas = true;
+
+                ///imprimir
                 imprimir(proceso, nroProceso);
             }
             if (proceso == "factura")
             {
                 ///grabar el nuevo nro de factura
                 zdb.grabarConfig("nroFactura", nroProceso.ToString());
+
+                ///imprimir
+                imprimir(proceso, nroProceso);
             }
             if (proceso == "pendiente")
             {
@@ -806,6 +811,8 @@ namespace SIV_Servidor
         }
         private void imprimir(string proceso, long nroProceso)
         {
+            /// //// //// //// ACA SOLO SE IMPRIMEN REMITOS Y FACTURAS /// //// //// //// 
+            
             ///crear plantilla de impresion 
             plantillaImpresion p = new plantillaImpresion();
 
@@ -838,17 +845,30 @@ namespace SIV_Servidor
                 p.subtotal += "$ " + item.subtotal.ToString("0.00") + "\n";
             }
 
-            ///casos particulares
-            if (proceso == "pendiente")
+            /////casos particulares
+            //if (proceso == "pendiente")
+            //{
+            //    ///no se impriome pendientes desde aca, sino desde la pestaña 'consultas'
+            //    //p.total += "\n" + tbTotal.Text.ToString();
+            //    //p.total += "\n" + "$ 0.00";
+            //}
+
+            /////mandar todos los datos (plantilla) a 'impresionConPlantilla'
+            //zImpresion.impresionConPlantilla imprimirPlantilla = new zImpresion.impresionConPlantilla();
+            //imprimirPlantilla.imprimir(p);
+
+            ///mandar todos los datos (plantilla) a una nueva pagina de impresion
+            if (proceso == "remito" || proceso == "pendiente")
             {
-                ///no se impriome pendientes desde aca, sino desde la pestaña 'consultas'
-                //p.total += "\n" + tbTotal.Text.ToString();
-                //p.total += "\n" + "$ 0.00";
+                zImpresion.impresionConPlantilla imprimirPlantilla = new zImpresion.impresionConPlantilla();
+                imprimirPlantilla.imprimir(p);
+            }
+            if (proceso == "factura")
+            {
+                zImpresion.impresionFactura imprimirPlantilla = new zImpresion.impresionFactura();
+                imprimirPlantilla.imprimir(p);
             }
 
-            ///mandar todos los datos (plantilla) a 'impresionConPlantilla'
-            zImpresion.impresionConPlantilla imprimirPlantilla = new zImpresion.impresionConPlantilla();
-            imprimirPlantilla.imprimir(p);
 
         }
 

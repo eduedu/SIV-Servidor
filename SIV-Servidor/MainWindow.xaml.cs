@@ -607,7 +607,7 @@ namespace SIV_Servidor
                 gridCortinaNegra.Visibility = Visibility.Hidden;
 
             }
-            consola(gridCortinaNegra.IsVisible.ToString());
+            //consola(gridCortinaNegra.IsVisible.ToString());
         }
 
 
@@ -625,6 +625,42 @@ namespace SIV_Servidor
 
         }
 
+        /// BOTONES MENU
+        private void btnOpcionesVerGrillaDeImpresion_Click(object sender, RoutedEventArgs e)
+        {
+
+            ///crear control 
+            zImpresion.impresionFactura hojaFactura = new zImpresion.impresionFactura();
+            //HorizontalAlignment = "Left" HorizontalContentAlignment = "Left" VerticalContentAlignment = "Top" VerticalAlignment = "Top"
+            hojaFactura.HorizontalAlignment = HorizontalAlignment.Left;
+            hojaFactura.HorizontalContentAlignment = HorizontalAlignment.Left;
+            hojaFactura.VerticalAlignment = VerticalAlignment.Center;
+            hojaFactura.VerticalContentAlignment = VerticalAlignment.Center;
+            //Thickness pos = new Thickness(0, 0, 500, 500);
+            //hojaFactura.Margin = pos;
+            //hojaFactura.Height = 500;
+            //hojaFactura.Margin.Left = pos;
+
+
+            ///redimensionar control
+            ScaleTransform scale = new ScaleTransform();
+            scale.ScaleY = 0.45;
+            scale.ScaleX = 0.45;
+
+            hojaFactura.LayoutTransform = scale;
+
+            ///agregar al grid
+            //windowGrid.Children.Add(hojaFactura);
+            gridMain.Children.Add(hojaFactura);
+            //gridCortinaNegra.Visibility = Visibility.Visible;
+
+
+
+            //hojaFactura.BringIntoView();
+            //Grid.SetColumn(hojaFactura, 0);
+            //Grid.SetRow(hojaFactura, 0);
+
+        }
 
         ///-------------------------------------------------------------------------------------------
 

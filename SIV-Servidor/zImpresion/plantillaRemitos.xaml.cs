@@ -23,7 +23,8 @@ namespace SIV_Servidor.zImpresion
         public plantillaRemitos()
         {
             InitializeComponent();
-            
+
         }
+
     }
 }

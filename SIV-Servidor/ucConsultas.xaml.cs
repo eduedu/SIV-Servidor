@@ -972,6 +972,8 @@ namespace SIV_Servidor
         /// IMPRIMIR
         private void imprimirConsulta()
         {
+            /// //// //// //// DESDE CONSULTA SOLO IMPRIMO PENDIENTES /// //// //// //// 
+
             ///crear plantilla de impresion 
             plantillaImpresion p = new plantillaImpresion();
 
@@ -1041,7 +1043,7 @@ namespace SIV_Servidor
                 p.total += "\n$ " + saldoPen.ToString("0.00");
             }
 
-            ///mandar todos los datos (plantilla) a 'impresionConPlantilla'
+            ///mandar todos los datos (plantilla) a una nueva pagina de impresion
             zImpresion.impresionConPlantilla imprimirPlantilla = new zImpresion.impresionConPlantilla();
             imprimirPlantilla.imprimir(p);
 

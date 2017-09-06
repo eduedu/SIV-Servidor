@@ -145,7 +145,7 @@
         </TabControl>
         <Label x:Name="labelAyuda" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{DynamicResource colorfondo3}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="417" BorderBrush="{DynamicResource infocable}" Padding="3,0,1,0" Margin="46,0,0,0"/>
         <Label x:Name="label_Copy10" Content="Ayuda" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="{DynamicResource textoclaro}" Background="{DynamicResource colorfondo}" FontWeight="Bold" Height="35" Width="46" HorizontalContentAlignment="Right" BorderBrush="{DynamicResource colorfondo}" Padding="0,0,2,5"/>
-        <Grid x:Name="gridMain" Background="{DynamicResource colorfondo}" Margin="0,50,-3048,35" Cursor="" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Stretch" Width="Auto">
+        <Grid x:Name="gridMain" Background="{DynamicResource colorfondo}" Margin="0,50,-3048,35" Cursor="" RenderTransformOrigin="0.5,0.5"  Width="Auto">
             <Grid.RenderTransform>
                 <TransformGroup>
 
@@ -168,7 +168,6 @@
 
 
 
-
         </Grid>
         <Label x:Name="labelAyuda2" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{DynamicResource colorfondo3}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="426" BorderBrush="{DynamicResource infocable}" Padding="3,0,1,0" Margin="463,0,0,0"/>
         <Expander x:Name="expanderOpciones" Header=" OPCIONES" HorizontalAlignment="Right"   Margin="0,19,0,0" VerticalAlignment="Top" FontWeight="Bold" 
@@ -176,7 +175,7 @@
             <!--<Grid Background="#FFE5E5E5" Margin="-79,0,8,0" Height="178"/>-->
             <StackPanel Margin="0,7,0,0"  >
                 <Button Style="{DynamicResource BotonOpciones}" Content="Cambiar número de Factura" />
-                <Button Style="{DynamicResource BotonOpciones}" Content="Ver Grilla de Impresión" />
+                <Button x:Name="btnOpcionesVerGrillaDeImpresion" Style="{DynamicResource BotonOpciones}" Content="Ver Grilla de Impresión" Click="btnOpcionesVerGrillaDeImpresion_Click" />
                 <Button Style="{DynamicResource BotonOpciones}" Content="Ajustar Caja" />
                 <Button Style="{DynamicResource BotonOpciones}" Content="(Poner en cero)" />
             </StackPanel>

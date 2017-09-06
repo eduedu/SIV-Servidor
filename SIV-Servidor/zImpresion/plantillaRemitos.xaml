@@ -95,23 +95,24 @@
         <!--DATOS CLIENTE-->
         <Grid Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="1" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="6*" />
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="81*" />
+                <ColumnDefinition Width="19*" />
+                <ColumnDefinition Width="225*"/>
+                <ColumnDefinition Width="41*" />
+                <ColumnDefinition Width="122*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Column="0" Style="{DynamicResource stTextoDerecha}">NOMBRE:</TextBlock>
-            <TextBlock x:Name="tbNombre" Grid.Column="1" Style="{DynamicResource stTextoIzquierda}" FontWeight="Bold">nombre</TextBlock>
-            <TextBlock Grid.Column="2" Style="{DynamicResource stTextoDerecha}">TEL.:</TextBlock>
-            <TextBlock x:Name="tbTelefono" Grid.Column="3" Style="{DynamicResource stTextoIzquierda}" FontWeight="Bold">4466269</TextBlock>
-            <TextBlock Grid.Column="0" Grid.Row="1" Style="{DynamicResource stTextoDerecha}">DIRECCIÓN:</TextBlock>
-            <TextBlock x:Name="tbDireccion" Grid.Column="1" Grid.Row="1" Style="{DynamicResource stTextoIzquierda}" FontWeight="Bold">direccion</TextBlock>
-            <TextBlock Grid.Column="2" Grid.Row="1" Style="{DynamicResource stTextoDerecha}">CUIT:</TextBlock>
-            <TextBlock x:Name="tbCuit" Grid.Column="3" Grid.Row="1" Style="{DynamicResource stTextoIzquierda}" FontWeight="Bold">20-10032732-6</TextBlock>
+            <TextBlock Grid.Column="0" Style="{DynamicResource stTextoDerecha}" Margin="0,5,4,5">NOMBRE:</TextBlock>
+            <TextBlock x:Name="tbNombre" Grid.Column="1" Style="{DynamicResource stTextoIzquierda}" FontWeight="Bold" Grid.ColumnSpan="2" Margin="5,5,0,5">nombre</TextBlock>
+            <TextBlock Grid.Column="3" Style="{DynamicResource stTextoDerecha}" Margin="0,5,4,5">TEL.:</TextBlock>
+            <TextBlock x:Name="tbTelefono" Grid.Column="4" Style="{DynamicResource stTextoIzquierda}" FontWeight="Bold" Margin="5,5,0,5">4466269</TextBlock>
+            <TextBlock Grid.Column="0" Grid.Row="1" Style="{DynamicResource stTextoDerecha}" Margin="0,5,5,5">DIRECCIÓN:</TextBlock>
+            <TextBlock x:Name="tbDireccion" Grid.Column="1" Grid.Row="1" Style="{DynamicResource stTextoIzquierda}" FontWeight="Bold" Grid.ColumnSpan="2" Margin="5,5,0,5">direccion</TextBlock>
+            <TextBlock Grid.Column="3" Grid.Row="1" Style="{DynamicResource stTextoDerecha}" Margin="0,5,4,5">CUIT:</TextBlock>
+            <TextBlock x:Name="tbCuit" Grid.Column="4" Grid.Row="1" Style="{DynamicResource stTextoIzquierda}" FontWeight="Bold" Margin="5,5,0,5">20-10032732-6</TextBlock>
         </Grid>
         <!--DETALLE VENTA-->
         <Grid Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="1" >
@@ -145,7 +146,7 @@
             <TextBlock x:Name="tbSubtotal" Grid.Column="3" Grid.Row="1" Style="{DynamicResource stTextoDerecha}" VerticalAlignment="Top"> Sub-total</TextBlock>
 
             <!--TOTAL-->
-            <TextBlock x:Name="tbTotalTexto" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Style="{DynamicResource stTextoDerecha}" FontWeight="Bold" >TOTAL: </TextBlock>
+            <TextBlock x:Name="tbTotalTexto" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Style="{DynamicResource stTextoDerecha}" FontWeight="Bold" >TOTAL:</TextBlock>
             <TextBlock x:Name="tbTotal" Grid.Column="3" Grid.Row="2" Style="{DynamicResource stTextoDerecha}" FontWeight="Bold" Text="total"/>
 
 
