@@ -55,6 +55,7 @@ namespace SIV_Servidor
         public static TextBox statBalanceCaja;
         public static Label statLabBalanceCaja;
         public static ProgressBar statPBar;
+        public static Button statCortinaNegra;
         //public static uczImprimirConsulta statImprimirConsulta;
 
         ///propiedades
@@ -83,6 +84,7 @@ namespace SIV_Servidor
             statPBar = pBar;
             statBalanceCaja = tbBalanceCaja;
             statLabBalanceCaja = labBalanceCaja;
+            statCortinaNegra = gridCortinaNegra;
             //statImprimirConsulta = uczImprimirConsulta;
 
             ///actualizar 'tbBalanceCaja' en MainWindow desde ucInicio
@@ -112,7 +114,7 @@ namespace SIV_Servidor
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             mAnchoPantalla = SistemaVentas.Width;
-            gridXTo = -500;
+            //gridXTo = -500;
             //gridXFrom = 0;
 
 
@@ -697,7 +699,7 @@ namespace SIV_Servidor
             };
             bGuardar.Click += (o, s) =>
             {
-                guardarPosiciones(hojaFactura.gridHoja);
+                guardarPosicionesImpresionFactura(hojaFactura.gridHoja);
                 gridCortinaNegra.Visibility = Visibility.Hidden;
                 gridMain.Children.Remove(sp);
                 ucInicio.tbDescripcion.Focus();
@@ -724,9 +726,23 @@ namespace SIV_Servidor
 
             //gridMain.Children.Add(hojaFactura);
         }
+        ///boton Cambiar Numero de FActura
+        private void btnOpcionesCambiarNroDeFactura_Click(object sender, RoutedEventArgs e)
+        {
+            ///mostrar 'cortina' de fondo
+            gridCortinaNegra.Visibility = Visibility.Visible;
+            
+            ///Crear control
+            zOpciones.opcCambiarNroFactura opcFactura = new zOpciones.opcCambiarNroFactura();
+
+            ///agregar StackPanel al mainGrid (mostrar)
+            gridMain.Children.Add(opcFactura);
+            opcFactura.tbCambiarPor.Focus();
+            
+        }
 
         ///FUNCIONES
-        private void guardarPosiciones(Grid grid)
+        private void guardarPosicionesImpresionFactura(Grid grid)
         {
             ///recorrer todos textblocks dentro del grid
             foreach (var t in LogicalTreeHelper.GetChildren(grid))
@@ -746,6 +762,8 @@ namespace SIV_Servidor
                 }
             }
         }
+
+
         ///-------------------------------------------------------------------------------------------
 
 

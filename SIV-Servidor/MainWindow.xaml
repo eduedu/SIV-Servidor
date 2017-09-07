@@ -180,10 +180,10 @@
                   Foreground="{DynamicResource textoclaro}"  Template="{StaticResource RevealExpanderTemp}" LostFocus="expanderOpciones_LostFocus" Expanded="expanderOpciones_Expanded" Collapsed="expanderOpciones_Expanded">
             <!--<Grid Background="#FFE5E5E5" Margin="-79,0,8,0" Height="178"/>-->
             <StackPanel Margin="0,7,0,0"  >
-                <Button Style="{DynamicResource BotonOpciones}" Content="Cambiar número de Factura" />
-                <Button x:Name="btnOpcionesVerGrillaDeImpresion" Style="{DynamicResource BotonOpciones}" Content="Ver Grilla de Impresión" Click="btnOpcionesVerGrillaDeImpresion_Click" />
+                <Button x:Name="btnOpcionesVerGrillaDeImpresion" Style="{DynamicResource BotonOpciones}" Content="Ajustar Grilla de Impresión (factura)" Click="btnOpcionesVerGrillaDeImpresion_Click" />
                 <Button Style="{DynamicResource BotonOpciones}" Content="Ajustar Caja" />
-                <Button Style="{DynamicResource BotonOpciones}" Content="(Poner en cero)" />
+                <!--<Button Style="{DynamicResource BotonOpciones}" Content="(Poner en cero)" />-->
+                <Button x:Name="btnOpcionesCambiarNroDeFactura" Style="{DynamicResource BotonOpciones}" Content="Cambiar número de Factura" Click="btnOpcionesCambiarNroDeFactura_Click" />
             </StackPanel>
 
         </Expander>

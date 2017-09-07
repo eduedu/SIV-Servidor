@@ -131,6 +131,9 @@
     <Compile Include="zImpresion\impresionConPlantilla.xaml.cs">
       <DependentUpon>impresionConPlantilla.xaml</DependentUpon>
     </Compile>
+    <Compile Include="zOpciones\opcCambiarNroFactura.xaml.cs">
+      <DependentUpon>opcCambiarNroFactura.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -184,6 +187,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="zImpresion\impresionConPlantilla.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="zOpciones\opcCambiarNroFactura.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

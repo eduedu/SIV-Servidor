@@ -295,7 +295,7 @@
                             BorderBrush="DarkGray" 
                             CornerRadius="0" 
                             Background="{TemplateBinding Background}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -398,6 +398,8 @@
             <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
             <Setter Property="Background" Value="{StaticResource sinfoco}" />
             <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+
             <!--<Setter Property="FocusVisualStyle" Value="{x:Null}"/>-->
             <!--<Setter Property="Template" >
                 <Setter.Value>
@@ -827,7 +829,7 @@
                                     Storyboard.TargetProperty="(UIElement.Opacity)" 
                                     Storyboard.TargetName="cortina">
                                     <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.7"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.15" Value="0.75"/>
                                 </DoubleAnimationUsingKeyFrames>
                             </Storyboard>
                         </BeginStoryboard>

@@ -47,6 +47,7 @@
         <TextBlock x:Name="tbFecha" Style="{DynamicResource stTextoIzquierda}" FontWeight="Bold" Margin="584,13,0,1095" Cursor="Hand"  PreviewMouseLeftButtonDown="tb_PreviewMouseLeftButtonDown"  Focusable="True" PreviewKeyDown="tb_PreviewKeyDown"><Run Text="fecha" /></TextBlock>
         <TextBlock x:Name="tbNro" Style="{DynamicResource stTextoIzquierda}" FontWeight="Bold" Margin="577,108,0,1000" Cursor="Hand"  PreviewMouseLeftButtonDown="tb_PreviewMouseLeftButtonDown"  Focusable="True" PreviewKeyDown="tb_PreviewKeyDown"><Run Text="NroFactura" /></TextBlock>
         <TextBlock x:Name="tbTotal" Style="{DynamicResource stTextoDerecha}" FontWeight="Bold" Text="total" Margin="0,488,290,619" Cursor="Hand"  PreviewMouseLeftButtonDown="tb_PreviewMouseLeftButtonDown"   Focusable="True" PreviewKeyDown="tb_PreviewKeyDown" />
-
+        <TextBlock x:Name="tbCondicion" Style="{DynamicResource stTextoIzquierda}"  Margin="135,428,0,0" Cursor="Hand"  PreviewMouseLeftButtonDown="tb_PreviewMouseLeftButtonDown"  Focusable="True" PreviewKeyDown="tb_PreviewKeyDown"><Run Text="Contado" /></TextBlock>
+        <TextBlock x:Name="tbNota" Style="{DynamicResource stTextoIzquierda}"  Margin="135,458,0,0" Cursor="Hand"  PreviewMouseLeftButtonDown="tb_PreviewMouseLeftButtonDown"  Focusable="True" PreviewKeyDown="tb_PreviewKeyDown"><Run Text="Nota: Mercadería probada, sin garantía." /></TextBlock>
     </Grid>
 </UserControl>

@@ -57,7 +57,8 @@ namespace SIV_Servidor.zImpresion
             if (p.proceso == "factura")
             {
                 tbFecha.Text = p.fecha;
-                tbNro.Text = p.nro;
+                //tbNro.Text = p.nro;
+                tbNro.Text = "";
                 tbNombre.Text = p.nombre;
                 tbTelefono.Text = p.telefono;
                 tbDireccion.Text = p.direccion;
