@@ -238,7 +238,7 @@ namespace SIV_Servidor
             //Console.WriteLine(texto);
             //consola(labelAyuda.Content.ToString());
 
-            if (labelAyuda.Content.ToString() != texto)
+            if (labelAyuda.Content.ToString() != texto || labelAyuda2.Content.ToString() != texto2)
             {
                 labelAyuda.Content = texto;
                 labelAyuda2.Content = texto2;
@@ -250,7 +250,7 @@ namespace SIV_Servidor
         {
             if (statAyuda1 != null)
             {
-                if (statAyuda1.Content.ToString() != texto)
+                if (statAyuda1.Content.ToString() != texto || statAyuda2.Content.ToString() != texto2)
                 {
                     statAyuda1.Content = texto;
                     statAyuda2.Content = texto2;

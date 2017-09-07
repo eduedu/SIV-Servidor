@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SIV_Servidor"
         xmlns:Properties="clr-namespace:SIV_Servidor.Properties" x:Name="SistemaVentas" x:Class="SIV_Servidor.MainWindow"
         mc:Ignorable="d"
-        Title="Sistema Ventas (Servidor)" Height="650" Width="1000" Background="{DynamicResource colorfondo2}" PreviewKeyDown="SistemaVentas_PreviewKeyDown" DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}" WindowStyle="ThreeDBorderWindow" Loaded="SistemaVentas_Loaded" SizeChanged="SistemaVentas_SizeChanged" SizeToContent="WidthAndHeight" StateChanged="SistemaVentas_StateChanged">
+        Title="Sistema Ventas (Servidor)" Height="650" Width="1000" Background="{DynamicResource colorfondo2}" PreviewKeyDown="SistemaVentas_PreviewKeyDown" DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}" WindowStyle="ThreeDBorderWindow" Loaded="SistemaVentas_Loaded" >
     <Window.Resources>
 
 
@@ -67,132 +67,137 @@
             <!--<BeginStoryboard Storyboard="{StaticResource sbSlideCaja}"/>-->
         </EventTrigger>
     </Window.Triggers>
-    <Grid x:Name="windowGrid" RenderTransformOrigin="0.5,0.5">
-        <Label x:Name="Label1" x:FieldModifier="public" Content="Label" Margin="-580,170.05,0,0" VerticalAlignment="Top" Height="32" Background="{DynamicResource infocable3}" HorizontalAlignment="Left" Width="147" Foreground="{DynamicResource textoobscuro}" d:LayoutOverrides="VerticalAlignment"/>
-        <TabControl x:Name="tabMain"  HorizontalAlignment="Left" Margin="10,10,0,40" Width="969"  Background="{x:Null}" BorderBrush="{x:Null}" SelectionChanged="tabMain_SelectionChanged" Focusable="False">
-            <TabControl.Resources>
-                <Style TargetType="{x:Type TabItem}">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type TabItem}">
-                                <Border x:Name="Border"  BorderThickness="0" BorderBrush="{StaticResource textoclaro}" CornerRadius="0" Margin="0,0,5,0">
-                                    <Border x:Name="bordeSel"  BorderThickness="0,0,0,5" BorderBrush="{DynamicResource colorfondo}" Background="{x:Null}">
-                                        <Border BorderThickness="0,5,0,0" BorderBrush="{x:Null}" Background="{x:Null}">
-                                            <ContentPresenter x:Name="ContentSite"
+    <Viewbox >
+        <Grid x:Name="windowGrid" RenderTransformOrigin="0.5,0.5">
+            <Label x:Name="Label1" x:FieldModifier="public" Content="Label" Margin="-580,170.05,0,0" VerticalAlignment="Top" Height="32" Background="{DynamicResource infocable3}" HorizontalAlignment="Left" Width="147" Foreground="{DynamicResource textoobscuro}" d:LayoutOverrides="VerticalAlignment"/>
+            <TabControl x:Name="tabMain"  HorizontalAlignment="Left" Margin="10,10,0,40" Width="969"  Background="{x:Null}" BorderBrush="{x:Null}" SelectionChanged="tabMain_SelectionChanged" Focusable="False">
+                <TabControl.Resources>
+                    <Style TargetType="{x:Type TabItem}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type TabItem}">
+                                    <Border x:Name="Border"  BorderThickness="0" BorderBrush="{StaticResource textoclaro}" CornerRadius="0" Margin="0,0,5,0">
+                                        <Border x:Name="bordeSel"  BorderThickness="0,0,0,5" BorderBrush="{DynamicResource colorfondo}" Background="{x:Null}">
+                                            <Border BorderThickness="0,5,0,0" BorderBrush="{x:Null}" Background="{x:Null}">
+                                                <ContentPresenter x:Name="ContentSite"
 										VerticalAlignment="Center"
 										HorizontalAlignment="Center"
 										ContentSource="Header"
                                                       />
+                                            </Border>
                                         </Border>
                                     </Border>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="bordeSel" Property="BorderBrush" Value="{StaticResource confoco2}" />
-                                        <Setter Property="TextBlock.Foreground" Value="{StaticResource confoco2}" />
-                                    </Trigger>
-                                    <Trigger Property="IsSelected" Value="False">
-                                        <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
-                                        <Setter TargetName="bordeSel" Property="BorderBrush" Value="{StaticResource colorfondo2}" />
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </TabControl.Resources>
-            <TabItem x:Name="tabItemVentas" FocusVisualStyle="{x:Null}" Cursor="">
-                <TabItem.Header>
-                    <Grid x:Name="gridTabItemVEntasHeader" Width="120" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
-                        <TextBlock x:Name="tbPestanaVentas"  Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F1-"/><Run Text="INICIO"/></TextBlock>
-                    </Grid>
-                </TabItem.Header>
-            </TabItem>
-            <TabItem x:Name="tabItem1" FocusVisualStyle="{x:Null}"  Background="{DynamicResource colorfondo}" >
-                <TabItem.Header>
-                    <Grid  Width="120" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
-                        <TextBlock x:Name="tbPestanaCaja" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F2-"/><Run Text="IMPR"/><Run Text="IMIR"/></TextBlock>
-                    </Grid>
-                </TabItem.Header>
-                <!--<Grid x:Name="gridCaja" Margin="0" RenderTransformOrigin="0.5,0.5"/>-->
-            </TabItem>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="bordeSel" Property="BorderBrush" Value="{StaticResource confoco2}" />
+                                            <Setter Property="TextBlock.Foreground" Value="{StaticResource confoco2}" />
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="False">
+                                            <Setter Property="Foreground" Value="{StaticResource textoclaro}" />
+                                            <Setter TargetName="bordeSel" Property="BorderBrush" Value="{StaticResource colorfondo2}" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </TabControl.Resources>
+                <TabItem x:Name="tabItemVentas" FocusVisualStyle="{x:Null}" Cursor="">
+                    <TabItem.Header>
+                        <Grid x:Name="gridTabItemVEntasHeader" Width="120" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
+                            <TextBlock x:Name="tbPestanaVentas"  Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F1-"/><Run Text="INICIO"/></TextBlock>
+                        </Grid>
+                    </TabItem.Header>
+                </TabItem>
+                <TabItem x:Name="tabItem1" FocusVisualStyle="{x:Null}"  Background="{DynamicResource colorfondo}" >
+                    <TabItem.Header>
+                        <Grid  Width="120" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
+                            <TextBlock x:Name="tbPestanaCaja" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F2-"/><Run Text="IMPR"/><Run Text="IMIR"/></TextBlock>
+                        </Grid>
+                    </TabItem.Header>
+                    <!--<Grid x:Name="gridCaja" Margin="0" RenderTransformOrigin="0.5,0.5"/>-->
+                </TabItem>
 
-            <TabItem x:Name="tabItem2" FocusVisualStyle="{x:Null}"  Background="{DynamicResource colorfondo}" >
-                <TabItem.Header>
-                    <Grid  Width="120" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
-                        <!--<TextBlock x:Name="tbPestanaOpciones" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F3-OPCIONES"/></TextBlock>-->
-                        <TextBlock x:Name="tbPestanaConsultas" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F3-CONSULTAS"/></TextBlock>
-                    </Grid>
-                </TabItem.Header>
-                <Grid />
-            </TabItem>
-            <TabItem x:Name="tabItem3" FocusVisualStyle="{x:Null}"  Background="{DynamicResource colorfondo}" >
-                <TabItem.Header>
-                    <Grid  Width="120" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
-                        <!--<TextBlock x:Name="tbPestanaOpciones" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F3-OPCIONES"/></TextBlock>-->
-                        <TextBlock x:Name="tbPestanaGastos" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F4-GASTOS"/></TextBlock>
-                    </Grid>
-                </TabItem.Header>
-                <Grid />
-            </TabItem>
-            <!--<Menu Height="100" Width="100"/>-->
+                <TabItem x:Name="tabItem2" FocusVisualStyle="{x:Null}"  Background="{DynamicResource colorfondo}" >
+                    <TabItem.Header>
+                        <Grid  Width="120" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
+                            <!--<TextBlock x:Name="tbPestanaOpciones" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F3-OPCIONES"/></TextBlock>-->
+                            <TextBlock x:Name="tbPestanaConsultas" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F3-CONSULTAS"/></TextBlock>
+                        </Grid>
+                    </TabItem.Header>
+                    <Grid />
+                </TabItem>
+                <TabItem x:Name="tabItem3" FocusVisualStyle="{x:Null}"  Background="{DynamicResource colorfondo}" >
+                    <TabItem.Header>
+                        <Grid  Width="120" Height="25" Cursor="Hand" Background="{DynamicResource colorfondo2}">
+                            <!--<TextBlock x:Name="tbPestanaOpciones" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F3-OPCIONES"/></TextBlock>-->
+                            <TextBlock x:Name="tbPestanaGastos" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" ><Run Text="F4-GASTOS"/></TextBlock>
+                        </Grid>
+                    </TabItem.Header>
+                    <Grid />
+                </TabItem>
+                <!--<Menu Height="100" Width="100"/>-->
 
-            <!--<Path Data="" Stretch="Fill"/>
+                <!--<Path Data="" Stretch="Fill"/>
             <Path Data="" Stretch="Fill"/>
             <Expander Header="Expander" Height="79.5" Width="209.295">
                 <Grid Background="#FFE5E5E5"/>
             </Expander>-->
-        </TabControl>
-        <Label x:Name="labelAyuda" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="417" BorderBrush="{DynamicResource infocable}" Padding="3,0,1,0" Margin="46,0,0,0"/>
-        <Label x:Name="label_Copy10" Content="Ayuda" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="{DynamicResource textoclaro}" Background="{DynamicResource colorfondo}" FontWeight="Bold" Height="35" Width="46" HorizontalContentAlignment="Right" BorderBrush="{DynamicResource colorfondo}" Padding="0,0,2,5"/>
-        <Grid x:Name="gridMain" Background="{DynamicResource colorfondo}" Margin="0,50,-3048,35" Cursor="" RenderTransformOrigin="0.5,0.5"  Width="Auto">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1000"/>
-                <ColumnDefinition Width="1000"/>
-                <ColumnDefinition Width="1000"/>
-                <ColumnDefinition Width="1000"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RenderTransform>
-                <TransformGroup>
+            </TabControl>
+            <Label x:Name="labelAyuda" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="417" BorderBrush="{DynamicResource infocable}" Padding="3,0,1,0" Margin="46,0,0,0"/>
+            <Label x:Name="label_Copy10" Content="Ayuda" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="{DynamicResource textoclaro}" Background="{DynamicResource colorfondo}" FontWeight="Bold" Height="38" Width="46" HorizontalContentAlignment="Right" BorderBrush="{DynamicResource colorfondo}" Padding="0,0,2,5" Margin="0,0,0,-3"/>
+            <Grid x:Name="gridMain" Background="{DynamicResource colorfondo}" Margin="0,50,-3048,35" Cursor="" RenderTransformOrigin="0.5,0.5"  Width="Auto">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1000"/>
+                    <ColumnDefinition Width="1000"/>
+                    <ColumnDefinition Width="1000"/>
+                    <ColumnDefinition Width="1000"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RenderTransform>
+                    <TransformGroup>
 
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Grid.RenderTransform>
-            <local:ucConsultas x:Name="ucConsultas" Margin="12,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" Grid.Column="2" />
-            <local:ucInicio x:Name="ucInicio" Margin="0,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
-            <local:ucImpresiones x:Name="ucImpresiones" Margin="2,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" Grid.Column="1" Grid.ColumnSpan="1" />
-            <local:ucGastos x:Name="ucGastos" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" Grid.Column="3" />
-            <!--<local:uczImprimirConsulta x:Name="uczImprimirConsulta" Margin="0,775,3640,-641" />-->
-            <!--cortinaNegra -->
-            <!--<Grid x:Name="gridCortinaNegra" Visibility="Hidden" Focusable="True"  >
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Grid.RenderTransform>
+                <local:ucConsultas x:Name="ucConsultas" Margin="12,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" Grid.Column="2" />
+                <local:ucInicio x:Name="ucInicio" Margin="0,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" />
+                <local:ucImpresiones x:Name="ucImpresiones" Margin="2,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" Grid.Column="1" Grid.ColumnSpan="1" />
+                <local:ucGastos x:Name="ucGastos" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" VerticalAlignment="Top" Grid.Column="3" />
+                <!--<local:uczImprimirConsulta x:Name="uczImprimirConsulta" Margin="0,775,3640,-641" />-->
+                <!--cortinaNegra -->
+                <!--<Grid x:Name="gridCortinaNegra" Visibility="Hidden" Focusable="True"  >
                 <ContentControl Template="{DynamicResource cortinaNegra}"/>
             </Grid>-->
-            <Button x:Name="gridCortinaNegra" Visibility="Hidden" Template="{DynamicResource cortinaNegra}" BorderBrush="{x:Null}" Background="{x:Null}" Grid.ColumnSpan="4" />
+                <Button x:Name="gridCortinaNegra" Visibility="Hidden" Template="{DynamicResource cortinaNegra}" BorderBrush="{x:Null}" Background="{x:Null}" Grid.ColumnSpan="4" />
 
+
+
+            </Grid>
+            <Label x:Name="labelAyuda2" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="426" BorderBrush="{DynamicResource infocable}" Padding="3,0,1,0" Margin="463,0,0,0"/>
+            <Expander x:Name="expanderOpciones" Header=" OPCIONES" HorizontalAlignment="Right"   Margin="0,19,0,0" VerticalAlignment="Top" FontWeight="Bold" 
+                  Foreground="{DynamicResource textoclaro}"  Template="{StaticResource RevealExpanderTemp}" LostFocus="expanderOpciones_LostFocus" Expanded="expanderOpciones_Expanded" Collapsed="expanderOpciones_Expanded">
+                <!--<Grid Background="#FFE5E5E5" Margin="-79,0,8,0" Height="178"/>-->
+                <StackPanel Margin="0,7,0,0"  >
+                    <Button x:Name="btnOpcionesVerGrillaDeImpresion" Style="{DynamicResource BotonOpciones}" Content="Ajustar Grilla de Impresión (factura)" Click="btnOpcionesVerGrillaDeImpresion_Click" />
+                    <Button Style="{DynamicResource BotonOpciones}" Content="Ajustar Caja" />
+                    <!--<Button Style="{DynamicResource BotonOpciones}" Content="(Poner en cero)" />-->
+                    <Button x:Name="btnOpcionesCambiarNroDeFactura" Style="{DynamicResource BotonOpciones}" Content="Cambiar número de Factura" Click="btnOpcionesCambiarNroDeFactura_Click" />
+                </StackPanel>
+
+            </Expander>
+            <Rectangle Fill="{DynamicResource colorfondo}" HorizontalAlignment="Left" Margin="459,0,0,-3" Width="4" Height="38" VerticalAlignment="Bottom"/>
+            <Rectangle Fill="{DynamicResource colorfondo}" HorizontalAlignment="Left" Margin="889,0,0,0" Width="105" Height="35" VerticalAlignment="Bottom"/>
+            <Label x:Name="labBalanceCaja" Content="S" Margin="894,0,6,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Padding="0" Height="15" VerticalAlignment="Bottom" Foreground="{DynamicResource textoclaro}" FontSize="9"/>
+            <TextBox x:Name="tbBalanceCaja" BorderThickness="1" Margin="892,0,4,14" Text="889" Style="{DynamicResource styleTBCaja}"  VerticalAlignment="Bottom" Background="{DynamicResource confoco2}" Foreground="{DynamicResource textoobscuro}" Focusable="False" IsHitTestVisible="False" IsTabStop="False" BorderBrush="{DynamicResource colorfondo4}" Height="21" />
+            <ProgressBar x:Name="pBar" Margin="892,0,4,0" Height="35" VerticalAlignment="Bottom" Background="{DynamicResource colorfondo2}" IsIndeterminate="True" Maximum="10" SmallChange="5" BorderBrush="{DynamicResource colorfondo4}" Foreground="{DynamicResource confoco}"/>
+            <Rectangle HorizontalAlignment="Left" Height="568" Margin="-167,50,0,-3" VerticalAlignment="Top" Width="170" Fill="{DynamicResource colorfondo}"/>
+            <Rectangle HorizontalAlignment="Left" Height="568" Margin="994,50,-170,-3" VerticalAlignment="Top" Width="170" Fill="{DynamicResource colorfondo}"/>
+            <Rectangle HorizontalAlignment="Left" Height="410" Margin="-10,617,-18,-412" VerticalAlignment="Top" Width="1022" Fill="{DynamicResource colorfondo}"/>
 
 
         </Grid>
-        <Label x:Name="labelAyuda2" Content="labelAyuda&#xA;sdsd&#xA;sdsd&#xA;sdssd" Background="{DynamicResource colorfondo2}" Foreground="{DynamicResource textoclaro}" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="426" BorderBrush="{DynamicResource infocable}" Padding="3,0,1,0" Margin="463,0,0,0"/>
-        <Expander x:Name="expanderOpciones" Header=" OPCIONES" HorizontalAlignment="Right"   Margin="0,19,0,0" VerticalAlignment="Top" FontWeight="Bold" 
-                  Foreground="{DynamicResource textoclaro}"  Template="{StaticResource RevealExpanderTemp}" LostFocus="expanderOpciones_LostFocus" Expanded="expanderOpciones_Expanded" Collapsed="expanderOpciones_Expanded">
-            <!--<Grid Background="#FFE5E5E5" Margin="-79,0,8,0" Height="178"/>-->
-            <StackPanel Margin="0,7,0,0"  >
-                <Button x:Name="btnOpcionesVerGrillaDeImpresion" Style="{DynamicResource BotonOpciones}" Content="Ajustar Grilla de Impresión (factura)" Click="btnOpcionesVerGrillaDeImpresion_Click" />
-                <Button Style="{DynamicResource BotonOpciones}" Content="Ajustar Caja" />
-                <!--<Button Style="{DynamicResource BotonOpciones}" Content="(Poner en cero)" />-->
-                <Button x:Name="btnOpcionesCambiarNroDeFactura" Style="{DynamicResource BotonOpciones}" Content="Cambiar número de Factura" Click="btnOpcionesCambiarNroDeFactura_Click" />
-            </StackPanel>
-
-        </Expander>
-        <Rectangle Fill="{DynamicResource colorfondo}" HorizontalAlignment="Left" Margin="459,0,0,0" Width="4" Height="35" VerticalAlignment="Bottom"/>
-        <Rectangle Fill="{DynamicResource colorfondo}" HorizontalAlignment="Left" Margin="889,0,0,0" Width="105" Height="35" VerticalAlignment="Bottom"/>
-        <Label x:Name="labBalanceCaja" Content="S" Margin="894,0,6,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Padding="0" Height="15" VerticalAlignment="Bottom" Foreground="{DynamicResource textoclaro}" FontSize="9"/>
-        <TextBox x:Name="tbBalanceCaja" BorderThickness="1" Margin="892,0,4,14" Text="889" Style="{DynamicResource styleTBCaja}"  VerticalAlignment="Bottom" Background="{DynamicResource confoco2}" Foreground="{DynamicResource textoobscuro}" Focusable="False" IsHitTestVisible="False" IsTabStop="False" BorderBrush="{DynamicResource colorfondo4}" Height="21" />
-        <ProgressBar x:Name="pBar" Margin="892,0,4,0" Height="35" VerticalAlignment="Bottom" Background="{DynamicResource colorfondo2}" IsIndeterminate="True" Maximum="10" SmallChange="5" BorderBrush="{DynamicResource colorfondo4}" Foreground="{DynamicResource confoco}"/>
-
-
-    </Grid>
+    </Viewbox>
 </Window>

@@ -1528,7 +1528,7 @@ namespace SIV_Servidor
         {
             var tb = sender as TextBox;
             tb.Tag = tb.Text;
-            ayuda(zAyuda.inicio_tbCaja,zAyuda.inicio_tbCajab);
+            ayuda(zAyuda.inicio_tbCaja, zAyuda.inicio_tbCajab);
 
         }
         private void tbCajaXX_LostFocus(object sender, RoutedEventArgs e)
@@ -1759,7 +1759,7 @@ namespace SIV_Servidor
         {
             if (e.Key == Key.Enter)
             {
-                if (tbPagaCon.Text == "")
+                if (tbPagaCon.Text.Trim() == "")
                 {
                     btnAsentar.Focus();
                 }
@@ -1879,7 +1879,7 @@ namespace SIV_Servidor
                     resto = resto - (tempCociente * denominacion[i]);
                 }
             }
-            cantidad[cantidad.Length-1] = resto;
+            cantidad[cantidad.Length - 1] = resto;
             tbVuelto.Tag = cantidad;
 
             ///actualizar vista
@@ -1894,7 +1894,11 @@ namespace SIV_Servidor
                     tbVueltoEnBilletes.Text += "\n" + tmpLinea;
                 }
             }
-            tbVueltoEnBilletes.Text += "\n m: -" + resto.ToString();
+            if (resto > 0)
+            {
+                tbVueltoEnBilletes.Text += "\n m: -" + resto.ToString();
+
+            }
         }
 
         private void tbBalanceCaja_TextChanged(object sender, TextChangedEventArgs e)

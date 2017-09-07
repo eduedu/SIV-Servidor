@@ -109,10 +109,12 @@ namespace SIV_Servidor.zImpresion
             ///poner fondo amarillo en el q se hizo click
             TextBlock tb = sender as TextBlock;
             tb.Background = Application.Current.FindResource("confoco") as Brush;
-            tb.Focus();
 
-            string pos = tb.Margin.Left.ToString() + " - " + tb.Margin.Top.ToString();
-            MainWindow.ayuda2(pos, zAyuda.grillaImpresionFacturas);
+            string posicion = "X: " + tb.Margin.Left.ToString() + " - Y: " + tb.Margin.Top.ToString();
+            MainWindow.ayuda2(zAyuda.grillaImpresionFacturas, posicion);
+
+            zfun.consola(tb.Name.ToString());
+            tb.Focus();
         }
         private void tb_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -165,9 +167,12 @@ namespace SIV_Servidor.zImpresion
                     }
 
                 }
+                string posicion = "X: " + tb.Margin.Left.ToString() + " - Y: " + tb.Margin.Top.ToString();
+                //MainWindow.ayuda2(zAyuda.grillaImpresionFacturas, posicion);
+                MainWindow.statAyuda2.Content = posicion;
 
+                e.Handled = true;
             }
-            e.Handled = true;
         }
 
 

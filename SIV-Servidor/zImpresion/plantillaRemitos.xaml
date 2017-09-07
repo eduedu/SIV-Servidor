@@ -56,7 +56,8 @@
         <Border Grid.Row="3" Grid.Column="1" BorderBrush="Black" BorderThickness="2,2,2,1" Grid.RowSpan="1" />
         <Border Grid.Row="4" Grid.Column="1" BorderBrush="Black" BorderThickness="2,0" Grid.RowSpan="1" />
         <Border Grid.Row="5" Grid.Column="1" BorderBrush="Black" BorderThickness="2" Grid.RowSpan="1" />
-        <Border Grid.Row="6" Grid.Column="1" BorderBrush="Black" BorderThickness="2,0,2,2" Grid.RowSpan="1" />
+        <Border Grid.Row="6" Grid.Column="1" BorderBrush="Black" BorderThickness="2,0,2,2" Grid.RowSpan="1" >
+        </Border>
 
         <!--HEADER-->
         <TextBlock x:Name="tbHeader" Grid.Column="1" Grid.Row="1"  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="45" FontWeight="UltraBlack" Padding="0,8,0,0">
@@ -150,7 +151,11 @@
             <TextBlock x:Name="tbTotal" Grid.Column="3" Grid.Row="2" Style="{DynamicResource stTextoDerecha}" FontWeight="Bold" Text="total"/>
 
 
+
         </Grid>
 
+        <!--NOTA-->
+        <TextBlock x:Name="tbNota" Grid.Row="6" Grid.Column="1" Style="{DynamicResource stTextoCentrado}"  Margin="0,0,0,0" ><Run Text="Obs.: Seña válida por 60 días a partir de la fecha de compra.-"/></TextBlock>
+        
     </Grid>
 </UserControl>
