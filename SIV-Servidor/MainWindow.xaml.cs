@@ -262,6 +262,19 @@ namespace SIV_Servidor
 
         }
 
+        ///extensiones
+        private float toFloat(string cadena)
+        {
+            return zfun.toFloat(cadena);
+        }
+        private bool esDecimal(Key key)
+        {
+            return zfun.esDecimal(key);
+        }
+        private void consola(string texto)
+        {
+            zfun.consola(texto);
+        }
 
         ///CONTROLES
         private void SistemaVentas_StateChanged(object sender, EventArgs e)
@@ -279,6 +292,12 @@ namespace SIV_Servidor
         }
         private void SistemaVentas_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            /// ATENCION: SI ESTA VISIBLE LA 'CORTINA NEGRA' ENTONCES IGNORO TODO ESTO
+            if (gridCortinaNegra.IsVisible)
+            {
+                return;
+            }
+
             //if (e.Key == Key.Escape)
             //{
             //    tabMain.SelectedIndex = 0;
@@ -574,22 +593,7 @@ namespace SIV_Servidor
             e.Handled = true;
         }
 
-
-        ///extensiones
-        private float toFloat(string cadena)
-        {
-            return zfun.toFloat(cadena);
-        }
-        private bool esDecimal(Key key)
-        {
-            return zfun.esDecimal(key);
-        }
-        private void consola(string texto)
-        {
-            zfun.consola(texto);
-        }
-
-        ///EXPANDER
+        ///expander
         private void expanderOpciones_LostFocus(object sender, RoutedEventArgs e)
         {
             //consola("chau");
@@ -602,16 +606,15 @@ namespace SIV_Servidor
             //consola(expanded.ToString());
             if (expanded)
             {
-                gridCortinaNegra.Visibility = Visibility.Visible;
+                gridCortinaOpciones.Visibility = Visibility.Visible;
             }
             else
             {
-                gridCortinaNegra.Visibility = Visibility.Hidden;
+                gridCortinaOpciones.Visibility = Visibility.Hidden;
 
             }
             //consola(gridCortinaNegra.IsVisible.ToString());
         }
-
 
         ///PROGRESS BAR
         public static void mostrarPBar(bool mostrar)
@@ -627,7 +630,7 @@ namespace SIV_Servidor
 
         }
 
-        /// BOTONES MENU
+        /// /// BOTONES MENU
 
         /// boton 'Ver Grilla'
         private void btnOpcionesVerGrillaDeImpresion_Click(object sender, RoutedEventArgs e)
@@ -666,12 +669,17 @@ namespace SIV_Servidor
             scale.ScaleX = 0.80;
             hojaFactura.LayoutTransform = scale;
 
-
-            ///crear StackPanel y setear
+            ///crear StackPanel para la hoja y los botones, y setear
             StackPanel sp = new StackPanel();
             sp.HorizontalAlignment = HorizontalAlignment.Center;
             sp.VerticalAlignment = VerticalAlignment.Center;
             sp.Orientation = Orientation.Horizontal;
+
+            ///crear stackpanel 'main', que contiene al otro stack y ademas agrega un texto arriba
+            StackPanel spMain = new StackPanel();
+            spMain.HorizontalAlignment = HorizontalAlignment.Center;
+            spMain.VerticalAlignment = VerticalAlignment.Center;
+            spMain.Orientation = Orientation.Vertical;
 
             ///crear botones (y su respectivo StackPanel), setear vistas 
             StackPanel spBotones = new StackPanel();
@@ -701,16 +709,17 @@ namespace SIV_Servidor
             {
                 guardarPosicionesImpresionFactura(hojaFactura.gridHoja);
                 gridCortinaNegra.Visibility = Visibility.Hidden;
-                gridMain.Children.Remove(sp);
+                //gridMain.Children.Remove(sp);
+                windowGrid.Children.Remove(spMain);
                 ucInicio.tbDescripcion.Focus();
             };
             bCancelar.Click += (o, s) =>
             {
                 gridCortinaNegra.Visibility = Visibility.Hidden;
-                gridMain.Children.Remove(sp);
+                //gridMain.Children.Remove(sp);
+                windowGrid.Children.Remove(spMain);
                 ucInicio.tbDescripcion.Focus();
             };
-
 
             ///agregar elementos al StackPanel 
             sp.Children.Add(hojaFactura);
@@ -719,8 +728,23 @@ namespace SIV_Servidor
             ///mostrar 'cortina' de fondo
             gridCortinaNegra.Visibility = Visibility.Visible;
 
+            ///crear texto de ayuda
+            TextBlock tbAyuda = new TextBlock();
+            tbAyuda.Text = "Seleccione un texto con el mouse y utilice las flechas del teclado para acomodarlo en la posición deseada.";
+            tbAyuda.FontSize = 12;
+            tbAyuda.FontWeight = FontWeights.Bold;
+            tbAyuda.Margin = new Thickness(0, 0, 0, 5);
+            tbAyuda.Foreground = Application.Current.FindResource("textoclaro") as Brush;
+
+            ///Agregar al stackpanel 'main' el otro stack y el texto de ayuda
+            spMain.Children.Add(tbAyuda);
+            spMain.Children.Add(sp);
+
             ///agregar StackPanel al mainGrid (mostrar)
-            gridMain.Children.Add(sp);
+            //windowGrid.Children.Add(sp);
+            windowGrid.Children.Add(spMain);
+
+            ///foco en la hoja (no se si sirve)
             hojaFactura.gridHoja.Focus();
 
 
@@ -731,14 +755,29 @@ namespace SIV_Servidor
         {
             ///mostrar 'cortina' de fondo
             gridCortinaNegra.Visibility = Visibility.Visible;
-            
+
             ///Crear control
             zOpciones.opcCambiarNroFactura opcFactura = new zOpciones.opcCambiarNroFactura();
 
             ///agregar StackPanel al mainGrid (mostrar)
-            gridMain.Children.Add(opcFactura);
+            //gridMain.Children.Add(opcFactura);
+            windowGrid.Children.Add(opcFactura);
             opcFactura.tbCambiarPor.Focus();
-            
+
+        }
+        /// boton Imprimir codigos
+        private void btnOpcionesImprimirCodigos_Click(object sender, RoutedEventArgs e)
+        {
+            ///mostrar 'cortina' de fondo
+            gridCortinaNegra.Visibility = Visibility.Visible;
+
+            ///Crear control
+            zOpciones.opcImprimirCodigos imprimirCodigos = new zOpciones.opcImprimirCodigos();
+
+            ///agregar StackPanel al mainGrid (mostrar)
+            windowGrid.Children.Add(imprimirCodigos);
+            imprimirCodigos.btnSalir.Focus();
+
         }
 
         ///FUNCIONES

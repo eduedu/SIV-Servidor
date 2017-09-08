@@ -33,6 +33,8 @@
         <SolidColorBrush x:Key="azul" Color="#FF087099"/>
         <SolidColorBrush x:Key="rojo" Color="#FFFF3333"/>
         <SolidColorBrush x:Key="bordo" Color="#FFAA3333"/>
+        <SolidColorBrush x:Key="bordoobscuro" Color="#FF521515"/>
+        <SolidColorBrush x:Key="azulobscuro" Color="#FF000218"/>
         <SolidColorBrush x:Key="verde" Color="#FF3A973A"/>
 
 
@@ -245,6 +247,42 @@
         <!--  BOTONESSSSS  -->
 
         <!--Estilo botones en GRILLA IMPRESION FACTURA-->
+        <Style TargetType="Button" x:Key="styleBotonBase" >
+            <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+            <Setter Property="Background" Value="{StaticResource sinfoco}" />
+            <!--<Setter Property="Padding" Value="10" />
+            <Setter Property="Margin" Value="0,0,0,5" />
+            <Setter Property="Cursor" Value="Hand" />-->
+            <Setter Property="Template" >
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Name="border" 
+                            BorderThickness="1"
+                            BorderBrush="{StaticResource textoclaro}" 
+                            CornerRadius="1" 
+                            Cursor="Hand"
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+                                <Setter Property="Background" Value="{StaticResource confoco2}" />
+                            </Trigger>
+                            <Trigger Property="Button.IsFocused" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+                                <Setter Property="Background" Value="{StaticResource confoco}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+        </Style>
+
+
+
+        <!--Estilo botones en GRILLA IMPRESION FACTURA-->
         <Style TargetType="Button" x:Key="botonGrillaImpresionFactura" >
             <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
             <Setter Property="Background" Value="{StaticResource sinfoco}" />
@@ -257,7 +295,7 @@
                         <Border Name="border" 
                             BorderThickness="1"
                             Padding="10" 
-                            Margin="0,0,0,5"
+                            Margin="5,0,0,5"
                             BorderBrush="{StaticResource textoclaro}" 
                             CornerRadius="1" 
                             Cursor="Hand"
@@ -813,8 +851,8 @@
         </ControlTemplate>
 
 
-        <!-- expander CORTINA NEGRA cortinaNegra-->
-        <ControlTemplate x:Key="cortinaNegra" TargetType="{x:Type Button}" >
+        <!-- expander CORTINA OPCIONES cortinaNegra-->
+        <ControlTemplate x:Key="cortinaOpciones" TargetType="{x:Type Button}" >
             <Grid x:Name="cortina" Background="Black" ></Grid>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsVisible" Value="True">
@@ -829,7 +867,7 @@
                                     Storyboard.TargetProperty="(UIElement.Opacity)" 
                                     Storyboard.TargetName="cortina">
                                     <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                    <EasingDoubleKeyFrame KeyTime="0:0:0.15" Value="0.75"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.15" Value="0.55"/>
                                 </DoubleAnimationUsingKeyFrames>
                             </Storyboard>
                         </BeginStoryboard>
@@ -887,7 +925,37 @@
                 </Trigger>-->
             </ControlTemplate.Triggers>
         </ControlTemplate>
-
+        
+        <!-- CORTINA NEGRA cortinaNegra-->
+        <ControlTemplate x:Key="cortinaNegra" TargetType="{x:Type Button}" >
+            <Grid x:Name="cortina" Background="{StaticResource azulobscuro}" ></Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsVisible" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimationUsingKeyFrames 
+                                    Storyboard.TargetProperty="(UIElement.Opacity)" 
+                                    Storyboard.TargetName="cortina">
+                                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.15" Value="0.85"/>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="cortina"
+                                                 Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                 To="0.1"
+                                                 Duration="0:0:1.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
         <!--/////////////////////////////////////////////////////////////////////////-->
         <!--/////////////////////////////////////////////////////////////////////////-->
         <!--/////////////////////////////////////////////////////////////////////////-->

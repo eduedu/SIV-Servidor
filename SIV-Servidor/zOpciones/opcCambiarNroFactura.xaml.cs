@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace SIV_Servidor.zOpciones
 {
-    /// <summary>
-    /// Interaction logic for opcCambiarNroFactura.xaml
-    /// </summary>
     public partial class opcCambiarNroFactura : UserControl
     {
         public opcCambiarNroFactura()

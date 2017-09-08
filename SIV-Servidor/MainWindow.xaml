@@ -171,7 +171,7 @@
                 <!--<Grid x:Name="gridCortinaNegra" Visibility="Hidden" Focusable="True"  >
                 <ContentControl Template="{DynamicResource cortinaNegra}"/>
             </Grid>-->
-                <Button x:Name="gridCortinaNegra" Visibility="Hidden" Template="{DynamicResource cortinaNegra}" BorderBrush="{x:Null}" Background="{x:Null}" Grid.ColumnSpan="4" />
+                <Button x:Name="gridCortinaOpciones" Visibility="Hidden" Template="{DynamicResource cortinaOpciones}" BorderBrush="{x:Null}" Background="{x:Null}" Grid.ColumnSpan="4" />
 
 
 
@@ -181,6 +181,7 @@
                   Foreground="{DynamicResource textoclaro}"  Template="{StaticResource RevealExpanderTemp}" LostFocus="expanderOpciones_LostFocus" Expanded="expanderOpciones_Expanded" Collapsed="expanderOpciones_Expanded">
                 <!--<Grid Background="#FFE5E5E5" Margin="-79,0,8,0" Height="178"/>-->
                 <StackPanel Margin="0,7,0,0"  >
+                    <Button x:Name="btnOpcionesImprimirCodigos" Style="{DynamicResource BotonOpciones}" Content="Imprimir códigos" Click="btnOpcionesImprimirCodigos_Click" />
                     <Button x:Name="btnOpcionesVerGrillaDeImpresion" Style="{DynamicResource BotonOpciones}" Content="Ajustar Grilla de Impresión (factura)" Click="btnOpcionesVerGrillaDeImpresion_Click" />
                     <Button Style="{DynamicResource BotonOpciones}" Content="Ajustar Caja" />
                     <!--<Button Style="{DynamicResource BotonOpciones}" Content="(Poner en cero)" />-->
@@ -197,7 +198,7 @@
             <Rectangle HorizontalAlignment="Left" Height="568" Margin="994,50,-170,-3" VerticalAlignment="Top" Width="170" Fill="{DynamicResource colorfondo}"/>
             <Rectangle HorizontalAlignment="Left" Height="410" Margin="-10,617,-18,-412" VerticalAlignment="Top" Width="1022" Fill="{DynamicResource colorfondo}"/>
 
-
+            <Button x:Name="gridCortinaNegra" Visibility="Hidden" Template="{DynamicResource cortinaNegra}" BorderBrush="{x:Null}" Background="{x:Null}" Grid.ColumnSpan="4" />
         </Grid>
     </Viewbox>
 </Window>

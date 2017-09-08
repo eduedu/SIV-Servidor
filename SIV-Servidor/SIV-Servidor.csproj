@@ -134,6 +134,9 @@
     <Compile Include="zOpciones\opcCambiarNroFactura.xaml.cs">
       <DependentUpon>opcCambiarNroFactura.xaml</DependentUpon>
     </Compile>
+    <Compile Include="zOpciones\opcImprimirCodigos.xaml.cs">
+      <DependentUpon>opcImprimirCodigos.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -191,6 +194,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="zOpciones\opcCambiarNroFactura.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="zOpciones\opcImprimirCodigos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
