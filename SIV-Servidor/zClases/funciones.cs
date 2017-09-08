@@ -91,12 +91,16 @@ namespace SIV_Servidor
         }
         public static string toFechaMostrar(string registro)
         {
-            DateTime fecha = DateTime.ParseExact(registro, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-            string resultado = fecha.ToString("dd/MM/yy HH:mm");
+            string resultado = "";
+            if (registro != "" && registro!="registroInexistente")
+            {
+                DateTime fecha = DateTime.ParseExact(registro, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                resultado = fecha.ToString("dd/MM/yy HH:mm");
+            }
 
             return resultado;
         }
-        
+
         public static string getFechaNow()
         {
             //DateTime fecha = DateTime.ParseExact(registro, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
@@ -107,7 +111,7 @@ namespace SIV_Servidor
             //DateTime fecha = DateTime.ParseExact(registro, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
             string now = nowMenos3horas.ToString("yyyy-MM-dd HH:mm:ss");
 
-            string resultado="DATETIME('"+ now + "')";
+            string resultado = "DATETIME('" + now + "')";
             return resultado;
         }
     }

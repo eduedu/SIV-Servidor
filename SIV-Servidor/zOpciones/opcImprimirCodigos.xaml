@@ -45,10 +45,10 @@
     <!-- /////////////////// MAIN /////////////////// -->
     <Grid Background="{DynamicResource colorfondo2}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="4*"/>
-            <RowDefinition Height="73*"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="197*"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -58,7 +58,7 @@
         </Grid.ColumnDefinitions>
 
         <!--HEADER-->
-        <Grid Grid.Column="1" Grid.Row="1" >
+        <Grid Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
@@ -67,7 +67,7 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource stTBlockEnCodigos}" Text="Mostrar los últimos"/>
                     <!--<TextBox Style="{StaticResource stTBoxEnCodigos}" Text="0"/>-->
-                    <ComboBox x:Name="comboCantidad" Style="{StaticResource stComboBoxEnCodigos}">
+                    <ComboBox x:Name="comboCantidad" Style="{StaticResource stComboBoxEnCodigos}" SelectionChanged="comboCantidad_SelectionChanged">
                         <ComboBoxItem>10</ComboBoxItem>
                         <ComboBoxItem IsSelected="True">50</ComboBoxItem>
                         <ComboBoxItem>100</ComboBoxItem>
@@ -78,25 +78,25 @@
                     <TextBlock Style="{StaticResource stTBlockEnCodigos}" Text="artículos vendidos."/>
                 </StackPanel>
             </StackPanel>
-            <CheckBox x:Name="cbOcultarImpresos" Grid.Column="1" Style="{StaticResource stCheckBoxEnCodigos}" Content="Ocultar lo que no se imprimirá"/>
+            <CheckBox x:Name="cbOcultarImpresos" Grid.Column="1" Style="{StaticResource stCheckBoxEnCodigos}" Content="Ocultar lo que no se imprimirá" Click="cbOcultarImpresos_Click"/>
         </Grid>
 
 
         <!--BOTONES-->
-        <StackPanel Grid.Column="3" Grid.Row="3" Grid.RowSpan="2" >
-            <Button Content="Imprimir" x:Name="btnImprimir" Style="{StaticResource stBotonEnCodigos}"   />
+        <StackPanel Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" >
+            <Button Content="Imprimir" x:Name="btnImprimir" Style="{StaticResource stBotonEnCodigos}" Click="btnImprimir_Click"   />
             <Button Content="Salir" x:Name="btnSalir" Style="{StaticResource stBotonEnCodigos}"  Click="btnSalir_Click"  />
 
         </StackPanel>
 
         <!--LIST VIEW-->
-        <ListView x:Name="listArticulos"  Background="{DynamicResource textoclaro}" Foreground="Black"  BorderThickness="0"  
+        <ListView x:Name="listArticulos"  Background="{DynamicResource colorfondo}" Foreground="Black"  BorderThickness="0"  
             BorderBrush="{x:Null}" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single"  IsHitTestVisible="True" 
                   Grid.Row="3" Grid.Column="1" Grid.RowSpan="1" Grid.ColumnSpan="1" 
                   >
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Fecha Venta" Width="95"   DisplayMemberBinding="{Binding fechaMostrar}"  />
+                    <GridViewColumn Header="Fecha Venta" Width="95"   DisplayMemberBinding="{Binding fechaVentaMostrar}"  />
                     <GridViewColumn Header="Código" Width="80">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -113,9 +113,17 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="color" Width="0"   DisplayMemberBinding="{Binding color}"   />
-                    <GridViewColumn Header="Fecha Impresion" Width="95"   DisplayMemberBinding="{Binding fechaMostrar}"  />
-                    <GridViewColumn Header="No Imprimir" Width="70"   DisplayMemberBinding="{Binding idventamostrar}"  />
-                    
+                    <GridViewColumn Header="Fecha Impresion" Width="95"   DisplayMemberBinding="{Binding fechaImpresionMostrar}"  />
+                    <GridViewColumn Header="Imprimir" Width="70" x:Name="CheckBoxColumn" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Width="{Binding ElementName=CheckBoxColumn, Path=Width}">
+                                    <CheckBox IsChecked="{Binding imprimir, Mode=TwoWay}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
                 </GridView>
             </ListView.View>
             <!--ESTILO DE LOS ITEMS-->

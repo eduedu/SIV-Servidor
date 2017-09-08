@@ -154,5 +154,26 @@ namespace SIV_Servidor
         public string total { get; set; }
         
     }
+    public class itemArticuloVendido
+    ///se usa en la BD caja y en el listCaja
+    {
+        //public long id { get; set; }
+        //public int idventa { get; set; }
+        //public string idventamostrar { get; set; }
+        public string fechaVenta { get; set; }
+        public string fechaVentaMostrar { get; set; }
+        public long codigo { get; set; }
+        public string descripcion { get; set; }
+        //public long cantidad { get; set; }
+        public float precio { get; set; }
+        //public float costo { get; set; }
+        //public float subtotal { get; set; }
+        //public string total { get; set; }
+        //public string totalmostrar { get; set; }
+        public int color { get; set; }
+        public string fechaImpresion { get; set; }
+        public string fechaImpresionMostrar { get; set; }
+        public bool imprimir { get; set; }
 
+    }
 }

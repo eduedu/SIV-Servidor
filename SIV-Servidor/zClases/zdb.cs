@@ -70,6 +70,27 @@ namespace SIV_Servidor
 
             ejecutarComandoSql(archivoDB, comando);
         }
+        public static void modificarRegistroDBcualquierCampo(string archivoDB, string tabla,
+            string campoBusqueda, string valorBusqueda, string campoModificacion, string valorModificacion, bool CampoModificacionEsNumerico = false)
+        {
+            /// MODIFICA el registro con id="index" de la "tabla" en el archivo "archivoDB", campo=valor.
+            string comando = "";
+            // UPDATE COMPANY SET ADDRESS = 'Texas' WHERE ID = 6;
+            // UPDATE COMPANY SET ADDRESS = 'Texas', SALARY = 20000.00;
+            if (CampoModificacionEsNumerico)
+            {
+                comando = "UPDATE  " + tabla + " SET " + campoModificacion + "=" + valorModificacion + " WHERE " + campoBusqueda + "=" + valorBusqueda.ToString();
+            }
+            else
+            {
+                comando = "UPDATE  " + tabla + " SET " + campoModificacion + "=" + valorModificacion + " WHERE " + campoBusqueda + "=" + valorBusqueda.ToString();
+
+                comando = "UPDATE  " + tabla + " SET " + campoModificacion + "='" + valorModificacion + " WHERE " + campoBusqueda + "=" + valorBusqueda.ToString();
+            }
+
+            ejecutarComandoSql(archivoDB, comando);
+        }
+
         public static void ejecutarComandoSql(string archivoDb, string comando)
         {
             ///EJECUTA -comando- en la base de datos -archivoDB-
@@ -128,10 +149,10 @@ namespace SIV_Servidor
                 comando = "UPDATE  " + tabla + " SET " + campo + "='" + valor + "' WHERE parametro='" + parametro + "'";
                 //new Thread(new ThreadStart(delegate
                 //{
-                    ejecutarComandoSql(archivoDB, comando);
-                    //Application.Current.Dispatcher.BeginInvoke((Action)(() =>
-                    //{
-                    //}), DispatcherPriority.Normal, null);
+                ejecutarComandoSql(archivoDB, comando);
+                //Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+                //{
+                //}), DispatcherPriority.Normal, null);
                 //})).Start();
 
             }
@@ -237,7 +258,7 @@ namespace SIV_Servidor
         //    float nuevoMonto = montoAnterior + fMonto;
         //    zdb.grabarConfig(nombreValor, nuevoMonto.ToString());
         //}
-        public static void balanceCajaDB(string monto, bool restar=false)
+        public static void balanceCajaDB(string monto, bool restar = false)
         {
             string nombreValor = "balanceCaja";
 
