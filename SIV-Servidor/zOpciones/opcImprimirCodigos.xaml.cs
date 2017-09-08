@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,15 +23,43 @@ namespace SIV_Servidor.zOpciones
     public partial class opcImprimirCodigos : UserControl
     {
         ///GLOBALES
-        public ObservableCollection<itemArticuloVendido>
+        private ObservableCollection<itemArticuloVendido>
             mArticulosVendidos = new ObservableCollection<itemArticuloVendido>();     //Listado de articulos vendidos
+        private ObservableCollection<itemArticuloVendido>
+            mArticulosVendidosFiltrados = new ObservableCollection<itemArticuloVendido>();     //Listado de articulos vendidos
 
+        //private ObservableCollection<itemArticuloVendido>
+        //    _mArticulosVendidos = new ObservableCollection<itemArticuloVendido>();     //Listado de articulos vendidos
+
+        //public ObservableCollection<itemArticuloVendido>
+        //    mArticulosVendidos
+        //{
+        //    get { return _mArticulosVendidos; }
+        //    set
+        //    {
+        //        if (value != _mArticulosVendidos)
+        //        {
+        //            _mArticulosVendidos = value;
+        //            OnPropertyChanged("mArticulosVendidos");
+        //        }
+        //    }
+        //}
+
+        //= new ObservableCollection<itemArticuloVendido>();     //Listado de articulos vendidos
+
+
+        //public event PropertyChangedEventHandler PropertyChanged;
+        //private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        //{
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //}
         ///MAIN
         public opcImprimirCodigos()
         {
             InitializeComponent();
 
             ///INICIO Y ASIGNACIONES
+            //listArticulos.DataContext = this;
             recargarListArticulos();
         }
 
@@ -84,7 +114,7 @@ namespace SIV_Servidor.zOpciones
                     tempArticulo.descripcion = registro["descripcion"].ToString().Trim();
                     tempArticulo.precio = zfun.toFloat(registro["precio"].ToString());
 
-                    
+
 
 
                     ///CONSULTAR BD 'ARTICULOS'
@@ -95,10 +125,14 @@ namespace SIV_Servidor.zOpciones
                     //{
                     //    zfun.consola("codigo:" + codigo.ToString());
                     //}
+                    tempArticulo.fechaImpresion = fechaImpresion;
+                    //tempArticulo.fechaImpresionMostrar = fechaImpresion;
+                    tempArticulo.fechaImpresionMostrar = zfun.toFechaMostrar(fechaImpresion);
                     if (fechaImpresion == "")
                     {
                         tempArticulo.imprimir = true;
                         tempArticulo.color = 1;
+                        tempArticulo.fechaImpresionMostrar = "-";
                     }
                     else
                     {
@@ -106,9 +140,7 @@ namespace SIV_Servidor.zOpciones
                         tempArticulo.color = 0;
                     }
 
-                    tempArticulo.fechaImpresion = fechaImpresion;
-                    //tempArticulo.fechaImpresionMostrar = fechaImpresion;
-                    tempArticulo.fechaImpresionMostrar = zfun.toFechaMostrar(fechaImpresion);
+
 
                     ///agregar tempArticulo a la lista
                     mArticulosVendidos.Add(tempArticulo);
@@ -134,6 +166,12 @@ namespace SIV_Servidor.zOpciones
 
             ///cerrar conexion
             conexion.Close();
+
+            ///calcular la cantidad de elementos que se imprimiran
+            int totalElementosAimprimir = mArticulosVendidos.Count(p => p.imprimir);
+            //zfun.consola("Se imprimirán:" + totalElementosAimprimir.ToString());
+            tbSeImprime.Text = "*Se imprime (" + totalElementosAimprimir.ToString() + ")";
+            tbNoSeImprime.Text = "*No se imprime (" + (mArticulosVendidos.Count - totalElementosAimprimir).ToString() + ")";
 
         }
         public static string dbVerificarImpresionEnBaseAlCodigo(string codigo)
@@ -215,6 +253,7 @@ namespace SIV_Servidor.zOpciones
                     zdb.modificarRegistroDBcualquierCampo(archivo, tabla, campoBusqueda, valorBusqueda, campoModificacion, valorModificacion, true);
                 }
             }
+            listArticulos.Focus();
 
         }
 
@@ -228,6 +267,7 @@ namespace SIV_Servidor.zOpciones
                 var articulosFiltrados = from registro in mArticulosVendidos
                                          where registro.imprimir.Equals(true)
                                          select registro;
+
                 //orderby registro.descripcion
 
                 //mTotalArticulosConFiltro = null;
@@ -247,14 +287,40 @@ namespace SIV_Servidor.zOpciones
             var list = sender as ListView;
             var selected = list.SelectedItem as itemArticuloVendido;
 
+            if (selected.imprimir == true)
+            {
+                selected.imprimir = false;
+                //(listArticulos.SelectedItem as itemArticuloVendido).imprimir = false;
+
+                //list.Items[8] = false;
+            }
+            else
+            {
+                selected.imprimir = true;
+                //(listArticulos.SelectedItem as itemArticuloVendido).imprimir = true;
+                //list.Items[8] = true;
+
+            }
             zfun.consola(selected.imprimir.ToString());
-            if (selected.imprimir==true)
+            //listArticulos.UpdateLayout();
+            var itemSourceTemp = listArticulos.ItemsSource;
+            listArticulos.ItemsSource = null;
+            listArticulos.ItemsSource = itemSourceTemp;
+
+            ///calcular la cantidad de elementos que se imprimiran
+            int totalElementosAimprimir = mArticulosVendidos.Count(p => p.imprimir);
+            //zfun.consola("Se imprimirán:" + totalElementosAimprimir.ToString());
+            tbSeImprime.Text = "*Se imprime (" + totalElementosAimprimir.ToString() + ")";
+            tbNoSeImprime.Text = "*No se imprime (" + (mArticulosVendidos.Count- totalElementosAimprimir).ToString() + ")";
+        }
+
+        private void imgCerrarImpresionDeCodigos_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ((Panel)this.Parent).Children.Remove(this);
+            MainWindow.statCortinaNegra.Visibility = Visibility.Hidden;
+            if (MainWindow.mPestanaMain == 0)
             {
-                //selected.imprimir = false;
-            } else
-            {
-                //selected.imprimir = true;
-                
+                MainWindow.statucInicio.tbDescripcion.Focus();
             }
         }
     }

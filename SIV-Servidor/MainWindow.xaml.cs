@@ -776,7 +776,8 @@ namespace SIV_Servidor
 
             ///agregar StackPanel al mainGrid (mostrar)
             windowGrid.Children.Add(imprimirCodigos);
-            imprimirCodigos.btnSalir.Focus();
+            //imprimirCodigos.btnSalir.Focus();
+            imprimirCodigos.listArticulos.Focus();
 
         }
 
