@@ -84,24 +84,26 @@ namespace SIV_Servidor.zOpciones
                     tempArticulo.descripcion = registro["descripcion"].ToString().Trim();
                     tempArticulo.precio = zfun.toFloat(registro["precio"].ToString());
 
-                    tempArticulo.color = 0;
+                    
 
 
                     ///CONSULTAR BD 'ARTICULOS'
                     ///si el campo 'fechaImpresion' es null, imprimir
                     string fechaImpresion = "";
                     fechaImpresion = dbVerificarImpresionEnBaseAlCodigo(codigo.ToString());
-                    if (fechaImpresion == "registroInexistente")
-                    {
-                        zfun.consola("codigo:" + codigo.ToString());
-                    }
+                    //if (fechaImpresion == "registroInexistente")
+                    //{
+                    //    zfun.consola("codigo:" + codigo.ToString());
+                    //}
                     if (fechaImpresion == "")
                     {
                         tempArticulo.imprimir = true;
+                        tempArticulo.color = 1;
                     }
                     else
                     {
                         tempArticulo.imprimir = false;
+                        tempArticulo.color = 0;
                     }
 
                     tempArticulo.fechaImpresion = fechaImpresion;
@@ -209,7 +211,7 @@ namespace SIV_Servidor.zOpciones
                     string campoBusqueda = "codigo";
                     string valorBusqueda = it.codigo.ToString();
                     string campoModificacion = "fechaimpresion";
-                    string valorModificacion = "DATETIME('NOW')";
+                    string valorModificacion = zfun.getFechaNow();
                     zdb.modificarRegistroDBcualquierCampo(archivo, tabla, campoBusqueda, valorBusqueda, campoModificacion, valorModificacion, true);
                 }
             }
@@ -237,6 +239,22 @@ namespace SIV_Servidor.zOpciones
             else
             {
                 listArticulos.ItemsSource = mArticulosVendidos;
+            }
+        }
+
+        private void listArticulos_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var list = sender as ListView;
+            var selected = list.SelectedItem as itemArticuloVendido;
+
+            zfun.consola(selected.imprimir.ToString());
+            if (selected.imprimir==true)
+            {
+                //selected.imprimir = false;
+            } else
+            {
+                //selected.imprimir = true;
+                
             }
         }
     }
