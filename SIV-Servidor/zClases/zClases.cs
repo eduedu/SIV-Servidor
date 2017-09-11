@@ -152,7 +152,8 @@ namespace SIV_Servidor
         public string precio { get; set; }
         public string subtotal { get; set; }
         public string total { get; set; }
-        
+        public string codigo { get; set; }
+
     }
     public class itemArticuloVendido
     ///se usa en la BD caja y en el listCaja

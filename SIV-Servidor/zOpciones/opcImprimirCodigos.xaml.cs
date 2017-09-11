@@ -61,6 +61,7 @@ namespace SIV_Servidor.zOpciones
             ///INICIO Y ASIGNACIONES
             //listArticulos.DataContext = this;
             recargarListArticulos();
+            tbSeImprimeMax.Visibility = Visibility.Collapsed;
         }
 
         ///FUNCIONES
@@ -168,10 +169,7 @@ namespace SIV_Servidor.zOpciones
             conexion.Close();
 
             ///calcular la cantidad de elementos que se imprimiran
-            int totalElementosAimprimir = mArticulosVendidos.Count(p => p.imprimir);
-            //zfun.consola("Se imprimirán:" + totalElementosAimprimir.ToString());
-            tbSeImprime.Text = "*Se imprime (" + totalElementosAimprimir.ToString() + ")";
-            tbNoSeImprime.Text = "*No se imprime (" + (mArticulosVendidos.Count - totalElementosAimprimir).ToString() + ")";
+            mostrarElementosQueSeImprimiran();
 
         }
         public static string dbVerificarImpresionEnBaseAlCodigo(string codigo)
@@ -222,41 +220,15 @@ namespace SIV_Servidor.zOpciones
             ((Panel)this.Parent).Children.Remove(this);
             MainWindow.statCortinaNegra.Visibility = Visibility.Hidden;
         }
-        private void comboCantidad_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void imgCerrarImpresionDeCodigos_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (listArticulos != null)
+            ((Panel)this.Parent).Children.Remove(this);
+            MainWindow.statCortinaNegra.Visibility = Visibility.Hidden;
+            if (MainWindow.mPestanaMain == 0)
             {
-                int max = zfun.toInt((comboCantidad.SelectedItem as ComboBoxItem).Content.ToString());
-                zfun.consola("co:" + max.ToString());
-                recargarListArticulos();
-
+                MainWindow.statucInicio.tbDescripcion.Focus();
             }
         }
-        private void btnImprimir_Click(object sender, RoutedEventArgs e)
-        {
-            ///recorrer listArticulos
-            foreach (var item in listArticulos.Items)
-            {
-                itemArticuloVendido it = item as itemArticuloVendido;
-
-                ///si checkBox imprimir=true, buscar en BD 'articulos' el item con ese numero de codigo y cargar la fecha(now)
-                if (it.imprimir)
-                {
-                    ///buscar y modificar articulo en BD 'articulos'
-                    //DATETIME('NOW')
-                    string archivo = "articulos.db";
-                    string tabla = "articulos";
-                    string campoBusqueda = "codigo";
-                    string valorBusqueda = it.codigo.ToString();
-                    string campoModificacion = "fechaimpresion";
-                    string valorModificacion = zfun.getFechaNow();
-                    zdb.modificarRegistroDBcualquierCampo(archivo, tabla, campoBusqueda, valorBusqueda, campoModificacion, valorModificacion, true);
-                }
-            }
-            listArticulos.Focus();
-
-        }
-
         private void cbOcultarImpresos_Click(object sender, RoutedEventArgs e)
         {
             //recargarListArticulos();
@@ -282,46 +254,128 @@ namespace SIV_Servidor.zOpciones
             }
         }
 
+        private void btnImprimir_Click(object sender, RoutedEventArgs e)
+        {
+            ///recorrer listArticulos para marcarlos como ya impresos y grabar la fecha de impresion
+            foreach (var item in listArticulos.Items)
+            {
+                itemArticuloVendido it = item as itemArticuloVendido;
+
+                ///si checkBox imprimir=true, buscar en BD 'articulos' el item con ese numero de codigo y cargar la fecha(now)
+                if (it.imprimir)
+                {
+                    ///buscar y modificar articulo en BD 'articulos'
+                    //DATETIME('NOW')
+                    string archivo = "articulos.db";
+                    string tabla = "articulos";
+                    string campoBusqueda = "codigo";
+                    string valorBusqueda = it.codigo.ToString();
+                    string campoModificacion = "fechaimpresion";
+                    string valorModificacion = zfun.getFechaNow();
+                    zdb.modificarRegistroDBcualquierCampo(archivo, tabla, campoBusqueda, valorBusqueda, campoModificacion, valorModificacion, true);
+                }
+            }
+
+            ///recorrer listArticulos para poblar la plantilla de impresion y mandar a imprimir
+            zImpresion.plantillaImprimirCodigos hoja = new zImpresion.plantillaImprimirCodigos();
+            plantillaImpresion p = new plantillaImpresion();
+            //p.fecha = "FECHA";
+            p.fecha = "";
+            p.codigo = "CÓDIGO";
+            p.descripcion = "DESCRIPCION";
+            p.precio = "PRECIO";
+            int index = 0;
+            foreach (var item in listArticulos.Items)
+            {
+                itemArticuloVendido it = item as itemArticuloVendido;
+
+                ///si checkBox imprimir=true, agregar a la plantilla el articulo
+                if (it.imprimir)
+                {
+                    //p.fecha += "\n" + it.fechaVentaMostrar;
+                    index++;
+                    p.fecha += "\n" + index.ToString() + ".";
+                    p.codigo += "\n" + it.codigo;
+                    p.descripcion += "\n" + it.descripcion;
+                    p.precio += "\n $" + it.precio.ToString("0.00");
+                }
+            }
+            hoja.imprimir(p);
+
+
+            listArticulos.Focus();
+
+        }
+
+        private void comboCantidad_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listArticulos != null)
+            {
+                int max = zfun.toInt((comboCantidad.SelectedItem as ComboBoxItem).Content.ToString());
+                zfun.consola("co:" + max.ToString());
+                recargarListArticulos();
+
+            }
+        }
         private void listArticulos_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var list = sender as ListView;
             var selected = list.SelectedItem as itemArticuloVendido;
 
-            if (selected.imprimir == true)
+            if (selected != null)
             {
-                selected.imprimir = false;
-                //(listArticulos.SelectedItem as itemArticuloVendido).imprimir = false;
+                ///cambiar el valor del elemento
+                if (selected.imprimir == true)
+                {
+                    selected.imprimir = false;
+                    //(listArticulos.SelectedItem as itemArticuloVendido).imprimir = false;
 
-                //list.Items[8] = false;
+                    //list.Items[8] = false;
+                }
+                else
+                {
+                    selected.imprimir = true;
+                    //(listArticulos.SelectedItem as itemArticuloVendido).imprimir = true;
+                    //list.Items[8] = true;
+
+                }
+                //zfun.consola(selected.imprimir.ToString());
+                //listArticulos.UpdateLayout();
+
+                ///actualizar list
+                var itemSourceTemp = listArticulos.ItemsSource;
+                listArticulos.ItemsSource = null;
+                listArticulos.ItemsSource = itemSourceTemp;
+
+                ///calcular la cantidad de elementos que se imprimiran
+                mostrarElementosQueSeImprimiran();
+                
             }
-            else
-            {
-                selected.imprimir = true;
-                //(listArticulos.SelectedItem as itemArticuloVendido).imprimir = true;
-                //list.Items[8] = true;
+        }
+        private void cbImprimir_Click(object sender, RoutedEventArgs e)
+        {
+            //var cb = sender as CheckBox;
+            //zfun.consola(cb.IsChecked.ToString());
 
-            }
-            zfun.consola(selected.imprimir.ToString());
-            //listArticulos.UpdateLayout();
-            var itemSourceTemp = listArticulos.ItemsSource;
-            listArticulos.ItemsSource = null;
-            listArticulos.ItemsSource = itemSourceTemp;
-
+            //zfun.consola(cb.Tag.ToString());
+            mostrarElementosQueSeImprimiran();
+        }
+        private void mostrarElementosQueSeImprimiran()
+        {
             ///calcular la cantidad de elementos que se imprimiran
+
             int totalElementosAimprimir = mArticulosVendidos.Count(p => p.imprimir);
             //zfun.consola("Se imprimirán:" + totalElementosAimprimir.ToString());
             tbSeImprime.Text = "*Se imprime (" + totalElementosAimprimir.ToString() + ")";
-            tbNoSeImprime.Text = "*No se imprime (" + (mArticulosVendidos.Count- totalElementosAimprimir).ToString() + ")";
-        }
-
-        private void imgCerrarImpresionDeCodigos_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            ((Panel)this.Parent).Children.Remove(this);
-            MainWindow.statCortinaNegra.Visibility = Visibility.Hidden;
-            if (MainWindow.mPestanaMain == 0)
+            if (totalElementosAimprimir > 64)
             {
-                MainWindow.statucInicio.tbDescripcion.Focus();
+                tbSeImprimeMax.Visibility = Visibility.Visible;
             }
+            else
+            {
+                tbSeImprimeMax.Visibility = Visibility.Collapsed;
+            }
+            tbNoSeImprime.Text = "*No se imprime (" + (mArticulosVendidos.Count - totalElementosAimprimir).ToString() + ")";
         }
     }
 }

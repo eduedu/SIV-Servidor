@@ -99,6 +99,12 @@
             </Grid.RowDefinitions>
             <StackPanel  Margin="0,0">
                 <TextBlock x:Name="tbSeImprime" Text="*Se imprime" Style="{StaticResource stTBlockEnCodigos}" Foreground="{StaticResource confoco2}" Margin="5,0"/>
+                <TextBlock x:Name="tbSeImprimeMax"  Style="{StaticResource stTBlockEnCodigos}" Foreground="{StaticResource textoclaro}" FontSize="12" Margin="5,0">
+                    <Run Text="No poner más de "/><LineBreak/>
+                    <Run Text="65 artículos porque no "/><LineBreak/>
+                    <Run Text="saldrán en la impresión"/><LineBreak/>
+                    <Run Text="(hoja A4)."/>
+                </TextBlock>
                 <TextBlock x:Name="tbNoSeImprime" Text="*No se imprime" Style="{StaticResource stTBlockEnCodigos}" Foreground="{StaticResource infocable3}" Margin="5,0"/>
                 <!--<Button Content="Salir" x:Name="btnSalir" Style="{StaticResource stBotonEnCodigos}"  Click="btnSalir_Click"  />-->
             </StackPanel>
@@ -147,7 +153,7 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid Width="{Binding ElementName=CheckBoxColumn, Path=Width}">
-                                    <CheckBox IsChecked="{Binding imprimir, Mode=TwoWay}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    <CheckBox x:Name="cbImprimir" IsChecked="{Binding imprimir, Mode=TwoWay}"   HorizontalAlignment="Center" VerticalAlignment="Center" Click="cbImprimir_Click" />
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>

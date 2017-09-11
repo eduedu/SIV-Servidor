@@ -125,6 +125,9 @@
     <Compile Include="zImpresion\impresionFactura.xaml.cs">
       <DependentUpon>impresionFactura.xaml</DependentUpon>
     </Compile>
+    <Compile Include="zImpresion\plantillaImprimirCodigos.xaml.cs">
+      <DependentUpon>plantillaImprimirCodigos.xaml</DependentUpon>
+    </Compile>
     <Compile Include="zImpresion\plantillaRemitos.xaml.cs">
       <DependentUpon>plantillaRemitos.xaml</DependentUpon>
     </Compile>
@@ -182,6 +185,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="zImpresion\impresionFactura.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="zImpresion\plantillaImprimirCodigos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
