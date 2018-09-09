@@ -730,7 +730,7 @@ namespace SIV_Servidor
 
             ///crear texto de ayuda
             TextBlock tbAyuda = new TextBlock();
-            tbAyuda.Text = "Seleccione un texto con el mouse y utilice las flechas del teclado para acomodarlo en la posición deseada.";
+            tbAyuda.Text = "AYUDA: Seleccione un texto con el mouse y utilice las flechas del teclado para acomodarlo en la posición deseada.";
             tbAyuda.FontSize = 12;
             tbAyuda.FontWeight = FontWeights.Bold;
             tbAyuda.Margin = new Thickness(0, 0, 0, 5);
@@ -781,6 +781,21 @@ namespace SIV_Servidor
 
         }
 
+        /// boton Administrar Articulos
+        private void btnOpcionesAdministrarArticulos_Click(object sender, RoutedEventArgs e)
+        {
+            ///mostrar 'cortina' de fondo
+            gridCortinaNegra.Visibility = Visibility.Visible;
+
+            ///Crear control
+            zOpciones.opcAdministrarArticulos administrarArticulos= new zOpciones.opcAdministrarArticulos();
+
+            ///agregar StackPanel al mainGrid (mostrar)
+            windowGrid.Children.Add(administrarArticulos);
+            //imprimirCodigos.btnSalir.Focus();
+            //imprimirCodigos.listArticulos.Focus();
+        }
+
         ///FUNCIONES
         private void guardarPosicionesImpresionFactura(Grid grid)
         {
@@ -802,6 +817,7 @@ namespace SIV_Servidor
                 }
             }
         }
+
 
 
         ///-------------------------------------------------------------------------------------------

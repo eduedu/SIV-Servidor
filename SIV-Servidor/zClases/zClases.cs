@@ -177,4 +177,24 @@ namespace SIV_Servidor
         public bool imprimir { get; set; }
 
     }
+
+    public class itemPreviewExcel
+    ///se usa en la BD caja y en el listCaja
+    {
+        //public long id { get; set; }
+        //public int idventa { get; set; }
+        //public string idventamostrar { get; set; }
+        public string a { get; set; }
+        public string b { get; set; }
+        public string c { get; set; }
+        public string d { get; set; }
+        public string e { get; set; }
+        public string f { get; set; }
+        public string g { get; set; }
+        public string h { get; set; }
+        public string i { get; set; }
+        public string j { get; set; }
+        public string k { get; set; }
+        public string l { get; set; }
+    }
 }

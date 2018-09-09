@@ -215,11 +215,6 @@ namespace SIV_Servidor.zOpciones
             return valor;
         }
         ///CONTROLES
-        private void btnSalir_Click(object sender, RoutedEventArgs e)
-        {
-            ((Panel)this.Parent).Children.Remove(this);
-            MainWindow.statCortinaNegra.Visibility = Visibility.Hidden;
-        }
         private void imgCerrarImpresionDeCodigos_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             ((Panel)this.Parent).Children.Remove(this);
@@ -228,6 +223,11 @@ namespace SIV_Servidor.zOpciones
             {
                 MainWindow.statucInicio.tbDescripcion.Focus();
             }
+        }
+        private void btnSalir_Click(object sender, RoutedEventArgs e)
+        {
+            ((Panel)this.Parent).Children.Remove(this);
+            MainWindow.statCortinaNegra.Visibility = Visibility.Hidden;
         }
         private void cbOcultarImpresos_Click(object sender, RoutedEventArgs e)
         {

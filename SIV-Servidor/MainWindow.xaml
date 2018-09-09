@@ -186,6 +186,7 @@
                     <Button Style="{DynamicResource BotonOpciones}" Content="Ajustar Caja" />
                     <!--<Button Style="{DynamicResource BotonOpciones}" Content="(Poner en cero)" />-->
                     <Button x:Name="btnOpcionesCambiarNroDeFactura" Style="{DynamicResource BotonOpciones}" Content="Cambiar número de Factura" Click="btnOpcionesCambiarNroDeFactura_Click" />
+                    <Button x:Name="btnOpcionesAdministrarArticulos" Style="{DynamicResource BotonOpciones}" Content="Administrar Artículos" Click="btnOpcionesAdministrarArticulos_Click" />
                 </StackPanel>
 
             </Expander>
