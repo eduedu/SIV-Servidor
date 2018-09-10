@@ -184,6 +184,8 @@ namespace SIV_Servidor
         //public long id { get; set; }
         //public int idventa { get; set; }
         //public string idventamostrar { get; set; }
+        public bool procesar { get; set; }
+        public int filaIndex { get; set; }
         public string a { get; set; }
         public string b { get; set; }
         public string c { get; set; }
