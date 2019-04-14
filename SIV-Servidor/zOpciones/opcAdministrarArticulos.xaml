@@ -52,7 +52,7 @@
         </DataTemplate>-->
         <Style x:Key="columnaSeleccionada" TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="Foreground" Value="{DynamicResource textoobscuro}"/>
-            <Setter Property="Background" Value="{DynamicResource confoco}"/>
+            <Setter Property="Background" Value="{DynamicResource confoco2}"/>
         </Style>
 
         <Style TargetType="{x:Type ComboBoxItem}"  x:Key="combo2"  >
@@ -147,8 +147,8 @@
         <TabControl x:Name="tabAccion" 
                     Focusable="False" Background="{x:Null}" BorderBrush="{x:Null}" Cursor="Hand" Padding="0" HorizontalContentAlignment="Left"
                                       Grid.Column="1" 
-                  Grid.Row="3" Grid.RowSpan="1" Grid.ColumnSpan="1"  
-                    SelectionChanged="tabAccion_SelectionChanged" 
+                  Grid.Row="3" Grid.ColumnSpan="1"  
+                    SelectionChanged="tabAccion_SelectionChanged" Margin="0,6,0,14" Grid.RowSpan="2" 
 
                     >
             <TabControl.Resources>
@@ -186,9 +186,9 @@
         <Grid  
             x:Name="gridActualizar"  
             Grid.Column="1" 
-            Grid.Row="3" Grid.RowSpan="1" Grid.ColumnSpan="1"  
-            Margin="0,40,0,0"
-            Background="{DynamicResource colorfondo2}"
+            Grid.Row="3" Grid.ColumnSpan="1"  
+            Margin="0,42,0,18"
+            Background="{DynamicResource colorfondo2}" Grid.RowSpan="2"
             >
             <Button x:Name="btnSeleccionarArchivo" Content="Seleccionar Archivo..." 
                     HorizontalAlignment="Left" 
@@ -199,27 +199,84 @@
                     Click="btnSeleccionarArchivo_Click" Height="33"
                     />
             <Grid x:Name="gridExcel"
-            Background="{DynamicResource colorfondo3}" Margin="0,45,0,0"
+            Background="{DynamicResource colorfondo2}" Margin="0,45,0,-4" VerticalAlignment="Top"
                 
                 >
+                <!--Grid.RowSpan="1" Grid.ColumnSpan="1"-->
+                <Grid  x:Name="gridActualizarBD"
+                       Background="{DynamicResource textoclaro}"
+                       
+                       Margin="1000,0,-1000,0" Height="112" Width="873" VerticalAlignment="Top">
+                    <Label Content="El archivo se analizó correctamente. " HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource textoobscuro}" Padding="0,0,3,0" Margin="10,4,0,0"/>
+                    <Label Content="VERDE: Se agregará un nuevo artículo a la Base de Datos" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Padding="0,1,3,0" Margin="10,49,0,0" Foreground="#FF00A600"/>
+                    <Label Content="Los colores indican el modo en que se procesará cada fila:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource textoobscuro}" Padding="0,1,3,0" Margin="10,32,0,0"/>
+                    <Label Content="AZUL: Actualizará el precio de un artículo ya existente en la Base de Datos (NO implementado aún)" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FF0036EC" FontWeight="Bold" Padding="0,1,3,0" Margin="10,67,0,0" Background="{x:Null}"/>
+                    <Label Content="ROJO: La fila será ignorada por ser un registro inválido" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFFF2121" FontWeight="Bold" Padding="0,1,3,0" Margin="10,84,0,0"/>
+                    <Button x:Name="btnAnalizar_Copy" Content="PROCESAR ARCHIVO" 
+                        VerticalAlignment="Top" 
+                        Margin="0,67,10,0"
+                    
+                        Click="btnProcesarArchivo_Click" Height="37" BorderBrush="{DynamicResource infocable3}" HorizontalAlignment="Right" Width="161"
+                    />
 
-                <ListView 
-            x:Name="listExcel"  
-            BorderThickness="0"  
-            SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single"  IsHitTestVisible="True" 
-            Background="{DynamicResource textoclaro}"
-            Foreground="{DynamicResource textoobscuro}"
-            Style="{DynamicResource listFiltroStyle1}"
-            BorderBrush="{DynamicResource textoclaro}" Margin="0,114,0,18" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                </Grid>
+                <Grid  x:Name="gridAnalizarArchivo" 
+                       Background="{DynamicResource colorfondo2}"
+                       VerticalAlignment="Top" Height="112">
+                    <Label Content="Indicar las columnas que contienen los siguientes datos:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource confoco}" FontWeight="Bold" Padding="0,5,5,5" Margin="10,0,0,0"/>
+                    <Label Content="1. Código (interno)" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Margin="10,31,0,0"/>
+                    <ComboBox x:Name="cmbCodigoInterno" SelectedIndex="0" HorizontalAlignment="Left" Margin="121,31,0,0" VerticalAlignment="Top" Width="50" Height="21" SelectionChanged="cmb_SelectionChanged" FontWeight="Bold" Style="{DynamicResource combo1}" />
+                    <ComboBox x:Name="cmbDescripcion" SelectedIndex="0" HorizontalAlignment="Left" Margin="121,57,0,0" VerticalAlignment="Top" Width="50" Height="21" SelectionChanged="cmb_SelectionChanged" FontWeight="Bold" Style="{DynamicResource combo1}" />
+                    <ComboBox x:Name="cmbPrecio" SelectedIndex="0" HorizontalAlignment="Left" Margin="121,83,0,0" VerticalAlignment="Top" Width="50" Height="21" SelectionChanged="cmb_SelectionChanged" FontWeight="Bold" Style="{DynamicResource combo1}" />
+                    <ComboBox x:Name="cmbProveedor" SelectedIndex="0" HorizontalAlignment="Left" Margin="333,31,0,0" VerticalAlignment="Top" Width="50" Height="21" SelectionChanged="cmb_SelectionChanged" FontWeight="Bold" Style="{DynamicResource combo1}" />
+                    <ComboBox x:Name="cmbCodProveedor" SelectedIndex="0" HorizontalAlignment="Left" Margin="333,57,0,0" VerticalAlignment="Top" Width="50" Height="21" SelectionChanged="cmb_SelectionChanged"  Style="{DynamicResource combo1}" FontWeight="Bold"  />
+                    <Label Content="2. Descripción" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Margin="10,57,0,0"/>
+                    <Label Content="3. Precio" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Margin="10,83,0,0"/>
+                    <Label Content="4. Proveedor" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Margin="222,31,0,0"/>
+                    <Label Content="5. Cod. proveedor" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Margin="222,57,0,0" BorderThickness="0"/>
+                    <Button x:Name="btnAnalizar" Content="Analizar Archivo" 
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Top" 
+                    Margin="222,83,0,0" 
+                    Width="161"
+                    
+                    Click="btnAnalizar_Click" Height="21" BorderBrush="{DynamicResource infocable3}"
+                    />
+                    <Label Content="Nota: sólo se muestran las primeras 10 filas, pero el archivo será analizado hasta el final." HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource boton}" Padding="0,5,5,5" Margin="399,81,0,0"/>
+                    <Label Content="(IMPLEMENTAR: que se pueda elegir no seleccionar COD. INTERNO, &#xD;&#xA;ni PROV, ni COD. PROV., y que le asigne valores automaticamente)" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource boton}" Padding="0,5,5,5" Margin="399,31,0,0" Height="47"/>
+                </Grid>
 
-            >
+                <ListView  x:Name="listExcel"  
+                    BorderThickness="0"  
+                    SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" SelectionMode="Single"  IsHitTestVisible="True" 
+                    Background="{DynamicResource textoclaro}"
+                    Foreground="{DynamicResource textoobscuro}"
+                    Style="{DynamicResource listFiltroStyle1}"
+                    BorderBrush="{DynamicResource textoclaro}" Margin="0,114,0,-168" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Height="257"
+                >
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn  Header=" " Width="50"   DisplayMemberBinding="{Binding filaIndex}"  />
-                            <GridViewColumn x:Name="col1" Header="a" Width="80" DisplayMemberBinding="{Binding a}"  />
+                            <!--<GridViewColumn  Header=" " Width="50"   DisplayMemberBinding="{Binding filaIndex}"  />-->
+                            <GridViewColumn  Header=" " Width="50"   DisplayMemberBinding="{Binding CELDA[0]}"  />
+
+                            <GridViewColumn x:Name="proc" Header="proc" Width="30" DisplayMemberBinding="{Binding procesoEnBD}"  />
                             <!--<GridViewColumn x:Name="col1" Header="a" Width="80" CellTemplate="{StaticResource colSeleccionada2}" HeaderContainerStyle="{DynamicResource CustomHeaderStyle}" />-->
 
-                            <GridViewColumn x:Name="col2"  Header="b" Width="80" DisplayMemberBinding="{Binding b}"  />
+                            <GridViewColumn x:Name="col1" Header="a" Width="80" DisplayMemberBinding="{Binding CELDA[1]}"  />
+                            <GridViewColumn x:Name="col2"  Header="b" Width="80" DisplayMemberBinding="{Binding CELDA[2]}"  />
+                            <GridViewColumn x:Name="col3" Header="c" Width="80" DisplayMemberBinding="{Binding CELDA[3]}"  />
+                            <GridViewColumn x:Name="col4" Header="d" Width="80" DisplayMemberBinding="{Binding CELDA[4]}"  />
+                            <GridViewColumn x:Name="col5" Header="e" Width="80" DisplayMemberBinding="{Binding CELDA[5]}"  />
+                            <GridViewColumn x:Name="col6" Header="f" Width="80" DisplayMemberBinding="{Binding CELDA[6]}"  />
+                            <GridViewColumn x:Name="col7" Header="g" Width="80" DisplayMemberBinding="{Binding CELDA[7]}"  />
+                            <GridViewColumn x:Name="col8" Header="h" Width="80" DisplayMemberBinding="{Binding CELDA[8]}"  />
+                            <GridViewColumn x:Name="col9" Header="i" Width="80" DisplayMemberBinding="{Binding CELDA[9]}"  />
+                            <GridViewColumn x:Name="col10" Header="j" Width="80" DisplayMemberBinding="{Binding CELDA[10]}"  />
+                            <GridViewColumn x:Name="col11" Header="k" Width="80" DisplayMemberBinding="{Binding CELDA[11]}"  />
+                            <GridViewColumn x:Name="col12" Header="l" Width="80" DisplayMemberBinding="{Binding CELDA[12]}"  />
+
+                            <!--<GridViewColumn x:Name="col1" Header="a" Width="80" DisplayMemberBinding="{Binding a}"  />-->
+                            <!--<GridViewColumn x:Name="col2"  Header="b" Width="80" DisplayMemberBinding="{Binding b}"  />
                             <GridViewColumn x:Name="col3" Header="c" Width="80" DisplayMemberBinding="{Binding c}"  />
                             <GridViewColumn x:Name="col4" Header="d" Width="80" DisplayMemberBinding="{Binding d}"  />
                             <GridViewColumn x:Name="col5" Header="e" Width="80" DisplayMemberBinding="{Binding e}"  />
@@ -229,7 +286,7 @@
                             <GridViewColumn x:Name="col9" Header="i" Width="80" DisplayMemberBinding="{Binding i}"  />
                             <GridViewColumn x:Name="col10" Header="j" Width="80" DisplayMemberBinding="{Binding j}"  />
                             <GridViewColumn x:Name="col11" Header="k" Width="80" DisplayMemberBinding="{Binding k}"  />
-                            <GridViewColumn x:Name="col12" Header="l" Width="80" DisplayMemberBinding="{Binding l}"  />
+                            <GridViewColumn x:Name="col12" Header="l" Width="80" DisplayMemberBinding="{Binding l}"  />-->
 
 
 
@@ -238,54 +295,53 @@
 
                     </ListView.View>
                     <!--/// ESTILO DE LOS ITEMS-->
-                    <!--<ListView.ItemContainerStyle>
+                    <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="Template" Value="{DynamicResource ListViewItemPersonalizado}" />
                             <Setter Property="Margin" Value="-5, 0" />
                             <Setter Property="BorderThickness" Value="1" />
 
                             <Style.Triggers>
+                                <DataTrigger Binding="{Binding procesoEnBD}" Value="0">
+                                    <!--<Setter Property="Background" Value="{StaticResource colorfondo3}" />-->
+                                    <!--<Setter Property="BorderBrush" Value="{StaticResource colorfondo3}" />-->
+                                    <!--<Setter Property="Foreground" Value="{StaticResource infocable3}" />-->
+                                    <Setter Property="Foreground" Value="Red" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding procesoEnBD}" Value="1">
+                                    <Setter Property="Foreground" Value="Blue" />
+                                </DataTrigger>
 
-                                <MultiTrigger>
+                                <DataTrigger Binding="{Binding procesoEnBD}" Value="2">
+                                    <Setter Property="Foreground" Value="Green" />
+                                </DataTrigger>
+                                <!--<MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true" />
+                                        <Condition Property="Selector.IsSelectionActive" Value="true" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="{StaticResource textoobscuro}" />
+                                    <Setter Property="Background" Value="{StaticResource confoco}" />
+                                    <Setter Property="BorderBrush" Value="{StaticResource confoco}" />
+                                </MultiTrigger>-->
+                                <!--<MultiTrigger>
                                     <MultiTrigger.Conditions>
                                         <Condition Property="IsSelected" Value="true" />
                                         <Condition Property="Selector.IsSelectionActive" Value="true" />
                                     </MultiTrigger.Conditions>
                                     <Setter Property="Background" Value="{StaticResource confoco}" />
-
-
-                                </MultiTrigger>
+                                </MultiTrigger>-->
                             </Style.Triggers>
                         </Style>
-                    </ListView.ItemContainerStyle>-->
+                    </ListView.ItemContainerStyle>
 
 
                 </ListView>
-                <Label Content="Indicar las columnas que contienen los siguientes datos:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource confoco}" FontWeight="Bold" Padding="0,5,5,5" Margin="10,0,0,0"/>
-                <Label Content="1. Código interno" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Margin="10,31,0,0"/>
-                <ComboBox x:Name="cmbCodigoInterno" SelectedIndex="0" HorizontalAlignment="Left" Margin="118,31,0,0" VerticalAlignment="Top" Width="50" Height="21" SelectionChanged="cmb_SelectionChanged" FontWeight="Bold" Style="{DynamicResource combo1}" />
-                <ComboBox x:Name="cmbDescripcion" SelectedIndex="0" HorizontalAlignment="Left" Margin="118,57,0,0" VerticalAlignment="Top" Width="50" Height="21" SelectionChanged="cmb_SelectionChanged" FontWeight="Bold" Style="{DynamicResource combo1}" />
-                <ComboBox x:Name="cmbPrecio" SelectedIndex="0" HorizontalAlignment="Left" Margin="118,83,0,0" VerticalAlignment="Top" Width="50" Height="21" SelectionChanged="cmb_SelectionChanged" FontWeight="Bold" Style="{DynamicResource combo1}" />
-                <ComboBox x:Name="cmbProveedor" SelectedIndex="0" HorizontalAlignment="Left" Margin="333,31,0,0" VerticalAlignment="Top" Width="50" Height="21" SelectionChanged="cmb_SelectionChanged" FontWeight="Bold" Style="{DynamicResource combo1}" />
-                <ComboBox x:Name="cmbCodProveedor" SelectedIndex="0" HorizontalAlignment="Left" Margin="333,57,0,0" VerticalAlignment="Top" Width="50" Height="21" SelectionChanged="cmb_SelectionChanged"  Style="{DynamicResource combo1}" FontWeight="Bold"  />
-                <Label Content="2. Descripción" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Margin="10,57,0,0"/>
-                <Label Content="3. Precio" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Margin="10,83,0,0"/>
-                <Label Content="4. Proveedor" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Margin="222,31,0,0"/>
-                <Label Content="5. Cod. proveedor" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Margin="222,57,0,0" BorderThickness="0"/>
-                <Button x:Name="btnProcesar" Content="Procesar" 
-                    HorizontalAlignment="Left" 
-                    VerticalAlignment="Top" 
-                    Margin="781,71,0,0" 
-                    Width="83"
-                    
-                    Click="btnProcesar_Click" Height="33"
-                    />
-                <Label x:Name="labelMensaje" Content="labelTip" Margin="0,50,10,0" VerticalAlignment="Top" Background="{DynamicResource infocable3}" IsHitTestVisible="False" Padding="2,0" Foreground="{DynamicResource textoobscuro}" Panel.ZIndex="2" HorizontalContentAlignment="Right" HorizontalAlignment="Right"/>
-                <Label Content="Nota: Acá sólo se muestran las primeras 10 filas, pero el archivo será procesado hasta el final." HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource boton}" Padding="0,5,5,5" Margin="376,356,0,-8"/>
             </Grid>
             <Label x:Name="lblArchivo" Content="Archivo:" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" Margin="163,7,0,0" Height="33" VerticalContentAlignment="Center" Width="579"/>
-            <ProgressBar x:Name="pBar" Margin="747,0,17,382" Height="30" VerticalAlignment="Bottom" Background="{DynamicResource colorfondo4}" IsIndeterminate="True" Maximum="10" SmallChange="5" BorderBrush="{DynamicResource celeste}" Foreground="{DynamicResource azul}"/>
-            <Label x:Name="labelProcesando" Content="Procesando..." HorizontalAlignment="Left" Margin="757,7,0,0" VerticalAlignment="Top" Height="30" Width="86" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Bold" FontSize="11" Foreground="{DynamicResource textoclaro}"/>
+            <ProgressBar x:Name="pBar" Margin="754,0,10,382" Height="30" VerticalAlignment="Bottom" Background="{DynamicResource colorfondo4}" IsIndeterminate="True" Maximum="10" SmallChange="5" BorderBrush="{DynamicResource celeste}" Foreground="{DynamicResource azul}"/>
+            <Label x:Name="labelProcesando" Content="Procesando..." HorizontalAlignment="Left" Margin="764,8,0,0" VerticalAlignment="Top" Height="30" Width="86" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Bold" FontSize="11" Foreground="{DynamicResource textoclaro}"/>
+            <Label x:Name="labelMensaje" Content="labelTip" Margin="0,50,10,0" VerticalAlignment="Top" Background="{DynamicResource infocable3}" IsHitTestVisible="False" Padding="2,0" Foreground="{DynamicResource textoobscuro}" Panel.ZIndex="2" HorizontalContentAlignment="Right" HorizontalAlignment="Right"/>
         </Grid>
 
         <Grid  
@@ -302,7 +358,7 @@
             Background="{DynamicResource textoclaro}"
             Foreground="{DynamicResource textoobscuro}"
             Style="{DynamicResource listFiltroStyle1}"
-            BorderBrush="{DynamicResource textoclaro}" Margin="0,0,0,0"
+            BorderBrush="{DynamicResource textoclaro}" Margin="0,4,0,-4"
 
             >
                 <ListView.View>
@@ -354,6 +410,7 @@
 
             </ListView>
         </Grid>
+        <Label Content="ARTÍCULOS" HorizontalAlignment="Center" Margin="0,-2,2,0" VerticalAlignment="Top" Foreground="{DynamicResource textoclaro}" FontSize="14" FontWeight="Bold" Width="871" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.RowSpan="4" Grid.Column="1"/>
 
     </Grid>
 </UserControl>
